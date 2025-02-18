@@ -35,7 +35,7 @@ const FournisseurPage = () => {
 
   const fetchFournisseurs = async () => {
     try {
-      const response = await axios.get('http://195.200.15.61/api/suplier/getsuppliers');
+      const response = await axios.get('https://195.200.15.61/api/suplier/getsuppliers');
       setFournisseurs(response.data);
       setFilteredFournisseurs(response.data);
     } catch (error) {
@@ -51,7 +51,7 @@ const FournisseurPage = () => {
 
   const handleAddFournisseur = async () => {
     try {
-      const response = await axios.post('http://195.200.15.61/api/suplier/suppliers', formData);
+      const response = await axios.post('https://195.200.15.61/api/suplier/suppliers', formData);
       setFournisseurs([...fournisseurs, response.data.supplier]);
       setFilteredFournisseurs([...fournisseurs, response.data.supplier]);
       setOpenAddDialog(false);
@@ -67,7 +67,7 @@ const FournisseurPage = () => {
 
   const handleUpdateFournisseur = async () => {
     try {
-      await axios.put(`http://195.200.15.61/api/suplier/upsuppliers/${editData.id}`, editData);
+      await axios.put(`https://195.200.15.61/api/suplier/upsuppliers/${editData.id}`, editData);
       setFournisseurs(fournisseurs.map(f => (f.id === editData.id ? editData : f)));
       setFilteredFournisseurs(fournisseurs.map(f => (f.id === editData.id ? editData : f)));
       setOpenEditDialog(false);
@@ -78,7 +78,7 @@ const FournisseurPage = () => {
 
   const handleDeleteFournisseur = async (id) => {
     try {
-      await axios.delete(`http://195.200.15.61/api/suplier/delsuppliers/${id}`);
+      await axios.delete(`https://195.200.15.61/api/suplier/delsuppliers/${id}`);
       setFournisseurs(fournisseurs.filter(f => f.id !== id));
       setFilteredFournisseurs(filteredFournisseurs.filter(f => f.id !== id));
     } catch (error) {
