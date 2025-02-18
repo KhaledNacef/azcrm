@@ -24,7 +24,7 @@ const ClientPage = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [openDialog, setOpenDialog] = useState(false);
   const [editMode, setEditMode] = useState(false);
-  const [currentClient, setCurrentClient] = useState({ fullName: '', tel: '', fax: '', adresse: '', ville: '', pays: '' });
+  const [currentClient, setCurrentClient] = useState({ fullName: '', tel: '', fax: '', adress: '', ville: '', pays: '' });
 
   useEffect(() => {
     // Fetch clients data from the backend API
@@ -46,7 +46,7 @@ const ClientPage = () => {
         client.fullName.toLowerCase().includes(query) ||
         client.tel.toString().includes(query) ||
         client.fax.toString().includes(query) ||
-        client.adresse.toLowerCase().includes(query) ||
+        client.adress.toLowerCase().includes(query) ||
         client.ville.toLowerCase().includes(query) ||
         client.pays.toLowerCase().includes(query)
     );
@@ -55,7 +55,7 @@ const ClientPage = () => {
 
   const handleOpenDialog = (client = null) => {
     setEditMode(!!client);
-    setCurrentClient(client || { fullName: '', tel: '', fax: '', adresse: '', ville: '', pays: '' });
+    setCurrentClient(client || { fullName: '', tel: '', fax: '', adress: '', ville: '', pays: '' });
     setOpenDialog(true);
   };
 
@@ -146,7 +146,7 @@ const ClientPage = () => {
                 <TableCell>{client.fullName}</TableCell>
                 <TableCell>{client.tel}</TableCell>
                 <TableCell>{client.fax}</TableCell>
-                <TableCell>{client.adresse}</TableCell>
+                <TableCell>{client.adress}</TableCell>
                 <TableCell>{client.ville}</TableCell>
                 <TableCell>{client.pays}</TableCell>
                 <TableCell>
@@ -169,7 +169,7 @@ const ClientPage = () => {
           <TextField label="Nom Complet" fullWidth value={currentClient.fullName} onChange={(e) => setCurrentClient({ ...currentClient, fullName: e.target.value })} sx={{ mb: 2 }} />
           <TextField label="Téléphone (Tel)" fullWidth value={currentClient.tel} onChange={(e) => setCurrentClient({ ...currentClient, tel: e.target.value })} sx={{ mb: 2 }} />
           <TextField label="Fax" fullWidth value={currentClient.fax} onChange={(e) => setCurrentClient({ ...currentClient, fax: e.target.value })} sx={{ mb: 2 }} />
-          <TextField label="Adresse" fullWidth value={currentClient.adresse} onChange={(e) => setCurrentClient({ ...currentClient, adresse: e.target.value })} sx={{ mb: 2 }} />
+          <TextField label="Adresse" fullWidth value={currentClient.adress} onChange={(e) => setCurrentClient({ ...currentClient, adress: e.target.value })} sx={{ mb: 2 }} />
           <TextField label="Ville" fullWidth value={currentClient.ville} onChange={(e) => setCurrentClient({ ...currentClient, ville: e.target.value })} sx={{ mb: 2 }} />
           <TextField label="Pays" fullWidth value={currentClient.pays} onChange={(e) => setCurrentClient({ ...currentClient, pays: e.target.value })} sx={{ mb: 2 }} />
         </DialogContent>
