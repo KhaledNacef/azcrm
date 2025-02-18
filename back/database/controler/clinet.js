@@ -1,5 +1,6 @@
-const Client = require('../models');
+const db  = require('../index'); // Adjust the path to your model as needed
 
+const Client =db.models.Client
 // Get all clients
 exports.getAllClients = async (req, res) => {
   try {
