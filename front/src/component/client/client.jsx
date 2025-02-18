@@ -24,15 +24,7 @@ const ClientPage = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [openDialog, setOpenDialog] = useState(false);
   const [editMode, setEditMode] = useState(false);
-  const [currentClient, setCurrentClient] = useState({
-    fullName: '',
-    tel: '',
-    fax: '',
-    adresse: '',
-    societe: '',
-    pays: '',
-    ville: '',
-  });
+  const [currentClient, setCurrentClient] = useState({ fullName: '', tel: '', fax: '', adresse: '', ville: '', pays: '' });
 
   useEffect(() => {
     // Fetch clients data from the backend API
@@ -55,22 +47,15 @@ const ClientPage = () => {
         client.tel.toString().includes(query) ||
         client.fax.toString().includes(query) ||
         client.adresse.toLowerCase().includes(query) ||
-        client.societe.toLowerCase().includes(query)
+        client.ville.toLowerCase().includes(query) ||
+        client.pays.toLowerCase().includes(query)
     );
     setFilteredClients(filtered);
   };
 
   const handleOpenDialog = (client = null) => {
     setEditMode(!!client);
-    setCurrentClient(client || {
-      fullName: '',
-      tel: '',
-      fax: '',
-      adresse: '',
-      societe: '',
-      pays: '',
-      ville: '',
-    });
+    setCurrentClient(client || { fullName: '', tel: '', fax: '', adresse: '', ville: '', pays: '' });
     setOpenDialog(true);
   };
 
@@ -128,11 +113,11 @@ const ClientPage = () => {
       </Typography>
 
       <Button variant="contained" color="primary" onClick={() => handleOpenDialog()} sx={{ mb: 2 }}>
-        Add Client
+        Ajouter un Client
       </Button>
 
       <TextField
-        label="Search by Name, Tel, Fax, or Address"
+        label="Rechercher par Nom, Tel, Fax, ou Adresse"
         variant="outlined"
         fullWidth
         value={searchQuery}
@@ -145,13 +130,12 @@ const ClientPage = () => {
           <TableHead>
             <TableRow>
               <TableCell><strong>ID</strong></TableCell>
-              <TableCell><strong>Full Name</strong></TableCell>
-              <TableCell><strong>Phone (Tel)</strong></TableCell>
+              <TableCell><strong>Nom Complet</strong></TableCell>
+              <TableCell><strong>Téléphone (Tel)</strong></TableCell>
               <TableCell><strong>Fax</strong></TableCell>
-              <TableCell><strong>Address</strong></TableCell>
-              <TableCell><strong>Company</strong></TableCell>
-              <TableCell><strong>City</strong></TableCell>
-              <TableCell><strong>Country</strong></TableCell>
+              <TableCell><strong>Adresse</strong></TableCell>
+              <TableCell><strong>Ville</strong></TableCell>
+              <TableCell><strong>Pays</strong></TableCell>
               <TableCell><strong>Actions</strong></TableCell>
             </TableRow>
           </TableHead>
@@ -163,15 +147,14 @@ const ClientPage = () => {
                 <TableCell>{client.tel}</TableCell>
                 <TableCell>{client.fax}</TableCell>
                 <TableCell>{client.adresse}</TableCell>
-                <TableCell>{client.societe}</TableCell>
                 <TableCell>{client.ville}</TableCell>
                 <TableCell>{client.pays}</TableCell>
                 <TableCell>
                   <Button variant="outlined" color="primary" onClick={() => handleOpenDialog(client)}>
-                    Edit
+                    Modifier
                   </Button>
                   <Button variant="outlined" color="error" onClick={() => handleDeleteClient(client.id)}>
-                    Delete
+                    Supprimer
                   </Button>
                 </TableCell>
               </TableRow>
@@ -181,61 +164,18 @@ const ClientPage = () => {
       </TableContainer>
 
       <Dialog open={openDialog} onClose={handleCloseDialog}>
-        <DialogTitle>{editMode ? 'Edit Client' : 'Add Client'}</DialogTitle>
+        <DialogTitle>{editMode ? 'Modifier Client' : 'Ajouter Client'}</DialogTitle>
         <DialogContent>
-          <TextField
-            label="Full Name"
-            fullWidth
-            value={currentClient.fullName}
-            onChange={(e) => setCurrentClient({ ...currentClient, fullName: e.target.value })}
-            sx={{ mb: 2 }}
-          />
-          <TextField
-            label="Phone (Tel)"
-            fullWidth
-            value={currentClient.tel}
-            onChange={(e) => setCurrentClient({ ...currentClient, tel: e.target.value })}
-            sx={{ mb: 2 }}
-          />
-          <TextField
-            label="Fax"
-            fullWidth
-            value={currentClient.fax}
-            onChange={(e) => setCurrentClient({ ...currentClient, fax: e.target.value })}
-            sx={{ mb: 2 }}
-          />
-          <TextField
-            label="Address (Adresse)"
-            fullWidth
-            value={currentClient.adresse}
-            onChange={(e) => setCurrentClient({ ...currentClient, adresse: e.target.value })}
-            sx={{ mb: 2 }}
-          />
-          <TextField
-            label="Company Name (Societe)"
-            fullWidth
-            value={currentClient.societe}
-            onChange={(e) => setCurrentClient({ ...currentClient, societe: e.target.value })}
-            sx={{ mb: 2 }}
-          />
-          <TextField
-            label="City (Ville)"
-            fullWidth
-            value={currentClient.ville}
-            onChange={(e) => setCurrentClient({ ...currentClient, ville: e.target.value })}
-            sx={{ mb: 2 }}
-          />
-          <TextField
-            label="Country (Pays)"
-            fullWidth
-            value={currentClient.pays}
-            onChange={(e) => setCurrentClient({ ...currentClient, pays: e.target.value })}
-            sx={{ mb: 2 }}
-          />
+          <TextField label="Nom Complet" fullWidth value={currentClient.fullName} onChange={(e) => setCurrentClient({ ...currentClient, fullName: e.target.value })} sx={{ mb: 2 }} />
+          <TextField label="Téléphone (Tel)" fullWidth value={currentClient.tel} onChange={(e) => setCurrentClient({ ...currentClient, tel: e.target.value })} sx={{ mb: 2 }} />
+          <TextField label="Fax" fullWidth value={currentClient.fax} onChange={(e) => setCurrentClient({ ...currentClient, fax: e.target.value })} sx={{ mb: 2 }} />
+          <TextField label="Adresse" fullWidth value={currentClient.adresse} onChange={(e) => setCurrentClient({ ...currentClient, adresse: e.target.value })} sx={{ mb: 2 }} />
+          <TextField label="Ville" fullWidth value={currentClient.ville} onChange={(e) => setCurrentClient({ ...currentClient, ville: e.target.value })} sx={{ mb: 2 }} />
+          <TextField label="Pays" fullWidth value={currentClient.pays} onChange={(e) => setCurrentClient({ ...currentClient, pays: e.target.value })} sx={{ mb: 2 }} />
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleCloseDialog} color="secondary">Cancel</Button>
-          <Button onClick={handleSaveClient} color="primary">{editMode ? 'Update' : 'Add'}</Button>
+          <Button onClick={handleCloseDialog} color="secondary">Annuler</Button>
+          <Button onClick={handleSaveClient} color="primary">{editMode ? 'Mettre à Jour' : 'Ajouter'}</Button>
         </DialogActions>
       </Dialog>
     </Box>
