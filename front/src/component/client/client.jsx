@@ -28,7 +28,7 @@ const ClientPage = () => {
 
   useEffect(() => {
     // Fetch clients data from the backend API
-    axios.get('https://195.200.15.61/api/clients/getclient')
+    axios.get('https://api.azcrm.deviceshopleader/api/clients/getclient')
       .then((response) => {
         setClients(response.data);
         setFilteredClients(response.data);
@@ -65,7 +65,7 @@ const ClientPage = () => {
   const handleSaveClient = () => {
     if (editMode) {
       // Update the client via API
-      axios.put(`https://195.200.15.61/api/clients/upclient/${currentClient.id}`, currentClient)
+      axios.put(`https://api.azcrm.deviceshopleader/api/clients/upclient/${currentClient.id}`, currentClient)
         .then((response) => {
           setClients((prevClients) =>
             prevClients.map((c) => (c.id === currentClient.id ? response.data : c))
@@ -80,7 +80,7 @@ const ClientPage = () => {
         });
     } else {
       // Create a new client via API
-      axios.post('https://195.200.15.61/api/clients/addclient', currentClient)
+      axios.post('https://api.azcrm.deviceshopleader/api/clients/addclient', currentClient)
         .then((response) => {
           setClients([...clients, response.data]);
           setFilteredClients([...clients, response.data]);
@@ -94,7 +94,7 @@ const ClientPage = () => {
 
   const handleDeleteClient = (clientId) => {
     // Delete client via API
-    axios.delete(`https://195.200.15.61/api/clients/delclient/${clientId}`)
+    axios.delete(`https://api.azcrm.deviceshopleader/api/clients/delclient/${clientId}`)
       .then(() => {
         const remainingClients = clients.filter((client) => client.id !== clientId);
         setClients(remainingClients);
