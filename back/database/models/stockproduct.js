@@ -1,4 +1,4 @@
-const {  DataTypes } = require('sequelize');
+const { DataTypes } = require('sequelize');
 
 const StockP = {
   id: {
@@ -12,7 +12,7 @@ const StockP = {
   },
   prixU_TTC: {
     type: DataTypes.FLOAT,
-    allowNull: false,
+    allowNull: true, // Computed field
   },
   tva: {
     type: DataTypes.FLOAT,
@@ -20,17 +20,16 @@ const StockP = {
   },
   netTTC: {
     type: DataTypes.FLOAT,
-    allowNull: false,
+    allowNull: true, // Computed field
   },
   netHT: {
     type: DataTypes.FLOAT,
-    allowNull: false,
+    allowNull: true, // Computed field
   },
   quantite: {
     type: DataTypes.INTEGER,
     allowNull: false,
   },
-  
   designation: {
     type: DataTypes.STRING,
     allowNull: false,
@@ -39,21 +38,7 @@ const StockP = {
     type: DataTypes.STRING,
     allowNull: true,
   },
-  
-  
 };
 
-// Add hooks to calculate dependent fields
-StockP.beforeSave((Stock) => {
-  // Calculate prixU_TTC from prixU_HT and tva
-  Stock.prixU_TTC = Stock.prixU_HT + (Stock.prixU_HT * (Stock.tva / 100));
 
-  // Calculate netTTC as prixU_TTC multiplied by quantity
-  Stock.netTTC = Stock.prixU_TTC * Stock.quantite;
-
-  // Calculate netHT as prixU_HT multiplied by quantity
-  Stock.netHT = Stock.prixU_HT * Stock.quantite;
-
-});
-
-module.exports = StockP;
+module.exports =  StockP;
