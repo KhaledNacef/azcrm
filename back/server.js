@@ -24,7 +24,7 @@ db.authenticate()
   })
   .then(() => {
     console.log('User table created (if not exists)');
-    app.listen(5000, () => {
+    app.listen(8080, () => {
       console.log('Server running on http://localhost:5000');
     });
   })
