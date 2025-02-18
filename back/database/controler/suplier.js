@@ -1,6 +1,6 @@
-const { Supplier } = require('../models'); // Adjust the path to your model as needed
+const db  = require('../index'); // Adjust the path to your model as needed
 
-
+const Supplier =db.models.Supplier
 async function getAllSuppliers(req, res) {
   try {
     const suppliers = await Supplier.findAll();

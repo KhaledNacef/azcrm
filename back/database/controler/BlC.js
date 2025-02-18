@@ -1,6 +1,10 @@
-const { DeliveryNote, Stock, StockP } = require('../models'); // Adjust model imports
 const Sequelize = require('sequelize');
-const Op = Sequelize.Op;
+const db  = require('../index'); // Adjust the path to your model as needed
+const Bs =db.models.Bs
+const Stock =db.models.Stock
+const StockP =db.models.StockP
+
+
 
 
 
