@@ -21,9 +21,6 @@ app.use('/api/suplier', suplierRoutes);
 app.use('/api/clients', clientRoutes);  
 
 // Connect to Database
-db.sequelize.authenticate()
-  .then(() => console.log('Database connected successfully!'))
-  .catch(err => console.error('Database connection failed:', err));
 
 const PORT = 8080;
 app.listen(PORT, () => {
