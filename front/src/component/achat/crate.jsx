@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import axios from 'axios';
 import {
   Box,
   Button,
@@ -12,48 +13,55 @@ import {
   TableHead,
 } from '@mui/material';
 
-const CreateDeliveryNoteModal = ({ onAddDeliveryNote }) => {
+const CreateDeliveryNoteModal = ({ onAddDeliveryNote, suppliers, availableProducts }) => {
   const [code, setCode] = useState('');
   const [supplier, setSupplier] = useState('');
+  const [timbre, setTimbre] = useState(0);
   const [products, setProducts] = useState([]);
   const [newProduct, setNewProduct] = useState('');
   const [tva, setTva] = useState(0);
-  const [prixUHT, setPrixUHT] = useState(0);
-  const [quantity, setQuantity] = useState(1);
-
-  // Hardcoded suppliers
-  const suppliers = ['Supplier A', 'Supplier B', 'Supplier C'];
-
-  // Hardcoded products
-  const availableProducts = ['Product 1', 'Product 2', 'Product 3'];
+  const [prixU_HT, setPrixU_HT] = useState(0);
+  const [quantite, setQuantite] = useState(1);
 
   const handleAddProduct = () => {
-    if (newProduct && !products.some((p) => p.name === newProduct)) {
+    if (newProduct && !products.some((p) => p.designation === newProduct)) {
       setProducts([
         ...products,
         {
-          name: newProduct,
+          designation: newProduct,
           tva: parseFloat(tva),
-          prixUHT: parseFloat(prixUHT),
-          quantity: parseInt(quantity, 10),
+          prixU_HT: parseFloat(prixU_HT),
+          quantite: parseInt(quantite, 10),
+          Unite: 'pcs', // Adjust if needed
         },
       ]);
       setNewProduct('');
       setTva(0);
-      setPrixUHT(0);
-      setQuantity(1);
+      setPrixU_HT(0);
+      setQuantite(1);
     }
   };
 
-  const handleSubmit = () => {
-    if (code && supplier && products.length > 0) {
-      const newNote = {
-        code,
-        supplierName: supplier,
-        products,
-        createdAt: new Date().toISOString(),
-      };
+  const handleSubmit = async () => {
+    if (!code || !supplier || products.length === 0) {
+      alert('Veuillez remplir tous les champs obligatoires.');
+      return;
+    }
+
+    const newNote = {
+      code,
+      spulierId: supplier,
+      timbre,
+      products,
+    };
+
+    try {
+      await axios.post('http://localhost:5000/stock/add', newNote);
+      alert('Bon d\'achat créé avec succès');
       onAddDeliveryNote(newNote);
+    } catch (error) {
+      console.error('Erreur lors de la création du bon d\'achat:', error);
+      alert('Échec de la création du bon d\'achat');
     }
   };
 
@@ -78,11 +86,19 @@ const CreateDeliveryNoteModal = ({ onAddDeliveryNote }) => {
         margin="normal"
       >
         {suppliers.map((sup, index) => (
-          <MenuItem key={index} value={sup}>
-            {sup}
+          <MenuItem key={index} value={sup.id}>
+            {sup.name}
           </MenuItem>
         ))}
       </TextField>
+      <TextField
+        label="Timbre"
+        type="number"
+        value={timbre}
+        onChange={(e) => setTimbre(e.target.value)}
+        fullWidth
+        margin="normal"
+      />
       <TextField
         label="Produit"
         value={newProduct}
@@ -108,16 +124,16 @@ const CreateDeliveryNoteModal = ({ onAddDeliveryNote }) => {
       <TextField
         label="Prix U HT"
         type="number"
-        value={prixUHT}
-        onChange={(e) => setPrixUHT(e.target.value)}
+        value={prixU_HT}
+        onChange={(e) => setPrixU_HT(e.target.value)}
         fullWidth
         margin="normal"
       />
       <TextField
         label="Quantité"
         type="number"
-        value={quantity}
-        onChange={(e) => setQuantity(e.target.value)}
+        value={quantite}
+        onChange={(e) => setQuantite(e.target.value)}
         fullWidth
         margin="normal"
       />
@@ -138,10 +154,10 @@ const CreateDeliveryNoteModal = ({ onAddDeliveryNote }) => {
           <TableBody>
             {products.map((prod, index) => (
               <TableRow key={index}>
-                <TableCell>{prod.name}</TableCell>
+                <TableCell>{prod.designation}</TableCell>
                 <TableCell>{prod.tva}</TableCell>
-                <TableCell>{prod.prixUHT}</TableCell>
-                <TableCell>{prod.quantity}</TableCell>
+                <TableCell>{prod.prixU_HT}</TableCell>
+                <TableCell>{prod.quantite}</TableCell>
               </TableRow>
             ))}
           </TableBody>

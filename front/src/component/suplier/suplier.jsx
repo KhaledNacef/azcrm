@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 import {
   Box,
   TextField,
@@ -23,20 +24,24 @@ const FournisseurPage = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [openAddDialog, setOpenAddDialog] = useState(false);
   const [openEditDialog, setOpenEditDialog] = useState(false);
-
   const [formData, setFormData] = useState({
-    fullname: '', pays: '', ville: '', tel: '', fax: '', codePostal: '', address: '', codeTVA: ''
+    fullname: '', pays: '', ville: '', tel: '', fax: '', codePostal: '', address: '', codeTVA: '', matriculefisacl: ''
   });
   const [editData, setEditData] = useState(null);
 
   useEffect(() => {
-    const mockFournisseurs = [
-      { id: 1, fullname: 'Fournisseur A', pays: 'France', ville: 'Paris', tel: '0123456789', fax: '0123456789', codePostal: '75001', address: '10 Rue de Paris', codeTVA: 'FR123456789' },
-      { id: 2, fullname: 'Fournisseur B', pays: 'Tunisie', ville: 'Tunis', tel: '9876543210', fax: '9876543210', codePostal: '1001', address: 'Avenue Habib Bourguiba', codeTVA: 'TN987654321' },
-    ];
-    setFournisseurs(mockFournisseurs);
-    setFilteredFournisseurs(mockFournisseurs);
+    fetchFournisseurs();
   }, []);
+
+  const fetchFournisseurs = async () => {
+    try {
+      const response = await axios.get('http://195.200.15.61/api/suplier/getsuppliers');
+      setFournisseurs(response.data);
+      setFilteredFournisseurs(response.data);
+    } catch (error) {
+      console.error("Erreur lors de la récupération des fournisseurs :", error);
+    }
+  };
 
   const handleSearch = (event) => {
     const query = event.target.value.toLowerCase();
@@ -44,11 +49,15 @@ const FournisseurPage = () => {
     setFilteredFournisseurs(fournisseurs.filter(f => f.fullname.toLowerCase().includes(query)));
   };
 
-  const handleAddFournisseur = () => {
-    const newFournisseur = { id: fournisseurs.length + 1, ...formData };
-    setFournisseurs([...fournisseurs, newFournisseur]);
-    setFilteredFournisseurs([...fournisseurs, newFournisseur]);
-    setOpenAddDialog(false);
+  const handleAddFournisseur = async () => {
+    try {
+      const response = await axios.post('http://195.200.15.61/api/suplier/suppliers', formData);
+      setFournisseurs([...fournisseurs, response.data.supplier]);
+      setFilteredFournisseurs([...fournisseurs, response.data.supplier]);
+      setOpenAddDialog(false);
+    } catch (error) {
+      console.error("Erreur lors de l'ajout du fournisseur :", error);
+    }
   };
 
   const handleEditFournisseur = (fournisseur) => {
@@ -56,10 +65,25 @@ const FournisseurPage = () => {
     setOpenEditDialog(true);
   };
 
-  const handleUpdateFournisseur = () => {
-    setFournisseurs(fournisseurs.map(f => f.id === editData.id ? editData : f));
-    setFilteredFournisseurs(fournisseurs.map(f => f.id === editData.id ? editData : f));
-    setOpenEditDialog(false);
+  const handleUpdateFournisseur = async () => {
+    try {
+      await axios.put(`http://195.200.15.61/api/suplier/upsuppliers/${editData.id}`, editData);
+      setFournisseurs(fournisseurs.map(f => (f.id === editData.id ? editData : f)));
+      setFilteredFournisseurs(fournisseurs.map(f => (f.id === editData.id ? editData : f)));
+      setOpenEditDialog(false);
+    } catch (error) {
+      console.error("Erreur lors de la mise à jour du fournisseur :", error);
+    }
+  };
+
+  const handleDeleteFournisseur = async (id) => {
+    try {
+      await axios.delete(`http://195.200.15.61/api/suplier/delsuppliers/${id}`);
+      setFournisseurs(fournisseurs.filter(f => f.id !== id));
+      setFilteredFournisseurs(filteredFournisseurs.filter(f => f.id !== id));
+    } catch (error) {
+      console.error("Erreur lors de la suppression du fournisseur :", error);
+    }
   };
 
   return (
@@ -88,6 +112,7 @@ const FournisseurPage = () => {
                 <TableCell>{f.tel}</TableCell>
                 <TableCell>
                   <Button variant="outlined" color="primary" onClick={() => handleEditFournisseur(f)}>Modifier</Button>
+                  <Button variant="outlined" color="secondary" onClick={() => handleDeleteFournisseur(f.id)} sx={{ ml: 1 }}>Supprimer</Button>
                 </TableCell>
               </TableRow>
             ))}

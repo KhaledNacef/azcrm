@@ -1,5 +1,19 @@
 const { Supplier } = require('../models'); // Adjust the path to your model as needed
 
+
+async function getAllSuppliers(req, res) {
+  try {
+    const suppliers = await Supplier.findAll();
+    return res.status(200).json(suppliers);
+  } catch (error) {
+    console.error('Error fetching suppliers:', error);
+    return res.status(500).json({
+      error: 'Failed to fetch suppliers',
+    });
+  }
+}
+
+
 // Create a new supplier
 async function createSupplier(req, res) {
   try {
@@ -96,5 +110,5 @@ async function deleteSupplier(req, res) {
 module.exports = {
   createSupplier,
   updateSupplier,
-  deleteSupplier,
+  deleteSupplier,getAllSuppliers
 };

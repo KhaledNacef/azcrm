@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 import {
   Box,
   TextField,
@@ -26,13 +27,15 @@ const ClientPage = () => {
   const [currentClient, setCurrentClient] = useState({ fullName: '', tel: '', fax: '', adresse: '', societe: '' });
 
   useEffect(() => {
-    const mockClients = [
-      { id: 1, fullName: 'Client A', tel: '123456789', fax: '987654321', adresse: 'Address 1', societe: 'Company A' },
-      { id: 2, fullName: 'Client B', tel: '234567890', fax: '876543210', adresse: 'Address 2', societe: 'Company B' },
-      { id: 3, fullName: 'Client C', tel: '345678901', fax: '765432109', adresse: 'Address 3', societe: 'Company C' },
-    ];
-    setClients(mockClients);
-    setFilteredClients(mockClients);
+    // Fetch clients data from the backend API
+    axios.get('http://195.200.15.61/api/clients/getclient')
+      .then((response) => {
+        setClients(response.data);
+        setFilteredClients(response.data);
+      })
+      .catch((error) => {
+        console.error("Error fetching clients data:", error);
+      });
   }, []);
 
   const handleSearch = (event) => {
@@ -61,24 +64,45 @@ const ClientPage = () => {
 
   const handleSaveClient = () => {
     if (editMode) {
-      setClients((prevClients) =>
-        prevClients.map((c) => (c.id === currentClient.id ? currentClient : c))
-      );
-      setFilteredClients((prevClients) =>
-        prevClients.map((c) => (c.id === currentClient.id ? currentClient : c))
-      );
+      // Update the client via API
+      axios.put(`http://195.200.15.61/api/clients/upclient/${currentClient.id}`, currentClient)
+        .then((response) => {
+          setClients((prevClients) =>
+            prevClients.map((c) => (c.id === currentClient.id ? response.data : c))
+          );
+          setFilteredClients((prevClients) =>
+            prevClients.map((c) => (c.id === currentClient.id ? response.data : c))
+          );
+          handleCloseDialog();
+        })
+        .catch((error) => {
+          console.error("Error updating client:", error);
+        });
     } else {
-      const newClient = { ...currentClient, id: clients.length + 1 };
-      setClients([...clients, newClient]);
-      setFilteredClients([...clients, newClient]);
+      // Create a new client via API
+      axios.post('http://195.200.15.61/api/clients/addclient', currentClient)
+        .then((response) => {
+          setClients([...clients, response.data]);
+          setFilteredClients([...clients, response.data]);
+          handleCloseDialog();
+        })
+        .catch((error) => {
+          console.error("Error creating client:", error);
+        });
     }
-    handleCloseDialog();
   };
 
   const handleDeleteClient = (clientId) => {
-    const remainingClients = clients.filter((client) => client.id !== clientId);
-    setClients(remainingClients);
-    setFilteredClients(remainingClients);
+    // Delete client via API
+    axios.delete(`http://195.200.15.61/api/clients/delclient/${clientId}`)
+      .then(() => {
+        const remainingClients = clients.filter((client) => client.id !== clientId);
+        setClients(remainingClients);
+        setFilteredClients(remainingClients);
+      })
+      .catch((error) => {
+        console.error("Error deleting client:", error);
+      });
   };
 
   return (

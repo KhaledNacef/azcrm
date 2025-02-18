@@ -1,7 +1,7 @@
 const { DataTypes } = require('sequelize');
 const db = require('../index'); // Adjust the path to your sequelize instance as needed
 
-const Client = db.define('Supplier', {
+const Client = db.define('Client', {
   id: {
     type: DataTypes.INTEGER,
     autoIncrement: true,

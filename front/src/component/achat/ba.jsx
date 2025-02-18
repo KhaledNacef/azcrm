@@ -12,15 +12,14 @@ import {
 } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import CreateDeliveryNoteModal from './crate.jsx'
+import axios from 'axios';
+
 
 const BonAchatPage = () => {
   const navigate = useNavigate();
 
   // Hardcoded delivery notes
-  const [deliveryNotes, setDeliveryNotes] = useState([
-    { code: 'DN001', supplierName: 1, createdAt: '2025-01-20' },
-    { code: 'DN002', supplierName: 2, createdAt: '2025-01-21' },
-  ]);
+  const [deliveryNotes, setDeliveryNotes] = useState([]);
 
   const [open, setOpen] = useState(false); // Modal state
 
@@ -32,6 +31,18 @@ const BonAchatPage = () => {
     handleClose();
   };
 
+  useEffect(() => {
+    fetchDeliveryNotes();
+  }, []);
+
+  const fetchDeliveryNotes = async () => {
+    try {
+      const response = await axios.get('http://localhost:5000/api/bl/stock/getall'); // Adjust URL based on your backend
+      setDeliveryNotes(response.data); // Assuming API returns { deliveryNotes: [...] }
+    } catch (error) {
+      console.error('Error fetching delivery notes:', error);
+    }
+  };
   return (
     <Box sx={{ p: 3 }}>
       <Typography variant="h4" mb={3}>

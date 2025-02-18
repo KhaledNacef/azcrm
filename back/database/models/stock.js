@@ -40,7 +40,10 @@ const Stock = db.define('Stock', {
     type: DataTypes.STRING,
     allowNull: true,
   },
-  
+  BaId: {
+    type: DataTypes.STRING,
+    allowNull: false,
+  }
   
 });
 
