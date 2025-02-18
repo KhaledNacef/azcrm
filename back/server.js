@@ -1,7 +1,7 @@
 const express = require('express');
 const morgan = require('morgan');
 const cors = require('cors');
-const db = require('./database/config'); 
+const db = require('./database/index'); 
 
 
 const suplier = require('../back/database/router/suplierR'); 
