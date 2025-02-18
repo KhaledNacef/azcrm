@@ -3,22 +3,27 @@ const morgan = require('morgan');
 const cors = require('cors');
 const db = require('./database/index'); 
 
-app.use(express.urlencoded({ extended: true }));
-app.use(express.static(__dirname + '/../client/dist'));
+const app = express(); // ✅ Define the app first
 
-
-const suplier = require('../back/database/router/suplierR'); 
-const clientRoutes = require('../back/database/router/clientr'); 
-
-const app = express();
-
+// Middleware
 app.use(morgan('dev')); 
 app.use(cors()); 
-app.use(express.json()); 
+app.use(express.json());  
+app.use(express.urlencoded({ extended: true }));  
+app.use(express.static(__dirname + '/../client/dist'));
 
+// Import Routes
+const suplierRoutes = require('./database/router/suplierR'); 
+const clientRoutes = require('./database/router/clientr'); 
 
-app.use('/api/suplier',suplier ); 
-app.use('/api/clients', clientRoutes);  // Add the client routes
+// Use Routes
+app.use('/api/suplier', suplierRoutes); 
+app.use('/api/clients', clientRoutes);  
+
+// Connect to Database
+db.sequelize.authenticate()
+  .then(() => console.log('Database connected successfully!'))
+  .catch(err => console.error('Database connection failed:', err));
 
 const PORT = 8080;
 app.listen(PORT, () => {
