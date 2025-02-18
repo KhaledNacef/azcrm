@@ -25,7 +25,7 @@ const ClientPage = () => {
   const [openDialog, setOpenDialog] = useState(false);
   const [editMode, setEditMode] = useState(false);
   const [currentClient, setCurrentClient] = useState({
-    fullName: '',
+    fullname: '',
     tel: '',
     fax: '',
     address: '',
@@ -51,7 +51,7 @@ const ClientPage = () => {
     setSearchQuery(query);
     const filtered = clients.filter(
       (client) =>
-        client.fullName.toLowerCase().includes(query) ||
+        client.fullname.toLowerCase().includes(query) ||
         client.tel.toString().includes(query) ||
         client.fax.toString().includes(query) ||
         client.address.toLowerCase().includes(query) ||
@@ -63,7 +63,7 @@ const ClientPage = () => {
 
   const handleOpenDialog = (client = null) => {
     setEditMode(!!client);
-    setCurrentClient(client || { fullName: '', tel: '', fax: '', address: '', ville: '', pays: '' });
+    setCurrentClient(client || { fullname: '', tel: '', fax: '', address: '', ville: '', pays: '' });
     setOpenDialog(true);
   };
 
@@ -72,9 +72,9 @@ const ClientPage = () => {
   };
 
   const handleSaveClient = () => {
-    const { fullName, pays, ville, tel, fax, address } = currentClient;
+    const { fullname, pays, ville, tel, fax, address } = currentClient;
 
-    const clientData = { fullName, pays, ville, tel, fax, address }; // Ensure 'address' is used consistently
+    const clientData = { fullname, pays, ville, tel, fax, address }; // Ensure 'address' is used consistently
     
     if (editMode) {
       // Update the client via API
@@ -158,7 +158,7 @@ const ClientPage = () => {
             {filteredClients.map((client) => (
               <TableRow key={client.id}>
                 <TableCell>{client.id}</TableCell>
-                <TableCell>{client.fullName}</TableCell>
+                <TableCell>{client.fullname}</TableCell>
                 <TableCell>{client.tel}</TableCell>
                 <TableCell>{client.fax}</TableCell>
                 <TableCell>{client.address}</TableCell>
@@ -184,8 +184,8 @@ const ClientPage = () => {
           <TextField
             label="Nom Complet"
             fullWidth
-            value={currentClient.fullName}
-            onChange={(e) => setCurrentClient({ ...currentClient, fullName: e.target.value })}
+            value={currentClient.fullname}
+            onChange={(e) => setCurrentClient({ ...currentClient, fullname: e.target.value })}
             sx={{ mb: 2 }}
           />
           <TextField
