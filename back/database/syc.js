@@ -1,4 +1,4 @@
-const db = require('./config/database');
+const db = require('../database/index');
 const Client = require('../models/Client'); // Import your model
 
 async function syncDatabase() {
