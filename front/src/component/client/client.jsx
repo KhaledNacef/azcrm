@@ -24,17 +24,25 @@ const ClientPage = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [openDialog, setOpenDialog] = useState(false);
   const [editMode, setEditMode] = useState(false);
-  const [currentClient, setCurrentClient] = useState({ fullName: '', tel: '', fax: '', adress: '', ville: '', pays: '' });
+  const [currentClient, setCurrentClient] = useState({
+    fullName: '',
+    tel: '',
+    fax: '',
+    address: '',
+    ville: '',
+    pays: '',
+  });
 
   useEffect(() => {
     // Fetch clients data from the backend API
-    axios.get('https://api.azcrm.deviceshopleader.com/api/clients/getclient')
+    axios
+      .get('https://api.azcrm.deviceshopleader.com/api/clients/getclient')
       .then((response) => {
         setClients(response.data);
         setFilteredClients(response.data);
       })
       .catch((error) => {
-        console.error("Error fetching clients data:", error);
+        console.error('Error fetching clients data:', error);
       });
   }, []);
 
@@ -46,7 +54,7 @@ const ClientPage = () => {
         client.fullName.toLowerCase().includes(query) ||
         client.tel.toString().includes(query) ||
         client.fax.toString().includes(query) ||
-        client.adress.toLowerCase().includes(query) ||
+        client.address.toLowerCase().includes(query) ||
         client.ville.toLowerCase().includes(query) ||
         client.pays.toLowerCase().includes(query)
     );
@@ -55,7 +63,7 @@ const ClientPage = () => {
 
   const handleOpenDialog = (client = null) => {
     setEditMode(!!client);
-    setCurrentClient(client || { fullName: '', tel: '', fax: '', adress: '', ville: '', pays: '' });
+    setCurrentClient(client || { fullName: '', tel: '', fax: '', address: '', ville: '', pays: '' });
     setOpenDialog(true);
   };
 
@@ -64,9 +72,14 @@ const ClientPage = () => {
   };
 
   const handleSaveClient = () => {
+    const { fullName, pays, ville, tel, fax, address } = currentClient;
+
+    const clientData = { fullName, pays, ville, tel, fax, address }; // Ensure 'address' is used consistently
+    
     if (editMode) {
       // Update the client via API
-      axios.put(`https://api.azcrm.deviceshopleader.com/api/clients/upclient/${currentClient.id}`, currentClient)
+      axios
+        .put(`https://api.azcrm.deviceshopleader.com/api/clients/upclient/${currentClient.id}`, clientData)
         .then((response) => {
           setClients((prevClients) =>
             prevClients.map((c) => (c.id === currentClient.id ? response.data : c))
@@ -77,32 +90,34 @@ const ClientPage = () => {
           handleCloseDialog();
         })
         .catch((error) => {
-          console.error("Error updating client:", error);
+          console.error('Error updating client:', error);
         });
     } else {
       // Create a new client via API
-      axios.post('https://api.azcrm.deviceshopleader.com/api/clients/addclient', currentClient)
+      axios
+        .post('https://api.azcrm.deviceshopleader.com/api/clients/addclient', clientData)
         .then((response) => {
           setClients([...clients, response.data]);
           setFilteredClients([...clients, response.data]);
           handleCloseDialog();
         })
         .catch((error) => {
-          console.error("Error creating client:", error);
+          console.error('Error creating client:', error);
         });
     }
   };
 
   const handleDeleteClient = (clientId) => {
     // Delete client via API
-    axios.delete(`https://api.azcrm.deviceshopleader.com/api/clients/delclient/${clientId}`)
+    axios
+      .delete(`https://api.azcrm.deviceshopleader.com/api/clients/delclient/${clientId}`)
       .then(() => {
         const remainingClients = clients.filter((client) => client.id !== clientId);
         setClients(remainingClients);
         setFilteredClients(remainingClients);
       })
       .catch((error) => {
-        console.error("Error deleting client:", error);
+        console.error('Error deleting client:', error);
       });
   };
 
@@ -146,7 +161,7 @@ const ClientPage = () => {
                 <TableCell>{client.fullName}</TableCell>
                 <TableCell>{client.tel}</TableCell>
                 <TableCell>{client.fax}</TableCell>
-                <TableCell>{client.adress}</TableCell>
+                <TableCell>{client.address}</TableCell>
                 <TableCell>{client.ville}</TableCell>
                 <TableCell>{client.pays}</TableCell>
                 <TableCell>
@@ -166,16 +181,56 @@ const ClientPage = () => {
       <Dialog open={openDialog} onClose={handleCloseDialog}>
         <DialogTitle>{editMode ? 'Modifier Client' : 'Ajouter Client'}</DialogTitle>
         <DialogContent>
-          <TextField label="Nom Complet" fullWidth value={currentClient.fullName} onChange={(e) => setCurrentClient({ ...currentClient, fullName: e.target.value })} sx={{ mb: 2 }} />
-          <TextField label="Téléphone (Tel)" fullWidth value={currentClient.tel} onChange={(e) => setCurrentClient({ ...currentClient, tel: e.target.value })} sx={{ mb: 2 }} />
-          <TextField label="Fax" fullWidth value={currentClient.fax} onChange={(e) => setCurrentClient({ ...currentClient, fax: e.target.value })} sx={{ mb: 2 }} />
-          <TextField label="Adresse" fullWidth value={currentClient.adress} onChange={(e) => setCurrentClient({ ...currentClient, adress: e.target.value })} sx={{ mb: 2 }} />
-          <TextField label="Ville" fullWidth value={currentClient.ville} onChange={(e) => setCurrentClient({ ...currentClient, ville: e.target.value })} sx={{ mb: 2 }} />
-          <TextField label="Pays" fullWidth value={currentClient.pays} onChange={(e) => setCurrentClient({ ...currentClient, pays: e.target.value })} sx={{ mb: 2 }} />
+          <TextField
+            label="Nom Complet"
+            fullWidth
+            value={currentClient.fullName}
+            onChange={(e) => setCurrentClient({ ...currentClient, fullName: e.target.value })}
+            sx={{ mb: 2 }}
+          />
+          <TextField
+            label="Téléphone (Tel)"
+            fullWidth
+            value={currentClient.tel}
+            onChange={(e) => setCurrentClient({ ...currentClient, tel: e.target.value })}
+            sx={{ mb: 2 }}
+          />
+          <TextField
+            label="Fax"
+            fullWidth
+            value={currentClient.fax}
+            onChange={(e) => setCurrentClient({ ...currentClient, fax: e.target.value })}
+            sx={{ mb: 2 }}
+          />
+          <TextField
+            label="Adresse"
+            fullWidth
+            value={currentClient.address} // Update to match field name
+            onChange={(e) => setCurrentClient({ ...currentClient, address: e.target.value })}
+            sx={{ mb: 2 }}
+          />
+          <TextField
+            label="Ville"
+            fullWidth
+            value={currentClient.ville}
+            onChange={(e) => setCurrentClient({ ...currentClient, ville: e.target.value })}
+            sx={{ mb: 2 }}
+          />
+          <TextField
+            label="Pays"
+            fullWidth
+            value={currentClient.pays}
+            onChange={(e) => setCurrentClient({ ...currentClient, pays: e.target.value })}
+            sx={{ mb: 2 }}
+          />
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleCloseDialog} color="secondary">Annuler</Button>
-          <Button onClick={handleSaveClient} color="primary">{editMode ? 'Mettre à Jour' : 'Ajouter'}</Button>
+          <Button onClick={handleCloseDialog} color="secondary">
+            Annuler
+          </Button>
+          <Button onClick={handleSaveClient} color="primary">
+            {editMode ? 'Mettre à Jour' : 'Ajouter'}
+          </Button>
         </DialogActions>
       </Dialog>
     </Box>
