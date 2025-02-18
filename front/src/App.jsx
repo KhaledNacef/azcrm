@@ -1,0 +1,35 @@
+import React from 'react';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import Layout from './home.jsx';
+import ProductPage from './component/products/productpage.jsx';
+import FournisseurPage from './component/suplier/suplier.jsx';
+import ClientPage from './component/client/client.jsx';
+import BonAchatPage from './component/achat/ba.jsx';
+import SingleDeliveryNote from './component/achat/singlepage.jsx';
+import SingleDeliverysortie from './component/vente/singlepagebl.jsx';
+import BonsortiePage from './component/vente/bl.jsx';
+import StockPage from './component/stock/stock.jsx';
+import Dashboard from './component/dashboard/dashboard.jsx';
+const App = () => {
+  return (
+    <Router>
+      <Routes>
+        {/* Wrap all routes under the Layout */}
+        <Route path="/" element={<Layout />}>
+          <Route path="produit" element={<ProductPage />} />
+          <Route path="dashboard" element={<Dashboard />} />
+          <Route path="stock" element={<StockPage />} />
+          <Route path="fournisseur" element={<FournisseurPage />} />
+          <Route path="client" element={<ClientPage />} />
+          <Route path="bon-dachat" element={<BonAchatPage />} />
+          <Route path="/bon-dachat/:code/:supplierName" element={<SingleDeliveryNote />} />
+          <Route path="bon-livraison" element={<BonsortiePage />} />
+          <Route path="/bon-livraison/:code/:supplierName" element={<SingleDeliverysortie />} />
+
+        </Route>
+      </Routes>
+    </Router>
+  );
+};
+
+export default App;
