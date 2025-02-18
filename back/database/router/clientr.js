@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const clientController = require('../controler/clinet');
+const clientController = require('../controler/client');
 
 // Routes for managing clients
 router.get('/getclient', clientController.getAllClients);           // Get all clients
