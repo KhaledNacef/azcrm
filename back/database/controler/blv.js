@@ -1,8 +1,8 @@
 const Sequelize = require('sequelize');
 const db  = require('../index'); // Adjust the path to your model as needed
-const Bs =db.models.Bs
-const Stock =db.models.Stock
-const StockP =db.models.StockP
+const Bs =db.models.bs
+const Stock =db.models.stock
+const StockP =db.models.stockP
 
 
 

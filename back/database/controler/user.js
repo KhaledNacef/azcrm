@@ -3,7 +3,9 @@
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const { validationResult } = require('express-validator');
-const User = require('../models/user');
+const db  = require('../index'); // Adjust the path to your model as needed
+
+const User =db.models.user
 
 // JWT Secret - Hardcoded (instead of process.env)
 const JWT_SECRET = 'your_secret_key'; // Change this to a secure key

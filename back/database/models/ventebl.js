@@ -1,7 +1,6 @@
-const { Sequelize, DataTypes, INTEGER } = require('sequelize');
-const db = require('../index'); // Adjust the path to your Sequelize instance as needed
+const {  DataTypes } = require('sequelize');
 
-const Vente = db.define('Vente', {
+const Vente =  {
   id: {
     type: DataTypes.INTEGER,
     autoIncrement: true,
@@ -35,6 +34,6 @@ const Vente = db.define('Vente', {
   }
   
   
-});
+};
 
 module.exports = Vente;

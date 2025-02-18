@@ -1,7 +1,6 @@
-const { Sequelize, DataTypes, INTEGER } = require('sequelize');
-const db = require('../index'); // Adjust the path to your Sequelize instance as needed
+const {  DataTypes } = require('sequelize');
 
-const StockP = db.define('StockP', {
+const StockP = {
   id: {
     type: DataTypes.INTEGER,
     autoIncrement: true,
@@ -42,7 +41,7 @@ const StockP = db.define('StockP', {
   },
   
   
-});
+};
 
 // Add hooks to calculate dependent fields
 StockP.beforeSave((Stock) => {

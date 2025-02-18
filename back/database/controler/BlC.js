@@ -1,8 +1,8 @@
 const Sequelize = require('sequelize');
-const db  = require('../index'); // Adjust the path to your model as needed
-const Bs =db.models.Bs
-const Stock =db.models.Stock
-const StockP =db.models.StockP
+const db  = require('../index'); 
+const Bs =db.models.bs
+const Stock =db.models.stock
+const StockP =db.models.stockP
 
 
 
@@ -46,6 +46,7 @@ async function getAllDeliveryNotes(req, res) {
       error: 'Failed to fetch delivery notes',
     });
   }
+
 }
 
 

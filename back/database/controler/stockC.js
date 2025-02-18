@@ -1,7 +1,6 @@
-const { StockP } = require('../models'); // Adjust the path to your models
 const db  = require('../index'); // Adjust the path to your model as needed
 
-const StockP =db.models.StockP
+const StockP =db.models.stockP
 // Sell a product from the stock
 const sellProduct = async (req, res) => {
   const { designation, quantiteToSell } = req.body; // Provide the product designation and the quantity to sell

@@ -3,6 +3,9 @@ const morgan = require('morgan');
 const cors = require('cors');
 const db = require('./database/index'); 
 
+app.use(express.urlencoded({ extended: true }));
+app.use(express.static(__dirname + '/../client/dist'));
+
 
 const suplier = require('../back/database/router/suplierR'); 
 const clientRoutes = require('../back/database/router/clientr'); 
@@ -17,17 +20,7 @@ app.use(express.json());
 app.use('/api/suplier',suplier ); 
 app.use('/api/clients', clientRoutes);  // Add the client routes
 
-db.authenticate() 
-  .then(() => {
-    console.log('Database connected...');
-    return db.sync(); 
-  })
-  .then(() => {
-    console.log('User table created (if not exists)');
-    app.listen(5000, () => {
-      console.log('Server running on http://localhost:5000');
-    });
-  })
-  .catch(err => {
-    console.error('Database connection error:', err);
-  });
+const PORT = 8080;
+app.listen(PORT, () => {
+    console.log(`Server running on port ${PORT}`);
+});

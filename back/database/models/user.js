@@ -1,8 +1,7 @@
 
 const { DataTypes } = require('sequelize');
-const sequelize = require('../index'); // Import the sequelize instance
 
-const User = sequelize.define('User', {
+const User =  {
   fullName: {
     type: DataTypes.STRING,
     allowNull: false,
@@ -19,6 +18,6 @@ const User = sequelize.define('User', {
     type: DataTypes.STRING,
     allowNull: false,
   },
-});
+};
 
 module.exports = User;

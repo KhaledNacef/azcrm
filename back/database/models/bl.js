@@ -1,7 +1,6 @@
-const { Sequelize, DataTypes, INTEGER } = require('sequelize');
-const sequelize = require('../index'); // Adjust the path to your Sequelize instance as needed
+const { DataTypes } = require('sequelize');
 
-const DeliveryNote = sequelize.define('DeliveryNote', {
+const DeliveryNote =  {
   id: {
     type: DataTypes.INTEGER,
     autoIncrement: true,
@@ -20,7 +19,7 @@ const DeliveryNote = sequelize.define('DeliveryNote', {
     allowNull:false
   }
  
-});
+};
 
 
 
