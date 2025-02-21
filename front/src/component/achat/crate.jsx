@@ -73,10 +73,10 @@ const CreateDeliveryNoteModala = ({ onAddDeliveryNote }) => {
     }
 
     const newNote = {
-      code,
+      code:code,
       spulierId: supplier,
-      timbre,
-      products,
+      timbre:timbre,
+      products:products,
     };
 
     try {
