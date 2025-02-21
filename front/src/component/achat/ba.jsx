@@ -30,11 +30,6 @@ const BonAchatPage = () => {
     
     handleClose();
   };
-
-  useEffect(() => {
-    fetchDeliveryNotes();
-  }, []);
-
   const fetchDeliveryNotes = async () => {
     try {
       const response = await axios.get('https://api.azcrm.deviceshopleader.com/api/bl/stock/getall'); // Adjust URL based on your backend
@@ -43,6 +38,13 @@ const BonAchatPage = () => {
       console.error('Error fetching delivery notes:', error);
     }
   };
+
+  
+  useEffect(() => {
+    fetchDeliveryNotes();
+  }, []);
+
+  
   return (
     <Box sx={{ p: 3 }}>
       <Typography variant="h4" mb={3}>
