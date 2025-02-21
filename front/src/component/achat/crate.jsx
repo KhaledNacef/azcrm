@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import React, { useState, useEffect } from "react";
+import axios from "axios";
 import {
   Box,
   Button,
@@ -11,23 +11,21 @@ import {
   TableCell,
   TableRow,
   TableHead,
-} from '@mui/material';
+} from "@mui/material";
 
-const API_BASE_URL = 'https://api.azcrm.deviceshopleader.com/api';
+const API_BASE_URL = "https://api.azcrm.deviceshopleader.com/api";
 
 const CreateDeliveryNoteModala = ({ onAddDeliveryNote }) => {
-  const [code, setCode] = useState(0);
-  const [supplier, setSupplier] = useState(0); 
-  const [timbre, setTimbre] = useState(false); 
+  const [code, setCode] = useState(""); // Start with an empty string
+  const [supplier, setSupplier] = useState(""); 
+  const [timbre, setTimbre] = useState(false);
   const [products, setProducts] = useState([]);
-  const [newProduct, setNewProduct] = useState('');
+  const [newProduct, setNewProduct] = useState("");
   const [tva, setTva] = useState(0);
   const [prixU_HT, setPrixU_HT] = useState(0);
   const [quantite, setQuantite] = useState(1);
   const [availableProducts, setAvailableProducts] = useState([]);
   const [suppliers, setSuppliers] = useState([]);
-  const [isSupplierSet, setIsSupplierSet] = useState(false); // Track if supplier is set
-  const [isTimbreSet, setIsTimbreSet] = useState(false); // Track if timbre is set
 
   useEffect(() => {
     const fetchData = async () => {
@@ -39,44 +37,54 @@ const CreateDeliveryNoteModala = ({ onAddDeliveryNote }) => {
         setAvailableProducts(productRes.data);
         setSuppliers(supplierRes.data);
       } catch (error) {
-        console.error('Error fetching data:', error);
+        console.error("Error fetching data:", error);
       }
     };
     fetchData();
   }, []);
 
   const handleAddProduct = () => {
-    if (newProduct && !products.some((p) => p.designation === newProduct)) {
-      const selectedProduct = availableProducts.find((p) => p.designation === newProduct);
-      setProducts([
-        ...products,
-        {
-          designation: selectedProduct.designation,
-          Unite: selectedProduct.Unite,
-          tva: parseFloat(tva),
-          prixU_HT: parseFloat(prixU_HT),
-          quantite: parseInt(quantite, 10),
-        },
-      ]);
-      // Reset product-related fields
-      setNewProduct('');
-      setTva(0);
-      setPrixU_HT(0);
-      setQuantite(1);
+    if (!newProduct) {
+      alert("Veuillez sélectionner un produit.");
+      return;
     }
+
+    const selectedProduct = availableProducts.find((p) => p.designation === newProduct);
+    
+    if (!selectedProduct) {
+      alert("Produit invalide sélectionné.");
+      return;
+    }
+
+    setProducts([
+      ...products,
+      {
+        designation: selectedProduct.designation,
+        Unite: selectedProduct.Unite,
+        tva: parseFloat(tva),
+        prixU_HT: parseFloat(prixU_HT),
+        quantite: parseInt(quantite, 10),
+      },
+    ]);
+
+    // Reset fields
+    setNewProduct("");
+    setTva(0);
+    setPrixU_HT(0);
+    setQuantite(1);
   };
 
   const handleSubmit = async () => {
     if (!code || !supplier || products.length === 0) {
-      alert('Veuillez remplir tous les champs obligatoires.');
+      alert("Veuillez remplir tous les champs obligatoires.");
       return;
     }
 
     const newNote = {
-      code:code,
-      spulierId: supplier,
-      timbre:timbre,
-      products:products,
+      code: code,
+      supplierId: supplier, // Changed from spulierId to supplierId
+      timbre: timbre,
+      products: products,
     };
 
     try {
@@ -84,19 +92,9 @@ const CreateDeliveryNoteModala = ({ onAddDeliveryNote }) => {
       alert("Bon d'achat créé avec succès");
       onAddDeliveryNote(newNote);
     } catch (error) {
-      console.error("Error creating delivery note:", error);
+      console.error("Error creating delivery note:", error.response?.data || error);
       alert("Échec de la création du bon d'achat");
     }
-  };
-
-  const handleSupplierChange = (e) => {
-    setSupplier(e.target.value);
-    setIsSupplierSet(true); // Mark the supplier as set
-  };
-
-  const handleTimbreChange = (e) => {
-    setTimbre(e.target.value);
-    setIsTimbreSet(true); // Mark timbre as set
   };
 
   return (
@@ -104,43 +102,40 @@ const CreateDeliveryNoteModala = ({ onAddDeliveryNote }) => {
       <Typography variant="h6" mb={2}>Créer un Bon d'Achat</Typography>
 
       {/* Code input */}
-      <TextField label="Code" value={code} onChange={(e) => setCode(e.target.value)} fullWidth margin="normal" />
+      <TextField
+        label="Code"
+        value={code}
+        onChange={(e) => setCode(e.target.value)}
+        fullWidth
+        margin="normal"
+      />
 
       {/* Supplier selection */}
-<TextField
-  label="Fournisseur"
-  value={supplier}
-  onChange={handleSupplierChange}
-  select
-  fullWidth
-  margin="normal"
->
-  {suppliers.map((sup) => (
-    <MenuItem key={sup.id} value={sup.id}>{sup.fullname}</MenuItem>
-  ))}
-</TextField>
-
-{/* Displaying the selected supplier */}
-{supplier && (
-  <Typography variant="body2" sx={{ marginTop: 2 }}>
-    Fournisseur sélectionné: {suppliers.find((sup) => sup.id === supplier)?.fullname}
-  </Typography>
-)}
+      <TextField
+        label="Fournisseur"
+        value={supplier}
+        onChange={(e) => setSupplier(e.target.value)}
+        select
+        fullWidth
+        margin="normal"
+      >
+        {suppliers.map((sup) => (
+          <MenuItem key={sup.id} value={sup.id}>{sup.fullname}</MenuItem>
+        ))}
+      </TextField>
 
       {/* Timbre selection */}
-      {!isTimbreSet && (
-        <TextField
-          label="Timbre"
-          select
-          value={timbre}
-          onChange={handleTimbreChange}
-          fullWidth
-          margin="normal"
-        >
-          <MenuItem value={true}>Oui</MenuItem>
-          <MenuItem value={false}>Non</MenuItem>
-        </TextField>
-      )}
+      <TextField
+        label="Timbre"
+        select
+        value={timbre}
+        onChange={(e) => setTimbre(e.target.value )}
+        fullWidth
+        margin="normal"
+      >
+        <MenuItem value={true}>Oui</MenuItem>
+        <MenuItem value={false}>Non</MenuItem>
+      </TextField>
 
       {/* Product selection */}
       <TextField
@@ -152,17 +147,42 @@ const CreateDeliveryNoteModala = ({ onAddDeliveryNote }) => {
         margin="normal"
       >
         {availableProducts.map((prod) => (
-          <MenuItem key={prod.id} value={prod.designation}>{prod.designation}</MenuItem>
+          <MenuItem key={prod.id} value={prod.designation}>
+            {prod.designation}
+          </MenuItem>
         ))}
       </TextField>
 
       {/* TVA, Price, and Quantity input */}
-      <TextField label="TVA (%)" type="number" value={tva} onChange={(e) => setTva(e.target.value)} fullWidth margin="normal" />
-      <TextField label="Prix U HT" type="number" value={prixU_HT} onChange={(e) => setPrixU_HT(e.target.value)} fullWidth margin="normal" />
-      <TextField label="Quantité" type="number" value={quantite} onChange={(e) => setQuantite(e.target.value)} fullWidth margin="normal" />
+      <TextField
+        label="TVA (%)"
+        type="number"
+        value={tva}
+        onChange={(e) => setTva(e.target.value)}
+        fullWidth
+        margin="normal"
+      />
+      <TextField
+        label="Prix U HT"
+        type="number"
+        value={prixU_HT}
+        onChange={(e) => setPrixU_HT(e.target.value)}
+        fullWidth
+        margin="normal"
+      />
+      <TextField
+        label="Quantité"
+        type="number"
+        value={quantite}
+        onChange={(e) => setQuantite(e.target.value)}
+        fullWidth
+        margin="normal"
+      />
 
       {/* Add Product Button */}
-      <Button onClick={handleAddProduct} variant="outlined" sx={{ mb: 2 }}>Ajouter Produit</Button>
+      <Button onClick={handleAddProduct} variant="outlined" sx={{ mb: 2 }}>
+        Ajouter Produit
+      </Button>
 
       {/* Products Table */}
       {products.length > 0 && (
