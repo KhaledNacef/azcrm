@@ -70,12 +70,12 @@ const BonAchatPage = () => {
           {deliveryNotes.map((note) => (
             <TableRow key={note.code}>
               <TableCell>{note.code}</TableCell>
-              <TableCell>{note.supplierName}</TableCell>
+              <TableCell>{note.spulierId}</TableCell>
               <TableCell>{new Date(note.createdAt).toLocaleDateString()}</TableCell>
               <TableCell>
                 <Button
                   variant="outlined"
-                  onClick={() => navigate(`/bon-dachat/${note.code}/${note.supplierName}`)}
+                  onClick={() => navigate(`/bon-dachat/${note.code}/${note.spulierId}`)}
                 >
                   Voir
                 </Button>

@@ -117,7 +117,7 @@ const CreateDeliveryNoteModala = ({ onAddDeliveryNote }) => {
           margin="normal"
         >
           {suppliers.map((sup) => (
-            <MenuItem key={sup.id} value={sup.id}>{sup.name}</MenuItem>
+            <MenuItem key={sup.id} value={sup.id}>{sup.fullname}</MenuItem>
           ))}
         </TextField>
       )}
@@ -125,7 +125,7 @@ const CreateDeliveryNoteModala = ({ onAddDeliveryNote }) => {
       {/* Displaying the selected supplier */}
       {supplier && !isSupplierSet && (
         <Typography variant="body2" sx={{ marginTop: 2 }}>
-          Fournisseur sélectionné: {suppliers.find((sup) => sup.id === supplier)?.name}
+          Fournisseur sélectionné: {suppliers.find((sup) => sup.id === supplier)?.fullname}
         </Typography>
       )}
 

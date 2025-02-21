@@ -113,7 +113,7 @@ const CreateDeliveryNoteModal = ({ onAddDeliveryNote }) => {
           margin="normal"
         >
           {clients.map((cl) => (
-            <MenuItem key={cl.id} value={cl.id}>{cl.name}</MenuItem>
+            <MenuItem key={cl.id} value={cl.id}>{cl.fullname}</MenuItem>
           ))}
         </TextField>
       )}
@@ -121,7 +121,7 @@ const CreateDeliveryNoteModal = ({ onAddDeliveryNote }) => {
       {/* Display selected client name */}
       {client && clientSelected && (
         <Typography variant="body1" mb={2}>
-          Client sélectionné: {clients.find((cl) => cl.id === client)?.name}
+          Client sélectionné: {clients.find((cl) => cl.id === client)?.fullname}
         </Typography>
       )}
 
