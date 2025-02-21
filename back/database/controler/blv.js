@@ -53,9 +53,9 @@ async function createBs(req, res) {
 
     // Step 1: Create the Bs (Bon de Sortie)
     const Bss = await Bs.create({
-      clientId,
-      timbre,
-      code
+      clientId:clientId,
+      timbre:timbre,
+      code:code
     });
 
     // Step 2: Handle the products
@@ -64,10 +64,10 @@ async function createBs(req, res) {
 
       // Create a new Vente entry (always linked to the Bs)
       await Vente.create({
-        prixU_HT,
-        quantite,
-        designation,
-        Unite,
+        prixU_HT:prixU_HT,
+        quantite:quantite,
+        designation:designation,
+        Unite:Unite,
         code: code, // Link Stock with Bs ID
       });
 
