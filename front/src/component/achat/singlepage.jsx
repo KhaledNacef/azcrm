@@ -35,7 +35,7 @@ const SingleDeliveryNote = () => {
   if (error) return <Typography color="error">{error}</Typography>;
 
   const totalNetHT = deliveryNote.products.reduce(
-    (acc, prod) => acc + prod.prixU_HT * prod.quantity,
+    (acc, prod) => acc + prod.prixU_HT * prod.quantite,
     0
   );
   const totalTVA = totalNetHT * (deliveryNote.products[0]?.TVA / 100);
@@ -80,7 +80,7 @@ const SingleDeliveryNote = () => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {deliveryNote.products.map((product, index) => (
+            {deliveryNote.map((product, index) => (
               <TableRow key={index}>
                 <TableCell>{product.name}</TableCell>
                 <TableCell>{product.quantity}</TableCell>

@@ -146,7 +146,7 @@ const SingleDeliverysortie = () => {
               </TableRow>
             </TableHead>
             <TableBody>
-              {deliveryNote.products.map((product, index) => (
+              {deliveryNote.map((product, index) => (
                 <TableRow key={index}>
                   <TableCell>{product.designation}</TableCell>
                   <TableCell>{product.quantite}</TableCell>
