@@ -70,7 +70,7 @@ const CreateDeliveryNoteModal = ({ onAddDeliveryNote }) => {
 
     const newNote = {
       code,
-      clientId: client,
+      clientId:client,
       timbre,
       products,
     };
@@ -100,23 +100,26 @@ const CreateDeliveryNoteModal = ({ onAddDeliveryNote }) => {
       />
 
       {/* Client Selection - Only show if client is not selected */}
-      {!clientSelected && (
-        <TextField
-          label="Client"
-          value={client}
-          onChange={(e) => {
-            setClient(e.target.value);
-            setClientSelected(true);
-          }}
-          select
-          fullWidth
-          margin="normal"
-        >
-          {clients.map((cl) => (
-            <MenuItem key={cl.id} value={cl.id}>{cl.fullname}</MenuItem>
-          ))}
-        </TextField>
-      )}
+      <TextField
+  label="Client"
+  value={client}
+  onChange={(e) => setClient(e.target.value)}
+  select
+  fullWidth
+  margin="normal"
+>
+  {clients.map((cl) => (
+    <MenuItem key={cl.id} value={cl.id}>{cl.fullname}</MenuItem>
+  ))}
+</TextField>
+
+{/* Display selected client name */}
+{client && (
+  <Typography variant="body1" mb={2}>
+    Client sélectionné: {clients.find((cl) => cl.id === client)?.fullname}
+  </Typography>
+)}
+
 
       {/* Display selected client name */}
       {client && clientSelected && (

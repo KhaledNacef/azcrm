@@ -15,7 +15,7 @@ const DeliveryNote =  {
     allowNull:false
   },
   code:{
-    type:DataTypes.INTEGER,
+    type:DataTypes.STRING,
     allowNull:false
   }
  
