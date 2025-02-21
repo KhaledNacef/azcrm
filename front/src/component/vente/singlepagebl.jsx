@@ -39,7 +39,7 @@ const SingleDeliverysortie = () => {
 
     fetchClientData();
     fetchDeliveryNoteData();
-  }, [code, clientName]);
+  }, [code, clientId]);
 
   const totalNettc = deliveryNote?.reduce(
     (acc, prod) => acc + (prod.prixU_HT || 0) * (prod.quantite || 0),
