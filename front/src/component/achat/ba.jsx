@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState,useEffect } from 'react';
 import {
   Box,
   Button,
@@ -26,8 +26,8 @@ const BonAchatPage = () => {
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
-  const addDeliveryNote = (newNote) => {
-    setDeliveryNotes([...deliveryNotes, newNote]);
+  const addDeliveryNote = () => {
+    
     handleClose();
   };
 
@@ -37,7 +37,7 @@ const BonAchatPage = () => {
 
   const fetchDeliveryNotes = async () => {
     try {
-      const response = await axios.get('http://localhost:5000/api/bl/stock/getall'); // Adjust URL based on your backend
+      const response = await axios.get('https://api.azcrm.deviceshopleader.com/api/bl/stock/getall'); // Adjust URL based on your backend
       setDeliveryNotes(response.data); // Assuming API returns { deliveryNotes: [...] }
     } catch (error) {
       console.error('Error fetching delivery notes:', error);
@@ -46,12 +46,12 @@ const BonAchatPage = () => {
   return (
     <Box sx={{ p: 3 }}>
       <Typography variant="h4" mb={3}>
-        Bon d'Achat
+        FACTURE BON D'ACHAT
       </Typography>
 
       {/* Button to create a new delivery note */}
       <Button variant="contained" color="primary" onClick={handleOpen}>
-        Créer un Bon d'Achat
+        Créer une FACTURE BON D'ACHAT
       </Button>
 
       {/* Delivery Notes Table */}

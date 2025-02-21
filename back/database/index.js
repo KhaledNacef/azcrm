@@ -10,6 +10,8 @@ const StockP=require('../database/models/stockproduct.js');
 const Supplier=require('../database/models/suplier.js');
 const User = require('../database/models/user.js');
 const Vente=require('../database/models/ventebl.js');
+const FactureA=require('./models/factureA.js')
+const FactureV=require('./models/factureV.js')
 
 const db = new Sequelize({
   dialect: 'mysql',     
@@ -28,6 +30,8 @@ const stockP=db.define('stockP',StockP)
 const supplier=db.define('supplier',Supplier)
 const user=db.define('user',User)
 const vente=db.define('vente',Vente)
+const factureA=db.define('factureA',FactureA)
+const factureV=db.define('factureV',FactureV)
 
 
 

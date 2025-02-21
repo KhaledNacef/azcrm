@@ -1,6 +1,6 @@
 const Sequelize = require('sequelize');
 const db  = require('../index'); 
-const Bs =db.models.bs
+const DeliveryNote =db.models.DeliveryNote
 const Stock =db.models.stock
 const StockP =db.models.stockP
 
@@ -12,7 +12,7 @@ const StockP =db.models.stockP
 
 const getAllStockItemsByDeliveryNote = async (req, res) => {
   try {
-    const { code } = req.body; // Assuming `code` is passed in the request body
+    const { code } = req.params; // Assuming `code` is passed in the request body
 
 
 

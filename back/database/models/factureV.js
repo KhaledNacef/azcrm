@@ -1,6 +1,6 @@
 const {  DataTypes } = require('sequelize');
 
-const Vente =  {
+const FactureV =  {
   id: {
     type: DataTypes.INTEGER,
     autoIncrement: true,
@@ -12,7 +12,7 @@ const Vente =  {
   },
   net: {
     type: DataTypes.FLOAT,
-    allowNull: true,
+    allowNull: false,
   },
  
   quantite: {
@@ -30,10 +30,10 @@ const Vente =  {
   },
   code: {
     type: DataTypes.STRING,
-    allowNull: false,
+    allowNull: true,
   }
   
   
 };
 
-module.exports = Vente;
+module.exports = FactureV;

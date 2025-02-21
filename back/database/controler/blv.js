@@ -1,22 +1,21 @@
 const Sequelize = require('sequelize');
 const db  = require('../index'); // Adjust the path to your model as needed
 const Bs =db.models.bs
-const Stock =db.models.stock
-const StockP =db.models.stockP
-
+const Vente=db.models.vente
+const StockP=db.models.stockP
 
 
 
 
 const getAllStockItemsByBs = async (req, res) => {
   try {
-    const { code } = req.body; // Assuming `code` is passed in the request body
+    const { code } = req.params; // Assuming `code` is passed in the request body
 
 
 
     // Fetch all Stock items where BaId matches the Bs's id
-    const stocks = await Stock.findAll({
-      where: { BaId: code },
+    const stocks = await Vente.findAll({
+      where: { code: code },
     });
 
     res.status(200).json(stocks);
@@ -54,32 +53,33 @@ async function getAllBss(req, res) {
 // Controller to create a Bs
 async function createBs(req, res) {
   try {
-    const { spulierId, timbre, products,code } = req.body;
+    const {clientId, timbre, products,code } = req.body;
 
     // Step 1: Create the Bs (Bon d'achat)
     const Bs = await Bs.create({
-      spulierId,
+      clientId,
       timbre,
       code
     });
 
-    // Step 2: Handle stock and stockP for each product
+   
     const stockPromises = products.map(async (product) => {
       const {
         prixU_HT,
+        netTTC,
         quantite,
         designation,
         Unite,
       } = product;
 
       // **Step 2.1: Create a new Stock entry (always linked to the Bs)**
-      await Stock.create({
+      await Vente.create({
         prixU_HT,
-        tva,
+        netTTC,
         quantite,
         designation,
         Unite,
-        BaId: code, // Link Stock with Bs ID
+        code: code, // Link Stock with Bs ID
       });
 
       // **Step 2.2: Handle StockP (general stock)**
@@ -95,7 +95,7 @@ async function createBs(req, res) {
           {
             prixU_HT, // Update the price
             tva, // Update the TVA
-            quantite: stockP.quantite + quantite, // Add the new quantity to the existing quantity
+            quantite: stockP.quantite - quantite, // Add the new quantity to the existing quantity
           },
           {
             where: {
@@ -103,16 +103,7 @@ async function createBs(req, res) {
             },
           }
         );
-      } else {
-        // If the StockP entry does not exist, create a new one
-        await StockP.create({
-          prixU_HT,
-          tva,
-          quantite,
-          designation,
-          Unite,
-        });
-      }
+      } 
     });
 
     // Wait for all Stock and StockP entries to be processed
@@ -144,9 +135,9 @@ async function deleteBs(req, res) {
     }
 
     // Step 2: Delete the associated Stock entries first
-    await Stock.destroy({
+    await Vente.destroy({
       where: {
-        BaId: BsId, // Match by the Bs ID (BaId)
+        code: BsId, // Match by the Bs ID (BaId)
       },
     });
 

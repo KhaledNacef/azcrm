@@ -12,29 +12,29 @@ import {
   Typography,
   Button,
 } from '@mui/material';
+import axios from 'axios';
 
 const ProductPage = () => {
   const [products, setProducts] = useState([]); // All products
   const [filteredProducts, setFilteredProducts] = useState([]); // Filtered products
   const [searchQuery, setSearchQuery] = useState(''); // Search input
   const [productName, setProductName] = useState(''); // New product name
-  const [productPrice, setProductPrice] = useState(''); // New product price
+  const [productUnite, setProductUnite] = useState(''); // New product unite
   const [editProductId, setEditProductId] = useState(null); // Product to edit
   const [editProductName, setEditProductName] = useState(''); // Edited name
-  const [editProductPrice, setEditProductPrice] = useState(''); // Edited price
+  const [editProductUnite, setEditProductUnite] = useState(''); // Edited unite
+  const API_BASE_URL = 'https://api.azcrm.deviceshopleader.com/api';
 
-  // Simulated product data
+  // Fetch products from the backend
   useEffect(() => {
     const fetchProducts = async () => {
-      // Replace with your API call
-      const mockProducts = [
-        { id: 1, name: 'Product A', price: 50 },
-        { id: 2, name: 'Product B', price: 75 },
-        { id: 3, name: 'Product C', price: 100 },
-        { id: 4, name: 'Product D', price: 200 },
-      ];
-      setProducts(mockProducts);
-      setFilteredProducts(mockProducts);
+      try {
+        const response = await axios.get(`${API_BASE_URL}/products/getallp`);
+        setProducts(response.data);
+        setFilteredProducts(response.data);
+      } catch (error) {
+        console.error('Error fetching products:', error);
+      }
     };
 
     fetchProducts();
@@ -47,52 +47,72 @@ const ProductPage = () => {
 
     const filtered = products.filter(
       (product) =>
-        product.name.toLowerCase().includes(query) ||
+        product.designation.toLowerCase().includes(query) ||
         product.id.toString().includes(query)
     );
     setFilteredProducts(filtered);
   };
 
   // Handle add product
-  const handleAddProduct = () => {
-    if (productName && productPrice) {
-      const newProduct = {
-        id: products.length + 1,
-        name: productName,
-        price: parseFloat(productPrice),
-      };
-      setProducts([...products, newProduct]);
-      setFilteredProducts([...products, newProduct]);
-      setProductName('');
-      setProductPrice('');
+  const handleAddProduct = async () => {
+    if (productName && productUnite) {
+      try {
+        const newProduct = {
+          designation: productName,
+          Unite: productUnite,
+        };
+
+        const response = await axios.post(`${API_BASE_URL}/products/createproduct`, newProduct);
+        setProducts([...products, response.data]);
+        setFilteredProducts([...products, response.data]);
+        setProductName('');
+        setProductUnite('');
+      } catch (error) {
+        console.error('Error creating product:', error);
+      }
     }
   };
 
   // Handle edit product
   const handleEditProduct = (product) => {
     setEditProductId(product.id);
-    setEditProductName(product.name);
-    setEditProductPrice(product.price);
+    setEditProductName(product.designation);
+    setEditProductUnite(product.Unite);
   };
 
-  const handleUpdateProduct = () => {
-    const updatedProducts = products.map((product) =>
-      product.id === editProductId
-        ? { ...product, name: editProductName, price: parseFloat(editProductPrice) }
-        : product
-    );
-    setProducts(updatedProducts);
-    setFilteredProducts(updatedProducts);
-    setEditProductId(null);
-    setEditProductName('');
-    setEditProductPrice('');
+  const handleUpdateProduct = async () => {
+    const updatedProduct = {
+      designation: editProductName,
+      Unite: editProductUnite,
+    };
+
+    try {
+      const response = await axios.put(`${API_BASE_URL}/products/upprod/${editProductId}`, updatedProduct);
+      const updatedProducts = products.map((product) =>
+        product.id === editProductId
+          ? { ...product, designation: editProductName, Unite: editProductUnite }
+          : product
+      );
+      setProducts(updatedProducts);
+      setFilteredProducts(updatedProducts);
+      setEditProductId(null);
+      setEditProductName('');
+      setEditProductUnite('');
+    } catch (error) {
+      console.error('Error updating product:', error);
+    }
   };
 
   // Handle delete product
-  const handleDeleteProduct = (productId) => {
-    const remainingProducts = products.filter((product) => product.id !== productId);
-    setProducts(remainingProducts);
-    setFilteredProducts(remainingProducts);
+  const handleDeleteProduct = async (productId) => {
+    try {
+      await axios.delete(`${API_BASE_URL}/products/proddel/${productId}`);
+      const remainingProducts = products.filter((product) => product.id !== productId);
+      setProducts(remainingProducts);
+      setFilteredProducts(remainingProducts);
+    } catch (error) {
+      console.error('Error deleting product:', error);
+    }
   };
 
   return (
@@ -112,11 +132,11 @@ const ProductPage = () => {
           sx={{ mb: 2 }}
         />
         <TextField
-          label="Product Price ($)"
+          label="Unite"
           variant="outlined"
           fullWidth
-          value={productPrice}
-          onChange={(e) => setProductPrice(e.target.value)}
+          value={productUnite}
+          onChange={(e) => setProductUnite(e.target.value)}
           sx={{ mb: 2 }}
         />
         <Button variant="contained" color="primary" onClick={handleAddProduct}>
@@ -136,11 +156,11 @@ const ProductPage = () => {
             sx={{ mb: 2 }}
           />
           <TextField
-            label="Product Price ($)"
+            label="Unite"
             variant="outlined"
             fullWidth
-            value={editProductPrice}
-            onChange={(e) => setEditProductPrice(e.target.value)}
+            value={editProductUnite}
+            onChange={(e) => setEditProductUnite(e.target.value)}
             sx={{ mb: 2 }}
           />
           <Button variant="contained" color="secondary" onClick={handleUpdateProduct}>
@@ -166,7 +186,7 @@ const ProductPage = () => {
             <TableRow>
               <TableCell><strong>ID</strong></TableCell>
               <TableCell><strong>Name</strong></TableCell>
-              <TableCell><strong>Price ($)</strong></TableCell>
+              <TableCell><strong>Unite</strong></TableCell>
               <TableCell><strong>Actions</strong></TableCell>
             </TableRow>
           </TableHead>
@@ -175,8 +195,8 @@ const ProductPage = () => {
               filteredProducts.map((product) => (
                 <TableRow key={product.id}>
                   <TableCell>{product.id}</TableCell>
-                  <TableCell>{product.name}</TableCell>
-                  <TableCell>{product.price}</TableCell>
+                  <TableCell>{product.designation}</TableCell>
+                  <TableCell>{product.Unite}</TableCell>
                   <TableCell>
                     <Button
                       variant="outlined"

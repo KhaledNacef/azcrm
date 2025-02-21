@@ -11,7 +11,7 @@ const DeliveryNote =  {
     allowNull:false
   },
   timbre:{
-    type:DataTypes.STRING,
+    type:DataTypes.BOOLEAN,
     allowNull:false
   },
   code:{

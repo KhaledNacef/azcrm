@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   Box,
   Button,
@@ -11,18 +11,27 @@ import {
   Modal,
 } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
-import CreateDeliveryNoteModal from './cratebl.jsx'
+import CreateDeliveryNoteModal from './cratebl.jsx';
+import axios from 'axios';
 
 const BonsortiePage = () => {
   const navigate = useNavigate();
-
-  // Hardcoded delivery notes
-  const [deliveryNotes, setDeliveryNotes] = useState([
-    { code: 'DN001', supplierName: "khaled", createdAt: '2025-01-20' },
-    { code: 'DN002', supplierName: "azmi", createdAt: '2025-01-21' },
-  ]);
-
+  const [deliveryNotes, setDeliveryNotes] = useState([]);
   const [open, setOpen] = useState(false); // Modal state
+  const API_BASE_URL = 'https://api.azcrm.deviceshopleader.com/api';
+  // Fetch all Bs (delivery notes) from the server
+  useEffect(() => {
+    const fetchDeliveryNotes = async () => {
+      try {
+        const response = await axios.get(`${API_BASE_URL}/bs/bs/get`); // Make sure to update the endpoint if needed
+        setDeliveryNotes(response.data.Bss); // Assuming the response structure has `Bss`
+      } catch (error) {
+        console.error('Error fetching delivery notes:', error);
+      }
+    };
+
+    fetchDeliveryNotes();
+  }, []);
 
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
@@ -57,12 +66,12 @@ const BonsortiePage = () => {
           {deliveryNotes.map((note) => (
             <TableRow key={note.code}>
               <TableCell>{note.code}</TableCell>
-              <TableCell>{note.supplierName}</TableCell>
+              <TableCell>{note.clientId}</TableCell>
               <TableCell>{new Date(note.createdAt).toLocaleDateString()}</TableCell>
               <TableCell>
                 <Button
                   variant="outlined"
-                  onClick={() => navigate(`/bon-livraison/${note.code}/${note.supplierName}`)}
+                  onClick={() => navigate(`/bon-livraison/${note.code}/${note.clientId}`)}
                 >
                   Voir
                 </Button>
