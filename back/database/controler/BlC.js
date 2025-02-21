@@ -1,6 +1,6 @@
 const Sequelize = require('sequelize');
 const db  = require('../index'); 
-const DeliveryNote =db.models.DeliveryNote
+const DeliveryNote =db.models.deliveryNote
 const Stock =db.models.stock
 const StockP =db.models.stockP
 
