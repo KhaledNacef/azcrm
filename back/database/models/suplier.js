@@ -3,9 +3,9 @@ const { UUID, UUIDV4 } = require('sequelize');
 
 const Supplier = {
   id: {
-      type: UUID, // UUID type for unique string IDs
-      defaultValue: UUIDV4, // Generate UUIDs by default
-      primaryKey: true,
+    type: DataTypes.INTEGER,
+    autoIncrement: true,
+    primaryKey: true,
     },
   fullname: {
     type: DataTypes.STRING,
