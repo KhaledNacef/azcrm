@@ -52,7 +52,7 @@ const CreateDeliveryNoteModala = ({ onAddDeliveryNote }) => {
         ...products,
         {
           designation: selectedProduct.designation,
-          Unite: selectedProduct.unite,
+          Unite: selectedProduct.Unite,
           tva: parseFloat(tva),
           prixU_HT: parseFloat(prixU_HT),
           quantite: parseInt(quantite, 10),

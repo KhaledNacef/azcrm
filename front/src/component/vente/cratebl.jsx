@@ -49,7 +49,7 @@ const CreateDeliveryNoteModal = ({ onAddDeliveryNote }) => {
         ...products,
         {
           designation: selectedProduct.designation,
-          Unite: selectedProduct.unite,
+          Unite: selectedProduct.Unite,
           prixU_HT: parseFloat(prixU_HT),
           quantite: parseInt(quantite, 10),
         },
