@@ -61,9 +61,9 @@ async function createDeliveryNote(req, res) {
 
     // Step 1: Create the DeliveryNote (Bon d'achat)
     const deliveryNote = await DeliveryNote.create({
-      spulierId,
-      timbre,
-      code,
+      spulierId:spulierId,
+      timbre:timbre,
+      code:code,
     });
 
     // Step 2: Handle stock and stockP for each product
@@ -72,11 +72,11 @@ async function createDeliveryNote(req, res) {
 
       // **Step 2.1: Create a new Stock entry (always linked to the DeliveryNote)**
       await Stock.create({
-        prixU_HT,
-        tva,
-        quantite,
-        designation,
-        Unite,
+        prixU_HT:prixU_HT,
+        tva:tva,
+        quantite:quantite,
+        designation:designation,
+        Unite:Unite,
         BaId: code, // Link Stock with DeliveryNote ID
       });
 
@@ -91,8 +91,8 @@ async function createDeliveryNote(req, res) {
         // If the StockP entry exists, update tva, prixU_HT, and add quantity
         await stockP.update(
           {
-            prixU_HT, // Update the price
-            tva, // Update the TVA
+            prixU_HT:prixU_HT, // Update the price
+            tva:tva, // Update the TVA
             quantite: stockP.quantite + quantite, // Add the new quantity to the existing quantity
           },
           {
@@ -104,11 +104,11 @@ async function createDeliveryNote(req, res) {
       } else {
         // If the StockP entry does not exist, create a new one
         await StockP.create({
-          prixU_HT,
-          tva,
-          quantite,
-          designation,
-          Unite,
+          prixU_HT:prixU_HT,
+          tva:tva,
+          quantite:quantite,
+          designation:designation,
+          Unite:Unite,
         });
       }
     });
