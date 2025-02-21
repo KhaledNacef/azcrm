@@ -11,7 +11,7 @@ import {
   Modal,
 } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
-import CreateDeliveryNoteModal from './crate.jsx'
+import CreateDeliveryNoteModala from './crate.jsx'
 import axios from 'axios';
 
 
@@ -98,7 +98,7 @@ const BonAchatPage = () => {
             width: 500,
           }}
         >
-          <CreateDeliveryNoteModal onAddDeliveryNote={addDeliveryNote} />
+          <CreateDeliveryNoteModala onAddDeliveryNote={addDeliveryNote} />
         </Box>
       </Modal>
     </Box>

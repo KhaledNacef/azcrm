@@ -1,6 +1,6 @@
 // productController.js
-const Product = require('../models/product'); // Adjust the path to your Product model
-
+const db = require('../index'); // Adjust the path to your Product model
+const Product=db.models.product
 // Get all products
 exports.getAllProducts = async (req, res) => {
   try {

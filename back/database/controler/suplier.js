@@ -13,6 +13,26 @@ async function getAllSuppliers(req, res) {
   }
 }
 
+async function getidSuppliers(req, res) {
+  try {
+    const { id } = req.params; // Extract ID from request parameters
+    if (!id) {
+      return res.status(400).json({ error: 'Supplier ID is required' });
+    }
+
+    const supplier = await Supplier.findByPk(id);
+
+    if (!supplier) {
+      return res.status(404).json({ error: 'Supplier not found' });
+    }
+
+    return res.status(200).json(supplier);
+  } catch (error) {
+    console.error('Error fetching supplier:', error);
+    return res.status(500).json({ error: 'Failed to fetch supplier' });
+  }
+}
+
 
 // Create a new supplier
 async function createSupplier(req, res) {
@@ -110,5 +130,5 @@ async function deleteSupplier(req, res) {
 module.exports = {
   createSupplier,
   updateSupplier,
-  deleteSupplier,getAllSuppliers
+  deleteSupplier,getAllSuppliers,getidSuppliers
 };

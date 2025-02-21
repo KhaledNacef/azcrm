@@ -36,8 +36,7 @@ const BonsortiePage = () => {
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
-  const addDeliveryNote = (newNote) => {
-    setDeliveryNotes([...deliveryNotes, newNote]);
+  const addDeliveryNote = () => {
     handleClose();
   };
 

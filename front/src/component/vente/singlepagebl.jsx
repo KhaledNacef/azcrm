@@ -17,7 +17,7 @@ const SingleDeliverysortie = () => {
     // Fetch client data
     const fetchClientData = async () => {
       try {
-        const response = await fetch(`/api/clients/${clientName}`);
+        const response = await fetch(`/api/clients/getcli/${clientName}`);
         const data = await response.json();
         setClient(data); // Set client data
       } catch (error) {
@@ -28,7 +28,7 @@ const SingleDeliverysortie = () => {
     // Fetch delivery note data
     const fetchDeliveryNoteData = async () => {
       try {
-        const response = await fetch(`/api/delivery-notes/${code}`);
+        const response = await fetch(`/bs/bs/stock/${code}`);
         const data = await response.json();
         setDeliveryNote(data); // Set delivery note data
       } catch (error) {
@@ -141,7 +141,7 @@ const SingleDeliverysortie = () => {
                 <TableCell>Produit</TableCell>
                 <TableCell>Quantité</TableCell>
                 <TableCell>Unité</TableCell>
-                <TableCell>Prix U HT</TableCell>
+                <TableCell>Prix U </TableCell>
                 <TableCell>Prix Net</TableCell>
               </TableRow>
             </TableHead>
@@ -151,8 +151,8 @@ const SingleDeliverysortie = () => {
                   <TableCell>{product.name}</TableCell>
                   <TableCell>{product.quantity}</TableCell>
                   <TableCell>{product.unite}</TableCell>
-                  <TableCell>{product.prixU_HT.toFixed(2)}</TableCell>
-                  <TableCell>{(product.prixU_HT * product.quantity).toFixed(2)}</TableCell>
+                  <TableCell>{product.prixU_HT.toFixed(2)}$</TableCell>
+                  <TableCell>{(product.prixU_HT * product.quantity).toFixed(2)}$</TableCell>
                 </TableRow>
               ))}
             </TableBody>

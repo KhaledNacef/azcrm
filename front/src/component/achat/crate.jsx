@@ -15,7 +15,7 @@ import {
 
 const API_BASE_URL = 'https://api.azcrm.deviceshopleader.com/api';
 
-const CreateDeliveryNoteModal = ({ onAddDeliveryNote }) => {
+const CreateDeliveryNoteModala = ({ onAddDeliveryNote }) => {
   const [code, setCode] = useState('');
   const [supplier, setSupplier] = useState('');
   const [timbre, setTimbre] = useState(false);
@@ -77,7 +77,7 @@ const CreateDeliveryNoteModal = ({ onAddDeliveryNote }) => {
     };
 
     try {
-      await axios.post(`${API_BASE_URL}/stock/add`, newNote);
+      await axios.post(`${API_BASE_URL}/bl/stock/add`, newNote);
       alert("Bon d'achat créé avec succès");
       onAddDeliveryNote(newNote);
     } catch (error) {
@@ -158,4 +158,4 @@ const CreateDeliveryNoteModal = ({ onAddDeliveryNote }) => {
   );
 };
 
-export default CreateDeliveryNoteModal;
+export default CreateDeliveryNoteModala;
