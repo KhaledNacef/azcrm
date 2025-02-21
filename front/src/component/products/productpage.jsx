@@ -29,7 +29,7 @@ const ProductPage = () => {
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const response = await axios.get(`${API_BASE_URL}/products/getallp`);
+        const response = await axios.get(`${API_BASE_URL}/product/getallp`);
         setProducts(response.data);
         setFilteredProducts(response.data);
       } catch (error) {
@@ -62,7 +62,7 @@ const ProductPage = () => {
           Unite: productUnite,
         };
 
-        const response = await axios.post(`${API_BASE_URL}/products/createproduct`, newProduct);
+        const response = await axios.post(`${API_BASE_URL}/product/createproduct`, newProduct);
         setProducts([...products, response.data]);
         setFilteredProducts([...products, response.data]);
         setProductName('');
@@ -87,7 +87,7 @@ const ProductPage = () => {
     };
 
     try {
-      const response = await axios.put(`${API_BASE_URL}/products/upprod/${editProductId}`, updatedProduct);
+      const response = await axios.put(`${API_BASE_URL}/product/upprod/${editProductId}`, updatedProduct);
       const updatedProducts = products.map((product) =>
         product.id === editProductId
           ? { ...product, designation: editProductName, Unite: editProductUnite }
@@ -106,7 +106,7 @@ const ProductPage = () => {
   // Handle delete product
   const handleDeleteProduct = async (productId) => {
     try {
-      await axios.delete(`${API_BASE_URL}/products/proddel/${productId}`);
+      await axios.delete(`${API_BASE_URL}/product/proddel/${productId}`);
       const remainingProducts = products.filter((product) => product.id !== productId);
       setProducts(remainingProducts);
       setFilteredProducts(remainingProducts);
