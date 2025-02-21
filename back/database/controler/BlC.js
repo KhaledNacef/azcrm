@@ -57,7 +57,7 @@ async function getAllDeliveryNotes(req, res) {
 // Controller to create a DeliveryNote
 async function createDeliveryNote(req, res) {
   try {
-    const { spulierId, timbre, products,code } = req.body;
+    const { code,spulierId, timbre, products } = req.body;
 
     // Step 1: Create the DeliveryNote (Bon d'achat)
     const deliveryNote = await DeliveryNote.create({
