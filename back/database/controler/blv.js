@@ -46,16 +46,15 @@ async function getAllBss(req, res) {
 }
 
 
-
 async function createBs(req, res) {
   try {
-    const {code ,clientId, timbre, products} = req.body;
+    const { code, clientId, timbre, products } = req.body;
 
     // Step 1: Create the Bs (Bon de Sortie)
     const Bss = await Bs.create({
-      clientId:clientId,
-      timbre:timbre,
-      code:code
+      clientId: clientId,
+      timbre: timbre,
+      code: code
     });
 
     // Step 2: Handle the products
@@ -64,10 +63,11 @@ async function createBs(req, res) {
 
       // Create a new Vente entry (always linked to the Bs)
       await Vente.create({
-        prixU_HT:prixU_HT,
-        quantite:quantite,
-        designation:designation,
-        Unite:Unite,
+        prixU_HT: prixU_HT,
+        net: prixU_HT * quantite,
+        quantite: quantite,
+        designation: designation,
+        Unite: Unite,
         code: code, // Link Stock with Bs ID
       });
 
@@ -80,7 +80,7 @@ async function createBs(req, res) {
 
       if (stockP) {
         // Update the StockP entry
-        await StockP.update(
+        await stockP.update(
           {
             prixU_HT, // Update the price
             quantite: stockP.quantite - quantite, // Deduct the sold quantity
@@ -95,7 +95,7 @@ async function createBs(req, res) {
     });
 
     // Wait for all Stock and StockP entries to be processed
-    await Promise.all(stockPromises,Bss);
+    await Promise.all(stockPromises);
 
     return res.status(201).json({
       message: 'Bon de Sortie, Stock, and StockP successfully created',
@@ -108,6 +108,7 @@ async function createBs(req, res) {
     });
   }
 }
+
 
 
 // Controller to delete a Bs and associated Stock

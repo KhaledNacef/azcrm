@@ -1,4 +1,4 @@
-import React, { useState,useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   Box,
   Button,
@@ -11,47 +11,44 @@ import {
   Modal,
 } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
-import CreateDeliveryNoteModala from './crate.jsx'
+import CreateDeliveryNoteModala from './crate.jsx'; // Ensure correct file name
 import axios from 'axios';
-
 
 const BonAchatPage = () => {
   const navigate = useNavigate();
-
-  // Hardcoded delivery notes
+  
+  // State to hold the delivery notes
   const [deliveryNotes, setDeliveryNotes] = useState([]);
-
-  const [open, setOpen] = useState(false); // Modal state
+  
+  // Modal state
+  const [open, setOpen] = useState(false);
 
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
-  const addDeliveryNote = () => {
-    
-    handleClose();
-  };
+  // Fetch delivery notes from the backend
   const fetchDeliveryNotes = async () => {
     try {
-      const response = await axios.get('https://api.azcrm.deviceshopleader.com/api/bl/stock/getall'); // Adjust URL based on your backend
-      setDeliveryNotes(response.data); // Assuming API returns { deliveryNotes: [...] }
+      const response = await axios.get('https://api.azcrm.deviceshopleader.com/api/bl/stock/getall'); // Adjust URL as needed
+      setDeliveryNotes(response.data); // Assuming API returns an array of delivery notes
     } catch (error) {
       console.error('Error fetching delivery notes:', error);
     }
   };
 
-  
+  // Add the new delivery note to the state
+ 
   useEffect(() => {
     fetchDeliveryNotes();
   }, []);
 
-  
   return (
     <Box sx={{ p: 3 }}>
       <Typography variant="h4" mb={3}>
         FACTURE BON D'ACHAT
       </Typography>
 
-      {/* Button to create a new delivery note */}
+      {/* Button to open the modal for creating a new delivery note */}
       <Button variant="contained" color="primary" onClick={handleOpen}>
         Créer une FACTURE BON D'ACHAT
       </Button>
@@ -85,7 +82,7 @@ const BonAchatPage = () => {
         </TableBody>
       </Table>
 
-      {/* Modal for creating a delivery note */}
+      {/* Modal for creating a new delivery note */}
       <Modal open={open} onClose={handleClose}>
         <Box
           sx={{
@@ -100,7 +97,7 @@ const BonAchatPage = () => {
             width: 500,
           }}
         >
-          <CreateDeliveryNoteModala onAddDeliveryNote={addDeliveryNote} />
+          <CreateDeliveryNoteModala  />
         </Box>
       </Modal>
     </Box>

@@ -57,24 +57,18 @@ async function getAllDeliveryNotes(req, res) {
 // Controller to create a DeliveryNote
 async function createDeliveryNote(req, res) {
   try {
-    const { code,spulierId, timbre, products } = req.body;
+    const { code, spulierId, timbre, products } = req.body;
 
     // Step 1: Create the DeliveryNote (Bon d'achat)
     const deliveryNote = await DeliveryNote.create({
       spulierId,
       timbre,
-      code
+      code,
     });
 
     // Step 2: Handle stock and stockP for each product
     const stockPromises = products.map(async (product) => {
-      const {
-        prixU_HT,
-        tva,
-        quantite,
-        designation,
-        Unite,
-      } = product;
+      const { prixU_HT, tva, quantite, designation, Unite } = product;
 
       // **Step 2.1: Create a new Stock entry (always linked to the DeliveryNote)**
       await Stock.create({
@@ -95,7 +89,7 @@ async function createDeliveryNote(req, res) {
 
       if (stockP) {
         // If the StockP entry exists, update tva, prixU_HT, and add quantity
-        await StockP.update(
+        await stockP.update(
           {
             prixU_HT, // Update the price
             tva, // Update the TVA
@@ -120,7 +114,7 @@ async function createDeliveryNote(req, res) {
     });
 
     // Wait for all Stock and StockP entries to be processed
-    await Promise.all(stockPromises,deliveryNote);
+    await Promise.all(stockPromises);
 
     return res.status(201).json({
       message: 'DeliveryNote, Stock, and StockP successfully created',
