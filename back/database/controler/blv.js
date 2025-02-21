@@ -51,38 +51,32 @@ async function getAllBss(req, res) {
 
 
 // Controller to create a Bs
+// Controller to create a Bon de Sortie (Bs)
 async function createBs(req, res) {
   try {
-    const {clientId, timbre, products,code } = req.body;
+    const { clientId, timbre, products, code } = req.body;
 
-    // Step 1: Create the Bs (Bon d'achat)
+    // Step 1: Create the Bs (Bon de Sortie)
     const Bs = await Bs.create({
       clientId,
       timbre,
       code
     });
 
-   
+    // Step 2: Handle the products
     const stockPromises = products.map(async (product) => {
-      const {
-        prixU_HT,
-        netTTC,
-        quantite,
-        designation,
-        Unite,
-      } = product;
+      const { prixU_HT, quantite, designation, Unite } = product;
 
-      // **Step 2.1: Create a new Stock entry (always linked to the Bs)**
+      // Create a new Vente entry (always linked to the Bs)
       await Vente.create({
         prixU_HT,
-        netTTC,
         quantite,
         designation,
         Unite,
         code: code, // Link Stock with Bs ID
       });
 
-      // **Step 2.2: Handle StockP (general stock)**
+      // Handle StockP (general stock)
       const stockP = await StockP.findOne({
         where: {
           designation,
@@ -90,12 +84,11 @@ async function createBs(req, res) {
       });
 
       if (stockP) {
-        // If the StockP entry exists, update tva, prixU_HT, and add quantity
+        // Update the StockP entry
         await StockP.update(
           {
             prixU_HT, // Update the price
-            tva, // Update the TVA
-            quantite: stockP.quantite - quantite, // Add the new quantity to the existing quantity
+            quantite: stockP.quantite - quantite, // Deduct the sold quantity
           },
           {
             where: {
@@ -103,23 +96,24 @@ async function createBs(req, res) {
             },
           }
         );
-      } 
+      }
     });
 
     // Wait for all Stock and StockP entries to be processed
     await Promise.all(stockPromises);
 
     return res.status(201).json({
-      message: 'Bs, Stock, and StockP successfully created',
+      message: 'Bon de Sortie, Stock, and StockP successfully created',
       Bs,
     });
   } catch (error) {
-    console.error('Error creating Bs, Stock, and StockP:', error);
+    console.error('Error creating Bon de Sortie, Stock, and StockP:', error);
     return res.status(500).json({
-      error: 'Failed to create Bs, Stock, and StockP',
+      error: 'Failed to create Bon de Sortie, Stock, and StockP',
     });
   }
 }
+
 
 // Controller to delete a Bs and associated Stock
 async function deleteBs(req, res) {

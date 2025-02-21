@@ -15,27 +15,26 @@ import {
 
 const API_BASE_URL = 'https://api.azcrm.deviceshopleader.com/api';
 
-const CreateDeliveryNoteModala = ({ onAddDeliveryNote }) => {
+const CreateDeliveryNoteModal = ({ onAddDeliveryNote }) => {
   const [code, setCode] = useState('');
-  const [supplier, setSupplier] = useState('');
+  const [client, setClient] = useState('');
   const [timbre, setTimbre] = useState(false);
   const [products, setProducts] = useState([]);
   const [newProduct, setNewProduct] = useState('');
-  const [tva, setTva] = useState(0);
   const [prixU_HT, setPrixU_HT] = useState(0);
   const [quantite, setQuantite] = useState(1);
   const [availableProducts, setAvailableProducts] = useState([]);
-  const [suppliers, setSuppliers] = useState([]);
+  const [clients, setClients] = useState([]);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const [productRes, supplierRes] = await Promise.all([
+        const [productRes, clientRes] = await Promise.all([
           axios.get(`${API_BASE_URL}/product/getallp`),
           axios.get(`${API_BASE_URL}/clients/getclient`),
         ]);
         setAvailableProducts(productRes.data);
-        setSuppliers(supplierRes.data);
+        setClients(clientRes.data);
       } catch (error) {
         console.error('Erreur lors du chargement des données:', error);
       }
@@ -51,53 +50,51 @@ const CreateDeliveryNoteModala = ({ onAddDeliveryNote }) => {
         {
           designation: selectedProduct.designation,
           Unite: selectedProduct.unite,
-          tva: parseFloat(tva),
           prixU_HT: parseFloat(prixU_HT),
           quantite: parseInt(quantite, 10),
         },
       ]);
       setNewProduct('');
-      setTva(0);
       setPrixU_HT(0);
       setQuantite(1);
     }
   };
 
   const handleSubmit = async () => {
-    if (!code || !supplier || products.length === 0) {
+    if (!code || !client || products.length === 0) {
       alert('Veuillez remplir tous les champs obligatoires.');
       return;
     }
 
     const newNote = {
       code,
-      spulierId: supplier,
+      clientId: client,
       timbre,
       products,
     };
 
     try {
       await axios.post(`${API_BASE_URL}/bs/bs/create`, newNote);
-      alert("Bon d'achat créé avec succès");
+      alert("Bon de Sortie créé avec succès");
       onAddDeliveryNote(newNote);
     } catch (error) {
-      console.error("Erreur lors de la création du bon d'achat:", error);
-      alert("Échec de la création du bon d'achat");
+      console.error("Erreur lors de la création du Bon de Sortie:", error);
+      alert("Échec de la création du Bon de Sortie");
     }
   };
 
   return (
     <Box>
-      <Typography variant="h6" mb={2}>Créer un Bon d'Achat</Typography>
+      <Typography variant="h6" mb={2}>Créer un Bon de Sortie</Typography>
       <TextField label="Code" value={code} onChange={(e) => setCode(e.target.value)} fullWidth margin="normal" />
       <TextField
-        label="Fournisseur"
-        value={supplier}
-        onChange={(e) => setSupplier(e.target.value)}
+        label="Client"
+        value={client}
+        onChange={(e) => setClient(e.target.value)}
         select fullWidth margin="normal"
       >
-        {suppliers.map((sup) => (
-          <MenuItem key={sup.id} value={sup.id}>{sup.name}</MenuItem>
+        {clients.map((cl) => (
+          <MenuItem key={cl.id} value={cl.id}>{cl.name}</MenuItem>
         ))}
       </TextField>
       <TextField
@@ -121,7 +118,6 @@ const CreateDeliveryNoteModala = ({ onAddDeliveryNote }) => {
           <MenuItem key={prod.id} value={prod.designation}>{prod.designation}</MenuItem>
         ))}
       </TextField>
-      <TextField label="TVA (%)" type="number" value={tva} onChange={(e) => setTva(e.target.value)} fullWidth margin="normal" />
       <TextField label="Prix U" type="number" value={prixU_HT} onChange={(e) => setPrixU_HT(e.target.value)} fullWidth margin="normal" />
       <TextField label="Quantité" type="number" value={quantite} onChange={(e) => setQuantite(e.target.value)} fullWidth margin="normal" />
       <Button onClick={handleAddProduct} variant="outlined" sx={{ mb: 2 }}>Ajouter Produit</Button>
@@ -132,8 +128,7 @@ const CreateDeliveryNoteModala = ({ onAddDeliveryNote }) => {
             <TableRow>
               <TableCell>Produit</TableCell>
               <TableCell>Unité</TableCell>
-              <TableCell>TVA (%)</TableCell>
-              <TableCell>Prix U </TableCell>
+              <TableCell>Prix U</TableCell>
               <TableCell>Quantité</TableCell>
             </TableRow>
           </TableHead>
@@ -142,7 +137,6 @@ const CreateDeliveryNoteModala = ({ onAddDeliveryNote }) => {
               <TableRow key={index}>
                 <TableCell>{prod.designation}</TableCell>
                 <TableCell>{prod.Unite}</TableCell>
-                <TableCell>{prod.tva}</TableCell>
                 <TableCell>{prod.prixU_HT}$</TableCell>
                 <TableCell>{prod.quantite}</TableCell>
               </TableRow>
@@ -158,4 +152,4 @@ const CreateDeliveryNoteModala = ({ onAddDeliveryNote }) => {
   );
 };
 
-export default CreateDeliveryNoteModala;
+export default CreateDeliveryNoteModal;

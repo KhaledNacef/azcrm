@@ -18,7 +18,7 @@ const API_BASE_URL = 'https://api.azcrm.deviceshopleader.com/api';
 const CreateDeliveryNoteModala = ({ onAddDeliveryNote }) => {
   const [code, setCode] = useState('');
   const [supplier, setSupplier] = useState('');
-  const [timbre, setTimbre] = useState(false);
+  const [timbre, setTimbre] = useState(false); // True/False
   const [products, setProducts] = useState([]);
   const [newProduct, setNewProduct] = useState('');
   const [tva, setTva] = useState(0);
@@ -27,6 +27,7 @@ const CreateDeliveryNoteModala = ({ onAddDeliveryNote }) => {
   const [availableProducts, setAvailableProducts] = useState([]);
   const [suppliers, setSuppliers] = useState([]);
 
+  // Fetching suppliers and products from the API
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -37,15 +38,16 @@ const CreateDeliveryNoteModala = ({ onAddDeliveryNote }) => {
         setAvailableProducts(productRes.data);
         setSuppliers(supplierRes.data);
       } catch (error) {
-        console.error('Erreur lors du chargement des données:', error);
+        console.error('Error fetching data:', error);
       }
     };
     fetchData();
   }, []);
 
+  // Add a new product to the products list
   const handleAddProduct = () => {
     if (newProduct && !products.some((p) => p.designation === newProduct)) {
-      const selectedProduct = availableProducts.find(p => p.designation === newProduct);
+      const selectedProduct = availableProducts.find((p) => p.designation === newProduct);
       setProducts([
         ...products,
         {
@@ -56,6 +58,7 @@ const CreateDeliveryNoteModala = ({ onAddDeliveryNote }) => {
           quantite: parseInt(quantite, 10),
         },
       ]);
+      // Reset product-related fields
       setNewProduct('');
       setTva(0);
       setPrixU_HT(0);
@@ -63,6 +66,7 @@ const CreateDeliveryNoteModala = ({ onAddDeliveryNote }) => {
     }
   };
 
+  // Submit the delivery note
   const handleSubmit = async () => {
     if (!code || !supplier || products.length === 0) {
       alert('Veuillez remplir tous les champs obligatoires.');
@@ -81,7 +85,7 @@ const CreateDeliveryNoteModala = ({ onAddDeliveryNote }) => {
       alert("Bon d'achat créé avec succès");
       onAddDeliveryNote(newNote);
     } catch (error) {
-      console.error("Erreur lors de la création du bon d'achat:", error);
+      console.error("Error creating delivery note:", error);
       alert("Échec de la création du bon d'achat");
     }
   };
@@ -89,7 +93,11 @@ const CreateDeliveryNoteModala = ({ onAddDeliveryNote }) => {
   return (
     <Box>
       <Typography variant="h6" mb={2}>Créer un Bon d'Achat</Typography>
+
+      {/* Code input */}
       <TextField label="Code" value={code} onChange={(e) => setCode(e.target.value)} fullWidth margin="normal" />
+
+      {/* Supplier selection */}
       <TextField
         label="Fournisseur"
         value={supplier}
@@ -100,6 +108,8 @@ const CreateDeliveryNoteModala = ({ onAddDeliveryNote }) => {
           <MenuItem key={sup.id} value={sup.id}>{sup.name}</MenuItem>
         ))}
       </TextField>
+
+      {/* Timbre selection (True/False) */}
       <TextField
         label="Timbre"
         select
@@ -111,6 +121,8 @@ const CreateDeliveryNoteModala = ({ onAddDeliveryNote }) => {
         <MenuItem value={true}>Oui</MenuItem>
         <MenuItem value={false}>Non</MenuItem>
       </TextField>
+
+      {/* Product selection */}
       <TextField
         label="Produit"
         value={newProduct}
@@ -121,11 +133,16 @@ const CreateDeliveryNoteModala = ({ onAddDeliveryNote }) => {
           <MenuItem key={prod.id} value={prod.designation}>{prod.designation}</MenuItem>
         ))}
       </TextField>
+
+      {/* TVA, Price, and Quantity input */}
       <TextField label="TVA (%)" type="number" value={tva} onChange={(e) => setTva(e.target.value)} fullWidth margin="normal" />
       <TextField label="Prix U HT" type="number" value={prixU_HT} onChange={(e) => setPrixU_HT(e.target.value)} fullWidth margin="normal" />
       <TextField label="Quantité" type="number" value={quantite} onChange={(e) => setQuantite(e.target.value)} fullWidth margin="normal" />
+
+      {/* Add Product Button */}
       <Button onClick={handleAddProduct} variant="outlined" sx={{ mb: 2 }}>Ajouter Produit</Button>
 
+      {/* Products Table */}
       {products.length > 0 && (
         <Table>
           <TableHead>
@@ -151,6 +168,7 @@ const CreateDeliveryNoteModala = ({ onAddDeliveryNote }) => {
         </Table>
       )}
 
+      {/* Submit Button */}
       <Button variant="contained" color="primary" onClick={handleSubmit} fullWidth>
         Enregistrer
       </Button>
