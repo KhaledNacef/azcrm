@@ -17,8 +17,8 @@ const API_BASE_URL = 'https://api.azcrm.deviceshopleader.com/api';
 
 const CreateDeliveryNoteModala = ({ onAddDeliveryNote }) => {
   const [code, setCode] = useState(0);
-  const [supplier, setSupplier] = useState('');
-  const [timbre, setTimbre] = useState(false); // True/False
+  const [supplier, setSupplier] = useState(''); 
+  const [timbre, setTimbre] = useState(false); 
   const [products, setProducts] = useState([]);
   const [newProduct, setNewProduct] = useState('');
   const [tva, setTva] = useState(0);
@@ -26,8 +26,9 @@ const CreateDeliveryNoteModala = ({ onAddDeliveryNote }) => {
   const [quantite, setQuantite] = useState(1);
   const [availableProducts, setAvailableProducts] = useState([]);
   const [suppliers, setSuppliers] = useState([]);
+  const [isSupplierSet, setIsSupplierSet] = useState(false); // Track if supplier is set
+  const [isTimbreSet, setIsTimbreSet] = useState(false); // Track if timbre is set
 
-  // Fetching suppliers and products from the API
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -44,7 +45,6 @@ const CreateDeliveryNoteModala = ({ onAddDeliveryNote }) => {
     fetchData();
   }, []);
 
-  // Add a new product to the products list
   const handleAddProduct = () => {
     if (newProduct && !products.some((p) => p.designation === newProduct)) {
       const selectedProduct = availableProducts.find((p) => p.designation === newProduct);
@@ -66,7 +66,6 @@ const CreateDeliveryNoteModala = ({ onAddDeliveryNote }) => {
     }
   };
 
-  // Submit the delivery note
   const handleSubmit = async () => {
     if (!code || !supplier || products.length === 0) {
       alert('Veuillez remplir tous les champs obligatoires.');
@@ -90,6 +89,16 @@ const CreateDeliveryNoteModala = ({ onAddDeliveryNote }) => {
     }
   };
 
+  const handleSupplierChange = (e) => {
+    setSupplier(e.target.value);
+    setIsSupplierSet(true); // Mark the supplier as set
+  };
+
+  const handleTimbreChange = (e) => {
+    setTimbre(e.target.value === 'true');
+    setIsTimbreSet(true); // Mark timbre as set
+  };
+
   return (
     <Box>
       <Typography variant="h6" mb={2}>Créer un Bon d'Achat</Typography>
@@ -98,38 +107,42 @@ const CreateDeliveryNoteModala = ({ onAddDeliveryNote }) => {
       <TextField label="Code" value={code} onChange={(e) => setCode(e.target.value)} fullWidth margin="normal" />
 
       {/* Supplier selection */}
-      <TextField
-        label="Fournisseur"
-        value={supplier}
-        onChange={(e) => setSupplier(e.target.value)}
-        select
-        fullWidth
-        margin="normal"
-      >
-        {suppliers.map((sup) => (
-          <MenuItem key={sup.id} value={sup.id}>{sup.name}</MenuItem>
-        ))}
-      </TextField>
+      {!isSupplierSet && (
+        <TextField
+          label="Fournisseur"
+          value={supplier}
+          onChange={handleSupplierChange}
+          select
+          fullWidth
+          margin="normal"
+        >
+          {suppliers.map((sup) => (
+            <MenuItem key={sup.id} value={sup.id}>{sup.name}</MenuItem>
+          ))}
+        </TextField>
+      )}
 
       {/* Displaying the selected supplier */}
-      {supplier && (
+      {supplier && !isSupplierSet && (
         <Typography variant="body2" sx={{ marginTop: 2 }}>
           Fournisseur sélectionné: {suppliers.find((sup) => sup.id === supplier)?.name}
         </Typography>
       )}
 
-      {/* Timbre selection (True/False) */}
-      <TextField
-        label="Timbre"
-        select
-        value={timbre}
-        onChange={(e) => setTimbre(e.target.value === 'true')}
-        fullWidth
-        margin="normal"
-      >
-        <MenuItem value={true}>Oui</MenuItem>
-        <MenuItem value={false}>Non</MenuItem>
-      </TextField>
+      {/* Timbre selection */}
+      {!isTimbreSet && (
+        <TextField
+          label="Timbre"
+          select
+          value={timbre}
+          onChange={handleTimbreChange}
+          fullWidth
+          margin="normal"
+        >
+          <MenuItem value={true}>Oui</MenuItem>
+          <MenuItem value={false}>Non</MenuItem>
+        </TextField>
+      )}
 
       {/* Product selection */}
       <TextField

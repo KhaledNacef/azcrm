@@ -87,19 +87,31 @@ const CreateDeliveryNoteModal = ({ onAddDeliveryNote }) => {
     <Box>
       <Typography variant="h6" mb={2}>Créer un Bon de Sortie</Typography>
 
-      {/* Client Selection */}
+      {/* Code Selection */}
       <TextField
-        label="Client"
-        value={client}
-        onChange={(e) => setClient(e.target.value)}
-        select
+        label="Code"
+        value={code}
+        onChange={(e) => setCode(e.target.value)}
         fullWidth
         margin="normal"
-      >
-        {clients.map((cl) => (
-          <MenuItem key={cl.id} value={cl.id}>{cl.name}</MenuItem>
-        ))}
-      </TextField>
+        type="number"
+      />
+
+      {/* Client Selection */}
+      {!client && (
+        <TextField
+          label="Client"
+          value={client}
+          onChange={(e) => setClient(e.target.value)}
+          select
+          fullWidth
+          margin="normal"
+        >
+          {clients.map((cl) => (
+            <MenuItem key={cl.id} value={cl.id}>{cl.name}</MenuItem>
+          ))}
+        </TextField>
+      )}
 
       {/* Display selected client name */}
       {client && (
@@ -109,17 +121,19 @@ const CreateDeliveryNoteModal = ({ onAddDeliveryNote }) => {
       )}
 
       {/* Timbre Selection */}
-      <TextField
-        label="Timbre"
-        select
-        value={timbre}
-        onChange={(e) => setTimbre(e.target.value === 'true')}
-        fullWidth
-        margin="normal"
-      >
-        <MenuItem value={true}>Oui</MenuItem>
-        <MenuItem value={false}>Non</MenuItem>
-      </TextField>
+      {!timbre && (
+        <TextField
+          label="Timbre"
+          select
+          value={timbre}
+          onChange={(e) => setTimbre(e.target.value === 'true')}
+          fullWidth
+          margin="normal"
+        >
+          <MenuItem value={true}>Oui</MenuItem>
+          <MenuItem value={false}>Non</MenuItem>
+        </TextField>
+      )}
 
       {/* Product Selection */}
       <TextField
