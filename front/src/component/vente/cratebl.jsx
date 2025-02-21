@@ -132,7 +132,7 @@ const CreateDeliveryNoteModal = ({ onAddDeliveryNote }) => {
           select
           value={timbre}
           onChange={(e) => {
-            setTimbre(e.target.value === 'true');
+            setTimbre(e.target.value );
             setTimbreSelected(true);
           }}
           fullWidth

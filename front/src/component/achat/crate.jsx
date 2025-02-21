@@ -17,7 +17,7 @@ const API_BASE_URL = 'https://api.azcrm.deviceshopleader.com/api';
 
 const CreateDeliveryNoteModala = ({ onAddDeliveryNote }) => {
   const [code, setCode] = useState(0);
-  const [supplier, setSupplier] = useState(''); 
+  const [supplier, setSupplier] = useState(0); 
   const [timbre, setTimbre] = useState(false); 
   const [products, setProducts] = useState([]);
   const [newProduct, setNewProduct] = useState('');
@@ -95,7 +95,7 @@ const CreateDeliveryNoteModala = ({ onAddDeliveryNote }) => {
   };
 
   const handleTimbreChange = (e) => {
-    setTimbre(e.target.value === 'true');
+    setTimbre(e.target.value);
     setIsTimbreSet(true); // Mark timbre as set
   };
 
@@ -107,27 +107,25 @@ const CreateDeliveryNoteModala = ({ onAddDeliveryNote }) => {
       <TextField label="Code" value={code} onChange={(e) => setCode(e.target.value)} fullWidth margin="normal" />
 
       {/* Supplier selection */}
-      {!isSupplierSet && (
-        <TextField
-          label="Fournisseur"
-          value={supplier}
-          onChange={handleSupplierChange}
-          select
-          fullWidth
-          margin="normal"
-        >
-          {suppliers.map((sup) => (
-            <MenuItem key={sup.id} value={sup.id}>{sup.fullname}</MenuItem>
-          ))}
-        </TextField>
-      )}
+<TextField
+  label="Fournisseur"
+  value={supplier}
+  onChange={handleSupplierChange}
+  select
+  fullWidth
+  margin="normal"
+>
+  {suppliers.map((sup) => (
+    <MenuItem key={sup.id} value={sup.id}>{sup.fullname}</MenuItem>
+  ))}
+</TextField>
 
-      {/* Displaying the selected supplier */}
-      {supplier && !isSupplierSet && (
-        <Typography variant="body2" sx={{ marginTop: 2 }}>
-          Fournisseur sélectionné: {suppliers.find((sup) => sup.id === supplier)?.fullname}
-        </Typography>
-      )}
+{/* Displaying the selected supplier */}
+{supplier && (
+  <Typography variant="body2" sx={{ marginTop: 2 }}>
+    Fournisseur sélectionné: {suppliers.find((sup) => sup.id === supplier)?.fullname}
+  </Typography>
+)}
 
       {/* Timbre selection */}
       {!isTimbreSet && (

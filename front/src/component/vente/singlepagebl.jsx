@@ -40,8 +40,8 @@ const SingleDeliverysortie = () => {
     fetchDeliveryNoteData();
   }, [code, clientName]);
 
-  const totalNettc = deliveryNote?.products.reduce(
-    (acc, prod) => acc + prod.prixU_HT * prod.quantity,
+  const totalNettc = deliveryNote?.products?.reduce(
+    (acc, prod) => acc + (prod.prixU_HT || 0) * (prod.quantite || 0),
     0
   ) || 0;
 
@@ -83,9 +83,9 @@ const SingleDeliverysortie = () => {
 
     const tableHeaders = ['Produit', 'Quantité', 'Unité', 'Prix U HT ($)', 'Prix Net ($)'];
     const productRows = deliveryNote.products.map((product) => [
-      product.name,
-      product.quantity,
-      product.unite,
+      product.designation,
+      product.quantite,
+      product.Unite,
       product.prixU_HT.toFixed(2),
       (product.prixU_HT * product.quantity).toFixed(2),
     ]);
@@ -148,11 +148,11 @@ const SingleDeliverysortie = () => {
             <TableBody>
               {deliveryNote.products.map((product, index) => (
                 <TableRow key={index}>
-                  <TableCell>{product.name}</TableCell>
-                  <TableCell>{product.quantity}</TableCell>
-                  <TableCell>{product.unite}</TableCell>
+                  <TableCell>{product.designation}</TableCell>
+                  <TableCell>{product.quantite}</TableCell>
+                  <TableCell>{product.Unite}</TableCell>
                   <TableCell>{product.prixU_HT.toFixed(2)}$</TableCell>
-                  <TableCell>{(product.prixU_HT * product.quantity).toFixed(2)}$</TableCell>
+                  <TableCell>{(product.prixU_HT * product.quantite).toFixed(2)}$</TableCell>
                 </TableRow>
               ))}
             </TableBody>
