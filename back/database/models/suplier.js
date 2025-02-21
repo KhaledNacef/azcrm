@@ -1,5 +1,4 @@
 const { DataTypes } = require('sequelize');
-const { UUID, UUIDV4 } = require('sequelize');
 
 const Supplier = {
   id: {
