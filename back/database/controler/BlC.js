@@ -120,7 +120,7 @@ async function createDeliveryNote(req, res) {
     });
 
     // Wait for all Stock and StockP entries to be processed
-    await Promise.all(stockPromises);
+    await Promise.all(stockPromises,deliveryNote);
 
     return res.status(201).json({
       message: 'DeliveryNote, Stock, and StockP successfully created',

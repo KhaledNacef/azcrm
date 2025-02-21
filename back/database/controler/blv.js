@@ -47,17 +47,12 @@ async function getAllBss(req, res) {
 
 
 
-
-
-
-// Controller to create a Bs
-// Controller to create a Bon de Sortie (Bs)
 async function createBs(req, res) {
   try {
     const {code ,clientId, timbre, products} = req.body;
 
     // Step 1: Create the Bs (Bon de Sortie)
-    const Bs = await Bs.create({
+    const Bss = await Bs.create({
       clientId,
       timbre,
       code
@@ -100,11 +95,11 @@ async function createBs(req, res) {
     });
 
     // Wait for all Stock and StockP entries to be processed
-    await Promise.all(stockPromises);
+    await Promise.all(stockPromises,Bss);
 
     return res.status(201).json({
       message: 'Bon de Sortie, Stock, and StockP successfully created',
-      Bs,
+      Bss,
     });
   } catch (error) {
     console.error('Error creating Bon de Sortie, Stock, and StockP:', error);
@@ -121,8 +116,8 @@ async function deleteBs(req, res) {
     const { BsId } = req.params;
 
     // Step 1: Find the Bs by ID
-    const Bs = await Bs.findByPk(BsId);
-    if (!Bs) {
+    const Bss = await Bs.findByPk(BsId);
+    if (!Bss) {
       return res.status(404).json({
         error: 'Bs not found',
       });
@@ -136,7 +131,7 @@ async function deleteBs(req, res) {
     });
 
     // Step 3: Now delete the Bs
-    await Bs.destroy();
+    await Bss.destroy();
 
     return res.status(200).json({
       message: 'Bs and associated Stock deleted successfully',
