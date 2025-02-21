@@ -25,6 +25,8 @@ const CreateDeliveryNoteModal = ({ onAddDeliveryNote }) => {
   const [quantite, setQuantite] = useState(1);
   const [availableProducts, setAvailableProducts] = useState([]);
   const [clients, setClients] = useState([]);
+  const [clientSelected, setClientSelected] = useState(false);
+  const [timbreSelected, setTimbreSelected] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -82,7 +84,7 @@ const CreateDeliveryNoteModal = ({ onAddDeliveryNote }) => {
       alert("Échec de la création du Bon de Sortie");
     }
   };
-
+  
   return (
     <Box>
       <Typography variant="h6" mb={2}>Créer un Bon de Sortie</Typography>
@@ -97,12 +99,15 @@ const CreateDeliveryNoteModal = ({ onAddDeliveryNote }) => {
         type="number"
       />
 
-      {/* Client Selection */}
-      {!client && (
+      {/* Client Selection - Only show if client is not selected */}
+      {!clientSelected && (
         <TextField
           label="Client"
           value={client}
-          onChange={(e) => setClient(e.target.value)}
+          onChange={(e) => {
+            setClient(e.target.value);
+            setClientSelected(true);
+          }}
           select
           fullWidth
           margin="normal"
@@ -114,19 +119,22 @@ const CreateDeliveryNoteModal = ({ onAddDeliveryNote }) => {
       )}
 
       {/* Display selected client name */}
-      {client && (
+      {client && clientSelected && (
         <Typography variant="body1" mb={2}>
           Client sélectionné: {clients.find((cl) => cl.id === client)?.name}
         </Typography>
       )}
 
-      {/* Timbre Selection */}
-      {!timbre && (
+      {/* Timbre Selection - Only show if timbre is not selected */}
+      {!timbreSelected && (
         <TextField
           label="Timbre"
           select
           value={timbre}
-          onChange={(e) => setTimbre(e.target.value === 'true')}
+          onChange={(e) => {
+            setTimbre(e.target.value === 'true');
+            setTimbreSelected(true);
+          }}
           fullWidth
           margin="normal"
         >
