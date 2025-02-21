@@ -17,7 +17,7 @@ const SingleDeliverysortie = () => {
     // Fetch client data
     const fetchClientData = async () => {
       try {
-        const response = await fetch(`/api/clients/getcli/${clientName}`);
+        const response = await fetch(`https://api.azcrm.deviceshopleader.com/api/clients/getcli/${clientName}`);
         const data = await response.json();
         setClient(data); // Set client data
       } catch (error) {
@@ -28,7 +28,7 @@ const SingleDeliverysortie = () => {
     // Fetch delivery note data
     const fetchDeliveryNoteData = async () => {
       try {
-        const response = await fetch(`/bs/bs/stock/${code}`);
+        const response = await fetch(`https://api.azcrm.deviceshopleader.com/api/bs/bs/stock/${code}`);
         const data = await response.json();
         setDeliveryNote(data); // Set delivery note data
       } catch (error) {
