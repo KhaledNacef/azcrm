@@ -16,7 +16,7 @@ import {
 const API_BASE_URL = 'https://api.azcrm.deviceshopleader.com/api';
 
 const CreateDeliveryNoteModal = ({ onAddDeliveryNote }) => {
-  const [code, setCode] = useState('');
+  const [code, setCode] = useState(0);
   const [client, setClient] = useState('');
   const [timbre, setTimbre] = useState(false);
   const [products, setProducts] = useState([]);
@@ -86,17 +86,29 @@ const CreateDeliveryNoteModal = ({ onAddDeliveryNote }) => {
   return (
     <Box>
       <Typography variant="h6" mb={2}>Créer un Bon de Sortie</Typography>
-      <TextField label="Code" value={code} onChange={(e) => setCode(e.target.value)} fullWidth margin="normal" />
+
+      {/* Client Selection */}
       <TextField
         label="Client"
         value={client}
         onChange={(e) => setClient(e.target.value)}
-        select fullWidth margin="normal"
+        select
+        fullWidth
+        margin="normal"
       >
         {clients.map((cl) => (
           <MenuItem key={cl.id} value={cl.id}>{cl.name}</MenuItem>
         ))}
       </TextField>
+
+      {/* Display selected client name */}
+      {client && (
+        <Typography variant="body1" mb={2}>
+          Client sélectionné: {clients.find((cl) => cl.id === client)?.name}
+        </Typography>
+      )}
+
+      {/* Timbre Selection */}
       <TextField
         label="Timbre"
         select
@@ -108,20 +120,44 @@ const CreateDeliveryNoteModal = ({ onAddDeliveryNote }) => {
         <MenuItem value={true}>Oui</MenuItem>
         <MenuItem value={false}>Non</MenuItem>
       </TextField>
+
+      {/* Product Selection */}
       <TextField
         label="Produit"
         value={newProduct}
         onChange={(e) => setNewProduct(e.target.value)}
-        select fullWidth margin="normal"
+        select
+        fullWidth
+        margin="normal"
       >
         {availableProducts.map((prod) => (
           <MenuItem key={prod.id} value={prod.designation}>{prod.designation}</MenuItem>
         ))}
       </TextField>
-      <TextField label="Prix U" type="number" value={prixU_HT} onChange={(e) => setPrixU_HT(e.target.value)} fullWidth margin="normal" />
-      <TextField label="Quantité" type="number" value={quantite} onChange={(e) => setQuantite(e.target.value)} fullWidth margin="normal" />
-      <Button onClick={handleAddProduct} variant="outlined" sx={{ mb: 2 }}>Ajouter Produit</Button>
 
+      {/* Price and Quantity Inputs */}
+      <TextField
+        label="Prix U"
+        type="number"
+        value={prixU_HT}
+        onChange={(e) => setPrixU_HT(e.target.value)}
+        fullWidth
+        margin="normal"
+      />
+      <TextField
+        label="Quantité"
+        type="number"
+        value={quantite}
+        onChange={(e) => setQuantite(e.target.value)}
+        fullWidth
+        margin="normal"
+      />
+
+      <Button onClick={handleAddProduct} variant="outlined" sx={{ mb: 2 }}>
+        Ajouter Produit
+      </Button>
+
+      {/* List of Added Products */}
       {products.length > 0 && (
         <Table>
           <TableHead>

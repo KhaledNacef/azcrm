@@ -16,7 +16,7 @@ import {
 const API_BASE_URL = 'https://api.azcrm.deviceshopleader.com/api';
 
 const CreateDeliveryNoteModala = ({ onAddDeliveryNote }) => {
-  const [code, setCode] = useState('');
+  const [code, setCode] = useState(0);
   const [supplier, setSupplier] = useState('');
   const [timbre, setTimbre] = useState(false); // True/False
   const [products, setProducts] = useState([]);
@@ -102,12 +102,21 @@ const CreateDeliveryNoteModala = ({ onAddDeliveryNote }) => {
         label="Fournisseur"
         value={supplier}
         onChange={(e) => setSupplier(e.target.value)}
-        select fullWidth margin="normal"
+        select
+        fullWidth
+        margin="normal"
       >
         {suppliers.map((sup) => (
           <MenuItem key={sup.id} value={sup.id}>{sup.name}</MenuItem>
         ))}
       </TextField>
+
+      {/* Displaying the selected supplier */}
+      {supplier && (
+        <Typography variant="body2" sx={{ marginTop: 2 }}>
+          Fournisseur sélectionné: {suppliers.find((sup) => sup.id === supplier)?.name}
+        </Typography>
+      )}
 
       {/* Timbre selection (True/False) */}
       <TextField
@@ -127,7 +136,9 @@ const CreateDeliveryNoteModala = ({ onAddDeliveryNote }) => {
         label="Produit"
         value={newProduct}
         onChange={(e) => setNewProduct(e.target.value)}
-        select fullWidth margin="normal"
+        select
+        fullWidth
+        margin="normal"
       >
         {availableProducts.map((prod) => (
           <MenuItem key={prod.id} value={prod.designation}>{prod.designation}</MenuItem>
