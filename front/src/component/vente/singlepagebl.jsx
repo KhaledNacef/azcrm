@@ -6,7 +6,7 @@ import * as XLSX from 'xlsx';
 import Grid from '@mui/material/Grid2';
 
 const SingleDeliverysortie = () => {
-  const { code, clientName } = useParams();
+  const { code, clientId } = useParams();
   const navigate = useNavigate();
   const printRef = useRef();
   const previousLocation = window.location.pathname;
@@ -19,7 +19,7 @@ const SingleDeliverysortie = () => {
   useEffect(() => {
     const fetchClientData = async () => {
       try {
-        const response = await fetch(`https://api.azcrm.deviceshopleader.com/api/clients/getcli/${clientName}`);
+        const response = await fetch(`https://api.azcrm.deviceshopleader.com/api/clients/getcli/${clientId}`);
         const data = await response.json();
         setClient(data);
       } catch (error) {
