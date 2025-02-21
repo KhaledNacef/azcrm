@@ -1,7 +1,8 @@
 const db = require('../database/index');
-const Client = db.models.Client
+const Client = db.models.client
 const FactureA = db.models.factureA
 const FactureV = db.models.factureV
+const Suplier = db.models.supplier
 
 async function syncDatabase() {
   try {
