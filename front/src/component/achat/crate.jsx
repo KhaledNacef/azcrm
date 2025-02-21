@@ -16,8 +16,8 @@ import {
 const API_BASE_URL = "https://api.azcrm.deviceshopleader.com/api";
 
 const CreateDeliveryNoteModala = ({ onAddDeliveryNote }) => {
-  const [code, setCode] = useState(""); // Start with an empty string
-  const [supplier, setSupplier] = useState(""); 
+  const [code, setCode] = useState(0); // Start with an empty string
+  const [supplier, setSupplier] = useState(0); 
   const [timbre, setTimbre] = useState(false);
   const [products, setProducts] = useState([]);
   const [newProduct, setNewProduct] = useState("");
