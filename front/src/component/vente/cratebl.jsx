@@ -70,7 +70,7 @@ const CreateDeliveryNoteModal = ({ onAddDeliveryNote }) => {
 
     const newNote = {
       code,
-      clientId: client,
+      clientId: client.id,
       timbre,
       products,
     };

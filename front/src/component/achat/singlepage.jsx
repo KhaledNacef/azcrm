@@ -13,10 +13,14 @@ const SingleDeliveryNote = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
+
+  const clientId = parseInt(supplierId, 10);
+
+
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const supplierRes = await axios.get(`https://api.azcrm.deviceshopleader.com/api/getidsuppliers/${supplierId}`);
+        const supplierRes = await axios.get(`https://api.azcrm.deviceshopleader.com/api/getidsuppliers/${clientId}`);
         const productRes = await axios.get(`https://api.azcrm.deviceshopleader.com/api/stock/getallstockdelv/${code}`);
 
         setSupplier(supplierRes.data);
