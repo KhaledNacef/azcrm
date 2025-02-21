@@ -22,9 +22,9 @@ const App = () => {
           <Route path="fournisseur" element={<FournisseurPage />} />
           <Route path="client" element={<ClientPage />} />
           <Route path="bon-dachat" element={<BonAchatPage />} />
-          <Route path="/bon-dachat/:code/:supplierName" element={<SingleDeliveryNote />} />
+          <Route path="/bon-dachat/:code/:supplierId" element={<SingleDeliveryNote />} />
           <Route path="bon-livraison" element={<BonsortiePage />} />
-          <Route path="/bon-livraison/:code/:supplierName" element={<SingleDeliverysortie />} />
+          <Route path="/bon-livraison/:code/:clientId" element={<SingleDeliverysortie />} />
 
         </Route>
       </Routes>
