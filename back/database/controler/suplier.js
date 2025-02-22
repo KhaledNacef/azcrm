@@ -16,11 +16,13 @@ async function getAllSuppliers(req, res) {
 async function getidSuppliers(req, res) {
   try {
     const { id } = req.params; // Extract ID from request parameters
-    if (!id) {
+    const parsedId = parseInt(id, 10); // Ensure id is an integer
+
+    if (!parsedId) {
       return res.status(400).json({ error: 'Supplier ID is required' });
     }
 
-    const supplier = await Supplier.findByPk(id);
+    const supplier = await Supplier.findByPk(parsedId);
 
     if (!supplier) {
       return res.status(404).json({ error: 'Supplier not found' });

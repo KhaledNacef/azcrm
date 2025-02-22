@@ -14,6 +14,8 @@ exports.getAllClients = async (req, res) => {
 // Get client by ID
 exports.getClientById = async (req, res) => {
   const {id} = req.params;  // Correct extraction of ID
+  const parsedId = parseInt(id, 10); // Ensure id is an integer
+
   try {
     const client = await Client.findByPk(id);
     if (!client) {
