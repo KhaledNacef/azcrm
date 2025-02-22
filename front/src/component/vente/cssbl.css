@@ -1,33 +1,44 @@
 @media print {
-    /* Hide any debug information or elements that contain localhost */
-    footer, .vite-footer, .react-footer, .vite-logo, .react-logo {
-        display: none !important;
-      }
-    
-      /* You can also try targeting the header if the logo appears there */
-      .vite-logo, .react-logo, .header {
-        display: none !important;
-      }
-    /* Adjust other styles for printing */
-    body {
-      font-size: 12px !important;
-    }
-  
-    .MuiTypography-root {
-      font-size: 12px !important;
-    }
-  
-    .MuiButton-root {
+  /* Hide debug information and interactive elements */
+  footer, .vite-footer, .react-footer, .vite-logo, .react-logo, .header, .MuiButton-root {
       display: none !important;
-    }
-  
-    .MuiTableCell-root {
-      font-size: 12px !important;
-    }
-  
-    .MuiTableRow-root {
-      font-size: 12px !important;
-    }
-  
-    /* Any other styles you want to apply for print */
   }
+
+  /* Adjust text size */
+  body {
+      font-size: 12px !important;
+  }
+
+  .MuiTypography-root, .MuiTableCell-root, .MuiTableRow-root {
+      font-size: 12px !important;
+  }
+
+  /* Table adjustments for print */
+  .MuiTable-root {
+      width: 100%;
+      table-layout: fixed;
+  }
+
+  .MuiTableCell-root {
+      padding: 8px 16px;
+  }
+
+  /* Make sure the layout is clean and tidy */
+  .table-section {
+      margin-bottom: 20px;
+  }
+
+  /* Header customization */
+  .header {
+      text-align: center;
+      font-size: 16px;
+      font-weight: bold;
+      margin-bottom: 20px;
+  }
+
+  /* Page margins */
+  @page {
+      margin: 20mm;
+      size: A4;
+  }
+}

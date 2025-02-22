@@ -2,6 +2,7 @@ import React, { useEffect, useState, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { Box, Typography, Button, Table, TableHead, TableRow, TableCell, TableBody, CircularProgress } from '@mui/material';
+import * as XLSX from 'xlsx';
 import './cssba.css';
 
 const SingleDeliveryNote = () => {
@@ -49,6 +50,21 @@ const SingleDeliveryNote = () => {
     printWindow.print();
   };
 
+  const handleExportExcel = () => {
+    const ws = XLSX.utils.json_to_sheet(
+      deliveryNote.map((product) => ({
+        "Produit": product.designation,
+        "Unité": product.Unite,
+        "TVA (%)": product.tva,
+        "Prix U HT": product.prixU_HT,
+        "Quantité": product.quantite
+      }))
+    );
+    const wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, 'Delivery Note');
+    XLSX.writeFile(wb, 'Delivery_Note.xlsx');
+  };
+
   return (
     <Box sx={{ p: 3 }}>
       <Button variant="outlined" onClick={() => navigate(-1)} sx={{ mb: 2 }}>
@@ -56,6 +72,9 @@ const SingleDeliveryNote = () => {
       </Button>
       <Button variant="contained" color="primary" onClick={handlePrint} sx={{ mb: 2, ml: 2 }}>
         Imprimer
+      </Button>
+      <Button variant="contained" color="secondary" onClick={handleExportExcel} sx={{ mb: 2, ml: 2 }}>
+        Exporter en Excel
       </Button>
 
       {/* Content to print */}
@@ -85,7 +104,7 @@ const SingleDeliveryNote = () => {
         </Box>
 
         {/* Products Table */}
-        <Table>
+        <Table sx={{ marginTop: 2 }}>
           <TableHead>
             <TableRow>
               <TableCell>Produit</TableCell>
