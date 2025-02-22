@@ -16,30 +16,33 @@ import axios from 'axios';
 
 const BonsortiePage = () => {
   const navigate = useNavigate();
-  const [deliveryNotes, setDeliveryNotes] = useState([]);
+  const [deliveryNotes, setDeliveryNotes] = useState([]); // State for storing delivery notes
   const [open, setOpen] = useState(false); // Modal state
+
+  // Function to fetch delivery notes
   const fetchDeliveryNotes = async () => {
     try {
-      const response = await axios.get(`https://api.azcrm.deviceshopleader.com/api/bs/bs/get`); // Make sure to update the endpoint if needed
-      setDeliveryNotes(response.data.Bss); // Assuming the response structure has `Bss`
+      const response = await axios.get('https://api.azcrm.deviceshopleader.com/api/bs/bs/get');
+      console.log("API Response:", response.data); // ✅ Debugging log
+      setDeliveryNotes(response.data.Bss || []); // ✅ Ensure it's always an array
     } catch (error) {
       console.error('Error fetching delivery notes:', error);
     }
   };
-  // Fetch all Bs (delivery notes) from the server
+
+  // Fetch delivery notes on component mount
   useEffect(() => {
-    
-
     fetchDeliveryNotes();
-  }, [deliveryNotes]);
+  }, []); // ✅ Runs only once
 
+  // Modal handlers
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
+  // Function to refresh data after adding a note
   const addDeliveryNote = () => {
     handleClose();
-    fetchDeliveryNotes();
-
+    fetchDeliveryNotes(); // ✅ Refresh table after adding
   };
 
   return (
@@ -59,33 +62,38 @@ const BonsortiePage = () => {
           <TableRow>
             <TableCell>Code</TableCell>
             <TableCell>Client</TableCell>
+            <TableCell>Timbre</TableCell>
             <TableCell>Date</TableCell>
             <TableCell>Actions</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
-            {deliveryNotes && Array.isArray(deliveryNotes) && deliveryNotes.length > 0 ? (
-          deliveryNotes.map((note) => (
-            <TableRow key={note.code}>
-              <TableCell>{note.code}</TableCell>
-              <TableCell>{note.clientId || "N/A"}</TableCell>
-              <TableCell>{note.timbre || "N/A"}</TableCell>
-              <TableCell>{note.createdAt ? new Date(note.createdAt).toLocaleDateString() : "N/A"}</TableCell>
-              <TableCell>
-                <Button
-                  variant="outlined"
-                  onClick={() => navigate(`/bon-livraison/${note.code}/${note.clientId}`)}
-                >
-                  Voir
-                </Button>
+          {deliveryNotes.length > 0 ? (
+            deliveryNotes.map((note) => (
+              <TableRow key={note.code}>
+                <TableCell>{note.code}</TableCell>
+                <TableCell>{note.clientId || "N/A"}</TableCell>
+                <TableCell>{note.timbre || "N/A"}</TableCell>
+                <TableCell>
+                  {note.createdAt ? new Date(note.createdAt).toLocaleDateString() : "N/A"}
+                </TableCell>
+                <TableCell>
+                  <Button
+                    variant="outlined"
+                    onClick={() => navigate(`/bon-livraison/${note.code}/${note.clientId}`)}
+                  >
+                    Voir
+                  </Button>
+                </TableCell>
+              </TableRow>
+            ))
+          ) : (
+            <TableRow>
+              <TableCell colSpan={5} align="center">
+                Aucune donnée disponible
               </TableCell>
             </TableRow>
-          ))
-        ) : (
-          <TableRow>
-            <TableCell colSpan={5}>Aucune donnée disponible</TableCell>
-          </TableRow>
-        )}
+          )}
         </TableBody>
       </Table>
 

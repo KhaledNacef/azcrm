@@ -25,7 +25,11 @@ const BonAchatPage = () => {
 
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
+  const addDeliveryNote = () => {
+    handleClose();
+    fetchDeliveryNotes();
 
+  };
   // Fetch delivery notes from the backend
   const fetchDeliveryNotes = async () => {
     try {
@@ -59,6 +63,7 @@ const BonAchatPage = () => {
           <TableRow>
             <TableCell>Code</TableCell>
             <TableCell>Fournisseur</TableCell>
+            <TableCell>Timbre</TableCell>
             <TableCell>Date</TableCell>
             <TableCell>Actions</TableCell>
           </TableRow>
@@ -104,7 +109,7 @@ const BonAchatPage = () => {
             width: 500,
           }}
         >
-          <CreateDeliveryNoteModala  />
+          <CreateDeliveryNoteModala onAddDeliveryNote={addDeliveryNote}  />
         </Box>
       </Modal>
     </Box>
