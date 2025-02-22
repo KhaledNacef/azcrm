@@ -98,15 +98,28 @@ const SingleDeliverysortie = () => {
               </TableRow>
             </TableHead>
             <TableBody>
-              {deliveryNote.map((product, index) => (
-                <TableRow key={index}>
-                  <TableCell>{product.designation}</TableCell>
-                  <TableCell>{product.quantite}</TableCell>
-                  <TableCell>{product.Unite}</TableCell>
-                  <TableCell>{product.prixU_HT.toFixed(2)}$</TableCell>
-                  <TableCell>{(product.prixU_HT * product.quantite).toFixed(2)}$</TableCell>
+                 {deliveryNote && Array.isArray(deliveryNote) && deliveryNote.length > 0 ? (
+              deliveryNote.map((note) => (
+                <TableRow key={note.code}>
+                  <TableCell>{note.code}</TableCell>
+                  <TableCell>{note.clientId || "N/A"}</TableCell>
+                  <TableCell>{note.timbre || "N/A"}</TableCell>
+                  <TableCell>{note.createdAt ? new Date(note.createdAt).toLocaleDateString() : "N/A"}</TableCell>
+                  <TableCell>
+                    <Button
+                      variant="outlined"
+                      onClick={() => navigate(`/bon-livraison/${note.code}/${note.clientId}`)}
+                    >
+                      Voir
+                    </Button>
+                  </TableCell>
                 </TableRow>
-              ))}
+              ))
+            ) : (
+              <TableRow>
+                <TableCell colSpan={5}>Aucune donnée disponible</TableCell>
+              </TableRow>
+            )}
             </TableBody>
           </Table>
 

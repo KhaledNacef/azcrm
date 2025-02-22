@@ -41,7 +41,7 @@ const SingleDeliveryNote = () => {
     (acc, prod) => acc + prod.prixU_HT * prod.quantite,
     0
   );
-  const totalTVA = totalNetHT * (deliveryNote[0]?.TVA / 100);
+  const totalTVA = totalNetHT * (deliveryNote[0]?.tva / 100);
   const totalNetTTC = totalNetHT + totalTVA;
 
   const handlePrint = () => {
@@ -97,7 +97,7 @@ const SingleDeliveryNote = () => {
                 <TableCell>{product.designation}</TableCell>
                 <TableCell>{product.quantite}</TableCell>
                 <TableCell>{product.prixU_HT.toFixed(2)} TND</TableCell>
-                <TableCell>{product.TVA}%</TableCell>
+                <TableCell>{product.tva}%</TableCell>
               </TableRow>
             ))}
           </TableBody>
