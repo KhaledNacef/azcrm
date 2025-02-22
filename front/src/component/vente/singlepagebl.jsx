@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { Box, Typography, Button, Table, TableHead, TableRow, TableCell, TableBody } from '@mui/material';
+import { Box, Typography, Button, Table, TableHead, TableRow, TableCell, TableBody} from '@mui/material';
 import * as XLSX from 'xlsx';
 import './cssbl.css';
 import Grid from '@mui/material/Grid2';
@@ -45,12 +45,14 @@ const SingleDeliverysortie = () => {
   ) || 0;
 
   const handlePrint = () => {
-    const printWindow = window.open('', '_blank');
-    printWindow.document.write('<html><head><title>Bon de Livraison</title></head><body>');
-    printWindow.document.write(printRef.current.innerHTML);
-    printWindow.document.write('</body></html>');
-    printWindow.document.close();
-    printWindow.print();
+    const originalContents = document.body.innerHTML;
+    const printContents = printRef.current.innerHTML;
+    document.body.innerHTML = printContents;
+    window.print();
+    window.onafterprint = () => {
+      document.body.innerHTML = originalContents;
+      navigate(previousLocation);
+    };
   };
 
   const handleExportExcel = () => {
@@ -66,6 +68,7 @@ const SingleDeliverysortie = () => {
       ["Produit", "Unité", "Prix U", "Quantité", "Prix Net"], // Column headers
     ];
 
+    // Create data for the table rows
     const rows = deliveryNote.map((product) => [
       product.designation,
       product.Unite,
@@ -74,21 +77,25 @@ const SingleDeliverysortie = () => {
       product.quantite * product.prixU_HT,
     ]);
 
+    // Combine the header and rows data
     const data = [...header, ...rows];
 
+    // Create a workbook and worksheet
     const ws = XLSX.utils.aoa_to_sheet(data);
     const wb = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(wb, ws, "Bon de Livraison");
 
+    // Set the column widths
     const wscols = [
-      { wpx: 250 },
-      { wpx: 150 },
-      { wpx: 100 },
-      { wpx: 100 },
-      { wpx: 100 },
+      { wpx: 250 }, // Produit column width
+      { wpx: 150 }, // Unité column width
+      { wpx: 100 }, // Prix U column width
+      { wpx: 100 }, // Quantité column width
+      { wpx: 100 }, // Prix Net column width
     ];
     ws['!cols'] = wscols;
 
+    // Export the workbook to a file
     XLSX.writeFile(wb, "Bon_de_Livraison.xlsx");
   };
 
@@ -97,70 +104,87 @@ const SingleDeliverysortie = () => {
       <Typography variant="h4" gutterBottom textAlign="center">
         Bon de Livraison
       </Typography>
-
-      <div ref={printRef} id="print-content">
-        <Box sx={{
-          border: '1px solid black', padding: '20px', width: '80%', margin: '0 auto',
-          backgroundColor: '#f9f9f9', boxShadow: '0px 4px 8px rgba(0, 0, 0, 0.1)'
-        }}>
-          <Grid container spacing={3}>
-            <Grid item xs={12} md={6}>
-              <Typography variant="h6">Informations de la Société</Typography>
-              <Typography>Nom: Ma Société</Typography>
-              <Typography>Adresse: Adresse de Ma Société</Typography>
-              <Typography>Téléphone: +987654321</Typography>
-              <Typography>Code TVA: TVA123456789</Typography>
-            </Grid>
-            <Grid item xs={12} md={6}>
-              <Typography variant="h6">Informations du Client</Typography>
-              <Typography>Nom: {client.fullname}</Typography>
-              <Typography>Adresse: {client.adresse}</Typography>
-              <Typography>Téléphone: {client.tel}</Typography>
-              <Typography>Code TVA: {client.codeTVA}</Typography>
-            </Grid>
-          </Grid>
-
-          <Typography variant="h5" marginTop={3} align="center">
-            Détails du Bon de Livraison (Code: {code})
-          </Typography>
-
-          <Table sx={{ marginTop: 3 }}>
-            <TableHead>
-              <TableRow>
-                <TableCell>Produit</TableCell>
-                <TableCell>Unité</TableCell>
-                <TableCell>Prix U</TableCell>
-                <TableCell>Quantité</TableCell>
-                <TableCell>Prix Net</TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {deliveryNote.map((product, index) => (
-                <TableRow key={index}>
-                  <TableCell>{product.designation}</TableCell>
-                  <TableCell>{product.Unite}</TableCell>
-                  <TableCell>{product.prixU_HT} TND</TableCell>
-                  <TableCell>{product.quantite}</TableCell>
-                  <TableCell>{product.quantite * product.prixU_HT}</TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-
-          <Typography variant="h6" marginTop={2} align="right">
-            Total Net: {totalNettc.toFixed(2)} TND
-          </Typography>
-        </Box>
-      </div>
-
-      <Box display="flex" justifyContent="center" marginTop={3}>
-        <Button variant="contained" color="primary" onClick={handlePrint} sx={{ marginRight: 2 }}>
+       <Button variant="outlined" onClick={() => navigate(-1)} sx={{ mb: 2 }}>
+              Retour
+            </Button>
+      <Button variant="contained" color="primary" onClick={handlePrint} sx={{ marginTop: 2 }}>
           Imprimer
         </Button>
-        <Button variant="contained" color="secondary" onClick={handleExportExcel}>
+        <Button variant="contained" color="secondary" onClick={handleExportExcel} sx={{ marginTop: 2, marginLeft: 2 }}>
           Exporter en Excel
         </Button>
-      </Box>
+      <div ref={printRef} id="print-content">
+        <Grid container spacing={3}>
+          {/* Company Info - Left Side */}
+          <Grid item xs={6}>
+            <Typography variant="h6">Informations de la Société</Typography>
+            <Typography>Nom: Ma Société</Typography>
+            <Typography>Adresse: Adresse de Ma Société</Typography>
+            <Typography>Téléphone: +987654321</Typography>
+            <Typography>Code TVA: TVA123456789</Typography>
+          </Grid>
+
+          {/* Client Info - Right Side */}
+          <Grid item xs={6}>
+            <Typography variant="h6">Informations du Client</Typography>
+            <Typography>Nom: {client.fullname}</Typography>
+            <Typography>Adresse: {client.adresse}</Typography>
+            <Typography>Téléphone: {client.tel}</Typography>
+            <Typography>Code TVA: {client.codeTVA}</Typography>
+          </Grid>
+        </Grid>
+
+        <Typography variant="h5" marginTop={3}>
+          Détails du Bon de Livraison {code}
+        </Typography>
+
+        <Table>
+          <TableHead>
+            <TableRow>
+              <TableCell>Produit</TableCell>
+              <TableCell>Unité</TableCell>
+              <TableCell>Prix U</TableCell>
+              <TableCell>Quantité</TableCell>
+              <TableCell>Prix Net</TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {deliveryNote.map((product, index) => (
+              <TableRow key={index}>
+                <TableCell>{product.designation}</TableCell>
+                <TableCell>{product.Unite}</TableCell>
+                <TableCell>{product.prixU_HT} TND</TableCell>
+                <TableCell>{product.quantite}</TableCell>
+                <TableCell>{product.quantite * product.prixU_HT}</TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+
+        <Typography variant="h6" marginTop={2}>
+          Total Net: {totalNettc.toFixed(2)} TND
+        </Typography>
+
+  <Box sx={{ display: 'flex', justifyContent: 'space-between', mt: 4 }}>
+          <Box sx={{ textAlign: 'center' }}>
+            <Typography variant="body1">Signature du Fournisseur</Typography>
+            <img
+              src="path/to/supplier/signature.png"
+              alt="Signature du fournisseur"
+              style={{ width: 150, marginTop: 10 }}
+            />
+          </Box>
+          <Box sx={{ textAlign: 'center' }}>
+            <Typography variant="body1">Signature de Ma Société</Typography>
+            <img
+              src="path/to/company/signature.png"
+              alt="Signature de la société"
+              style={{ width: 150, marginTop: 10 }}
+            />
+          </Box>
+        </Box>
+     
+      </div>
     </Box>
   );
 };

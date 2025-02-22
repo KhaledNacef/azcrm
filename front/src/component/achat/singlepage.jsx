@@ -102,6 +102,10 @@ const SingleDeliveryNote = () => {
             <Typography variant="body2">Code TVA: {supplier?.codeTVA}</Typography>
           </Box>
         </Box>
+        <Typography variant="h5" marginTop={3}>
+                  Détails du Facture {code}
+                </Typography>
+        
 
         {/* Products Table */}
         <Table sx={{ marginTop: 2 }}>
@@ -134,6 +138,24 @@ const SingleDeliveryNote = () => {
           <Typography><strong>Total TTC:</strong> {totalNetTTC.toFixed(2)} TND</Typography>
         </Box>
       </Box>
+      <Box sx={{ display: 'flex', justifyContent: 'space-between', mt: 4 }}>
+          <Box sx={{ textAlign: 'center' }}>
+            <Typography variant="body1">Signature du Fournisseur</Typography>
+            <img
+              src="path/to/supplier/signature.png"
+              alt="Signature du fournisseur"
+              style={{ width: 150, marginTop: 10 }}
+            />
+          </Box>
+          <Box sx={{ textAlign: 'center' }}>
+            <Typography variant="body1">Signature de Ma Société</Typography>
+            <img
+              src="path/to/company/signature.png"
+              alt="Signature de la société"
+              style={{ width: 150, marginTop: 10 }}
+            />
+          </Box>
+        </Box>
     </Box>
   );
 };
