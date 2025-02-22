@@ -13,9 +13,8 @@ import {
   TableHead,
 } from "@mui/material";
 
-const API_BASE_URL = "https://api.azcrm.deviceshopleader.com/api";
 
-const CreateDeliveryNoteModala = ({ onAddDeliveryNote }) => {
+const CreateDeliveryNoteModala = () => {
   const [code, setCode] = useState(""); // Start with an empty string
   const [supplier, setSupplier] = useState(0); 
   const [timbre, setTimbre] = useState(false);
@@ -26,6 +25,7 @@ const CreateDeliveryNoteModala = ({ onAddDeliveryNote }) => {
   const [quantite, setQuantite] = useState(1);
   const [availableProducts, setAvailableProducts] = useState([]);
   const [suppliers, setSuppliers] = useState([]);
+  const API_BASE_URL = "https://api.azcrm.deviceshopleader.com/api";
 
   useEffect(() => {
     const fetchData = async () => {
@@ -90,7 +90,6 @@ const CreateDeliveryNoteModala = ({ onAddDeliveryNote }) => {
     try {
       await axios.post(`${API_BASE_URL}/bl/stock/add`, newNote);
       alert("Bon d'achat créé avec succès");
-      onAddDeliveryNote(newNote);
     } catch (error) {
       console.error("Error creating delivery note:", error.response?.data || error);
       alert("Échec de la création du bon d'achat");
