@@ -228,7 +228,7 @@ const SingleDeliverysortie = () => {
               <TableRow key={index}>
                 <TableCell>{prod.designation}</TableCell>
                 <TableCell>{prod.quantite}</TableCell>
-                <TableCell>{prod.unite}</TableCell>
+                <TableCell>{prod.Unite}</TableCell>
                 <TableCell>{prod.prixU_HT}$</TableCell>
                 <TableCell>{(prod.prixU_HT * prod.quantite).toFixed(2)}$</TableCell>
               
