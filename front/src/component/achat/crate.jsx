@@ -14,7 +14,7 @@ import {
 } from "@mui/material";
 
 
-const CreateDeliveryNoteModala = () => {
+const CreateDeliveryNoteModala = ({onadd}) => {
   const [code, setCode] = useState(""); // Start with an empty string
   const [supplier, setSupplier] = useState(0); 
   const [timbre, setTimbre] = useState(false);
@@ -90,6 +90,7 @@ const CreateDeliveryNoteModala = () => {
     try {
       await axios.post(`https://api.azcrm.deviceshopleader.com/api/bonachat/add`, newNote);
       alert("Bon d'achat créé avec succès");
+      onadd()
     } catch (error) {
       console.error("Error creating delivery note:", error.response?.data || error);
       alert("Échec de la création du bon d'achat");

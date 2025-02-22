@@ -18,17 +18,17 @@ const BonsortiePage = () => {
   const navigate = useNavigate();
   const [deliveryNotes, setDeliveryNotes] = useState([]);
   const [open, setOpen] = useState(false); // Modal state
-  const API_BASE_URL = 'https://api.azcrm.deviceshopleader.com/api';
+  const fetchDeliveryNotes = async () => {
+    try {
+      const response = await axios.get(`https://api.azcrm.deviceshopleader.com/api/bs/bs/get`); // Make sure to update the endpoint if needed
+      setDeliveryNotes(response.data.Bss); // Assuming the response structure has `Bss`
+    } catch (error) {
+      console.error('Error fetching delivery notes:', error);
+    }
+  };
   // Fetch all Bs (delivery notes) from the server
   useEffect(() => {
-    const fetchDeliveryNotes = async () => {
-      try {
-        const response = await axios.get(`${API_BASE_URL}/bs/bs/get`); // Make sure to update the endpoint if needed
-        setDeliveryNotes(response.data.Bss); // Assuming the response structure has `Bss`
-      } catch (error) {
-        console.error('Error fetching delivery notes:', error);
-      }
-    };
+    
 
     fetchDeliveryNotes();
   }, [deliveryNotes]);
@@ -38,6 +38,8 @@ const BonsortiePage = () => {
 
   const addDeliveryNote = () => {
     handleClose();
+    fetchDeliveryNotes();
+
   };
 
   return (
@@ -72,7 +74,7 @@ const BonsortiePage = () => {
               <TableCell>
                 <Button
                   variant="outlined"
-                  onClick={() => navigate(`/bon-dachat/${note.code}/${note.clientId}`)}
+                  onClick={() => navigate(`/bon-livraison/${note.code}/${note.clientId}`)}
                 >
                   Voir
                 </Button>
