@@ -12,6 +12,7 @@ const SingleDeliveryNote = () => {
   const [deliveryNote, setDeliveryNote] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const previousLocation = window.location.pathname;
 
   useEffect(() => {
     const fetchData = async () => {
@@ -103,7 +104,7 @@ const SingleDeliveryNote = () => {
           <Typography variant="h6">Amounette Compnay</Typography>
         </Box>
         <Box>
-          <Typography variant="h6">{deliveryNote.fullname}</Typography>
+          <Typography variant="h6">{supplier.fullname}</Typography>
         </Box>
       </Box>
 
@@ -142,7 +143,7 @@ const SingleDeliveryNote = () => {
           </TableRow>
         </TableHead>
         <TableBody>
-          {deliveryNote.products.map((prod, index) => (
+          {deliveryNote.map((prod, index) => (
             <TableRow key={index}>
               <TableCell>{prod.designation}</TableCell>
               <TableCell>{prod.quantite}</TableCell>
