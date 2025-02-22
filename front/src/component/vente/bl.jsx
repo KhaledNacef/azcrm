@@ -24,7 +24,7 @@ const BonsortiePage = () => {
     try {
       const response = await axios.get('https://api.azcrm.deviceshopleader.com/api/bs/bs/get');
       console.log("API Response:", response.data); // ✅ Debugging log
-      setDeliveryNotes(response.data.Bss || []); // ✅ Ensure it's always an array
+      setDeliveryNotes(response.data); // ✅ Ensure it's always an array
     } catch (error) {
       console.error('Error fetching delivery notes:', error);
     }
@@ -68,33 +68,33 @@ const BonsortiePage = () => {
           </TableRow>
         </TableHead>
         <TableBody>
-          {deliveryNotes.length > 0 ? (
-            deliveryNotes.map((note) => (
-              <TableRow key={note.code}>
-                <TableCell>{note.code}</TableCell>
-                <TableCell>{note.clientId || "N/A"}</TableCell>
-                <TableCell>{note.timbre || "N/A"}</TableCell>
-                <TableCell>
-                  {note.createdAt ? new Date(note.createdAt).toLocaleDateString() : "N/A"}
-                </TableCell>
-                <TableCell>
-                  <Button
-                    variant="outlined"
-                    onClick={() => navigate(`/bon-livraison/${note.code}/${note.clientId}`)}
-                  >
-                    Voir
-                  </Button>
-                </TableCell>
-              </TableRow>
-            ))
-          ) : (
-            <TableRow>
-              <TableCell colSpan={5} align="center">
-                Aucune donnée disponible
-              </TableCell>
-            </TableRow>
-          )}
-        </TableBody>
+  {deliveryNotes.length > 0 ? (
+    deliveryNotes.map((note) => (
+      <TableRow key={note.code}>
+        <TableCell>{note.code}</TableCell>
+        <TableCell>{note.clientId || "N/A"}</TableCell>
+        <TableCell>{note.timbre || "N/A"}</TableCell>
+        <TableCell>
+          {note.createdAt ? new Date(note.createdAt).toLocaleDateString() : "N/A"}
+        </TableCell>
+        <TableCell>
+          <Button
+            variant="outlined"
+            onClick={() => navigate(`/bon-livraison/${note.code}/${note.clientId}`)}
+          >
+            Voir
+          </Button>
+        </TableCell>
+      </TableRow>
+    ))
+  ) : (
+    <TableRow>
+      <TableCell colSpan={5} align="center">
+        Aucune donnée disponible
+      </TableCell>
+    </TableRow>
+  )}
+</TableBody>
       </Table>
 
       {/* Modal for creating a delivery note */}
