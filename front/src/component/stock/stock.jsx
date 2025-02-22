@@ -12,7 +12,7 @@ import {
   Typography,
   Button,
 } from '@mui/material';
-
+import axios from 'axios';
 const StockPage = () => {
   const [products, setProducts] = useState([]); // All products
   const [filteredProducts, setFilteredProducts] = useState([]); // Filtered products
