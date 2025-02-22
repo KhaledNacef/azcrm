@@ -66,6 +66,7 @@ const BonsortiePage = () => {
             <TableRow key={note.code}>
               <TableCell>{note.code}</TableCell>
               <TableCell>{note.clientId}</TableCell>
+              <TableCell>{note.timbre}</TableCell>
               <TableCell>{new Date(note.createdAt).toLocaleDateString()}</TableCell>
               <TableCell>
                 <Button

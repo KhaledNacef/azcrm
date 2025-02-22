@@ -20,7 +20,7 @@ const SingleDeliveryNote = () => {
     const fetchData = async () => {
       try {
         const supplierRes = await axios.get(`https://api.azcrm.deviceshopleader.com/api/getidsuppliers/${supplierId}`);
-        const productRes = await axios.get(`https://api.azcrm.deviceshopleader.com/api/stock/getallstockdelv/${code}`);
+        const productRes = await axios.get(`https://api.azcrm.deviceshopleader.com/api/bonachat/stock/getallstockdelv/${code}`);
 
         setSupplier(supplierRes.data);
         setDeliveryNote(productRes.data);
@@ -94,7 +94,7 @@ const SingleDeliveryNote = () => {
           <TableBody>
             {deliveryNote.map((product, index) => (
               <TableRow key={index}>
-                <TableCell>{product.name}</TableCell>
+                <TableCell>{product.designation}</TableCell>
                 <TableCell>{product.quantite}</TableCell>
                 <TableCell>{product.prixU_HT.toFixed(2)} TND</TableCell>
                 <TableCell>{product.TVA}%</TableCell>

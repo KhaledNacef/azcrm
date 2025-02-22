@@ -19,9 +19,8 @@ const SingleDeliverysortie = () => {
   useEffect(() => {
     const fetchClientData = async () => {
       try {
-        const response = await fetch(`https://api.azcrm.deviceshopleader.com/api/clients/getcli/:${clientId}`);
-        const data = await response.json();
-        setClient(data);
+        const response = await fetch(`https://api.azcrm.deviceshopleader.com/api/clients/getcli/${clientId}`);
+        setClient(response.data);
       } catch (error) {
         console.error('Error fetching client data:', error);
       }
@@ -30,8 +29,7 @@ const SingleDeliverysortie = () => {
     const fetchDeliveryNoteData = async () => {
       try {
         const response = await fetch(`https://api.azcrm.deviceshopleader.com/api/bs/bs/stock/${code}`);
-        const data = await response.json();
-        setDeliveryNote(data);
+        setDeliveryNote(response.data);
       } catch (error) {
         console.error('Error fetching delivery note data:', error);
       }
