@@ -12,7 +12,7 @@ const router = express.Router();
 // Route to create a supplier
 router.post('/suppliers', createSupplier);
 router.get('/getsuppliers', getAllSuppliers);
-router.get('/getidsuppliers', getidSuppliers);
+router.get('/getidsuppliers/:id', getidSuppliers);
 
 // Route to update a supplier
 router.put('/upsuppliers/:id', updateSupplier);
