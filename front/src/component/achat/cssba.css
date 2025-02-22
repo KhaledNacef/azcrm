@@ -1,21 +1,25 @@
-/* Hide everything else during print */
 @media print {
-  body * {
-    visibility: hidden;
+  body {
+    font-family: Arial, sans-serif;
   }
 
-  #printContent, #printContent * {
-    visibility: visible;
+  .MuiTypography-h5 {
+    text-align: center !important;
   }
 
+  /* Ensure the print view does not break the layout */
   #printContent {
-    position: absolute;
-    left: 0;
-    top: 0;
     width: 100%;
-    height: 100%;
-    padding: 10mm;
-    box-sizing: border-box;
-    border: 1px solid #000;
+    padding: 20px;
+  }
+
+  /* Hide buttons and other elements that shouldn't be printed */
+  .MuiButton-root {
+    display: none;
+  }
+
+  /* Add other styles to match your print design */
+  .MuiTableCell-root {
+    border: 1px solid #ccc;
   }
 }

@@ -1,44 +1,35 @@
 @media print {
-  /* Hide debug information and interactive elements */
-  footer, .vite-footer, .react-footer, .vite-logo, .react-logo, .header, .MuiButton-root {
-      display: none !important;
-  }
-
-  /* Adjust text size */
   body {
-      font-size: 12px !important;
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
   }
 
-  .MuiTypography-root, .MuiTableCell-root, .MuiTableRow-root {
-      font-size: 12px !important;
+  #print-content {
+    margin: 20px;
   }
 
-  /* Table adjustments for print */
-  .MuiTable-root {
-      width: 100%;
-      table-layout: fixed;
+  .MuiButton-root {
+    display: none; /* Hide buttons on print */
   }
 
-  .MuiTableCell-root {
-      padding: 8px 16px;
+  table {
+    width: 100%;
+    border-collapse: collapse;
   }
 
-  /* Make sure the layout is clean and tidy */
-  .table-section {
-      margin-bottom: 20px;
+  th, td {
+    padding: 8px;
+    border: 1px solid #ddd;
+    text-align: left;
   }
 
-  /* Header customization */
-  .header {
-      text-align: center;
-      font-size: 16px;
-      font-weight: bold;
-      margin-bottom: 20px;
+  th {
+    background-color: #f2f2f2;
   }
 
-  /* Page margins */
-  @page {
-      margin: 20mm;
-      size: A4;
+  img {
+    width: 150px;
+    margin-top: 10px;
   }
 }

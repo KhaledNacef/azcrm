@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { Box, Typography, Button, Table, TableHead, TableRow, TableCell, TableBody} from '@mui/material';
+import { Box, Typography, Button, Table, TableHead, TableRow, TableCell, TableBody } from '@mui/material';
 import * as XLSX from 'xlsx';
 import './cssbl.css';
 import Grid from '@mui/material/Grid2';
@@ -104,15 +104,30 @@ const SingleDeliverysortie = () => {
       <Typography variant="h4" gutterBottom textAlign="center">
         Bon de Livraison
       </Typography>
-       <Button variant="outlined" onClick={() => navigate(-1)} sx={{ mb: 2 }}>
-              Retour
-            </Button>
-      <Button variant="contained" color="primary" onClick={handlePrint} sx={{ marginTop: 2 }}>
-          Imprimer
-        </Button>
-        <Button variant="contained" color="secondary" onClick={handleExportExcel} sx={{ marginTop: 2, marginLeft: 2 }}>
-          Exporter en Excel
-        </Button>
+      <Button
+        variant="outlined"
+        onClick={() => navigate(-1)}
+        sx={{ mb: 2, padding: "8px 16px", fontSize: "16px" }}
+      >
+        Retour
+      </Button>
+      <Button
+        variant="contained"
+        color="primary"
+        onClick={handlePrint}
+        sx={{ marginTop: 2, padding: "8px 16px", fontSize: "16px" }}
+      >
+        Imprimer
+      </Button>
+      <Button
+        variant="contained"
+        color="secondary"
+        onClick={handleExportExcel}
+        sx={{ marginTop: 2, marginLeft: 2, padding: "8px 16px", fontSize: "16px" }}
+      >
+        Exporter en Excel
+      </Button>
+
       <div ref={printRef} id="print-content">
         <Grid container spacing={3}>
           {/* Company Info - Left Side */}
@@ -128,13 +143,13 @@ const SingleDeliverysortie = () => {
           <Grid item xs={6}>
             <Typography variant="h6">Informations du Client</Typography>
             <Typography>Nom: {client.fullname}</Typography>
-            <Typography>Adresse: {client.adresse}</Typography>
+            <Typography>Adresse: {client.adress}</Typography>
             <Typography>Téléphone: {client.tel}</Typography>
             <Typography>Code TVA: {client.codeTVA}</Typography>
           </Grid>
         </Grid>
 
-        <Typography variant="h5" marginTop={3}>
+        <Typography variant="h5" marginTop={3} textAlign="center">
           Détails du Bon de Livraison {code}
         </Typography>
 
@@ -161,11 +176,11 @@ const SingleDeliverysortie = () => {
           </TableBody>
         </Table>
 
-        <Typography variant="h6" marginTop={2}>
+        <Typography variant="h6" marginTop={2} textAlign="right">
           Total Net: {totalNettc.toFixed(2)} TND
         </Typography>
 
-  <Box sx={{ display: 'flex', justifyContent: 'space-between', mt: 4 }}>
+        <Box sx={{ display: 'flex', justifyContent: 'space-between', mt: 4 }}>
           <Box sx={{ textAlign: 'center' }}>
             <Typography variant="body1">Signature du Fournisseur</Typography>
             <img
@@ -183,7 +198,6 @@ const SingleDeliverysortie = () => {
             />
           </Box>
         </Box>
-     
       </div>
     </Box>
   );
