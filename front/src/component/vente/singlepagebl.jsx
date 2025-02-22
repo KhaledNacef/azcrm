@@ -98,7 +98,7 @@ const SingleDeliverysortie = () => {
               </TableRow>
             </TableHead>
             <TableBody>
-                 {deliveryNote && Array.isArray(deliveryNote) && deliveryNote.length > 0 ? (
+                 {deliveryNote && Array.isArray(deliveryNote)  ? (
               deliveryNote.map((note) => (
                 <TableRow key={note.code}>
                   <TableCell>{note.code}</TableCell>

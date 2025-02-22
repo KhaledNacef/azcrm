@@ -84,23 +84,25 @@ const SingleDeliveryNote = () => {
         {/* Products Table */}
         <Table>
           <TableHead>
-            <TableRow>
-              <TableCell><strong>Produit</strong></TableCell>
-              <TableCell><strong>Quantité</strong></TableCell>
-              <TableCell><strong>Prix U HT</strong></TableCell>
-              <TableCell><strong>TVA (%)</strong></TableCell>
-            </TableRow>
+               <TableRow>
+                          <TableCell>Produit</TableCell>
+                          <TableCell>Unité</TableCell>
+                          <TableCell>TVA (%)</TableCell>
+                          <TableCell>Prix U HT</TableCell>
+                          <TableCell>Quantité</TableCell>
+                        </TableRow>
           </TableHead>
           <TableBody>
-            {deliveryNote.map((product, index) => (
-              <TableRow key={index}>
-                <TableCell>{product.designation}</TableCell>
-                <TableCell>{product.quantite}</TableCell>
-                <TableCell>{product.prixU_HT.toFixed(2)} TND</TableCell>
-                <TableCell>{product.tva}%</TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
+  {deliveryNote.map((product, index) => (
+    <TableRow key={index}>
+      <TableCell>{product.designation}</TableCell>
+      <TableCell>{product.Unite}</TableCell>
+      <TableCell>{product.tva}%</TableCell>
+      <TableCell>{product.prixU_HT} TND</TableCell>
+      <TableCell>{product.quantite}</TableCell>
+    </TableRow>
+  ))}
+</TableBody>
         </Table>
 
         {/* Totals */}
