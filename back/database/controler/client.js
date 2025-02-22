@@ -13,7 +13,7 @@ exports.getAllClients = async (req, res) => {
 
 // Get client by ID
 exports.getClientById = async (req, res) => {
-  const id = req.params.id;  // Correct extraction of ID
+  const {id} = req.params;  // Correct extraction of ID
   try {
     const client = await Client.findByPk(id);
     if (!client) {
