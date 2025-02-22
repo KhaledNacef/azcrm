@@ -145,7 +145,7 @@ const SingleDeliveryNote = () => {
               <TableCell>{prod.designation}</TableCell>
               <TableCell>{prod.quantite}</TableCell>
               <TableCell>{prod.prixU_HT}TND</TableCell>
-              <TableCell>{prod.TVA}%</TableCell>
+              <TableCell>{prod.tva}%</TableCell>
               <TableCell>{(prod.prixU_HT * prod.quantity).toFixed(2)}TND</TableCell>
               <TableCell>
                 {((prod.prixU_HT * prod.quantite) * (1 + prod.tva / 100)).toFixed(2)}TND
