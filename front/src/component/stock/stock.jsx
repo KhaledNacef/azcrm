@@ -20,43 +20,21 @@ const StockPage = () => {
 
   // Simulated product data
   useEffect(() => {
-    const fetchProducts = async () => {
-      // Replace with your API call
-      const mockProducts = [
-        {
-          id: 1,
-          name: 'Product A',
-          unit: 'Piece',
-          quantity: 10,
-          unitPrice: 50,
-          vat: 19,
-          photo: 'https://via.placeholder.com/100',
-        },
-        {
-          id: 2,
-          name: 'Product B',
-          unit: 'Box',
-          quantity: 5,
-          unitPrice: 75,
-          vat: 10,
-          photo: 'https://via.placeholder.com/100',
-        },
-        {
-          id: 3,
-          name: 'Product C',
-          unit: 'Kg',
-          quantity: 20,
-          unitPrice: 100,
-          vat: 5,
-          photo: 'https://via.placeholder.com/100',
-        },
-      ];
-      setProducts(mockProducts);
-      setFilteredProducts(mockProducts);
-    };
+   
+      const fetchstock = async () => {
+        try {
+          const response = await axios.get('https://api.azcrm.deviceshopleader.com/api/stock/getall');
+          setProducts(response.data);
+          setFilteredProducts(response.data);
+        } catch (error) {
+          console.error("Erreur lors de la récupération des fournisseurs :", error);
+        }
+      };
+     
+    
 
-    fetchProducts();
-  }, []);
+    fetchstock();
+    }, []);
 
   // Handle search input
   const handleSearch = (event) => {
@@ -65,7 +43,7 @@ const StockPage = () => {
 
     const filtered = products.filter(
       (product) =>
-        product.name.toLowerCase().includes(query) ||
+        product.designation.toLowerCase().includes(query) ||
         product.id.toString().includes(query)
     );
     setFilteredProducts(filtered);
@@ -110,23 +88,23 @@ const StockPage = () => {
           <TableBody>
             {filteredProducts.length > 0 ? (
               filteredProducts.map((product) => {
-                const netHT = calculateNetHT(product.unitPrice, product.quantity);
-                const netTTC = calculateNetTTC(netHT, product.vat);
+                const netHT = calculateNetHT(product.prixU_HT, product.quantite);
+                const netTTC = calculateNetTTC(netHT, product.tva);
                 return (
                   <TableRow key={product.id}>
                     <TableCell>{product.id}</TableCell>
-                    <TableCell>{product.name}</TableCell>
+                    <TableCell>{product.designation}</TableCell>
                     <TableCell>
                       <img
                         src={product.photo}
-                        alt={product.name}
+                        alt={product.designation}
                         style={{ width: '50px', height: '50px', objectFit: 'cover' }}
                       />
                     </TableCell>
-                    <TableCell>{product.unit}</TableCell>
-                    <TableCell>{product.quantity}</TableCell>
-                    <TableCell>{product.unitPrice.toFixed(2)} $</TableCell>
-                    <TableCell>{product.vat} %</TableCell>
+                    <TableCell>{product.Unite}</TableCell>
+                    <TableCell>{product.quantite}</TableCell>
+                    <TableCell>{product.prixU_HT.toFixed(2)} $</TableCell>
+                    <TableCell>{product.tva} %</TableCell>
                     <TableCell>{netHT.toFixed(2)} $</TableCell>
                     <TableCell>{netTTC.toFixed(2)} $</TableCell>
                   </TableRow>
