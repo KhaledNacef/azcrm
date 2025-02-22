@@ -23,9 +23,9 @@ const stock=require('./database/router/stockR')
 app.use('/api/suplier', suplierRoutes); 
 app.use('/api/clients', clientRoutes);  
 app.use('/api/product', product); 
-app.use('/api/bl',deliverynote)
+app.use('/api/bonachat',deliverynote)
 app.use('/api/bs',bss)
-app.use('/api/stock',stock)
+app.use('/api/stock',stock)                                                                                         
 // Connect to Database
 
 const PORT = 8080;

@@ -10,10 +10,10 @@ const {
 const router = express.Router();
 
 // Routes for delivery notes
-router.get('/stock/getallstockdelv', getAllStockItemsByDeliveryNote);
+router.get('/stock/getallstockdelv/:code', getAllStockItemsByDeliveryNote);
 
 router.get('/stock/getall', getAllDeliveryNotes);
-router.post('/stock/add/:delid', createDeliveryNote);
+router.post('/add', createDeliveryNote);
 router.delete('/stock/delete/:id', deleteDeliveryNote);
 
 module.exports = router;
