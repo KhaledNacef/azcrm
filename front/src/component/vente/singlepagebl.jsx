@@ -74,7 +74,7 @@ const SingleDeliverysortie = () => {
             </Grid>
 
             {/* Client Info - Right Side */}
-            <Grid item xs={6}>
+            <Grid item xs={6}>²²
               <Typography variant="h6">Informations du Client</Typography>
               <Typography>Nom: {client.fullname}</Typography>
               <Typography>Adresse: {client.adresse}</Typography>
@@ -98,29 +98,24 @@ const SingleDeliverysortie = () => {
               </TableRow>
             </TableHead>
             <TableBody>
-                 {deliveryNote && Array.isArray(deliveryNote)  ? (
-              deliveryNote.map((note) => (
-                <TableRow key={note.code}>
-                  <TableCell>{note.code}</TableCell>
-                  <TableCell>{note.clientId || "N/A"}</TableCell>
-                  <TableCell>{note.timbre || "N/A"}</TableCell>
-                  <TableCell>{note.createdAt ? new Date(note.createdAt).toLocaleDateString() : "N/A"}</TableCell>
-                  <TableCell>
-                    <Button
-                      variant="outlined"
-                      onClick={() => navigate(`/bon-livraison/${note.code}/${note.clientId}`)}
-                    >
-                      Voir
-                    </Button>
-                  </TableCell>
-                </TableRow>
-              ))
-            ) : (
-              <TableRow>
-                <TableCell colSpan={5}>Aucune donnée disponible</TableCell>
-              </TableRow>
-            )}
-            </TableBody>
+  {deliveryNote.map((note) => (
+    <TableRow key={note.code}>
+      <TableCell>{note.code}</TableCell>
+      <TableCell>{note.clientId || "N/A"}</TableCell>
+      <TableCell>{note.timbre !== undefined ? (note.timbre ? "Oui" : "Non") : "N/A"}</TableCell>
+      <TableCell>{note.createdAt ? new Date(note.createdAt).toLocaleDateString() : "N/A"}</TableCell>
+      <TableCell>
+        <Button
+          variant="outlined"
+          onClick={() => navigate(`/bon-livraison/${note.code}/${note.clientId}`)}
+        >
+          Voir
+        </Button>
+      </TableCell>
+    </TableRow>
+  ))}
+</TableBody>
+
           </Table>
 
           <Typography variant="h6" marginTop={2}>
