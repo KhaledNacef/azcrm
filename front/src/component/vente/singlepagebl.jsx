@@ -11,8 +11,8 @@ const SingleDeliverysortie = () => {
   const printRef = useRef();
   const previousLocation = window.location.pathname;
 
-  const [client, setClient] = useState(null);
-  const [deliveryNote, setDeliveryNote] = useState(null);
+  const [client, setClient] = useState({});
+  const [deliveryNote, setDeliveryNote] = useState([]);
 
 
 

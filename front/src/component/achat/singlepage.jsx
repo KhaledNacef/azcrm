@@ -8,8 +8,8 @@ const SingleDeliveryNote = () => {
   const { code, supplierId } = useParams();
   const navigate = useNavigate();
   const printRef = useRef();
-  const [supplier, setSupplier] = useState(null);
-  const [deliveryNote, setDeliveryNote] = useState(null);
+  const [supplier, setSupplier] = useState({});
+  const [deliveryNote, setDeliveryNote] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
