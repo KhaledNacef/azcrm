@@ -19,7 +19,7 @@ const SingleDeliverysortie = () => {
   useEffect(() => {
     const fetchClientData = async () => {
       try {
-        const response = await fetch(`https://api.azcrm.deviceshopleader.com/api/clients/getcli/${clientId}`);
+        const response = await fetch(`https://api.azcrm.deviceshopleader.com/api/clients/getcli/:${clientId}`);
         const data = await response.json();
         setClient(data);
       } catch (error) {
@@ -86,7 +86,7 @@ const SingleDeliverysortie = () => {
           </Grid>
 
           <Typography variant="h5" marginTop={3}>
-            Détails du Bon de Livraison (Code: {deliveryNote.code})
+            Détails du Bon de Livraison (Code: {code})
           </Typography>
 
           <Table>
