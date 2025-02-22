@@ -101,11 +101,8 @@ const SingleDeliveryNote = () => {
             alt="Logo de Ma Société"
             style={{ width: 100 }}
           />
-          <Typography variant="h6">Amounette Compnay</Typography>
         </Box>
-        <Box>
-          <Typography variant="h6">{supplier.fullname}</Typography>
-        </Box>
+       
       </Box>
 
       {/* Company and Supplier Information with Labels */}
