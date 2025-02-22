@@ -62,22 +62,28 @@ const BonsortiePage = () => {
           </TableRow>
         </TableHead>
         <TableBody>
-          {deliveryNotes.map((note) => (
+            {deliveryNotes && Array.isArray(deliveryNotes) && deliveryNotes.length > 0 ? (
+          deliveryNotes.map((note) => (
             <TableRow key={note.code}>
               <TableCell>{note.code}</TableCell>
-              <TableCell>{note.clientId}</TableCell>
-              <TableCell>{note.timbre}</TableCell>
-              <TableCell>{new Date(note.createdAt).toLocaleDateString()}</TableCell>
+              <TableCell>{note.clientId || "N/A"}</TableCell>
+              <TableCell>{note.timbre || "N/A"}</TableCell>
+              <TableCell>{note.createdAt ? new Date(note.createdAt).toLocaleDateString() : "N/A"}</TableCell>
               <TableCell>
                 <Button
                   variant="outlined"
-                  onClick={() => navigate(`/bon-livraison/${note.code}/${note.clientId}`)}
+                  onClick={() => navigate(`/bon-dachat/${note.code}/${note.clientId}`)}
                 >
                   Voir
                 </Button>
               </TableCell>
             </TableRow>
-          ))}
+          ))
+        ) : (
+          <TableRow>
+            <TableCell colSpan={5}>Aucune donnée disponible</TableCell>
+          </TableRow>
+        )}
         </TableBody>
       </Table>
 

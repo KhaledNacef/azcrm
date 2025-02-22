@@ -40,7 +40,7 @@ const BonAchatPage = () => {
  
   useEffect(() => {
     fetchDeliveryNotes();
-  }, []);
+  }, [deliveryNotes]);
 
   return (
     <Box sx={{ p: 3 }}>
@@ -68,13 +68,13 @@ const BonAchatPage = () => {
   deliveryNotes.map((note) => (
     <TableRow key={note.code}>
       <TableCell>{note.code}</TableCell>
-      <TableCell>{note.suplierId || "N/A"}</TableCell>
+      <TableCell>{note.spulierId || "N/A"}</TableCell>
       <TableCell>{note.timbre || "N/A"}</TableCell>
       <TableCell>{note.createdAt ? new Date(note.createdAt).toLocaleDateString() : "N/A"}</TableCell>
       <TableCell>
         <Button
           variant="outlined"
-          onClick={() => navigate(`/bon-dachat/${note.code}/${note.suplierId}`)}
+          onClick={() => navigate(`/bon-dachat/${note.code}/${note.spulierId}`)}
         >
           Voir
         </Button>
