@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { Box, Typography, Table, TableHead, TableRow, TableCell, TableBody } from '@mui/material';
+import { Box, Typography, Table, TableHead, TableRow, TableCell, TableBody,Button } from '@mui/material';
 import Grid from '@mui/material/Grid2';
 import './cssbl.css';
 
@@ -224,13 +224,13 @@ const SingleDeliverysortie = () => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {deliveryNote.products.map((prod, index) => (
+            {deliveryNote.map((prod, index) => (
               <TableRow key={index}>
-                <TableCell>{prod.name}</TableCell>
-                <TableCell>{prod.quantity}</TableCell>
+                <TableCell>{prod.designation}</TableCell>
+                <TableCell>{prod.quantite}</TableCell>
                 <TableCell>{prod.unite}</TableCell>
                 <TableCell>{prod.prixU_HT}$</TableCell>
-                <TableCell>{(prod.prixU_HT * prod.quantity).toFixed(2)}$</TableCell>
+                <TableCell>{(prod.prixU_HT * prod.quantite).toFixed(2)}$</TableCell>
               
               </TableRow>
             ))}
