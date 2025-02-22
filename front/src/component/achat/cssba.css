@@ -1,33 +1,21 @@
+/* Hide everything else during print */
 @media print {
-    /* Hide any debug information or elements that contain localhost */
-    footer, .vite-footer, .react-footer, .vite-logo, .react-logo {
-        display: none !important;
-      }
-    
-      /* You can also try targeting the header if the logo appears there */
-      .vite-logo, .react-logo, .header {
-        display: none !important;
-      }
-    /* Adjust other styles for printing */
-    body {
-      font-size: 12px !important;
-    }
-  
-    .MuiTypography-root {
-      font-size: 12px !important;
-    }
-  
-    .MuiButton-root {
-      display: none !important;
-    }
-  
-    .MuiTableCell-root {
-      font-size: 12px !important;
-    }
-  
-    .MuiTableRow-root {
-      font-size: 12px !important;
-    }
-  
-    /* Any other styles you want to apply for print */
+  body * {
+    visibility: hidden;
   }
+
+  #printContent, #printContent * {
+    visibility: visible;
+  }
+
+  #printContent {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    padding: 10mm;
+    box-sizing: border-box;
+    border: 1px solid #000;
+  }
+}

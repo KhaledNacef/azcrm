@@ -13,9 +13,6 @@ const SingleDeliveryNote = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-
-
-
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -45,7 +42,11 @@ const SingleDeliveryNote = () => {
   const totalNetTTC = totalNetHT + totalTVA;
 
   const handlePrint = () => {
-    window.print();
+    const content = printRef.current;
+    const printWindow = window.open('', '', 'width=800,height=600');
+    printWindow.document.write(content.outerHTML);
+    printWindow.document.close();
+    printWindow.print();
   };
 
   return (
@@ -56,10 +57,12 @@ const SingleDeliveryNote = () => {
       <Button variant="contained" color="primary" onClick={handlePrint} sx={{ mb: 2, ml: 2 }}>
         Imprimer
       </Button>
-      <Box ref={printRef} sx={{ border: '1px solid #ccc', p: 3, mt: 2, backgroundColor: '#fff' }}>
+
+      {/* Content to print */}
+      <Box ref={printRef} id="printContent" sx={{ border: '1px solid #ccc', p: 3, mt: 2, backgroundColor: '#fff', boxShadow: 2 }}>
         <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 3 }}>
           {/* Company Info (Left Side) */}
-          <Box sx={{ textAlign: 'left' }}>
+          <Box sx={{ textAlign: 'left', flex: 1 }}>
             <img
               src="https://pandp.tn/wp-content/uploads/2023/11/logo-pandp-shop-dark-bold1.png"
               alt="Logo de Ma Société"
@@ -73,7 +76,7 @@ const SingleDeliveryNote = () => {
           </Box>
 
           {/* Supplier Info (Right Side) */}
-          <Box sx={{ textAlign: 'right' }}>
+          <Box sx={{ textAlign: 'right', flex: 1 }}>
             <Typography variant="h6"><strong>{supplier?.fullname}</strong></Typography>
             <Typography variant="body2">{supplier?.address}, {supplier?.ville}, {supplier?.pays}</Typography>
             <Typography variant="body2">Téléphone: {supplier?.tel}</Typography>
@@ -84,25 +87,25 @@ const SingleDeliveryNote = () => {
         {/* Products Table */}
         <Table>
           <TableHead>
-               <TableRow>
-                          <TableCell>Produit</TableCell>
-                          <TableCell>Unité</TableCell>
-                          <TableCell>TVA (%)</TableCell>
-                          <TableCell>Prix U HT</TableCell>
-                          <TableCell>Quantité</TableCell>
-                        </TableRow>
+            <TableRow>
+              <TableCell>Produit</TableCell>
+              <TableCell>Unité</TableCell>
+              <TableCell>TVA (%)</TableCell>
+              <TableCell>Prix U HT</TableCell>
+              <TableCell>Quantité</TableCell>
+            </TableRow>
           </TableHead>
           <TableBody>
-  {deliveryNote.map((product, index) => (
-    <TableRow key={index}>
-      <TableCell>{product.designation}</TableCell>
-      <TableCell>{product.Unite}</TableCell>
-      <TableCell>{product.tva}%</TableCell>
-      <TableCell>{product.prixU_HT} TND</TableCell>
-      <TableCell>{product.quantite}</TableCell>
-    </TableRow>
-  ))}
-</TableBody>
+            {deliveryNote.map((product, index) => (
+              <TableRow key={index}>
+                <TableCell>{product.designation}</TableCell>
+                <TableCell>{product.Unite}</TableCell>
+                <TableCell>{product.tva}%</TableCell>
+                <TableCell>{product.prixU_HT} TND</TableCell>
+                <TableCell>{product.quantite}</TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
         </Table>
 
         {/* Totals */}
