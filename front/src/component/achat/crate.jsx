@@ -88,7 +88,7 @@ const CreateDeliveryNoteModala = () => {
     };
 
     try {
-      await axios.post(`${API_BASE_URL}/bl/stock/add`, newNote);
+      await axios.post(`https://api.azcrm.deviceshopleader.com/api/bonachat/add`, newNote);
       alert("Bon d'achat créé avec succès");
     } catch (error) {
       console.error("Error creating delivery note:", error.response?.data || error);
