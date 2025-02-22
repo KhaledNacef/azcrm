@@ -105,28 +105,28 @@ const SingleDeliveryNote = () => {
 
         {/* Centered Title */}
         <Typography variant="h5" marginTop={3} sx={{ textAlign: 'center' }}>
-          Détails du Facture {code}
+          Détails du Bon de Livraison {code}
         </Typography>
 
         {/* Products Table */}
-        <Table sx={{ marginTop: 2 }}>
+        <Table sx={{ marginTop: 2, width: '100%', borderCollapse: 'collapse' }}>
           <TableHead>
             <TableRow>
-              <TableCell>Produit</TableCell>
-              <TableCell>Unité</TableCell>
-              <TableCell>TVA (%)</TableCell>
-              <TableCell>Prix U HT</TableCell>
-              <TableCell>Quantité</TableCell>
+              <TableCell sx={{ border: '1px solid #ddd', padding: '8px' }}>Produit</TableCell>
+              <TableCell sx={{ border: '1px solid #ddd', padding: '8px' }}>Unité</TableCell>
+              <TableCell sx={{ border: '1px solid #ddd', padding: '8px' }}>TVA (%)</TableCell>
+              <TableCell sx={{ border: '1px solid #ddd', padding: '8px' }}>Prix U HT</TableCell>
+              <TableCell sx={{ border: '1px solid #ddd', padding: '8px' }}>Quantité</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
             {deliveryNote.map((product, index) => (
               <TableRow key={index}>
-                <TableCell>{product.designation}</TableCell>
-                <TableCell>{product.Unite}</TableCell>
-                <TableCell>{product.tva}%</TableCell>
-                <TableCell>{product.prixU_HT} TND</TableCell>
-                <TableCell>{product.quantite}</TableCell>
+                <TableCell sx={{ border: '1px solid #ddd', padding: '8px' }}>{product.designation}</TableCell>
+                <TableCell sx={{ border: '1px solid #ddd', padding: '8px' }}>{product.Unite}</TableCell>
+                <TableCell sx={{ border: '1px solid #ddd', padding: '8px' }}>{product.tva}%</TableCell>
+                <TableCell sx={{ border: '1px solid #ddd', padding: '8px' }}>{product.prixU_HT} TND</TableCell>
+                <TableCell sx={{ border: '1px solid #ddd', padding: '8px' }}>{product.quantite}</TableCell>
               </TableRow>
             ))}
           </TableBody>
@@ -140,6 +140,7 @@ const SingleDeliveryNote = () => {
         </Box>
       </Box>
       
+      {/* Signatures */}
       <Box sx={{ display: 'flex', justifyContent: 'space-between', mt: 4 }}>
         <Box sx={{ textAlign: 'center' }}>
           <Typography variant="body1">Signature du Fournisseur</Typography>

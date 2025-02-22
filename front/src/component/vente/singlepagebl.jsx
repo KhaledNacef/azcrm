@@ -62,7 +62,7 @@ const SingleDeliverysortie = () => {
       [], // Empty row for spacing
       ["Informations du Client", "", "", ""], // Client Info Header
       ["Nom", "Adresse", "Téléphone", "Code TVA"],
-      [client.fullname, client.adresse, client.tel, client.codeTVA], // Client Data row
+      [client.fullname, client.adress, client.tel, client.codeTVA], // Client Data row
       [], // Empty row for spacing
       ["Détails du Bon de Livraison", "", "", ""], // Delivery details title
       ["Produit", "Unité", "Prix U", "Quantité", "Prix Net"], // Column headers
@@ -104,29 +104,31 @@ const SingleDeliverysortie = () => {
       <Typography variant="h4" gutterBottom textAlign="center">
         Bon de Livraison
       </Typography>
-      <Button
-        variant="outlined"
-        onClick={() => navigate(-1)}
-        sx={{ mb: 2, padding: "8px 16px", fontSize: "16px" }}
-      >
-        Retour
-      </Button>
-      <Button
-        variant="contained"
-        color="primary"
-        onClick={handlePrint}
-        sx={{ marginTop: 2, padding: "8px 16px", fontSize: "16px" }}
-      >
-        Imprimer
-      </Button>
-      <Button
-        variant="contained"
-        color="secondary"
-        onClick={handleExportExcel}
-        sx={{ marginTop: 2, marginLeft: 2, padding: "8px 16px", fontSize: "16px" }}
-      >
-        Exporter en Excel
-      </Button>
+      <Box sx={{ mb: 2, display: 'flex', justifyContent: 'center' }}>
+        <Button
+          variant="outlined"
+          onClick={() => navigate(-1)}
+          sx={{ padding: "8px 16px", fontSize: "16px", marginRight: 2 }}
+        >
+          Retour
+        </Button>
+        <Button
+          variant="contained"
+          color="primary"
+          onClick={handlePrint}
+          sx={{ padding: "8px 16px", fontSize: "16px", marginRight: 2 }}
+        >
+          Imprimer
+        </Button>
+        <Button
+          variant="contained"
+          color="secondary"
+          onClick={handleExportExcel}
+          sx={{ padding: "8px 16px", fontSize: "16px" }}
+        >
+          Exporter en Excel
+        </Button>
+      </Box>
 
       <div ref={printRef} id="print-content">
         <Grid container spacing={3}>
