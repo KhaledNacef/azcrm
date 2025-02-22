@@ -31,7 +31,7 @@ const FournisseurPage = () => {
 
   useEffect(() => {
     fetchFournisseurs();
-  }, []);
+  }, [fournisseurs]);
 
   const fetchFournisseurs = async () => {
     try {
@@ -85,6 +85,8 @@ const FournisseurPage = () => {
       console.error("Erreur lors de la suppression du fournisseur :", error);
     }
   };
+
+
 
   return (
     <Box sx={{ p: 3 }}>

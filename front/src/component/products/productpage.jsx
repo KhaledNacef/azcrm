@@ -38,7 +38,7 @@ const ProductPage = () => {
     };
 
     fetchProducts();
-  }, []);
+  }, [products]);
 
   // Handle search input
   const handleSearch = (event) => {

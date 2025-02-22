@@ -33,14 +33,11 @@ async function getAllBss(req, res) {
     // Fetch all delivery notes with their associated stock entries
     const Bss = await Bs.findAll();
 
-    return res.status(200).json({
-      message: 'Delivery notes fetched successfully',
-      Bss,
-    });
+    return res.status(200).json(Bss);
   } catch (error) {
     console.error('Error fetching delivery notes:', error);
     return res.status(500).json({
-      error: 'Failed to fetch delivery notes',
+      error: 'Failed to fetch delivery notess',
     });
   }
 }

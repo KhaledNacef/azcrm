@@ -36,10 +36,7 @@ async function getAllDeliveryNotes(req, res) {
     // Fetch all delivery notes with their associated stock entries
     const deliveryNotes = await DeliveryNote.findAll();
 
-    return res.status(200).json({
-      message: 'Delivery notes fetched successfully',
-      deliveryNotes,
-    });
+    return res.status(200).json(deliveryNotes);
   } catch (error) {
     console.error('Error fetching delivery notes:', error);
     return res.status(500).json({
