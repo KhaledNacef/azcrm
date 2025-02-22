@@ -19,10 +19,10 @@ const SingleDeliverysortie = () => {
   useEffect(() => {
     const fetchClientData = async () => {
       try {
-        const response = await fetch(`https://api.azcrm.deviceshopleader.com/api/clients/getcli/${clientId}`);
+        const response = await fetch(`https://api.azcrm.deviceshopleader.com/api/clients/getclietn/${clientId}`);
         setClient(response.data);
       } catch (error) {
-        console.error('Error fetching client data:', error);
+        console.error('Error fetching client data:', error,);
       }
     };
 

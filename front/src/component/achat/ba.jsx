@@ -64,23 +64,28 @@ const BonAchatPage = () => {
           </TableRow>
         </TableHead>
         <TableBody>
-      {deliveryNotes.map((note) => (
-                <TableRow key={note.code}>
-                  <TableCell>{note.code}</TableCell>
-                  <TableCell>{note.spulierId}</TableCell>
-                  <TableCell>{note.timbre}</TableCell>
-
-                  <TableCell>{new Date(note.createdAt).toLocaleDateString()}</TableCell>
-                  <TableCell>
-                    <Button
-                      variant="outlined"
-                      onClick={() => navigate(`/bon-dachat/${note.code}/${note.spulierId}`)}
-                    >
-                      Voir
-                    </Button>
-                  </TableCell>
-                </TableRow>
-              ))}
+        {Array.isArray(deliveryNotes) ? (
+  deliveryNotes.map((note) => (
+    <TableRow key={note.code}>
+      <TableCell>{note.code}</TableCell>
+      <TableCell>{note.spulierId || "N/A"}</TableCell>
+      <TableCell>{note.timbre || "N/A"}</TableCell>
+      <TableCell>{note.createdAt ? new Date(note.createdAt).toLocaleDateString() : "N/A"}</TableCell>
+      <TableCell>
+        <Button
+          variant="outlined"
+          onClick={() => navigate(`/bon-dachat/${note.code}/${note.spulierId}`)}
+        >
+          Voir
+        </Button>
+      </TableCell>
+    </TableRow>
+  ))
+) : (
+  <TableRow>
+    <TableCell colSpan={5}>Aucune donnée disponible</TableCell>
+  </TableRow>
+)}
  </TableBody>
       </Table>
 
