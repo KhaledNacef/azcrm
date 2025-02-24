@@ -38,6 +38,14 @@ const SingleDeliveryNote = () => {
   const totalNetHT = deliveryNote.reduce((acc, prod) => acc + prod.prixU_HT * prod.quantite, 0);
   const totalTVA = totalNetHT * (deliveryNote[0]?.tva / 100);
   const totalNetTTC = totalNetHT + totalTVA;
+  function displayDate() {
+    const today = new Date();
+    const day = String(today.getDate()).padStart(2, '0');
+    const month = String(today.getMonth() + 1).padStart(2, '0');
+    const year = today.getFullYear();
+    return `${day}/${month}/${year}`;
+}
+
 
  
   const handlePrint = () => {
@@ -116,6 +124,7 @@ const SingleDeliveryNote = () => {
 </Box>
 
         {/* Supplier Information (Right Column) */}
+        <Typography>{displayDate()}</Typography>
         <Box sx={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 2, marginLeft: '30%' }}>
           <Typography variant="body1"><strong>Nom du fournisseur:</strong> {supplier.fullname}</Typography>
           <Typography variant="body1"><strong>Adresse du fournisseur:</strong> {supplier?.address || 'Adresse inconnue'}</Typography>

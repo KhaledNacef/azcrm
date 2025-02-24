@@ -56,6 +56,14 @@ const SingleDeliverysortie = () => {
     };
   };
 
+  function displayDate() {
+    const today = new Date();
+    const day = String(today.getDate()).padStart(2, '0');
+    const month = String(today.getMonth() + 1).padStart(2, '0');
+    const year = today.getFullYear();
+    return `${day}/${month}/${year}`;
+}
+
 
   const handleExportToExcel = () => {
     const companyInfo = [
@@ -199,7 +207,7 @@ const SingleDeliverysortie = () => {
   <Typography variant="body1"><strong>Téléphone de la société:</strong> +987654321</Typography>
   <Typography variant="body1"><strong>Code TVA de la société:</strong> TVA123456789</Typography>
 </Box>
-
+            <Typography> {displayDate()}</Typography>
           {/* Supplier Information (Right Column) */}
           <Box sx={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 2, marginLeft: '30%' }}>
             <Typography variant="body1"><strong>Nom du Client:</strong> {client.fullname}</Typography>
