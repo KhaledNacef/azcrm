@@ -1,6 +1,6 @@
 const { v4: uuidv4 } = require('uuid'); // Use require instead of import
 const { DataTypes } = require('sequelize');
-const db=require('../index')
+const db = require('../index'); // Assuming db is the Sequelize instance
 
 // Generate a unique code for the Bs model
 const generateUniqueCode = () => {
@@ -8,33 +8,29 @@ const generateUniqueCode = () => {
 };
 
 // Define the Bs model
-const Bs = () => {
-  const bs = db.define('bs', {
-    id: {
-      type: DataTypes.INTEGER,
-      autoIncrement: true,
-      primaryKey: true,
-    },
-    clientId: {
-      type: DataTypes.INTEGER,
-      allowNull: false
-    },
-    timbre: {
-      type: DataTypes.BOOLEAN,
-      allowNull: false
-    },
-    code: {
-      type: DataTypes.STRING,
-      allowNull: true
-    }
-  });
+const Bs = db.define('bs', {
+  id: {
+    type: DataTypes.INTEGER,
+    autoIncrement: true,
+    primaryKey: true,
+  },
+  clientId: {
+    type: DataTypes.INTEGER,
+    allowNull: false
+  },
+  timbre: {
+    type: DataTypes.BOOLEAN,
+    allowNull: false
+  },
+  code: {
+    type: DataTypes.STRING,
+    allowNull: true
+  }
+});
 
-  // Hook to generate a unique code before creating a new Bs record
-  bs.beforeCreate((noteInstance) => {
-    noteInstance.code = generateUniqueCode();
-  });
-
-  return bs;
-};
+// Hook to generate a unique code before creating a new Bs record
+Bs.beforeCreate((bsInstance) => {
+  bsInstance.code = generateUniqueCode();
+});
 
 module.exports = Bs;
