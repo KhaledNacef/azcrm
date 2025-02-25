@@ -8,12 +8,13 @@ const FactureVP=db.models.FactureVP
 
 async function createbv(req, res) {
   try {
-    const { clientId, timbre, products } = req.body;
+    const {code, clientId, timbre, products } = req.body;
 
     // Step 1: Create the Bs (Bon de Sortie)
     const Bss = await FactureV.create({
       clientId: clientId,
-      timbre: timbre
+      timbre: timbre,
+      code:code
     });
 
     // Step 2: Handle the products
@@ -27,7 +28,7 @@ async function createbv(req, res) {
         quantite: quantite,
         designation: designation,
         Unite: Unite,
-        code:Bss.code
+        code:code
       });
 
 
