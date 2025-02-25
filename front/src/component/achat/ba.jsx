@@ -25,11 +25,7 @@ const BonAchatPage = () => {
 
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
-  const addDeliveryNote = () => {
-    handleClose();
-    fetchDeliveryNotes();
-
-  };
+  
   // Fetch delivery notes from the backend
   const fetchDeliveryNotes = async () => {
     try {
@@ -45,7 +41,11 @@ const BonAchatPage = () => {
   useEffect(() => {
     fetchDeliveryNotes();
   }, [deliveryNotes]);
+  const addDeliveryNote = () => {
+    handleClose();
+    fetchDeliveryNotes();
 
+  };
   return (
     <Box sx={{ p: 3 }}>
       <Typography variant="h4" mb={3}>

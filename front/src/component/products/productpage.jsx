@@ -24,6 +24,7 @@ const ProductPage = () => {
   const [editProductName, setEditProductName] = useState(''); // Edited name
   const [editProductUnite, setEditProductUnite] = useState(''); // Edited unite
   const API_BASE_URL = 'https://api.azcrm.deviceshopleader.com/api';
+  const [isDataUpdated, setIsDataUpdated] = useState(false);
 
   // Fetch products from the backend
   useEffect(() => {
@@ -38,7 +39,7 @@ const ProductPage = () => {
     };
 
     fetchProducts();
-  }, [products]);
+  }, [isDataUpdated]);
 
   // Handle search input
   const handleSearch = (event) => {
@@ -67,6 +68,8 @@ const ProductPage = () => {
         setFilteredProducts([...products, response.data]);
         setProductName('');
         setProductUnite('');
+        setIsDataUpdated(true); // Mark that data is updated
+
       } catch (error) {
         console.error('Error creating product:', error);
       }
