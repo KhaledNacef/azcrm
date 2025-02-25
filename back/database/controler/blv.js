@@ -45,13 +45,12 @@ async function getAllBss(req, res) {
 
 async function createBs(req, res) {
   try {
-    const { code, clientId, timbre, products } = req.body;
+    const { clientId, timbre, products } = req.body;
 
     // Step 1: Create the Bs (Bon de Sortie)
     const Bss = await Bs.create({
       clientId: clientId,
-      timbre: timbre,
-      code: code
+      timbre: timbre
     });
 
     // Step 2: Handle the products
@@ -65,7 +64,7 @@ async function createBs(req, res) {
         quantite: quantite,
         designation: designation,
         Unite: Unite,
-        code: code, // Link Stock with Bs ID
+        code:Bss.code
       });
 
       // Handle StockP (general stock)
@@ -79,7 +78,7 @@ async function createBs(req, res) {
         // Update the StockP entry
         await stockP.update(
           {
-            prixU_HT, // Update the price
+         // Update the price
             quantite: stockP.quantite - quantite, // Deduct the sold quantity
           },
           {

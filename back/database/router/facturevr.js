@@ -10,7 +10,7 @@ router.get('/facturev', factureVController.getAllFactureV);
 router.get('/facturev/:code', factureVController.getFactureVByCode);
 
 // Route to create a new FactureV
-router.post('/facturev', factureVController.createFactureV);
+router.post('/facturev', factureVController.createbv);
 
 // Route to update FactureV by id
 router.put('/facturev/:id', factureVController.updateFactureVById);

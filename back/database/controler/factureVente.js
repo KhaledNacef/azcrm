@@ -3,22 +3,53 @@
 const db  = require('../index'); // Adjust the path to your model as needed
 
 const  FactureV  = db.models.factureV // Adjust the path as per your project structure
-
+const FactureVP=db.models.FactureVP
 // Create a new FactureV entry
-const createFactureV = async (req, res) => {
-  const { clientId, timbre, code } = req.body;
 
+async function createbv(req, res) {
   try {
-    const newFactureV = await FactureV.create({
-      clientId,
-      timbre,
-      code
+    const { clientId, timbre, products } = req.body;
+
+    // Step 1: Create the Bs (Bon de Sortie)
+    const Bss = await FactureV.create({
+      clientId: clientId,
+      timbre: timbre
     });
-    res.status(201).json(newFactureV);
+
+    // Step 2: Handle the products
+    const stockPromises = products.map(async (product) => {
+      const { prixU_HT, quantite, designation, Unite } = product;
+
+      // Create a new Vente entry (always linked to the Bs)
+      await FactureVP.create({
+        prixU_HT: prixU_HT,
+        net: prixU_HT * quantite,
+        quantite: quantite,
+        designation: designation,
+        Unite: Unite,
+        code:Bss.code
+      });
+
+
+    
+     
+    });
+
+    // Wait for all Stock and StockP entries to be processed
+    await Promise.all(stockPromises);
+
+    return res.status(201).json({
+      message: 'Bon de Sortie, Stock, and StockP successfully created',
+      Bss,
+    });
   } catch (error) {
-    res.status(500).json({ error: 'Error creating FactureV' });
+    console.error('Error creating Bon de Sortie, Stock, and StockP:', error);
+    return res.status(500).json({
+      error: 'Failed to create Bon de Sortie, Stock, and StockP',
+    });
   }
-};
+}
+
 
 // Get all FactureV entries
 const getAllFactureV = async (req, res) => {
@@ -85,7 +116,7 @@ const deleteFactureVById = async (req, res) => {
 };
 
 module.exports = {
-  createFactureV,
+  createbv,
   getAllFactureV,
   getFactureVByCode,
   updateFactureVById,

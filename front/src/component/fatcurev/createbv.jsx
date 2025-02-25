@@ -15,7 +15,7 @@ import {
 
 const API_BASE_URL = 'https://api.azcrm.deviceshopleader.com/api';
 
-const CreateDeliveryNoteModal = ({ onAddDeliveryNote }) => {
+const Createbv = ({ onAddDeliveryNote }) => {
   const [client, setClient] = useState(0);
   const [timbre, setTimbre] = useState(false);
   const [products, setProducts] = useState([]);
@@ -74,7 +74,7 @@ const CreateDeliveryNoteModal = ({ onAddDeliveryNote }) => {
     };
 
     try {
-      await axios.post(`${API_BASE_URL}/facturev`, newNote);
+      await axios.post(`${API_BASE_URL}/facturevp`, newNote);
       alert("Bon de Sortie créé avec succès");
       onAddDeliveryNote(newNote);
     } catch (error) {
@@ -203,4 +203,4 @@ const CreateDeliveryNoteModal = ({ onAddDeliveryNote }) => {
   );
 };
 
-export default CreateDeliveryNoteModal;
+export default Createbv;

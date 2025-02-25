@@ -15,7 +15,6 @@ import {
 
 
 const CreateDeliveryNoteModala = ({ onAddDeliveryNote }) => {
-  const [code, setCode] = useState(""); // Start with an empty string
   const [supplier, setSupplier] = useState(0); 
   const [timbre, setTimbre] = useState(false);
   const [products, setProducts] = useState([]);
@@ -75,16 +74,15 @@ const CreateDeliveryNoteModala = ({ onAddDeliveryNote }) => {
   };
 
   const handleSubmit = async () => {
-    if (!code || !supplier || products.length === 0) {
+    if (!supplier || products.length === 0) {
       alert("Veuillez remplir tous les champs obligatoires.");
       return;
     }
 
     const newNote = {
-      code: code,
       spulierId: supplier, // Changed from spulierId to supplierId
       timbre: timbre,
-      products: products,
+      products: products
     };
 
     try {
@@ -101,14 +99,7 @@ const CreateDeliveryNoteModala = ({ onAddDeliveryNote }) => {
     <Box>
       <Typography variant="h6" mb={2}>Créer un Bon d'Achat</Typography>
 
-      {/* Code input */}
-      <TextField
-        label="Code"
-        value={code}
-        onChange={(e) => setCode(e.target.value)}
-        fullWidth
-        margin="normal"
-      />
+     
 
       {/* Supplier selection */}
       <TextField

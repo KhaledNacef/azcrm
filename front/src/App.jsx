@@ -10,6 +10,10 @@ import SingleDeliverysortie from './component/vente/singlepagebl.jsx';
 import BonsortiePage from './component/vente/bl.jsx';
 import StockPage from './component/stock/stock.jsx';
 import Dashboard from './component/dashboard/dashboard.jsx';
+import Boncommande from './component/fatcure/facturachat.jsx';
+import Boncommandev from './component/fatcurev/facturvente.jsx';
+import BCsingleACHAT from './component/fatcure/facturesiblge.jsx'
+import BVsinlge from './component/fatcurev/facturesinglevente.jsx';
 const App = () => {
   return (
     <Router>
@@ -27,7 +31,10 @@ const App = () => {
           <Route path="/bon-dachat/:code/:supplierId" element={<SingleDeliveryNote />} />
           <Route path="/bon-livraison" element={<BonsortiePage />} />
           <Route path="/bon-livraison/:code/:clientId" element={<SingleDeliverysortie />} />
-
+          <Route path="/bon-commandefacture" element={<Boncommandev />} />
+          <Route path="/bon-commandefacture/:code/:clientId" element={<BVsinlge />} />
+          <Route path="/bon-commande" element={<Boncommande />} />
+          <Route path="/bon-commandea/:code/:supplierId" element={<BCsingleACHAT />} />
         </Route>
       </Routes>
     </Router>

@@ -11,10 +11,10 @@ import {
   Modal,
 } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
-import CreateDeliveryNoteModala from './crate.jsx'; // Ensure correct file name
+import CreatebcModala from './createa.jsx'; // Ensure correct file name
 import axios from 'axios';
 
-const BonAchatPage = () => {
+const Boncommande = () => {
   const navigate = useNavigate();
   
   // State to hold the delivery notes
@@ -79,7 +79,7 @@ const BonAchatPage = () => {
       <TableCell>
         <Button
           variant="outlined"
-          onClick={() => navigate(`/bon-dachat/${note.code}/${note.spulierId}`)}
+          onClick={() => navigate(`/bon-commandea/${note.code}/${note.spulierId}`)}
         >
           Voir
         </Button>
@@ -109,11 +109,11 @@ const BonAchatPage = () => {
             width: 500,
           }}
         >
-          <CreateDeliveryNoteModala onAddDeliveryNote={addDeliveryNote}  />
+          <CreatebcModala onAddDeliveryNote={addDeliveryNote}  />
         </Box>
       </Modal>
     </Box>
   );
 };
 
-export default BonAchatPage;
+export default Boncommande;

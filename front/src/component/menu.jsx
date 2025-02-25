@@ -28,6 +28,8 @@ const SidebarMenu = () => {
     { label: 'Client', path: '/client', icon: <PersonIcon /> },
     { label: 'Bon de Sortie', path: '/bon-livraison', icon: <ExitToAppIcon /> },
     { label: 'Bon d’Achat', path: '/bon-dachat', icon: <ShoppingCartIcon /> },
+    { label: 'Bon de Commande', path: '/bon-commande', icon: <ShoppingCartIcon /> },
+    { label: 'Bon de Livraison', path: '/bon-commandefacture', icon: <ExitToAppIcon /> }
   ];
 
   return (
