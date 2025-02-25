@@ -15,6 +15,7 @@ import {
 
 
 const CreateDeliveryNoteModala = ({ onAddDeliveryNote }) => {
+  const [code,setCode]= useState('');
   const [supplier, setSupplier] = useState(0); 
   const [timbre, setTimbre] = useState(false);
   const [products, setProducts] = useState([]);
@@ -25,6 +26,15 @@ const CreateDeliveryNoteModala = ({ onAddDeliveryNote }) => {
   const [availableProducts, setAvailableProducts] = useState([]);
   const [suppliers, setSuppliers] = useState([]);
   const API_BASE_URL = "https://api.azcrm.deviceshopleader.com/api";
+
+
+  const generateUniqueCode = () => {
+    const timestamp = new Date().getTime(); // Current timestamp (milliseconds)
+    const randomString = Math.random().toString(36).substring(2, 8).toUpperCase(); // Random alphanumeric string
+    return `DN-${timestamp}-${randomString}`; // Combine timestamp and random string
+  };
+
+
 
   useEffect(() => {
     const fetchData = async () => {
@@ -39,6 +49,8 @@ const CreateDeliveryNoteModala = ({ onAddDeliveryNote }) => {
         console.error("Error fetching data:", error);
       }
     };
+    const newCode = generateUniqueCode();
+    setCode(newCode); // Set generated code
     fetchData();
   }, []);
 
@@ -80,6 +92,7 @@ const CreateDeliveryNoteModala = ({ onAddDeliveryNote }) => {
     }
 
     const newNote = {
+      code:code,
       spulierId: supplier, // Changed from spulierId to supplierId
       timbre: timbre,
       products: products

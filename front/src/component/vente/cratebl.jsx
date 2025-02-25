@@ -16,6 +16,8 @@ import {
 const API_BASE_URL = 'https://api.azcrm.deviceshopleader.com/api';
 
 const CreateDeliveryNoteModal = ({ onAddDeliveryNote }) => {
+    const [code,setCode]= useState('');
+
   const [client, setClient] = useState(0);
   const [timbre, setTimbre] = useState(false);
   const [products, setProducts] = useState([]);
@@ -26,6 +28,15 @@ const CreateDeliveryNoteModal = ({ onAddDeliveryNote }) => {
   const [clients, setClients] = useState([]);
   const [clientSelected, setClientSelected] = useState(false);
   const [timbreSelected, setTimbreSelected] = useState(false);
+
+
+  const generateUniqueCode = () => {
+    const timestamp = new Date().getTime(); // Current timestamp (milliseconds)
+    const randomString = Math.random().toString(36).substring(2, 8).toUpperCase(); // Random alphanumeric string
+    return `DN-${timestamp}-${randomString}`; // Combine timestamp and random string
+  };
+
+
 
   useEffect(() => {
     const fetchData = async () => {
@@ -40,6 +51,8 @@ const CreateDeliveryNoteModal = ({ onAddDeliveryNote }) => {
         console.error('Erreur lors du chargement des données:', error);
       }
     };
+    const newCode = generateUniqueCode();
+    setCode(newCode); // Set generated code
     fetchData();
   }, []);
 
@@ -68,6 +81,7 @@ const CreateDeliveryNoteModal = ({ onAddDeliveryNote }) => {
     }
 
     const newNote = {
+      code:code,
       clientId:client,
       timbre,
       products,
