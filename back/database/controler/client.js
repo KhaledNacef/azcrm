@@ -17,7 +17,7 @@ exports.getClientById = async (req, res) => {
   const parsedId = parseInt(id, 10); // Ensure id is an integer
 
   try {
-    const client = await Client.findByPk(id);
+    const client = await Client.findByPk(parsedId);
     if (!client) {
       return res.status(404).json({ error: "Client not found" });
     }

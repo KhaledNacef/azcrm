@@ -16,7 +16,7 @@ import {
 const API_BASE_URL = 'https://api.azcrm.deviceshopleader.com/api';
 
 const CreateDeliveryNoteModal = ({ onAddDeliveryNote }) => {
-  const [code, setCode] = useState(0);
+  const [code, setCode] = useState("");
   const [client, setClient] = useState(0);
   const [timbre, setTimbre] = useState(false);
   const [products, setProducts] = useState([]);

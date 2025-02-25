@@ -12,7 +12,8 @@ const User = require('../database/models/user.js');
 const Vente=require('../database/models/ventebl.js');
 const FactureA=require('./models/factureA.js')
 const FactureV=require('./models/factureV.js')
-
+const FactureAP=require('../database/models/factureachatproduit.js')
+const FactureVP=require('./models/factureventeproduit.js')
 const db = new Sequelize({
   dialect: 'mysql',     
   host: '195.200.15.61',    
@@ -32,7 +33,8 @@ const user=db.define('user',User)
 const vente=db.define('vente',Vente)
 const factureA=db.define('factureA',FactureA)
 const factureV=db.define('factureV',FactureV)
-
+const factureap=db.define('factureap',FactureAP)
+const facturevp=db.define('facturevp',FactureVP)
 
 
 

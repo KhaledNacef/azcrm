@@ -15,7 +15,7 @@ const Bs =  {
     allowNull:false
   },
   code:{
-    type:DataTypes.INTEGER,
+    type:DataTypes.STRING,
     allowNull:false
   }
 };

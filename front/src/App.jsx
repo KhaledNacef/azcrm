@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import Layout from './home.jsx';
 import ProductPage from './component/products/productpage.jsx';
 import FournisseurPage from './component/suplier/suplier.jsx';
@@ -14,16 +14,18 @@ const App = () => {
   return (
     <Router>
       <Routes>
+      <Route path="/" element={<Navigate to="/dashboard" replace />} />
+
         {/* Wrap all routes under the Layout */}
         <Route path="/" element={<Layout />}>
-          <Route path="produit" element={<ProductPage />} />
-          <Route path="dashboard" element={<Dashboard />} />
-          <Route path="stock" element={<StockPage />} />
-          <Route path="fournisseur" element={<FournisseurPage />} />
-          <Route path="client" element={<ClientPage />} />
-          <Route path="bon-dachat" element={<BonAchatPage />} />
+          <Route path="/produit" element={<ProductPage />} />
+          <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/stock" element={<StockPage />} />
+          <Route path="/fournisseur" element={<FournisseurPage />} />
+          <Route path="/client" element={<ClientPage />} />
+          <Route path="/bon-dachat" element={<BonAchatPage />} />
           <Route path="/bon-dachat/:code/:supplierId" element={<SingleDeliveryNote />} />
-          <Route path="bon-livraison" element={<BonsortiePage />} />
+          <Route path="/bon-livraison" element={<BonsortiePage />} />
           <Route path="/bon-livraison/:code/:clientId" element={<SingleDeliverysortie />} />
 
         </Route>

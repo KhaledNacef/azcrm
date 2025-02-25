@@ -34,7 +34,7 @@ const StockPage = () => {
     
 
     fetchstock();
-    }, []);
+    }, [products]);
 
   // Handle search input
   const handleSearch = (event) => {

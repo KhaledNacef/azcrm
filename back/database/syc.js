@@ -3,6 +3,8 @@ const Client = db.models.client
 const FactureA = db.models.factureA
 const FactureV = db.models.factureV
 const Suplier = db.models.supplier
+const FactureVp = db.models.facturevp
+const Factureap = db.models.factureap
 
 async function syncDatabase() {
   try {

@@ -140,7 +140,8 @@ const SingleDeliveryNote = () => {
       <Table>
         <TableHead>
           <TableRow>
-            <TableCell>Produit</TableCell>
+            <TableCell>Designation</TableCell>
+            <TableCell>Unite</TableCell>
             <TableCell>Quantité</TableCell>
             <TableCell>Prix U (HT)</TableCell>
             <TableCell>TVA (%)</TableCell>
@@ -152,6 +153,7 @@ const SingleDeliveryNote = () => {
           {deliveryNote.map((prod, index) => (
             <TableRow key={index}>
               <TableCell>{prod.designation}</TableCell>
+              <TableCell>{prod.Unite}</TableCell>
               <TableCell>{prod.quantite}</TableCell>
               <TableCell>{prod.prixU_HT}TND</TableCell>
               <TableCell>{prod.tva}%</TableCell>
