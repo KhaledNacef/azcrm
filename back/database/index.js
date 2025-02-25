@@ -22,8 +22,7 @@ const db = new Sequelize({
   database: 'azcrm' 
 });
 
-const deliveryNote=db.define('deliveryNote',DeliveryNote)
-const bs=db.define('bs',Bs)
+
 const client=db.define('client',Client)
 const product=db.define('product',Product)
 const stock=db.define('stock',Stock)
@@ -31,8 +30,6 @@ const stockP=db.define('stockP',StockP)
 const supplier=db.define('supplier',Supplier)
 const user=db.define('user',User)
 const vente=db.define('vente',Vente)
-const factureA=db.define('factureA',FactureA)
-const factureV=db.define('factureV',FactureV)
 const factureap=db.define('factureap',FactureAP)
 const facturevp=db.define('facturevp',FactureVP)
 
