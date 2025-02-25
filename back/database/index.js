@@ -1,8 +1,6 @@
 // config/database.js
 
 const { Sequelize } = require('sequelize');
-const DeliveryNote = require('../database/models/bl.js');
-const Bs = require('../database/models/bs.js');
 const Client = require('../database/models/client.js');
 const Product = require('../database/models/product.js');
 const Stock = require('../database/models/stock.js');
@@ -10,8 +8,6 @@ const StockP=require('../database/models/stockproduct.js');
 const Supplier=require('../database/models/suplier.js');
 const User = require('../database/models/user.js');
 const Vente=require('../database/models/ventebl.js');
-const FactureA=require('./models/factureA.js')
-const FactureV=require('./models/factureV.js')
 const FactureAP=require('../database/models/factureachatproduit.js')
 const FactureVP=require('./models/factureventeproduit.js')
 const db = new Sequelize({

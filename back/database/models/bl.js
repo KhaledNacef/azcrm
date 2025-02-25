@@ -8,7 +8,7 @@ const generateUniqueCode = () => {
 };
 
 // Define the DeliveryNote model
-const DeliveryNote = (sequelize) => {
+const DeliveryNote = () => {
   const note = db.define('deliveryNote', {
     id: {
       type: DataTypes.INTEGER,
