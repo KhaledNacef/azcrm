@@ -34,7 +34,7 @@ const BVsinlge = () => {
     fetchClientData();
     fetchDeliveryNoteData();
   }, [code, clientId]);
-  const totalNettc = deliveryNote.reduce((acc, prod) => acc + (prod.prixU_HT || 0) * (prod.quantite || 0), 0) || 0;
+  const totalNettc = (Array.isArray(deliveryNote) ? deliveryNote.reduce((acc, prod) => acc + (prod.prixU_HT || 0) * (prod.quantite || 0), 0) : 0) || 0;
 
   const handlePrint = () => {
     const originalContents = document.body.innerHTML;
@@ -215,7 +215,7 @@ const BVsinlge = () => {
         </Box>
 
         <Typography variant="h4" mb={3} textAlign="center">
-          Bon de Sortie - {deliveryNote.code}
+          Bon de Livraison - {deliveryNote.code}
         </Typography>
 
         <Table>

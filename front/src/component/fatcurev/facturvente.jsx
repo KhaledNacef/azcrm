@@ -53,7 +53,7 @@ const Boncommandev = () => {
 
       {/* Button to create a new delivery note */}
       <Button variant="contained" color="primary" onClick={handleOpen}>
-        Créer un Bon De Sortie
+        Créer un Bon De Livraison
       </Button>
 
       {/* Delivery Notes Table */}
