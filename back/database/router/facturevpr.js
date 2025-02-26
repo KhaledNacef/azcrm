@@ -10,7 +10,6 @@ router.get('/facturevp', factureVPController.getAllFactureVP);
 router.get('/facturevp/:code', factureVPController.getFactureVPByCode);
 
 // Route to create a new FactureVP
-router.post('/facturevp', factureVPController.createFactureVP);
 
 // Route to update FactureVP by id
 router.put('/facturevp/:id', factureVPController.updateFactureVPById);

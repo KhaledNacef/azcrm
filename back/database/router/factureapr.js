@@ -10,7 +10,6 @@ router.get('/factureap', factureAPController.getAllFactureAPs);
 router.get('/factureap/:code', factureAPController.getFactureAPByFaId);
 
 // Route to create a new FactureAP
-router.post('/factureap', factureAPController.createFactureAP);
 
 // Route to update FactureAP by faId
 router.put('/factureap/:faId', factureAPController.updateFactureAPByFaId);
