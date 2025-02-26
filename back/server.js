@@ -7,7 +7,6 @@ const app = express(); // ✅ Define the app first
 
 // Middleware
 app.use(morgan('dev')); 
-const cors = require('cors');
 const express = require('express');
 
 const corsOptions = {
