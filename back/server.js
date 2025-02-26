@@ -7,7 +7,16 @@ const app = express(); // ✅ Define the app first
 
 // Middleware
 app.use(morgan('dev')); 
-app.use(cors()); 
+const cors = require('cors');
+const express = require('express');
+
+const corsOptions = {
+    origin: 'https://azcrm.deviceshopleader.com', // Autorise le front-end
+    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+    // credentials: false, // Si tu utilises des cookies ou l'authentification
+};
+
+app.use(cors(corsOptions));
 app.use(express.json());  
 app.use(express.urlencoded({ extended: true }));  
 app.use(express.static(__dirname + '/../client/dist'));
