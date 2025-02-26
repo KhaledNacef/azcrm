@@ -26,7 +26,8 @@ const BVsinlge = () => {
     const fetchDeliveryNoteData = async () => {
       try {
         const responseprod = await fetch(`https://api.azcrm.deviceshopleader.com/api/bonlivraison/facturev/${code}`);
-        setDeliveryNote(responseprod.data);
+        const data = await responseprod.json();
+        setDeliveryNote(data);
       } catch (error) {
         console.error('Error fetching delivery note data:', error);
       }
