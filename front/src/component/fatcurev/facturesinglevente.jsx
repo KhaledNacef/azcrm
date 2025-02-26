@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { Box, Typography, Table, TableHead, TableRow, TableCell, TableBody,Button } from '@mui/material';
 import './fvdesign.css';
+import * as XLSX from 'xlsx';
 
 const BVsinlge = () => {
   const { code, clientId } = useParams();
@@ -14,8 +15,9 @@ const BVsinlge = () => {
   useEffect(() => {
     const fetchClientData = async () => {
       try {
-        const response = await fetch(`https://api.azcrm.deviceshopleader.com/api/clients/getclietn/${clientId}`);
+        const response = await fetch(`https://api.azcrm.deviceshopleader.com/api/bonlivraisonproducts/facturevp/${code}`);
         const data = await response.json();
+        setDeliveryNote(data);  // Assuming response data directly contains the array
         setClient(data);
       } catch (error) {
         console.error('Error fetching client data:', error);
