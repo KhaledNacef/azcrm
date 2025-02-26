@@ -61,7 +61,7 @@ const SidebarMenu = () => {
               transition: '0.3s',
             }}
           >
-            <ListItemIcon sx={{ color: 'inherit', minWidth: 40 }}>{item.icon}</ListItemIcon>
+            <ListItemIcon sx={{ color: '#1976d2', minWidth: 40 }}>{item.icon}</ListItemIcon>
             <ListItemText primary={item.label} sx={{ fontWeight: 'bold' }} />
           </ListItem>
         ))}
