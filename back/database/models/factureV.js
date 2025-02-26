@@ -21,7 +21,7 @@ const FactureV =  {
   }
   ,
   clientName: {
-    type: DataTypes.INTEGER,
+    type: DataTypes.STRING,
     allowNull: false
   }
 };
