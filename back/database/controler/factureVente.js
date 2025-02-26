@@ -3,7 +3,7 @@
 const db  = require('../index'); // Adjust the path to your model as needed
 
 const  FactureV  = db.models.factureV // Adjust the path as per your project structure
-const FactureVP=db.models.FactureVP
+const FactureVP=db.models.facturevp
 // Create a new FactureV entry
 
 async function createbv(req, res) {

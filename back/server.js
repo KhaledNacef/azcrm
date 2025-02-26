@@ -39,8 +39,6 @@ app.use('/api/bonachat',deliverynote)
 app.use('/api/bs',bss)
 app.use('/api/stock',stock)                                                                                         
 app.use('/api/boncommandall',factureachat)
-app.use('/api/bonlivraison',facturev)
-app.use('/api/boncommandallproducts',factureachatproduct)
 app.use('/api/bonlivraisonproducts',factureventeproduct)
 const PORT = 8080;
 app.listen(PORT, () => {
