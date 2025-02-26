@@ -42,7 +42,7 @@ const CreateDeliveryNoteModal = ({ onAddDeliveryNote }) => {
     const fetchData = async () => {
       try {
         const [productRes, clientRes] = await Promise.all([
-          axios.get(`${API_BASE_URL}/product/getallp`),
+          axios.get(`https://api.azcrm.deviceshopleader.com/api/stock/getall`),
           axios.get(`${API_BASE_URL}/clients/getclient`),
         ]);
         setAvailableProducts(productRes.data);

@@ -25,6 +25,7 @@ const Boncommande = () => {
 
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
+
   const addDeliveryNote = () => {
     handleClose();
     fetchDeliveryNotes();
@@ -33,7 +34,7 @@ const Boncommande = () => {
   // Fetch delivery notes from the backend
   const fetchDeliveryNotes = async () => {
     try {
-      const response = await axios.get('https://api.azcrm.deviceshopleader.com/api/FA00/factures/get'); // Adjust URL as needed
+      const response = await axios.get('https://api.azcrm.deviceshopleader.com/api/boncommandall/factures/get'); // Adjust URL as needed
       setDeliveryNotes(response.data); // Assuming API returns an array of delivery notes
     } catch (error) {
       console.error('Error fetching delivery notes:', error);
@@ -54,7 +55,7 @@ const Boncommande = () => {
 
       {/* Button to open the modal for creating a new delivery note */}
       <Button variant="contained" color="primary" onClick={handleOpen}>
-        Créer une FACTURE BON D'ACHAT
+        Créer une BON DE COMMANDE
       </Button>
 
       {/* Delivery Notes Table */}

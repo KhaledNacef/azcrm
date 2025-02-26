@@ -22,7 +22,7 @@ const Boncommandev = () => {
   // Function to fetch delivery notes
   const fetchDeliveryNotes = async () => {
     try {
-      const response = await axios.get('https://api.azcrm.deviceshopleader.com/api/FA01/facturev/get');
+      const response = await axios.get('https://api.azcrm.deviceshopleader.com/api/bonlivraison/facturev/get');
       console.log("API Response:", response.data); // ✅ Debugging log
       setDeliveryNotes(response.data); // ✅ Ensure it's always an array
     } catch (error) {

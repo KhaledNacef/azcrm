@@ -18,7 +18,7 @@ const BCsingleACHAT = () => {
     const fetchData = async () => {
       try {
         const supplierRes = await axios.get(`https://api.azcrm.deviceshopleader.com/api/suplier/getidsuppliers/${supplierId}`);
-        const productRes = await axios.get(`https://api.azcrm.deviceshopleader.com/api/FA02/factureap/${code}`);
+        const productRes = await axios.get(`https://api.azcrm.deviceshopleader.com/api/boncommandallproducts/factureap/${code}`);
 
         setSupplier(supplierRes.data);
         setDeliveryNote(productRes.data);

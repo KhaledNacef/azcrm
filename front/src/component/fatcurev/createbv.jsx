@@ -39,7 +39,7 @@ const Createbv = ({ onAddDeliveryNote }) => {
     const fetchData = async () => {
       try {
         const [productRes, clientRes] = await Promise.all([
-          axios.get(`${API_BASE_URL}/product/getallp`),
+          axios.get(`https://api.azcrm.deviceshopleader.com/api/stock/getall`),
           axios.get(`${API_BASE_URL}/clients/getclient`),
         ]);
         setAvailableProducts(productRes.data);
@@ -78,13 +78,14 @@ const Createbv = ({ onAddDeliveryNote }) => {
     }
 
     const newNote = {
+      code:code,
       clientId:client,
       timbre,
       products,
     };
 
     try {
-      await axios.post(`${API_BASE_URL}/FA01/facturev`, newNote);
+      await axios.post(`${API_BASE_URL}/bonlivraison/facturev`, newNote);
       alert("Bon de Sortie créé avec succès");
       onAddDeliveryNote(newNote);
     } catch (error) {
