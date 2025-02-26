@@ -15,9 +15,8 @@ const BVsinlge = () => {
   useEffect(() => {
     const fetchClientData = async () => {
       try {
-        const response = await fetch(`https://api.azcrm.deviceshopleader.com/api/bonlivraisonproducts/facturevp/${code}`);
+        const response = await fetch(`https://api.azcrm.deviceshopleader.com/api/clients/getclietn/${code}`);
         const data = await response.json();
-        setDeliveryNote(data);  // Assuming response data directly contains the array
         setClient(data);
       } catch (error) {
         console.error('Error fetching client data:', error);
