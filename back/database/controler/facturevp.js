@@ -19,9 +19,9 @@ const getAllFactureVP = async (req, res) => {
 const getFactureVPByCode = async (req, res) => {
   const { code } = req.params;
   try {
-    const factureVP = await FactureVP.findAll({ where: { code } });
+    const factureVP = await FactureVP.findAll({ where: { code:code } });
     if (factureVP) {
-      res.status(200).json(factureVP);
+      res.send(factureVP).res.status(200);
     } else {
       res.status(404).json({ error: 'FactureVP not found' });
     }
