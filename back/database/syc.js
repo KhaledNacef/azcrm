@@ -12,7 +12,7 @@ const DeliveryNote =db.models.deliveryNote
 
 async function syncDatabase() {
   try {
-    await db.sync({ alter: true }); // This will update the schema without deleting data
+    await db.sync({ alter: false }); // This will update the schema without deleting data
     console.log('Database synced without deleting data.');
   } catch (error) {
     console.error('Error syncing the database:', error);
