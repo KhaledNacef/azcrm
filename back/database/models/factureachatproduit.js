@@ -40,7 +40,7 @@ const FactureAP = {
   },
   code: {
     type: DataTypes.STRING,
-    allowNull: false,
+    allowNull: true,
   },
 };
 

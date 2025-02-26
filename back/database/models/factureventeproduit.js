@@ -25,7 +25,7 @@ const FactureVP =  {
   },
   code: {
     type: DataTypes.STRING,
-    allowNull: false,
+    allowNull: true,
   }
   
   
