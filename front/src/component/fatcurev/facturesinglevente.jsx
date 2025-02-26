@@ -15,7 +15,7 @@ const BVsinlge = () => {
   useEffect(() => {
     const fetchClientData = async () => {
       try {
-        const response = await fetch(`https://api.azcrm.deviceshopleader.com/api/clients/getclietn/${code}`);
+        const response = await fetch(`https://api.azcrm.deviceshopleader.com/api/clients/getclietn/${clientId}`);
         const data = await response.json();
         setClient(data);
       } catch (error) {
