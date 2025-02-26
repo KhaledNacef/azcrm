@@ -24,7 +24,6 @@ async function createbv(req, res) {
       // Create a new Vente entry (always linked to the Bs)
       await FactureVP.create({
         prixU_HT: prixU_HT,
-        net: prixU_HT * quantite,
         quantite: quantite,
         designation: designation,
         Unite: Unite,
