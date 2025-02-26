@@ -38,11 +38,10 @@ app.use('/api/product', product);
 app.use('/api/bonachat',deliverynote)
 app.use('/api/bs',bss)
 app.use('/api/stock',stock)                                                                                         
-// Connect to Database
-app.use('/api/FA00',factureachat)
-app.use('/api/FA01',facturev)
-app.use('/api/FA02',factureachatproduct)
-app.use('/api/FA03',factureventeproduct)
+app.use('/api/boncommandall',factureachat)
+app.use('/api/bonlivraison',facturev)
+app.use('/api/boncommandallproducts',factureachatproduct)
+app.use('/api/bonlivraisonproducts',factureventeproduct)
 const PORT = 8080;
 app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);
