@@ -19,7 +19,7 @@ const getAllFactureVP = async (req, res) => {
 const getFactureVPByCode = async (req, res) => {
   const { code } = req.params;
   try {
-    const factureVP = await FactureVP.findOne({ where: { code:code } });
+    const factureVP = await FactureVP.findAll({ where: { code:code } });
     if (factureVP) {
       res.status(200).json(factureVP);
     } else {
