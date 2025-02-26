@@ -38,6 +38,7 @@ const BVsinlge = () => {
 
   if (Array.isArray(deliveryNote)) {
     const totalNettc = deliveryNote.reduce((acc, prod) => acc + (prod.prixU_HT || 0) * (prod.quantite || 0), 0);
+    return totalNettc
   } else {
     console.error("deliveryNote is not an array", deliveryNote);
   }
