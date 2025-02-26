@@ -74,7 +74,6 @@ const deleteFactureAPByFaId = async (req, res) => {
 };
 
 module.exports = {
-  createFactureAP,
   getAllFactureAPs,
   getFactureAPByFaId,
   updateFactureAPByFaId,

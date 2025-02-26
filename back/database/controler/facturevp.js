@@ -72,7 +72,6 @@ const deleteFactureVPById = async (req, res) => {
 };
 
 module.exports = {
-  createFactureVP,
   getAllFactureVP,
   getFactureVPByCode,
   updateFactureVPById,
