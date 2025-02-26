@@ -34,12 +34,8 @@ const BVsinlge = () => {
     fetchClientData();
     fetchDeliveryNoteData();
   }, [code, clientId]);
+  const totalNettc = deliveryNote.reduce((acc, prod) => acc + (prod.prixU_HT || 0) * (prod.quantite || 0), 0) || 0;
 
-  const totalNettc = deliveryNote.reduce((acc, prod) => {
-    const prixU_HT = prod.prixU_HT || 0;
-    const quantite = prod.quantite || 0;
-    return acc + (prixU_HT * quantite);
-  }, 0); 
   const handlePrint = () => {
     const originalContents = document.body.innerHTML;
     const printContents = printRef.current.innerHTML;
@@ -233,16 +229,16 @@ const BVsinlge = () => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {deliveryNote.map((prod, index) => (
-              <TableRow key={index}>
-                <TableCell>{prod.designation}</TableCell>
-                <TableCell>{prod.quantite}</TableCell>
-                <TableCell>{prod.Unite}</TableCell>
-                <TableCell>{prod.prixU_HT}$</TableCell>
-                <TableCell>{(prod.prixU_HT * prod.quantite).toFixed(2)}$</TableCell>
-              
-              </TableRow>
-            ))}
+           {deliveryNote.map((prod, index) => (
+                       <TableRow key={index}>
+                         <TableCell>{prod.designation}</TableCell>
+                         <TableCell>{prod.quantite}</TableCell>
+                         <TableCell>{prod.Unite}</TableCell>
+                         <TableCell>{prod.prixU_HT}$</TableCell>
+                         <TableCell>{(prod.prixU_HT * prod.quantite).toFixed(2)}$</TableCell>
+                       
+                       </TableRow>
+                     ))}
           </TableBody>
         </Table>
 
