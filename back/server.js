@@ -18,6 +18,11 @@ const clientRoutes = require('./database/router/clientr');
 const product=require('./database/router/productr')
 const deliverynote=require('./database/router/BlR')
 const bss=require('./database/router/venter')
+const factureachat=require('./database/router/facturear')
+const facturev=require('./database/router/facturevr')
+const factureachatproduct=require('./database/router/factureapr')
+const factureventeproduct=require('./database/router/facturevpr')
+
 const stock=require('./database/router/stockR')
 // Use Routes
 app.use('/api/suplier', suplierRoutes); 
@@ -27,7 +32,10 @@ app.use('/api/bonachat',deliverynote)
 app.use('/api/bs',bss)
 app.use('/api/stock',stock)                                                                                         
 // Connect to Database
-
+app.use('/api/FA00',factureachat)
+app.use('/api/FA01',facturev)
+app.use('/api/FA02',factureachatproduct)
+app.use('/api/FA03',factureventeproduct)
 const PORT = 8080;
 app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);

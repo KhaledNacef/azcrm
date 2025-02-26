@@ -88,7 +88,7 @@ const CreateDeliveryNoteModal = ({ onAddDeliveryNote }) => {
     };
 
     try {
-      await axios.post(`${API_BASE_URL}/facturev`, newNote);
+      await axios.post(`${API_BASE_URL}/bs/bs/create`, newNote);
       alert("Bon de Sortie créé avec succès");
       onAddDeliveryNote(newNote);
     } catch (error) {

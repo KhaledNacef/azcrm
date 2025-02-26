@@ -44,7 +44,7 @@ const ClientPage = () => {
       .catch((error) => {
         console.error('Error fetching clients data:', error);
       });
-  }, [clients]);
+  }, []);
 
   const handleSearch = (event) => {
     const query = event.target.value.toLowerCase();

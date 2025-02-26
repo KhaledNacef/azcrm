@@ -97,7 +97,7 @@ const CreatebcModala = ({ onAddDeliveryNote }) => {
     };
 
     try {
-      await axios.post(`https://api.azcrm.deviceshopleader.com/api/factures`, newNote);
+      await axios.post(`https://api.azcrm.deviceshopleader.com/api/FA00/factures`, newNote);
       alert("Bon d'achat créé avec succès");
       onAddDeliveryNote(newNote);
     } catch (error) {

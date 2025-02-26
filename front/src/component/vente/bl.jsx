@@ -33,7 +33,7 @@ const BonsortiePage = () => {
   // Fetch delivery notes on component mount
   useEffect(() => {
     fetchDeliveryNotes();
-  }, []); // ✅ Runs only once
+  }, [1]); // ✅ Runs only once
 
   // Modal handlers
   const handleOpen = () => setOpen(true);

@@ -31,7 +31,7 @@ const FournisseurPage = () => {
 
   useEffect(() => {
     fetchFournisseurs();
-  }, [fournisseurs]);
+  }, []);
 
   const fetchFournisseurs = async () => {
     try {
@@ -55,6 +55,7 @@ const FournisseurPage = () => {
       setFournisseurs([...fournisseurs, response.data.supplier]);
       setFilteredFournisseurs([...fournisseurs, response.data.supplier]);
       setOpenAddDialog(false);
+      fetchFournisseurs();
     } catch (error) {
       console.error("Erreur lors de l'ajout du fournisseur :", error);
     }

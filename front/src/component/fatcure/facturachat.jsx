@@ -33,7 +33,7 @@ const Boncommande = () => {
   // Fetch delivery notes from the backend
   const fetchDeliveryNotes = async () => {
     try {
-      const response = await axios.get('https://api.azcrm.deviceshopleader.com/api/factures'); // Adjust URL as needed
+      const response = await axios.get('https://api.azcrm.deviceshopleader.com/api/FA00/factures'); // Adjust URL as needed
       setDeliveryNotes(response.data); // Assuming API returns an array of delivery notes
     } catch (error) {
       console.error('Error fetching delivery notes:', error);
@@ -44,7 +44,7 @@ const Boncommande = () => {
  
   useEffect(() => {
     fetchDeliveryNotes();
-  }, [deliveryNotes]);
+  }, []);
 
   return (
     <Box sx={{ p: 3 }}>

@@ -84,7 +84,7 @@ const Createbv = ({ onAddDeliveryNote }) => {
     };
 
     try {
-      await axios.post(`${API_BASE_URL}/facturevp`, newNote);
+      await axios.post(`${API_BASE_URL}/FA01/facturev`, newNote);
       alert("Bon de Sortie créé avec succès");
       onAddDeliveryNote(newNote);
     } catch (error) {
