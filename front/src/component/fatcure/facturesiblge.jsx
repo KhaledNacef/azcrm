@@ -35,9 +35,20 @@ const BCsingleACHAT = () => {
   if (loading) return <CircularProgress />;
   if (error) return <Typography color="error">{error}</Typography>;
 
-  const totalNetHT = deliveryNote.reduce((acc, prod) => acc + prod.prixU_HT * prod.quantite, 0);
-  const totalTVA = totalNetHT * (deliveryNote[0]?.tva / 100);
+  const totalNetHT = deliveryNote.reduce((acc, prod) => {
+    // Check for valid values to avoid multiplying undefined or null
+    const prixU_HT = prod.prixU_HT || 0;  // Default to 0 if undefined or null
+    const quantite = prod.quantite || 0;  // Default to 0 if undefined or null
+    return acc + prixU_HT * quantite;
+  }, 0);
+  
+  // Ensure TVA is properly accessed (in case it's missing or invalid)
+  const tvaRate = deliveryNote[0]?.tva || 0;  // Default to 0 if undefined
+  const totalTVA = totalNetHT * (tvaRate / 100);
+  
+  // Calculate the total with VAT (TTC)
   const totalNetTTC = totalNetHT + totalTVA;
+  
   function displayDate() {
     const today = new Date();
     const day = String(today.getDate()).padStart(2, '0');
