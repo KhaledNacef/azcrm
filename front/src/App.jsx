@@ -32,7 +32,7 @@ const App = () => {
           <Route path="/bon-livraison" element={<BonsortiePage />} />
           <Route path="/bon-livraison/:code/:clientId" element={<SingleDeliverysortie />} />
           <Route path="/bon-commandefacture" element={<Boncommandev />} />
-          <Route path="/bon-commandefacture/:code/:clientId" element={<BVsinlge />} />
+          <Route path="/bon-commandefacturee/:code/:clientId" element={<BVsinlge />} />
           <Route path="/bon-commande" element={<Boncommande />} />
           <Route path="/bon-commandea/:code/:supplierId" element={<BCsingleACHAT />} />
         </Route>

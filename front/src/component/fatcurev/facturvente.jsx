@@ -80,7 +80,7 @@ const Boncommandev = () => {
         <TableCell>
           <Button
             variant="outlined"
-            onClick={() => navigate(`/bon-commandefacture/${note.code}/${note.clientId}`)}
+            onClick={() => navigate(`/bon-commandefacturee/${note.code}/${note.clientId}`)}
           >
             Voir
           </Button>

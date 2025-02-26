@@ -135,7 +135,7 @@ const BCsingleACHAT = () => {
       </Box>
 
       <Typography variant="h4" mb={3} textAlign="center">
-        Bon De Commande - {deliveryNote.code}
+        Bon De Commande - {code}
       </Typography>
 
       <Table>
