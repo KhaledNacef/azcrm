@@ -35,7 +35,7 @@ const BVsinlge = () => {
     fetchDeliveryNoteData();
   }, [code, clientId]);
 
-  
+
   const totalNettc = deliveryNote.reduce((acc, prod) => acc + (prod.prixU_HT || 0) * (prod.quantite || 0), 0) || 0;
 
   const handlePrint = () => {
@@ -79,7 +79,7 @@ const BVsinlge = () => {
       ['Fax', client?.fax || 'Code TVA inconnu'],
     ];
   
-    const deliveryNoteDetails = [['Bon de Livraison', deliveryNote.code]];
+    const deliveryNoteDetails = [['Bon de Livraison', code]];
   
     const tableHeaders = ['Produit', 'Quantité', 'Unité', 'Prix U HT ($)', 'Prix Net ($)'];
     const productRows = deliveryNote.map((product) => [
@@ -136,7 +136,7 @@ const BVsinlge = () => {
     XLSX.utils.book_append_sheet(workbook, worksheet, 'Bon de Livraison');
   
     // Export the workbook as a file
-    XLSX.writeFile(workbook, `Bon_de_Livraison_${deliveryNote.code}.xlsx`);
+    XLSX.writeFile(workbook, `Bon_de_Livraison_${code}.xlsx`);
   };
   
 
