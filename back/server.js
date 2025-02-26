@@ -7,7 +7,6 @@ const app = express(); // ✅ Define the app first
 
 // Middleware
 app.use(morgan('dev')); 
-const express = require('express');
 
 const corsOptions = {
     origin: 'https://azcrm.deviceshopleader.com', // Autorise le front-end
