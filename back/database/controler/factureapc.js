@@ -18,7 +18,7 @@ const getAllFactureAPs = async (req, res) => {
 const getFactureAPByFaId = async (req, res) => {
   const { code } = req.params;
   try {
-    const FactureAPP = await FactureAP.findOne({ where: { code } });
+    const FactureAPP = await FactureAP.findOne({ where: { code:code } });
     if (FactureAPP) {
       res.status(200).json(FactureAPP);
     } else {
