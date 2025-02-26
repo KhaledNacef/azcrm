@@ -1,10 +1,10 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { Box, Typography, Table, TableHead, TableRow, TableCell, TableBody,Button } from '@mui/material';
-import './fvdesign.css';
-import * as XLSX from 'xlsx';
+import Grid from '@mui/material/Grid2';
+import './cssbl.css';
 
-const BVsinlge = () => {
+const Bvsinlge = () => {
   const { code, clientId } = useParams();
   const printRef = useRef();
   const navigate = useNavigate();
@@ -25,8 +25,8 @@ const BVsinlge = () => {
 
     const fetchDeliveryNoteData = async () => {
       try {
-        const responseprod = await fetch(`https://api.azcrm.deviceshopleader.com/api/bonlivraison/facturev/${code}`);
-        const data = await responseprod.json();
+        const response = await fetch(`https://api.azcrm.deviceshopleader.com/api/bonlivraison/facturev/${code}`);
+        const data = await response.json();
         setDeliveryNote(data);
       } catch (error) {
         console.error('Error fetching delivery note data:', error);
@@ -37,13 +37,8 @@ const BVsinlge = () => {
     fetchDeliveryNoteData();
   }, [code, clientId]);
 
-
-  if (Array.isArray(deliveryNote)) {
-    const totalNettc = deliveryNote.reduce((acc, prod) => acc + (prod.prixU_HT || 0) * (prod.quantite || 0), 0);
-    return totalNettc
-  } else {
-    console.error("deliveryNote is not an array", deliveryNote);
-  }
+  const totalNettc = deliveryNote.reduce((acc, prod) => acc + (prod.prixU_HT || 0) * (prod.quantite || 0), 0) || 0;
+ 
   const handlePrint = () => {
     const originalContents = document.body.innerHTML;
     const printContents = printRef.current.innerHTML;
@@ -85,7 +80,7 @@ const BVsinlge = () => {
       ['Fax', client?.fax || 'Code TVA inconnu'],
     ];
   
-    const deliveryNoteDetails = [['Bon de Livraison', code]];
+    const deliveryNoteDetails = [['Bon de Livraison', deliveryNote.code]];
   
     const tableHeaders = ['Produit', 'Quantité', 'Unité', 'Prix U HT ($)', 'Prix Net ($)'];
     const productRows = deliveryNote.map((product) => [
@@ -142,7 +137,7 @@ const BVsinlge = () => {
     XLSX.utils.book_append_sheet(workbook, worksheet, 'Bon de Livraison');
   
     // Export the workbook as a file
-    XLSX.writeFile(workbook, `Bon_de_Livraison_${code}.xlsx`);
+    XLSX.writeFile(workbook, `Bon_de_Livraison_${deliveryNote.code}.xlsx`);
   };
   
 
@@ -223,7 +218,7 @@ const BVsinlge = () => {
         </Box>
 
         <Typography variant="h4" mb={3} textAlign="center">
-          Bon de Livraison - {code}
+          Bon de livraison - {code}
         </Typography>
 
         <Table>
@@ -237,16 +232,16 @@ const BVsinlge = () => {
             </TableRow>
           </TableHead>
           <TableBody>
-             {deliveryNote.map((prod, index) => (
-                          <TableRow key={index}>
-                            <TableCell>{prod.designation}</TableCell>
-                            <TableCell>{prod.quantite}</TableCell>
-                            <TableCell>{prod.Unite}</TableCell>
-                            <TableCell>{prod.prixU_HT}$</TableCell>
-                            <TableCell>{(prod.prixU_HT * prod.quantite).toFixed(2)}$</TableCell>
-                          
-                          </TableRow>
-                        ))}
+            {deliveryNote.map((prod, index) => (
+              <TableRow key={index}>
+                <TableCell>{prod.designation}</TableCell>
+                <TableCell>{prod.quantite}</TableCell>
+                <TableCell>{prod.Unite}</TableCell>
+                <TableCell>{prod.prixU_HT}$</TableCell>
+                <TableCell>{(prod.prixU_HT * prod.quantite).toFixed(2)}$</TableCell>
+              
+              </TableRow>
+            ))}
           </TableBody>
         </Table>
 
@@ -284,4 +279,4 @@ const BVsinlge = () => {
   );
 };
 
-export default BVsinlge;
+export default Bvsinlge;
