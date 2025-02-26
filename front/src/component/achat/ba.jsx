@@ -40,7 +40,7 @@ const BonAchatPage = () => {
  
   useEffect(() => {
     fetchDeliveryNotes();
-  }, [deliveryNotes]);
+  }, []);
   const addDeliveryNote = () => {
     handleClose();
     fetchDeliveryNotes();
@@ -49,12 +49,12 @@ const BonAchatPage = () => {
   return (
     <Box sx={{ p: 3 }}>
       <Typography variant="h4" mb={3}>
-        FACTURE BON D'ACHAT
+        FACTURE D'ACHAT
       </Typography>
 
       {/* Button to open the modal for creating a new delivery note */}
       <Button variant="contained" color="primary" onClick={handleOpen}>
-        Créer une FACTURE BON D'ACHAT
+        Créer une FACTURE D'ACHAT
       </Button>
 
       {/* Delivery Notes Table */}
