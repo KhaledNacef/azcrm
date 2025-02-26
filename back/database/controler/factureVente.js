@@ -65,7 +65,7 @@ const getAllFactureV = async (req, res) => {
 const getFactureVByCode = async (req, res) => {
   const { code } = req.params;
   try {
-    const facture = await FactureV.findOne({ where: { code } });
+    const facture = await FactureVP.findAll({ where: { code } });
     if (facture) {
       res.status(200).json(facture);
     } else {
