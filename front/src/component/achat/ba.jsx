@@ -73,7 +73,7 @@ const BonAchatPage = () => {
   deliveryNotes.map((note) => (
     <TableRow key={note.code}>
       <TableCell>{note.code}</TableCell>
-      <TableCell>{note.spulierId || "N/A"}</TableCell>
+      <TableCell>{note.spulierName || "N/A"}</TableCell>
         <TableCell>{note.timbre ? "Oui" : "Non"}</TableCell>
       <TableCell>{note.createdAt ? new Date(note.createdAt).toLocaleDateString() : "N/A"}</TableCell>
       <TableCell>

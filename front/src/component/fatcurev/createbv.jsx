@@ -17,6 +17,8 @@ import {
 const Createbv = ({ onAddDeliveryNote }) => {
     const [code,setCode]= useState('');
   const [client, setClient] = useState(0);
+  const [clientn, setClientn] = useState("");
+
   const [timbre, setTimbre] = useState(false);
   const [products, setProducts] = useState([]);
   const [newProduct, setNewProduct] = useState('');
@@ -82,6 +84,7 @@ const Createbv = ({ onAddDeliveryNote }) => {
       clientId:client,
       timbre,
       products,
+      clientName:clientn
     };
 
     try {
@@ -110,6 +113,7 @@ const Createbv = ({ onAddDeliveryNote }) => {
   margin="normal"
 >
   {clients.map((cl) => (
+    setClientn(cl.fullname),
     <MenuItem key={cl.id} value={cl.id}>{cl.fullname}</MenuItem>
   ))}
 </TextField>

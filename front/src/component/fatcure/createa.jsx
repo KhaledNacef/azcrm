@@ -16,8 +16,8 @@ import {
 
 const CreatebcModala = ({ onAddDeliveryNote }) => {
     const [code,setCode]= useState('');
-  const [supplier, setSupplier] = useState(0); 
-  const [timbre, setTimbre] = useState(false);
+    const [supplier, setSupplier] = useState({ id: 0, fullname: "" }); 
+    const [timbre, setTimbre] = useState(false);
   const [products, setProducts] = useState([]);
   const [newProduct, setNewProduct] = useState("");
   const [tva, setTva] = useState(0);
@@ -90,10 +90,11 @@ const CreatebcModala = ({ onAddDeliveryNote }) => {
     }
 
     const newNote = {
-      code:code,
-      spulierId: supplier, // Changed from spulierId to supplierId
+      code: code,
+      supplierId: supplier.id, 
+      spulierName: supplier.fullname, // Include supplier name
       timbre: timbre,
-      products: products,
+      products: products
     };
 
     try {
@@ -113,17 +114,22 @@ const CreatebcModala = ({ onAddDeliveryNote }) => {
    
       {/* Supplier selection */}
       <TextField
-        label="Fournisseur"
-        value={supplier}
-        onChange={(e) => setSupplier(e.target.value)}
-        select
-        fullWidth
-        margin="normal"
-      >
-        {suppliers.map((sup) => (
-          <MenuItem key={sup.id} value={sup.id}>{sup.fullname}</MenuItem>
-        ))}
-      </TextField>
+  label="Fournisseur"
+  value={supplier.id} // Bind to supplier ID
+  onChange={(e) => {
+    const selectedSupplier = suppliers.find((sup) => sup.id === parseInt(e.target.value, 10));
+    if (selectedSupplier) {
+      setSupplier({ id: selectedSupplier.id, fullname: selectedSupplier.fullname });
+    }
+  }}
+  select
+  fullWidth
+  margin="normal"
+>
+  {suppliers.map((sup) => (
+    <MenuItem key={sup.id} value={sup.id}>{sup.fullname}</MenuItem>
+  ))}
+</TextField>;
 
       {/* Timbre selection */}
       <TextField

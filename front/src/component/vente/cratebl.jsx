@@ -18,6 +18,8 @@ const CreateDeliveryNoteModal = ({ onAddDeliveryNote }) => {
     const [code,setCode]= useState('');
 
   const [client, setClient] = useState(0);
+  const [cliennt, setCliennt] = useState('');
+
   const [timbre, setTimbre] = useState(false);
   const [products, setProducts] = useState([]);
   const [newProduct, setNewProduct] = useState('');
@@ -85,6 +87,7 @@ const CreateDeliveryNoteModal = ({ onAddDeliveryNote }) => {
       clientId:client,
       timbre,
       products,
+      clientName:cliennt
     };
 
     try {
@@ -113,6 +116,7 @@ const CreateDeliveryNoteModal = ({ onAddDeliveryNote }) => {
   margin="normal"
 >
   {clients.map((cl) => (
+    setCliennt(cl.fullname),
     <MenuItem key={cl.id} value={cl.id}>{cl.fullname}</MenuItem>
   ))}
 </TextField>
