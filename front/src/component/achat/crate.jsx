@@ -13,10 +13,10 @@ import {
   TableHead,
 } from "@mui/material";
 
-
 const CreateDeliveryNoteModala = ({ onAddDeliveryNote }) => {
-  const [code,setCode]= useState('');
-  const [supplier, setSupplier] = useState({ id: 0, fullname: "" }); 
+  const [code, setCode] = useState("");
+  const [supplier, setSupplier] = useState(0);
+  const [suppliern, setSuppliern] = useState("");
   const [timbre, setTimbre] = useState(false);
   const [products, setProducts] = useState([]);
   const [newProduct, setNewProduct] = useState("");
@@ -25,16 +25,15 @@ const CreateDeliveryNoteModala = ({ onAddDeliveryNote }) => {
   const [quantite, setQuantite] = useState(1);
   const [availableProducts, setAvailableProducts] = useState([]);
   const [suppliers, setSuppliers] = useState([]);
+
   const API_BASE_URL = "https://api.azcrm.deviceshopleader.com/api";
 
-
+  // Generate unique code for the delivery note
   const generateUniqueCode = () => {
-    const timestamp = new Date().getTime(); // Current timestamp (milliseconds)
-    const randomString = Math.random().toString(36).substring(2, 8).toUpperCase(); // Random alphanumeric string
-    return `DN-${timestamp}-${randomString}`; // Combine timestamp and random string
+    const timestamp = new Date().getTime();
+    const randomString = Math.random().toString(36).substring(2, 8).toUpperCase();
+    return `DN-${timestamp}-${randomString}`;
   };
-
-
 
   useEffect(() => {
     const fetchData = async () => {
@@ -49,19 +48,27 @@ const CreateDeliveryNoteModala = ({ onAddDeliveryNote }) => {
         console.error("Error fetching data:", error);
       }
     };
-    const newCode = generateUniqueCode();
-    setCode(newCode); // Set generated code
+
+    setCode(generateUniqueCode()); // Set generated code
     fetchData();
   }, []);
 
+  // Handle supplier selection
+  const handleSupplierChange = (e) => {
+    const selectedSupplier = suppliers.find(sup => sup.id === e.target.value);
+    setSupplier(e.target.value);
+    setSuppliern(selectedSupplier ? selectedSupplier.fullname : "");
+  };
+
+  // Add product to the list
   const handleAddProduct = () => {
     if (!newProduct) {
       alert("Veuillez sélectionner un produit.");
       return;
     }
 
-    const selectedProduct = availableProducts.find((p) => p.designation === newProduct);
-    
+    const selectedProduct = availableProducts.find(p => p.designation === newProduct);
+
     if (!selectedProduct) {
       alert("Produit invalide sélectionné.");
       return;
@@ -72,9 +79,9 @@ const CreateDeliveryNoteModala = ({ onAddDeliveryNote }) => {
       {
         designation: selectedProduct.designation,
         Unite: selectedProduct.Unite,
-        tva: parseFloat(tva),
-        prixU_HT: parseFloat(prixU_HT),
-        quantite: parseInt(quantite, 10),
+        tva: parseFloat(tva) || 0,
+        prixU_HT: parseFloat(prixU_HT) || 0,
+        quantite: parseInt(quantite, 10) || 1,
       },
     ]);
 
@@ -85,6 +92,7 @@ const CreateDeliveryNoteModala = ({ onAddDeliveryNote }) => {
     setQuantite(1);
   };
 
+  // Handle form submission
   const handleSubmit = async () => {
     if (!supplier || products.length === 0) {
       alert("Veuillez remplir tous les champs obligatoires.");
@@ -93,14 +101,14 @@ const CreateDeliveryNoteModala = ({ onAddDeliveryNote }) => {
 
     const newNote = {
       code: code,
-      supplierId: supplier.id, 
-      spulierName: supplier.fullname, // Include supplier name
+      spulierId: supplier, // Corrected key
       timbre: timbre,
-      products: products
+      products: products,
+      spulierName:suppliern
     };
 
     try {
-      await axios.post(`https://api.azcrm.deviceshopleader.com/api/bonachat/add`, newNote);
+      await axios.post(`${API_BASE_URL}/bonachat/add`, newNote);
       alert("Bon d'achat créé avec succès");
       onAddDeliveryNote(newNote);
     } catch (error) {
@@ -113,42 +121,34 @@ const CreateDeliveryNoteModala = ({ onAddDeliveryNote }) => {
     <Box>
       <Typography variant="h6" mb={2}>Créer un Bon d'Achat</Typography>
 
-     
-
-      {/* Supplier selection */}
+      {/* Supplier Selection */}
       <TextField
-  label="Fournisseur"
-  value={supplier.id} // Bind to supplier ID
-  onChange={(e) => {
-    const selectedSupplier = suppliers.find((sup) => sup.id === parseInt(e.target.value, 10));
-    if (selectedSupplier) {
-      setSupplier({ id: selectedSupplier.id, fullname: selectedSupplier.fullname });
-    }
-  }}
-  select
-  fullWidth
-  margin="normal"
->
-  {suppliers.map((sup) => (
-    <MenuItem key={sup.id} value={sup.id}>{sup.fullname}</MenuItem>
-  ))}
-</TextField>;
-
-
-      {/* Timbre selection */}
-      <TextField
-        label="Timbre"
+        label="Fournisseur"
+        value={supplier}
+        onChange={handleSupplierChange}
         select
-        value={timbre}
-        onChange={(e) => setTimbre(e.target.value )}
         fullWidth
         margin="normal"
       >
-        <MenuItem value={true}>Oui</MenuItem>
-        <MenuItem value={false}>Non</MenuItem>
+        {suppliers.map((sup) => (
+          <MenuItem key={sup.id} value={sup.id}>{sup.fullname}</MenuItem>
+        ))}
       </TextField>
 
-      {/* Product selection */}
+      {/* Timbre Selection */}
+      <TextField
+        label="Timbre"
+        select
+        value={timbre.toString()} // Convert boolean to string for MUI
+        onChange={(e) => setTimbre(e.target.value === "true")}
+        fullWidth
+        margin="normal"
+      >
+        <MenuItem value="true">Oui</MenuItem>
+        <MenuItem value="false">Non</MenuItem>
+      </TextField>
+
+      {/* Product Selection */}
       <TextField
         label="Produit"
         value={newProduct}
@@ -164,12 +164,12 @@ const CreateDeliveryNoteModala = ({ onAddDeliveryNote }) => {
         ))}
       </TextField>
 
-      {/* TVA, Price, and Quantity input */}
+      {/* TVA, Price, and Quantity Input */}
       <TextField
         label="TVA (%)"
         type="number"
         value={tva}
-        onChange={(e) => setTva(e.target.value)}
+        onChange={(e) => setTva(parseFloat(e.target.value) || 0)}
         fullWidth
         margin="normal"
       />
@@ -177,7 +177,7 @@ const CreateDeliveryNoteModala = ({ onAddDeliveryNote }) => {
         label="Prix U HT"
         type="number"
         value={prixU_HT}
-        onChange={(e) => setPrixU_HT(e.target.value)}
+        onChange={(e) => setPrixU_HT(parseFloat(e.target.value) || 0)}
         fullWidth
         margin="normal"
       />
@@ -185,7 +185,7 @@ const CreateDeliveryNoteModala = ({ onAddDeliveryNote }) => {
         label="Quantité"
         type="number"
         value={quantite}
-        onChange={(e) => setQuantite(e.target.value)}
+        onChange={(e) => setQuantite(parseInt(e.target.value, 10) || 1)}
         fullWidth
         margin="normal"
       />

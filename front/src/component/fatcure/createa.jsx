@@ -13,11 +13,11 @@ import {
   TableHead,
 } from "@mui/material";
 
-
 const CreatebcModala = ({ onAddDeliveryNote }) => {
-    const [code,setCode]= useState('');
-    const [supplier, setSupplier] = useState({ id: 0, fullname: "" }); 
-    const [timbre, setTimbre] = useState(false);
+  const [code, setCode] = useState("");
+  const [supplier, setSupplier] = useState(0);
+  const [suppliern, setSuppliern] = useState("");
+  const [timbre, setTimbre] = useState(false);
   const [products, setProducts] = useState([]);
   const [newProduct, setNewProduct] = useState("");
   const [tva, setTva] = useState(0);
@@ -28,11 +28,10 @@ const CreatebcModala = ({ onAddDeliveryNote }) => {
   const API_BASE_URL = "https://api.azcrm.deviceshopleader.com/api";
 
   const generateUniqueCode = () => {
-    const timestamp = new Date().getTime(); // Current timestamp (milliseconds)
-    const randomString = Math.random().toString(36).substring(2, 8).toUpperCase(); // Random alphanumeric string
-    return `DN-${timestamp}-${randomString}`; // Combine timestamp and random string
+    const timestamp = new Date().getTime();
+    const randomString = Math.random().toString(36).substring(2, 8).toUpperCase();
+    return `DN-${timestamp}-${randomString}`;
   };
-
 
   useEffect(() => {
     const fetchData = async () => {
@@ -47,8 +46,7 @@ const CreatebcModala = ({ onAddDeliveryNote }) => {
         console.error("Error fetching data:", error);
       }
     };
-    const newCode = generateUniqueCode();
-    setCode(newCode); // Set generated code
+    setCode(generateUniqueCode());
     fetchData();
   }, []);
 
@@ -59,7 +57,6 @@ const CreatebcModala = ({ onAddDeliveryNote }) => {
     }
 
     const selectedProduct = availableProducts.find((p) => p.designation === newProduct);
-    
     if (!selectedProduct) {
       alert("Produit invalide sélectionné.");
       return;
@@ -70,13 +67,12 @@ const CreatebcModala = ({ onAddDeliveryNote }) => {
       {
         designation: selectedProduct.designation,
         Unite: selectedProduct.Unite,
-        tva: parseFloat(tva),
-        prixU_HT: parseFloat(prixU_HT),
-        quantite: parseInt(quantite, 10),
+        tva: Number(tva),
+        prixU_HT: Number(prixU_HT),
+        quantite: Number(quantite),
       },
     ]);
 
-    // Reset fields
     setNewProduct("");
     setTva(0);
     setPrixU_HT(0);
@@ -84,21 +80,21 @@ const CreatebcModala = ({ onAddDeliveryNote }) => {
   };
 
   const handleSubmit = async () => {
-    if ( !supplier || products.length === 0) {
+    if (!supplier || products.length === 0) {
       alert("Veuillez remplir tous les champs obligatoires.");
       return;
     }
 
     const newNote = {
-      code: code,
-      supplierId: supplier.id, 
-      spulierName: supplier.fullname, // Include supplier name
-      timbre: timbre,
-      products: products
+      code,
+      spulierId: supplier, // Fixed key name
+      timbre,
+      products,
+      spulierName:suppliern
     };
 
     try {
-      await axios.post(`https://api.azcrm.deviceshopleader.com/api/boncommandall/factures`, newNote);
+      await axios.post(`${API_BASE_URL}/boncommandall/factures`, newNote);
       alert("Bon d'achat créé avec succès");
       onAddDeliveryNote(newNote);
     } catch (error) {
@@ -111,32 +107,30 @@ const CreatebcModala = ({ onAddDeliveryNote }) => {
     <Box>
       <Typography variant="h6" mb={2}>Créer un Bon De Commande</Typography>
 
-   
       {/* Supplier selection */}
       <TextField
-  label="Fournisseur"
-  value={supplier.id} // Bind to supplier ID
-  onChange={(e) => {
-    const selectedSupplier = suppliers.find((sup) => sup.id === parseInt(e.target.value, 10));
-    if (selectedSupplier) {
-      setSupplier({ id: selectedSupplier.id, fullname: selectedSupplier.fullname });
-    }
-  }}
-  select
-  fullWidth
-  margin="normal"
->
-  {suppliers.map((sup) => (
-    <MenuItem key={sup.id} value={sup.id}>{sup.fullname}</MenuItem>
-  ))}
-</TextField>;
+        label="Fournisseur"
+        value={supplier}
+        onChange={(e) => {
+          const selectedSupplier = suppliers.find((sup) => sup.id === e.target.value);
+          setSupplier(e.target.value);
+          setSuppliern(selectedSupplier?.fullname || "");
+        }}
+        select
+        fullWidth
+        margin="normal"
+      >
+        {suppliers.map((sup) => (
+          <MenuItem key={sup.id} value={sup.id}>{sup.fullname}</MenuItem>
+        ))}
+      </TextField>
 
       {/* Timbre selection */}
       <TextField
         label="Timbre"
         select
         value={timbre}
-        onChange={(e) => setTimbre(e.target.value )}
+        onChange={(e) => setTimbre(e.target.value === "true")}
         fullWidth
         margin="normal"
       >
@@ -147,7 +141,7 @@ const CreatebcModala = ({ onAddDeliveryNote }) => {
       {/* Product selection */}
       <TextField
         label="Produit"
-        value={newProduct}
+        value={newProduct || ""}
         onChange={(e) => setNewProduct(e.target.value)}
         select
         fullWidth
@@ -165,7 +159,7 @@ const CreatebcModala = ({ onAddDeliveryNote }) => {
         label="TVA (%)"
         type="number"
         value={tva}
-        onChange={(e) => setTva(e.target.value)}
+        onChange={(e) => setTva(Number(e.target.value))}
         fullWidth
         margin="normal"
       />
@@ -173,7 +167,7 @@ const CreatebcModala = ({ onAddDeliveryNote }) => {
         label="Prix U HT"
         type="number"
         value={prixU_HT}
-        onChange={(e) => setPrixU_HT(e.target.value)}
+        onChange={(e) => setPrixU_HT(Number(e.target.value))}
         fullWidth
         margin="normal"
       />
@@ -181,7 +175,7 @@ const CreatebcModala = ({ onAddDeliveryNote }) => {
         label="Quantité"
         type="number"
         value={quantite}
-        onChange={(e) => setQuantite(e.target.value)}
+        onChange={(e) => setQuantite(Number(e.target.value))}
         fullWidth
         margin="normal"
       />

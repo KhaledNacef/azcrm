@@ -107,13 +107,16 @@ const Createbv = ({ onAddDeliveryNote }) => {
       <TextField
   label="Client"
   value={client}
-  onChange={(e) => setClient(e.target.value)}
+  onChange={(e) => {
+    const selectedClient = clients.find(cl => cl.id === e.target.value);
+    setClient(e.target.value);
+    setClientn(selectedClient?.fullname || ""); // Set client name
+  }}
   select
   fullWidth
   margin="normal"
 >
   {clients.map((cl) => (
-    setClientn(cl.fullname),
     <MenuItem key={cl.id} value={cl.id}>{cl.fullname}</MenuItem>
   ))}
 </TextField>
@@ -125,13 +128,6 @@ const Createbv = ({ onAddDeliveryNote }) => {
   </Typography>
 )}
 
-
-      {/* Display selected client name */}
-      {client && clientSelected && (
-        <Typography variant="body1" mb={2}>
-          Client sélectionné: {clients.find((cl) => cl.id === client)?.fullname}
-        </Typography>
-      )}
 
       {/* Timbre Selection - Only show if timbre is not selected */}
       {!timbreSelected && (

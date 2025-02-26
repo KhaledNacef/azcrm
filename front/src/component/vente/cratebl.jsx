@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import React, { useState, useEffect } from "react";
+import axios from "axios";
 import {
   Box,
   Button,
@@ -11,83 +11,75 @@ import {
   TableCell,
   TableRow,
   TableHead,
-} from '@mui/material';
-
+} from "@mui/material";
 
 const CreateDeliveryNoteModal = ({ onAddDeliveryNote }) => {
-    const [code,setCode]= useState('');
-
-  const [client, setClient] = useState(0);
-  const [cliennt, setCliennt] = useState('');
-
+  const [code, setCode] = useState("");
+  const [client, setClient] = useState("");
   const [timbre, setTimbre] = useState(false);
   const [products, setProducts] = useState([]);
-  const [newProduct, setNewProduct] = useState('');
+  const [newProduct, setNewProduct] = useState("");
   const [prixU_HT, setPrixU_HT] = useState(0);
   const [quantite, setQuantite] = useState(1);
   const [availableProducts, setAvailableProducts] = useState([]);
   const [clients, setClients] = useState([]);
-  const [clientSelected, setClientSelected] = useState(false);
-  const [timbreSelected, setTimbreSelected] = useState(false);
-
 
   const generateUniqueCode = () => {
-    const timestamp = new Date().getTime(); // Current timestamp (milliseconds)
-    const randomString = Math.random().toString(36).substring(2, 8).toUpperCase(); // Random alphanumeric string
-    return `DN-${timestamp}-${randomString}`; // Combine timestamp and random string
+    const timestamp = new Date().getTime();
+    const randomString = Math.random().toString(36).substring(2, 8).toUpperCase();
+    return `DN-${timestamp}-${randomString}`;
   };
 
-  const API_BASE_URL = 'https://api.azcrm.deviceshopleader.com/api';
-
+  const API_BASE_URL = "https://api.azcrm.deviceshopleader.com/api";
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         const [productRes, clientRes] = await Promise.all([
-          axios.get(`https://api.azcrm.deviceshopleader.com/api/stock/getall`),
+          axios.get(`${API_BASE_URL}/stock/getall`),
           axios.get(`${API_BASE_URL}/clients/getclient`),
         ]);
         setAvailableProducts(productRes.data);
         setClients(clientRes.data);
       } catch (error) {
-        console.error('Erreur lors du chargement des données:', error);
+        console.error("Erreur lors du chargement des données:", error);
       }
     };
-    const newCode = generateUniqueCode();
-    setCode(newCode); // Set generated code
+    setCode(generateUniqueCode());
     fetchData();
   }, []);
 
   const handleAddProduct = () => {
-    if (newProduct && !products.some((p) => p.designation === newProduct)) {
-      const selectedProduct = availableProducts.find(p => p.designation === newProduct);
-      setProducts([
-        ...products,
-        {
-          designation: selectedProduct.designation,
-          Unite: selectedProduct.Unite,
-          prixU_HT: parseFloat(prixU_HT),
-          quantite: parseInt(quantite, 10),
-        },
-      ]);
-      setNewProduct('');
-      setPrixU_HT(0);
-      setQuantite(1);
-    }
+    if (!newProduct) return;
+    const selectedProduct = availableProducts.find((p) => p.designation === newProduct);
+    if (!selectedProduct) return;
+
+    setProducts((prev) => [
+      ...prev,
+      {
+        designation: selectedProduct.designation,
+        Unite: selectedProduct.Unite,
+        prixU_HT: parseFloat(prixU_HT),
+        quantite: parseInt(quantite, 10),
+      },
+    ]);
+    setNewProduct("");
+    setPrixU_HT(0);
+    setQuantite(1);
   };
 
   const handleSubmit = async () => {
     if (!client || products.length === 0) {
-      alert('Veuillez remplir tous les champs obligatoires.');
+      alert("Veuillez remplir tous les champs obligatoires.");
       return;
     }
 
     const newNote = {
-      code:code,
-      clientId:client,
+      code,
+      clientId: client,
       timbre,
       products,
-      clientName:cliennt
+      clientName: clients.find((cl) => cl.id === client)?.fullname || "",
     };
 
     try {
@@ -99,60 +91,47 @@ const CreateDeliveryNoteModal = ({ onAddDeliveryNote }) => {
       alert("Échec de la création du Bon de Sortie");
     }
   };
-  
+
   return (
     <Box>
-      <Typography variant="h6" mb={2}>Créer un Bon de Sortie</Typography>
+      <Typography variant="h6" mb={2}>
+        Créer un Bon de Sortie
+      </Typography>
 
-      {/* Code Selection */}
-     
-      {/* Client Selection - Only show if client is not selected */}
+      {/* Client Selection */}
       <TextField
-  label="Client"
-  value={client}
-  onChange={(e) => setClient(e.target.value)}
-  select
-  fullWidth
-  margin="normal"
->
-  {clients.map((cl) => (
-    setCliennt(cl.fullname),
-    <MenuItem key={cl.id} value={cl.id}>{cl.fullname}</MenuItem>
-  ))}
-</TextField>
+        label="Client"
+        value={client}
+        onChange={(e) => setClient(e.target.value)}
+        select
+        fullWidth
+        margin="normal"
+      >
+        {clients.map((cl) => (
+          <MenuItem key={cl.id} value={cl.id}>
+            {cl.fullname}
+          </MenuItem>
+        ))}
+      </TextField>
 
-{/* Display selected client name */}
-{client && (
-  <Typography variant="body1" mb={2}>
-    Client sélectionné: {clients.find((cl) => cl.id === client)?.fullname}
-  </Typography>
-)}
-
-
-      {/* Display selected client name */}
-      {client && clientSelected && (
+      {client && (
         <Typography variant="body1" mb={2}>
           Client sélectionné: {clients.find((cl) => cl.id === client)?.fullname}
         </Typography>
       )}
 
-      {/* Timbre Selection - Only show if timbre is not selected */}
-      {!timbreSelected && (
-        <TextField
-          label="Timbre"
-          select
-          value={timbre}
-          onChange={(e) => {
-            setTimbre(e.target.value );
-            setTimbreSelected(true);
-          }}
-          fullWidth
-          margin="normal"
-        >
-          <MenuItem value={true}>Oui</MenuItem>
-          <MenuItem value={false}>Non</MenuItem>
-        </TextField>
-      )}
+      {/* Timbre Selection */}
+      <TextField
+        label="Timbre"
+        select
+        value={timbre.toString()}
+        onChange={(e) => setTimbre(JSON.parse(e.target.value))}
+        fullWidth
+        margin="normal"
+      >
+        <MenuItem value="true">Oui</MenuItem>
+        <MenuItem value="false">Non</MenuItem>
+      </TextField>
 
       {/* Product Selection */}
       <TextField
@@ -164,7 +143,9 @@ const CreateDeliveryNoteModal = ({ onAddDeliveryNote }) => {
         margin="normal"
       >
         {availableProducts.map((prod) => (
-          <MenuItem key={prod.id} value={prod.designation}>{prod.designation}</MenuItem>
+          <MenuItem key={prod.id} value={prod.designation}>
+            {prod.designation}
+          </MenuItem>
         ))}
       </TextField>
 
