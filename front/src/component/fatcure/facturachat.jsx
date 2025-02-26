@@ -70,29 +70,29 @@ const Boncommande = () => {
           </TableRow>
         </TableHead>
         <TableBody>
-        {deliveryNotes && Array.isArray(deliveryNotes) && deliveryNotes.length > 0 ? (
-  deliveryNotes.map((note) => (
-    <TableRow key={note.code}>
-      <TableCell>{note.code}</TableCell>
-      <TableCell>{note.spulierId || "N/A"}</TableCell>
+  {deliveryNotes && Array.isArray(deliveryNotes) && deliveryNotes.length > 0 ? (
+    deliveryNotes.map((note) => (
+      <TableRow key={note.id || note.code}> {/* Use a unique identifier */}
+        <TableCell>{note.code}</TableCell>
+        <TableCell>{note.spulierId || "N/A"}</TableCell>
         <TableCell>{note.timbre ? "Oui" : "Non"}</TableCell>
-      <TableCell>{note.createdAt ? new Date(note.createdAt).toLocaleDateString() : "N/A"}</TableCell>
-      <TableCell>
-        <Button
-          variant="outlined"
-          onClick={() => navigate(`/bon-commandea/${note.code}/${note.spulierId}`)}
-        >
-          Voir
-        </Button>
-      </TableCell>
+        <TableCell>{note.createdAt ? new Date(note.createdAt).toLocaleDateString() : "N/A"}</TableCell>
+        <TableCell>
+          <Button
+            variant="outlined"
+            onClick={() => navigate(`/bon-commandea/${note.code}/${note.spulierId}`)}
+          >
+            Voir
+          </Button>
+        </TableCell>
+      </TableRow>
+    ))
+  ) : (
+    <TableRow>
+      <TableCell colSpan={5}>Aucune donnée disponible</TableCell>
     </TableRow>
-  ))
-) : (
-  <TableRow>
-    <TableCell colSpan={5}>Aucune donnée disponible</TableCell>
-  </TableRow>
-)}
- </TableBody>
+  )}
+</TableBody>
       </Table>
 
       {/* Modal for creating a new delivery note */}
