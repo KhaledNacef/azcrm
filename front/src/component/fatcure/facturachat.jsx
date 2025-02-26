@@ -55,7 +55,7 @@ const Boncommande = () => {
 
       {/* Button to open the modal for creating a new delivery note */}
       <Button variant="contained" color="primary" onClick={handleOpen}>
-        Créer une BON DE COMMANDE
+      Créer un Bon De Commande
       </Button>
 
       {/* Delivery Notes Table */}

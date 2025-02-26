@@ -134,7 +134,7 @@ const BCsingleACHAT = () => {
       </Box>
 
       <Typography variant="h4" mb={3} textAlign="center">
-        Bon D'Achat - {deliveryNote.code}
+        Bon De Commande - {deliveryNote.code}
       </Typography>
 
       <Table>
@@ -168,18 +168,18 @@ const BCsingleACHAT = () => {
 
       {/* Total Section - Moved to the Right Side */}
       <Box sx={{ display: 'flex', justifyContent: 'flex-end', mt: 3 }}>
-        <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end' }}>
-          <Typography variant="body1">
-            <strong>Total Net (HT):</strong> {totalNetHT.toFixed(2)}TND
-          </Typography>
-          <Typography variant="body1">
-            <strong>Total TVA:</strong> {totalTVA.toFixed(2)}TND
-          </Typography>
-          <Typography variant="body1">
-            <strong>Total Net (TTC):</strong> {totalNetTTC.toFixed(2)}TND
-          </Typography>
-        </Box>
-      </Box>
+  <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end' }}>
+    <Typography variant="body1">
+      <strong>Total Net (HT):</strong> {totalNetHT.toFixed(2)}TND
+    </Typography>
+    <Typography variant="body1">
+      <strong>Total TVA:</strong> {totalTVA.toFixed(2)}TND
+    </Typography>
+    <Typography variant="body1">
+      <strong>Total Net (TTC):</strong> {totalNetTTC.toFixed(2)}TND
+    </Typography>
+  </Box>
+</Box>
 
       <Box sx={{ display: 'flex', justifyContent: 'space-between', mt: 4 }}>
         <Box sx={{ textAlign: 'center' }}>

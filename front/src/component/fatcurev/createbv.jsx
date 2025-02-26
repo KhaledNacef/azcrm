@@ -13,7 +13,6 @@ import {
   TableHead,
 } from '@mui/material';
 
-const API_BASE_URL = 'https://api.azcrm.deviceshopleader.com/api';
 
 const Createbv = ({ onAddDeliveryNote }) => {
     const [code,setCode]= useState('');
@@ -34,6 +33,7 @@ const Createbv = ({ onAddDeliveryNote }) => {
     return `DN-${timestamp}-${randomString}`; // Combine timestamp and random string
   };
 
+  const API_BASE_URL = 'https://api.azcrm.deviceshopleader.com/api';
 
   useEffect(() => {
     const fetchData = async () => {

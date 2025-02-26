@@ -108,7 +108,7 @@ const CreatebcModala = ({ onAddDeliveryNote }) => {
 
   return (
     <Box>
-      <Typography variant="h6" mb={2}>Créer un Bon De Command</Typography>
+      <Typography variant="h6" mb={2}>Créer un Bon De Commande</Typography>
 
    
       {/* Supplier selection */}
