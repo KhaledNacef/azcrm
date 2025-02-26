@@ -7,7 +7,7 @@ const factureAPController = require('../controler/factureapc'); // Adjust the pa
 router.get('/factureap', factureAPController.getAllFactureAPs);
 
 // Route to fetch FactureAP by faId
-router.get('/factureap/:faId', factureAPController.getFactureAPByFaId);
+router.get('/factureap/:code', factureAPController.getFactureAPByFaId);
 
 // Route to create a new FactureAP
 router.post('/factureap', factureAPController.createFactureAP);

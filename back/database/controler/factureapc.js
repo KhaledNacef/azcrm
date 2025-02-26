@@ -4,25 +4,6 @@ const db  = require('../index'); // Adjust the path to your model as needed
 
 const  FactureAP  = db.models.factureap // Adjust the path as per your project structure
 
-// Create a new FactureAP entry
-const createFactureAP = async (req, res) => {
-  const { prixU_HT, tva, quantite, designation, Unite, faId } = req.body;
-
-  try {
-    const newFactureAP = await FactureAP.create({
-      prixU_HT:prixU_HT,
-      tva:tva,
-      quantite:quantite,
-      designation:designation,
-      Unite:Unite,
-      faId: faId, // Link Stock with DeliveryNote ID
-    });
-    res.status(201).json(newFactureAP);
-  } catch (error) {
-    res.status(500).json({ error: 'Error creating FactureAP' });
-  }
-};
-
 // Get all FactureAPs
 const getAllFactureAPs = async (req, res) => {
   try {
@@ -35,9 +16,9 @@ const getAllFactureAPs = async (req, res) => {
 
 // Get FactureAP by faId
 const getFactureAPByFaId = async (req, res) => {
-  const { faId } = req.params;
+  const { code } = req.params;
   try {
-    const FactureAP = await FactureAP.findOne({ where: { faId } });
+    const FactureAP = await FactureAP.findOne({ where: { code } });
     if (FactureAP) {
       res.status(200).json(FactureAP);
     } else {

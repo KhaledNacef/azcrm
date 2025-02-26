@@ -4,23 +4,6 @@ const db  = require('../index'); // Adjust the path to your model as needed
 
 const  FactureVP  = db.models.facturevp // Adjust the path as per your project structure
 
-// Create a new FactureVP entry
-const createFactureVP = async (req, res) => {
-  const { prixU_HT, quantite, designation, Unite, code } = req.body;
-
-  try {
-    const newFactureVP = await FactureVP.create({
-      prixU_HT,
-      quantite,
-      designation,
-      Unite,
-      code
-    });
-    res.status(201).json(newFactureVP);
-  } catch (error) {
-    res.status(500).json({ error: 'Error creating FactureVP' });
-  }
-};
 
 // Get all FactureVP entries
 const getAllFactureVP = async (req, res) => {

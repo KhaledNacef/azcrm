@@ -52,7 +52,7 @@ async function addFactureA(req, res) {
         quantite:quantite,
         designation:designation,
         Unite:Unite,
-        faId: code, // Link Stock with DeliveryNote ID
+        code:code, // Link Stock with DeliveryNote ID
       });
 
       // **Step 2.2: Handle StockP (general stock)**

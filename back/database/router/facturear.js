@@ -4,7 +4,7 @@ const router = express.Router();
 const factureAController = require('../controler/factureachat');
 
 // Route to fetch all FactureA
-router.get('/factures', factureAController.getAllFactureA);
+router.get('/factures/get', factureAController.getAllFactureA);
 
 // Route to fetch FactureA by code
 router.get('/factures/:code', factureAController.getFactureAByCode);

@@ -4,7 +4,7 @@ const router = express.Router();
 const factureVController = require('../controler/factureVente');
 
 // Route to fetch all FactureV entries
-router.get('/facturev', factureVController.getAllFactureV);
+router.get('/facturev/get', factureVController.getAllFactureV);
 
 // Route to fetch FactureV by code
 router.get('/facturev/:code', factureVController.getFactureVByCode);

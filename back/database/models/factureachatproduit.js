@@ -38,7 +38,7 @@ const FactureAP = {
     type: DataTypes.STRING,
     allowNull: true,
   },
-  faId: {
+  code: {
     type: DataTypes.STRING,
     allowNull: false,
   },

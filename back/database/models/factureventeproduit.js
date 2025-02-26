@@ -10,8 +10,6 @@ const FactureVP =  {
     type: DataTypes.FLOAT,
     allowNull: false,
   },
-
- 
   quantite: {
     type: DataTypes.INTEGER,
     allowNull: false,

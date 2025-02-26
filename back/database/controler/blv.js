@@ -45,7 +45,7 @@ async function getAllBss(req, res) {
 
 async function createBs(req, res) {
   try {
-    const { code,clientId, timbre, products } = req.body;
+    const {code,clientId, timbre, products } = req.body;
 
     // Step 1: Create the Bs (Bon de Sortie)
     const Bss = await Bs.create({
