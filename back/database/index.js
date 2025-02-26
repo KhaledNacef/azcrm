@@ -24,7 +24,6 @@ const db = new Sequelize({
 
 const deliveryNote=db.define('deliveryNote',DeliveryNote)
 const bs=db.define('bs',Bs)
-
 const client=db.define('client',Client)
 const product=db.define('product',Product)
 const stock=db.define('stock',Stock)

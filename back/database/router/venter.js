@@ -3,7 +3,7 @@ const router = express.Router();
 const { createBs, deleteBs, getAllBss, getAllStockItemsByBs } = require('../controler/blv');
 
 // Route to create a new Bs
-router.post('/bs/create', createBs);
+router.post('/create', createBs);
 
 // Route to get all Bss
 router.get('/bs/get', getAllBss);

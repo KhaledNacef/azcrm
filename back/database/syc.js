@@ -5,6 +5,10 @@ const FactureV = db.models.factureV
 const Suplier = db.models.supplier
 const FactureVp = db.models.facturevp
 const Factureap = db.models.factureap
+const Bs =db.models.bs
+const Vente=db.models.vente
+const StockP=db.models.stockP
+const DeliveryNote =db.models.deliveryNote
 
 async function syncDatabase() {
   try {
