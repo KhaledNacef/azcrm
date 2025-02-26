@@ -19,9 +19,9 @@ const getAllFactureVP = async (req, res) => {
 const getFactureVPByCode = async (req, res) => {
   const { code } = req.params;
   try {
-    const factureVP = await FactureVP.findAll({ where: { code:code } });
-    if (factureVP) {
-      res.send(factureVP).res.status(200);
+    const factureVP = await FactureVP.findAll({ where: { code: code } });
+    if (factureVP && factureVP.length > 0) {
+      res.status(200).json(factureVP); // Corrected here
     } else {
       res.status(404).json({ error: 'FactureVP not found' });
     }
@@ -29,6 +29,7 @@ const getFactureVPByCode = async (req, res) => {
     res.status(500).json({ error: 'Error fetching FactureVP by code' });
   }
 };
+
 
 // Update FactureVP by id
 const updateFactureVPById = async (req, res) => {
