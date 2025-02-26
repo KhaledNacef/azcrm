@@ -35,18 +35,10 @@ const BCsingleACHAT = () => {
   if (loading) return <CircularProgress />;
   if (error) return <Typography color="error">{error}</Typography>;
 
-  const totalNetHT = deliveryNote
-  .map(prod => prod.prixU_HT * prod.quantite)  // Calculate each product's net HT
-  .reduce((acc, netHT) => acc + netHT, 0);     // Sum up all net HT values
-
-// Step 2: Calculate totalTVA based on each product's tva
-const totalTVA = deliveryNote
-  .map(prod => (prod.prixU_HT * prod.quantite * prod.tva) / 100)  // Calculate TVA for each product
-  .reduce((acc, tva) => acc + tva, 0);  // Sum up all TVA values
-
-// Step 3: Calculate totalNetTTC (Net TTC = Net HT + TVA)
-const totalNetTTC = totalNetHT + totalTVA;
-
+  const totalNetHT = deliveryNote.reduce((acc, prod) => acc + prod.prixU_HT * prod.quantite, 0);
+  const totalTVA = totalNetHT * (deliveryNote[0]?.tva / 100);
+  const totalNetTTC = totalNetHT + totalTVA;
+  
   function displayDate() {
     const today = new Date();
     const day = String(today.getDate()).padStart(2, '0');
