@@ -19,6 +19,12 @@ const FactureA =  {
     type: DataTypes.STRING,
     allowNull: true
   }
+  ,
+    spulierName: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    }
+  
 };
 
 

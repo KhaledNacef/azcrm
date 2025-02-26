@@ -22,6 +22,10 @@ const DeliveryNote =  {
     code: {
       type: DataTypes.STRING,
       allowNull: true,
+    },
+    spulierName: {
+      type: DataTypes.STRING,
+      allowNull: true,
     }
   
 

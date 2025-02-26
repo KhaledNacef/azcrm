@@ -1,4 +1,3 @@
-const Sequelize = require('sequelize');
 const db  = require('../index'); // Adjust the path to your model as needed
 const Bs =db.models.bs
 const Vente=db.models.vente
@@ -45,13 +44,14 @@ async function getAllBss(req, res) {
 
 async function createBs(req, res) {
   try {
-    const {code,clientId, timbre, products } = req.body;
+    const {code,clientId, timbre, products,clientName } = req.body;
 
     // Step 1: Create the Bs (Bon de Sortie)
     const Bss = await Bs.create({
       clientId: clientId,
       timbre: timbre,
-      code:code
+      code:code,
+      clientName:clientName
     });
 
     // Step 2: Handle the products

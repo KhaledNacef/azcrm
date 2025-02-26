@@ -54,13 +54,14 @@ async function getAllDeliveryNotes(req, res) {
 // Controller to create a DeliveryNote
 async function createDeliveryNote(req, res) {
   try {
-    const {code, spulierId, timbre, products } = req.body;
+    const {code, spulierId, timbre, products,spulierName } = req.body;
 
     // Step 1: Create the DeliveryNote (Bon d'achat)
     const deliveryNote = await DeliveryNote.create({
       spulierId:spulierId,
       timbre:timbre,
-      code:code
+      code:code,
+      spulierName:spulierName
     });
 
     // Step 2: Handle stock and stockP for each product

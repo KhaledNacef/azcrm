@@ -19,6 +19,11 @@ const Bs = {
     type: DataTypes.STRING,
     allowNull: true
   }
+  ,
+  clientName: {
+    type: DataTypes.INTEGER,
+    allowNull: false
+  }
 }
 
 
