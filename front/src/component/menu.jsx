@@ -38,7 +38,7 @@ const SidebarMenu = () => {
       {/* Header Section */}
       <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', p: 3, bgcolor: '#1976d2', color: 'white' }}>
         <Avatar
-          src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRms6VOlo3lDt5HuHvAZL1w-2fkilkxuCBsIw&s"
+          src="https://cdn-icons-png.flaticon.com/512/3237/3237447.png "
           alt="User Profile"
           sx={{ width: 70, height: 70, mb: 1, border: '3px solid white' }}
         />
