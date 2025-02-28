@@ -34,7 +34,7 @@ const SidebarMenu = () => {
   ];
 
   return (
-    <Box sx={{ width: 270, height: '100vh', bgcolor: '#f4f6f8', boxShadow: 2, display: 'flex', flexDirection: 'column' }}>
+    <Box sx={{ width: 270, height: '100vh', bgcolor: 'white', boxShadow: 3, display: 'flex', flexDirection: 'column' }}>
       {/* Header Section */}
       <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', p: 3, bgcolor: 'white', color: 'black' }}>
         <Avatar
@@ -58,11 +58,11 @@ const SidebarMenu = () => {
               borderRadius: '8px',
               mb: 1,
               '&:hover': { bgcolor: '#1976d2', color: 'white' },
-              transition: '0.3s',
-              bgcolor:"white"
+              transition: '0.3s'
+              
             }}
           >
-            <ListItemIcon sx={{ color: 'black', minWidth: 40 , '&:hover': { color: 'white' }}}>{item.icon}</ListItemIcon>
+            <ListItemIcon sx={{ color: '#1976d2', minWidth: 40 , '&:hover': { color: 'white' }}}>{item.icon}</ListItemIcon>
             <ListItemText primary={item.label} sx={{ fontWeight: 'bold',color:"black" }} />
           </ListItem>
         ))}
