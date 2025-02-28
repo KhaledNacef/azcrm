@@ -59,9 +59,10 @@ const SidebarMenu = () => {
               mb: 1,
               '&:hover': { bgcolor: '#1976d2', color: 'white' },
               transition: '0.3s',
+              bgcolor:"white"
             }}
           >
-            <ListItemIcon sx={{ color: '#white', minWidth: 40 , '&:hover': { color: '#1976d2' }}}>{item.icon}</ListItemIcon>
+            <ListItemIcon sx={{ color: 'black', minWidth: 40 , '&:hover': { color: 'white' }}}>{item.icon}</ListItemIcon>
             <ListItemText primary={item.label} sx={{ fontWeight: 'bold',color:"black" }} />
           </ListItem>
         ))}
