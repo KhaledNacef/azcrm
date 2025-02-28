@@ -36,7 +36,7 @@ const SidebarMenu = () => {
   return (
     <Box sx={{ width: 270, height: '100vh', bgcolor: '#f4f6f8', boxShadow: 2, display: 'flex', flexDirection: 'column' }}>
       {/* Header Section */}
-      <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', p: 3,  color: 'white' }}>
+      <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', p: 3, bgcolor: 'white', color: 'black' }}>
         <Avatar
           src="https://cdn-icons-png.flaticon.com/512/3237/3237447.png "
           alt="User Profile"
