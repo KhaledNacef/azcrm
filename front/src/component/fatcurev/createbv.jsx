@@ -99,7 +99,8 @@ const Createbv = ({ onAddDeliveryNote }) => {
   
   return (
     <Box>
-      <Typography variant="h6" mb={2}>Créer un Bon de Sortie</Typography>
+      <Typography variant="h6" mb={2}>Créer un Bon De Livraison
+      </Typography>
 
       {/* Code Selection */}
      

@@ -218,7 +218,7 @@ const Bvsinlge = () => {
         </Box>
 
         <Typography variant="h4" mb={3} textAlign="center">
-          Bon de livraison - {code}
+        Bon De Livraison- {code}
         </Typography>
 
         <Table>
