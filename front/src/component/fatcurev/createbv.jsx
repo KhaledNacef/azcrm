@@ -109,9 +109,10 @@ const Createbv = ({ onAddDeliveryNote }) => {
   label="Client"
   value={client}
   onChange={(e) => {
-    const selectedClient = clients.find(cl => cl.id === e.target.value);
-    setClient(e.target.value);
-    setClientn(selectedClient?.fullname || ""); // Set client name
+    const selectedClientId = parseInt(e.target.value, 10);
+    const selectedClient = clients.find(cl => cl.id === selectedClientId);
+    setClient(selectedClientId);
+    setClientn(selectedClient ? selectedClient.fullname : ""); // Ensure client name is set
   }}
   select
   fullWidth
