@@ -24,6 +24,11 @@ const Bs = {
     type: DataTypes.STRING,
     allowNull: false
   }
+  ,
+    codey: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    }
 }
 
 

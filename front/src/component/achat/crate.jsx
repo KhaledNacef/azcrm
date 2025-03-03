@@ -15,6 +15,8 @@ import {
 
 const CreateDeliveryNoteModala = ({ onAddDeliveryNote }) => {
   const [code, setCode] = useState("");
+  const [codey, setCodey] = useState("");
+
   const [supplier, setSupplier] = useState(0);
   const [suppliern, setSuppliern] = useState("");
   const [timbre, setTimbre] = useState(false);
@@ -34,6 +36,11 @@ const CreateDeliveryNoteModala = ({ onAddDeliveryNote }) => {
     const randomString = Math.random().toString(36).substring(2, 8).toUpperCase();
     return `DN-${timestamp}-${randomString}`;
   };
+  const generateUniqueCodey = () => {
+    const randomString = Math.random().toString(36).substring(2, 8).toUpperCase();
+    return `DN-${randomString}`;
+  };
+
 
   useEffect(() => {
     const fetchData = async () => {
@@ -50,6 +57,7 @@ const CreateDeliveryNoteModala = ({ onAddDeliveryNote }) => {
     };
 
     setCode(generateUniqueCode()); // Set generated code
+    setCodey(generateUniqueCodey())
     fetchData();
   }, []);
 
@@ -104,7 +112,8 @@ const CreateDeliveryNoteModala = ({ onAddDeliveryNote }) => {
       spulierId: supplier, // Corrected key
       timbre: timbre,
       products: products,
-      spulierName:suppliern
+      spulierName:suppliern,
+      codey:codey
     };
 
     try {
@@ -122,6 +131,7 @@ const CreateDeliveryNoteModala = ({ onAddDeliveryNote }) => {
       <Typography variant="h6" mb={2}>Créer un Bon d'Achat</Typography>
 
       {/* Supplier Selection */}
+    
       <TextField
         label="Fournisseur"
         value={supplier}

@@ -80,7 +80,7 @@ const BonsortiePage = () => {
         <TableCell>
           <Button
             variant="outlined"
-            onClick={() => navigate(`/bon-livraison/${note.code}/${note.clientId}`)}
+            onClick={() => navigate(`/bon-livraison/${note.code}/${note.clientId}/${note.codey}`)}
           >
             Voir
           </Button>

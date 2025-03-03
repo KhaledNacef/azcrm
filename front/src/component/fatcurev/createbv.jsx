@@ -18,6 +18,7 @@ const Createbv = ({ onAddDeliveryNote }) => {
     const [code,setCode]= useState('');
   const [client, setClient] = useState(0);
   const [clientn, setClientn] = useState("");
+  const [codey, setCodey] = useState("");
 
   const [timbre, setTimbre] = useState(false);
   const [products, setProducts] = useState([]);
@@ -33,6 +34,10 @@ const Createbv = ({ onAddDeliveryNote }) => {
     const timestamp = new Date().getTime(); // Current timestamp (milliseconds)
     const randomString = Math.random().toString(36).substring(2, 8).toUpperCase(); // Random alphanumeric string
     return `DN-${timestamp}-${randomString}`; // Combine timestamp and random string
+  };
+  const generateUniqueCodey = () => {
+    const randomString = Math.random().toString(36).substring(2, 8).toUpperCase(); // Random alphanumeric string
+    return `DN-${randomString}`; // Combine timestamp and random string
   };
 
   const API_BASE_URL = 'https://api.azcrm.deviceshopleader.com/api';
@@ -51,7 +56,9 @@ const Createbv = ({ onAddDeliveryNote }) => {
       }
     };
     const newCode = generateUniqueCode();
+    const newcodey=generateUniqueCodey()
     setCode(newCode); // Set generated code
+    setCodey(newcodey)
     fetchData();
   }, []);
 
@@ -84,7 +91,8 @@ const Createbv = ({ onAddDeliveryNote }) => {
       clientId:client,
       timbre,
       products,
-      clientName:clientn
+      clientName:clientn,
+      codey:codey
     };
 
     try {
@@ -103,7 +111,7 @@ const Createbv = ({ onAddDeliveryNote }) => {
       </Typography>
 
       {/* Code Selection */}
-     
+    
       {/* Client Selection - Only show if client is not selected */}
       <TextField
   label="Client"

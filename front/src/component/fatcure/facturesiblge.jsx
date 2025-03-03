@@ -5,7 +5,7 @@ import { Box, Typography, Button, Table, TableHead, TableRow, TableCell, TableBo
 import './fdesign.css';
 
 const BCsingleACHAT = () => {
-  const { code, supplierId } = useParams();
+  const { code, supplierId ,codey} = useParams();
   const navigate = useNavigate();
   const printRef = useRef();
   const [supplier, setSupplier] = useState({});
@@ -135,7 +135,7 @@ const BCsingleACHAT = () => {
       </Box>
 
       <Typography variant="h4" mb={3} textAlign="center">
-        Bon De Commande - {code}
+        Bon De Commande - {codey}
       </Typography>
 
       <Table>

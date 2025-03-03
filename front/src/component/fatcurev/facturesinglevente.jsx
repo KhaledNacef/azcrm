@@ -5,7 +5,7 @@ import Grid from '@mui/material/Grid2';
 import './fvdesign.css';
 
 const Bvsinlge = () => {
-  const { code, clientId } = useParams();
+  const { code, clientId,codey } = useParams();
   const printRef = useRef();
   const navigate = useNavigate();
 
@@ -218,7 +218,7 @@ const Bvsinlge = () => {
         </Box>
 
         <Typography variant="h4" mb={3} textAlign="center">
-        Bon De Livraison- {code}
+        Bon De Livraison- {codey}
         </Typography>
 
         <Table>

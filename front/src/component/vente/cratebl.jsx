@@ -17,6 +17,8 @@ const CreateDeliveryNoteModal = ({ onAddDeliveryNote }) => {
   const [code, setCode] = useState("");
   const [client, setClient] = useState("");
   const [timbre, setTimbre] = useState(false);
+    const [codey, setCodey] = useState("");
+  
   const [products, setProducts] = useState([]);
   const [newProduct, setNewProduct] = useState("");
   const [prixU_HT, setPrixU_HT] = useState(0);
@@ -28,6 +30,10 @@ const CreateDeliveryNoteModal = ({ onAddDeliveryNote }) => {
     const timestamp = new Date().getTime();
     const randomString = Math.random().toString(36).substring(2, 8).toUpperCase();
     return `DN-${timestamp}-${randomString}`;
+  };
+  const generateUniqueCodey = () => {
+    const randomString = Math.random().toString(36).substring(2, 8).toUpperCase();
+    return `DN-${randomString}`;
   };
 
   const API_BASE_URL = "https://api.azcrm.deviceshopleader.com/api";
@@ -46,6 +52,7 @@ const CreateDeliveryNoteModal = ({ onAddDeliveryNote }) => {
       }
     };
     setCode(generateUniqueCode());
+    setCodey(generateUniqueCodey())
     fetchData();
   }, []);
 
@@ -80,6 +87,7 @@ const CreateDeliveryNoteModal = ({ onAddDeliveryNote }) => {
       timbre,
       products,
       clientName: clients.find((cl) => cl.id === client)?.fullname || "",
+      codey:codey
     };
 
     try {
@@ -99,6 +107,7 @@ const CreateDeliveryNoteModal = ({ onAddDeliveryNote }) => {
       </Typography>
 
       {/* Client Selection */}
+
       <TextField
         label="Client"
         value={client}

@@ -5,7 +5,7 @@ import { Box, Typography, Button, Table, TableHead, TableRow, TableCell, TableBo
 import './cssba.css';
 
 const SingleDeliveryNote = () => {
-  const { code, supplierId } = useParams();
+  const { code, supplierId,codey } = useParams();
   const navigate = useNavigate();
   const printRef = useRef();
   const [supplier, setSupplier] = useState({});
@@ -134,7 +134,7 @@ const SingleDeliveryNote = () => {
       </Box>
 
       <Typography variant="h4" mb={3} textAlign="center">
-        Bon D'Achat - {code}
+        Bon D'Achat - {codey}
       </Typography>
 
       <Table>
