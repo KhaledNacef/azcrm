@@ -43,6 +43,11 @@ const Createbv = ({ onAddDeliveryNote }) => {
   const API_BASE_URL = 'https://api.azcrm.deviceshopleader.com/api';
 
   useEffect(() => {
+    const newCode = generateUniqueCode();
+    const newcodey=generateUniqueCodey();
+    setCode(newCode); // Set generated code
+    setCodey(newcodey)
+
     const fetchData = async () => {
       try {
         const [productRes, clientRes] = await Promise.all([
@@ -55,10 +60,7 @@ const Createbv = ({ onAddDeliveryNote }) => {
         console.error('Erreur lors du chargement des données:', error);
       }
     };
-    const newCode = generateUniqueCode();
-    const newcodey=generateUniqueCodey()
-    setCode(newCode); // Set generated code
-    setCodey(newcodey)
+   
     fetchData();
   }, []);
 

@@ -39,6 +39,9 @@ const CreateDeliveryNoteModal = ({ onAddDeliveryNote }) => {
   const API_BASE_URL = "https://api.azcrm.deviceshopleader.com/api";
 
   useEffect(() => {
+    setCode(generateUniqueCode());
+    setCodey(generateUniqueCodey());
+
     const fetchData = async () => {
       try {
         const [productRes, clientRes] = await Promise.all([
@@ -51,8 +54,7 @@ const CreateDeliveryNoteModal = ({ onAddDeliveryNote }) => {
         console.error("Erreur lors du chargement des données:", error);
       }
     };
-    setCode(generateUniqueCode());
-    setCodey(generateUniqueCodey())
+   
     fetchData();
   }, []);
 

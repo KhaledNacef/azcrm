@@ -71,7 +71,7 @@ const BonsortiePage = () => {
   {deliveryNotes.length > 0 ? (
     deliveryNotes.map((note) => (
       <TableRow key={note.code}>
-        <TableCell>{note.code}</TableCell>
+        <TableCell>{note.codey}</TableCell>
         <TableCell>{note.clientName || "N/A"}</TableCell>
         <TableCell>{note.timbre ? "Oui" : "Non"}</TableCell>
         <TableCell>

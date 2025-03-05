@@ -31,18 +31,15 @@ const CreateDeliveryNoteModala = ({ onAddDeliveryNote }) => {
   const API_BASE_URL = "https://api.azcrm.deviceshopleader.com/api";
 
   // Generate unique code for the delivery note
-  const generateUniqueCode = () => {
-    const timestamp = new Date().getTime();
-    const randomString = Math.random().toString(36).substring(2, 8).toUpperCase();
-    return `DN-${timestamp}-${randomString}`;
-  };
-  const generateUniqueCodey = () => {
-    const randomString = Math.random().toString(36).substring(2, 8).toUpperCase();
-    return `DN-${randomString}`;
-  };
+  const generateUniqueCode = () => `DN-${Date.now()}-${Math.random().toString(36).substring(2, 8).toUpperCase()}`;
+  const generateUniqueCodey = () => `DN-${Math.random().toString(36).substring(2, 8).toUpperCase()}`;
 
 
   useEffect(() => {
+
+    setCode(generateUniqueCode()); // Set generated code
+    setCodey(generateUniqueCodey())
+
     const fetchData = async () => {
       try {
         const [productRes, supplierRes] = await Promise.all([
@@ -56,8 +53,7 @@ const CreateDeliveryNoteModala = ({ onAddDeliveryNote }) => {
       }
     };
 
-    setCode(generateUniqueCode()); // Set generated code
-    setCodey(generateUniqueCodey())
+    
     fetchData();
   }, []);
 

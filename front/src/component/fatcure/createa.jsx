@@ -40,6 +40,10 @@ const CreatebcModala = ({ onAddDeliveryNote }) => {
   };
 
   useEffect(() => {
+
+    setCode(generateUniqueCode());
+    setCodey(generateUniqueCodey());
+
     const fetchData = async () => {
       try {
         const [productRes, supplierRes] = await Promise.all([
@@ -52,8 +56,7 @@ const CreatebcModala = ({ onAddDeliveryNote }) => {
         console.error("Error fetching data:", error);
       }
     };
-    setCode(generateUniqueCode());
-    setCodey(generateUniqueCodey())
+   
     fetchData();
   }, []);
 
