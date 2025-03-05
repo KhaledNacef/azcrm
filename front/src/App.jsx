@@ -13,7 +13,7 @@ import Dashboard from './component/dashboard/dashboard.jsx';
 import Boncommande from './component/fatcure/facturachat.jsx';
 import Boncommandev from './component/fatcurev/facturvente.jsx';
 import BCsingleACHAT from './component/fatcure/facturesiblge.jsx'
-import BVsinlge from './component/fatcurev/facturesinglevente.jsx';
+import Bvsinlge from './component/fatcurev/facturesinglevente.jsx';
 const App = () => {
   return (
     <Router>
@@ -28,13 +28,13 @@ const App = () => {
           <Route path="/fournisseur" element={<FournisseurPage />} />
           <Route path="/client" element={<ClientPage />} />
           <Route path="/bon-dachat" element={<BonAchatPage />} />
-          <Route path="/bon-dachat/:code/:supplierId" element={<SingleDeliveryNote />} />
+          <Route path="/bon-dachat/:code/:supplierId/:codey" element={<SingleDeliveryNote />} />
           <Route path="/bon-livraison" element={<BonsortiePage />} />
-          <Route path="/bon-livraison/:code/:clientId" element={<SingleDeliverysortie />} />
+          <Route path="/bon-livraison/:code/:clientId/:codey" element={<SingleDeliverysortie />} />
           <Route path="/bon-commandefacture" element={<Boncommandev />} />
-          <Route path="/bon-commandefacturee/:code/:clientId" element={<BVsinlge />} />
+          <Route path="/bon-commandefacturee/:code/:clientId/:codey" element={<Bvsinlge />} />
           <Route path="/bon-commande" element={<Boncommande />} />
-          <Route path="/bon-commandea/:code/:supplierId" element={<BCsingleACHAT />} />
+          <Route path="/bon-commandea/:code/:supplierId/:codey" element={<BCsingleACHAT />} />
         </Route>
       </Routes>
     </Router>
