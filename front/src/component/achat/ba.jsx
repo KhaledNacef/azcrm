@@ -33,9 +33,10 @@ const BonAchatPage = () => {
   };
 
   // Filtered delivery notes based on search query
-  const filteredDeliveryNotes = deliveryNotes.filter((note) =>
+  const filteredNotes = deliveryNotes.filter(note =>
     note.codey.toLowerCase().includes(searchQuery.toLowerCase())
   );
+
 
   useEffect(() => {
     fetchDeliveryNotes();
@@ -69,8 +70,8 @@ const BonAchatPage = () => {
           </TableRow>
         </TableHead>
         <TableBody>
-          {filteredDeliveryNotes  > 0 ? (
-            filteredDeliveryNotes.map((note) => (
+          {filteredNotes  > 0 ? (
+            filteredNotes.map((note) => (
               <TableRow key={note.code}>
                 <TableCell>{note.codey}</TableCell>
                 <TableCell>{note.spulierName || "N/A"}</TableCell>
