@@ -43,9 +43,7 @@ const BonAchatPage = () => {
       </Typography>
 
       {/* Button to open the modal for creating a new delivery note */}
-      <Button variant="contained" color="primary" onClick={handleOpen}>
-        Créer une FACTURE D'ACHAT
-      </Button>
+   
 
       {/* Delivery Notes Table */}
       <Table sx={{ mt: 3 }}>
