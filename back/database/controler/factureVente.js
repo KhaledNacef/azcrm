@@ -79,7 +79,19 @@ const getFactureVByCode = async (req, res) => {
     res.status(500).json({ error: 'Error fetching FactureV by code' });
   }
 };
-
+const getFactureVBycodey = async (req, res) => {
+  const { codey } = req.params;
+  try {
+    const facture = await FactureVP.findAll({ where: { codey } });
+    if (facture) {
+      res.status(200).json(facture);
+    } else {
+      res.status(404).json({ error: 'FactureV not found' });
+    }
+  } catch (error) {
+    res.status(500).json({ error: 'Error fetching FactureV by codey' });
+  }
+};
 // Update FactureV by id
 const updateFactureVById = async (req, res) => {
   const { id } = req.params;
@@ -125,4 +137,5 @@ module.exports = {
   getFactureVByCode,
   updateFactureVById,
   deleteFactureVById,
+  getFactureVBycodey
 };

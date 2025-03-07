@@ -23,10 +23,10 @@ const CompareProducts = () => {
     const fetchData = async () => {
       try {
         const bonResponse = await axios.get(
-          `https://api.azcrm.deviceshopleader.com/api/boncommandallproducts/factureap/${codey}`
+          `https://api.azcrm.deviceshopleader.com/api/boncommandallproducts/codey/${codey}`
         );
         const factureResponse = await axios.get(
-          `https://api.azcrm.deviceshopleader.com/api/bonachat/stock/getallstockdelv/${codey}`
+          `https://api.azcrm.deviceshopleader.com/api/bonachat/stock/codey/${codey}`
         );
 
         setBonCommande(bonResponse.data);

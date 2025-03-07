@@ -36,7 +36,27 @@ const getFactureAPByFaId = async (req, res) => {
     return res.status(500).json({ error: 'Error fetching FactureAP' });
   }
 };
+const getFactureAPBycodey = async (req, res) => {
+  const { codey } = req.params;
 
+  // Ensure the 'code' parameter is present
+  if (!codey) {
+    return res.status(400).json({ error: 'Code parameter is required' });
+  }
+
+  try {
+    const FactureAPP = await FactureAP.findAll({ where: { codey: codey } });
+
+    if (FactureAPP) {
+      return res.status(200).json(FactureAPP);
+    } else {
+      return res.status(404).json({ error: 'FactureAP not found' });
+    }
+  } catch (error) {
+    console.error('Error fetching FactureAP:', error); // Log the error for debugging
+    return res.status(500).json({ error: 'Error fetching FactureAP' });
+  }
+};
 // Update FactureAP by faId
 const updateFactureAPByFaId = async (req, res) => {
   const { faId } = req.params;
@@ -86,4 +106,5 @@ module.exports = {
   getFactureAPByFaId,
   updateFactureAPByFaId,
   deleteFactureAPByFaId,
+  getFactureAPBycodey
 };

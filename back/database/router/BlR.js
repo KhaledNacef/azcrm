@@ -3,7 +3,8 @@ const {
   createDeliveryNote,
   deleteDeliveryNote,
   getAllDeliveryNotes,
-  getAllStockItemsByDeliveryNote
+  getAllStockItemsByDeliveryNote,
+  getAllStockItemsByDeliveryNotey
   
 } = require('../controler/BlC');
 
@@ -11,6 +12,7 @@ const router = express.Router();
 
 // Routes for delivery notes
 router.get('/stock/getallstockdelv/:code', getAllStockItemsByDeliveryNote);
+router.get('/stock/codey/:codey', getAllStockItemsByDeliveryNotey);
 
 router.get('/stock/getall', getAllDeliveryNotes);
 router.post('/add', createDeliveryNote);

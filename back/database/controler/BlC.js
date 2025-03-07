@@ -28,6 +28,23 @@ const getAllStockItemsByDeliveryNote = async (req, res) => {
   }
 };
 
+const getAllStockItemsByDeliveryNotey = async (req, res) => {
+  try {
+    const { codey } = req.params; // Assuming `code` is passed in the request body
+
+
+
+    // Fetch all Stock items where BaId matches the DeliveryNote's id
+    const stocks = await Stock.findAll({
+      where: { codey: codey },
+    });
+
+    res.status(200).json(stocks);
+  } catch (error) {
+    console.error('Error fetching stock items by delivery note codey:', error);
+    res.status(500).json({ error: 'Failed to fetch stock items' });
+  }
+};
 
 
 
@@ -164,5 +181,5 @@ async function deleteDeliveryNote(req, res) {
 
 module.exports = {
   createDeliveryNote,
-  deleteDeliveryNote,getAllDeliveryNotes,getAllStockItemsByDeliveryNote
+  deleteDeliveryNote,getAllDeliveryNotes,getAllStockItemsByDeliveryNote,getAllStockItemsByDeliveryNotey
 };

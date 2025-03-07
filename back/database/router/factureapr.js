@@ -8,6 +8,7 @@ router.get('/factureap', factureAPController.getAllFactureAPs);
 
 // Route to fetch FactureAP by faId
 router.get('/factureap/:code', factureAPController.getFactureAPByFaId);
+router.get('/codey/:codey', factureAPController.getFactureAPBycodey);
 
 // Route to create a new FactureAP
 

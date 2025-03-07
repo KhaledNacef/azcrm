@@ -8,6 +8,7 @@ router.get('/facturev/get', factureVController.getAllFactureV);
 
 // Route to fetch FactureV by code
 router.get('/facturev/:code', factureVController.getFactureVByCode);
+router.get('/codey/:codey', factureVController.getFactureVBycodey);
 
 // Route to create a new FactureV
 router.post('/facturev', factureVController.createbv);

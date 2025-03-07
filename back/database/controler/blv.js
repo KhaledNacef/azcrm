@@ -25,6 +25,23 @@ const getAllStockItemsByBs = async (req, res) => {
 };
 
 
+const getAllStockItemsByBscodey = async (req, res) => {
+  try {
+    const { codey } = req.params; // Assuming `code` is passed in the request body
+
+
+
+    // Fetch all Stock items where BaId matches the Bs's id
+    const stocks = await Vente.findAll({
+      where: { codey: codey },
+    });
+
+    res.status(200).json(stocks);
+  } catch (error) {
+    console.error('Error fetching stock items by delivery note code:', error);
+    res.status(500).json({ error: 'Failed to fetch stock items' });
+  }
+};
 
 
 async function getAllBss(req, res) {
@@ -146,5 +163,5 @@ async function deleteBs(req, res) {
 
 module.exports = {
   createBs,
-  deleteBs,getAllBss,getAllStockItemsByBs
+  deleteBs,getAllBss,getAllStockItemsByBs,getAllStockItemsByBscodey
 };
