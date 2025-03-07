@@ -158,7 +158,7 @@ const addDeliveryNote = () => {
   <Button variant="contained" color="primary" onClick={handleOpen} sx={{ mb: 2, mr: 2 }}>
     Créer un Bon Sortie
   </Button>
-  <Button variant="outlined" onClick={() => navigate(`/gestions/${codey}`)} sx={{ mb: 2 }}>
+  <Button variant="outlined" onClick={() => navigate(`/gestionv/${codey}`)} sx={{ mb: 2 }}>
     Gestion De Stock
   </Button>
 

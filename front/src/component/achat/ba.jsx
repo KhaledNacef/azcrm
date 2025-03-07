@@ -69,7 +69,7 @@ const BonAchatPage = () => {
           </TableRow>
         </TableHead>
         <TableBody>
-          {filteredDeliveryNotes && Array.isArray(filteredDeliveryNotes) && filteredDeliveryNotes.length > 0 ? (
+          {filteredDeliveryNotes  > 0 ? (
             filteredDeliveryNotes.map((note) => (
               <TableRow key={note.code}>
                 <TableCell>{note.codey}</TableCell>
