@@ -1,19 +1,33 @@
 import React, { useState, useEffect } from "react";
-import { Container, Typography, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper } from "@mui/material";
+import {
+  Container,
+  Typography,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Paper,
+} from "@mui/material";
 import axios from "axios";
-import { useParams } from 'react-router-dom';
+import { useParams } from "react-router-dom";
 
 const CompareProducts = () => {
   const [bonCommande, setBonCommande] = useState([]);
   const [facture, setFacture] = useState([]);
   const [missingProducts, setMissingProducts] = useState([]);
-  const { code} = useParams();
+  const { code } = useParams();
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const bonResponse = await axios.get(`https://api.azcrm.deviceshopleader.com/api/boncommandallproducts/factureap/${code}`);
-        const factureResponse = await axios.get(`https://api.azcrm.deviceshopleader.com/api/bonachat/stock/getallstockdelv/${code}`);
+        const bonResponse = await axios.get(
+          `https://api.azcrm.deviceshopleader.com/api/boncommandallproducts/factureap/${code}`
+        );
+        const factureResponse = await axios.get(
+          `https://api.azcrm.deviceshopleader.com/api/bonachat/stock/getallstockdelv/${code}`
+        );
 
         setBonCommande(bonResponse.data);
         setFacture(factureResponse.data);
@@ -24,13 +38,18 @@ const CompareProducts = () => {
     };
 
     fetchData();
-  }, []);
+  }, [code]);
 
   const compareProducts = (bonCommandeData, factureData) => {
     const missing = bonCommandeData.map((product) => {
-      const found = factureData.find((p) => p.id === product.id);
+      const found = factureData.find(
+        (p) => p.designation.toLowerCase() === product.designation.toLowerCase()
+      );
       return found
-        ? { ...product, missingQuantity: Math.max(0, product.quantite - found.quantite) }
+        ? {
+            ...product,
+            missingQuantity: Math.max(0, product.quantite - found.quantite),
+          }
         : { ...product, missingQuantity: product.quantite };
     }).filter((p) => p.missingQuantity > 0);
     
@@ -43,7 +62,7 @@ const CompareProducts = () => {
         Comparaison des Produits
       </Typography>
 
-      <Typography variant="h6">Bon de Commande-{code}</Typography>
+      <Typography variant="h6">Bon de Commande - {code}</Typography>
       <TableContainer component={Paper}>
         <Table>
           <TableHead>
@@ -54,7 +73,7 @@ const CompareProducts = () => {
           </TableHead>
           <TableBody>
             {bonCommande.map((product) => (
-              <TableRow key={product.id}>
+              <TableRow key={product.designation}>
                 <TableCell>{product.designation}</TableCell>
                 <TableCell>{product.quantite}</TableCell>
               </TableRow>
@@ -64,7 +83,7 @@ const CompareProducts = () => {
       </TableContainer>
 
       <Typography variant="h6" style={{ marginTop: 20 }}>
-        Facture--{code}
+        Facture - {code}
       </Typography>
       <TableContainer component={Paper}>
         <Table>
@@ -76,7 +95,7 @@ const CompareProducts = () => {
           </TableHead>
           <TableBody>
             {facture.map((product) => (
-              <TableRow key={product.id}>
+              <TableRow key={product.designation}>
                 <TableCell>{product.designation}</TableCell>
                 <TableCell>{product.quantite}</TableCell>
               </TableRow>
@@ -99,14 +118,16 @@ const CompareProducts = () => {
           <TableBody>
             {missingProducts.length > 0 ? (
               missingProducts.map((product) => (
-                <TableRow key={product.id}>
+                <TableRow key={product.designation}>
                   <TableCell>{product.designation}</TableCell>
                   <TableCell>{product.missingQuantity}</TableCell>
                 </TableRow>
               ))
             ) : (
               <TableRow>
-                <TableCell colSpan={2} align="center">Aucun produit manquant</TableCell>
+                <TableCell colSpan={2} align="center">
+                  Aucun produit manquant
+                </TableCell>
               </TableRow>
             )}
           </TableBody>

@@ -3,7 +3,7 @@ import { Container, Typography, Table, TableBody, TableCell, TableContainer, Tab
 import axios from "axios";
 import { useParams } from 'react-router-dom';
 
-const CompareProducts = () => {
+const CompareProductsv = () => {
   const [bonCommande, setBonCommande] = useState([]);
   const [facture, setFacture] = useState([]);
   const [missingProducts, setMissingProducts] = useState([]);
@@ -116,4 +116,4 @@ const CompareProducts = () => {
   );
 };
 
-export default CompareProducts;
+export default CompareProductsv;
