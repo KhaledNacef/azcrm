@@ -41,20 +41,44 @@ const CompareProducts = () => {
   }, [codey]);
 
   const compareProducts = (bonCommandeData, factureData) => {
-    const missing = bonCommandeData.map((product) => {
-      const found = factureData.find(
-        (p) => p.designation.toLowerCase() === product.designation.toLowerCase()
-      );
-      return found
-        ? {
-            ...product,
-            missingQuantity: Math.max(0, product.quantite - found.quantite),
-          }
-        : { ...product, missingQuantity: product.quantite };
-    }).filter((p) => p.missingQuantity > 0);
-    
+    // Function to group and sum products by designation
+    const groupByDesignation = (data) => {
+      return data.reduce((acc, product) => {
+        const key = product.designation.toLowerCase();
+        if (!acc[key]) {
+          acc[key] = { ...product };
+        } else {
+          acc[key].quantite += product.quantite;
+        }
+        return acc;
+      }, {});
+    };
+  
+    // Aggregate bonCommande and facture data
+    const groupedBonCommande = groupByDesignation(bonCommandeData);
+    const groupedFacture = groupByDesignation(factureData);
+  
+    // Convert object back to array for rendering
+    const aggregatedBonCommande = Object.values(groupedBonCommande);
+    const aggregatedFacture = Object.values(groupedFacture);
+  
+    // Find missing products
+    const missing = aggregatedBonCommande
+      .map((product) => {
+        const key = product.designation.toLowerCase();
+        const found = groupedFacture[key];
+  
+        return found
+          ? { ...product, missingQuantity: Math.max(0, product.quantite - found.quantite) }
+          : { ...product, missingQuantity: product.quantite };
+      })
+      .filter((p) => p.missingQuantity > 0);
+  
+    setBonCommande(aggregatedBonCommande);
+    setFacture(aggregatedFacture);
     setMissingProducts(missing);
   };
+  
 
   return (
     <Container>
