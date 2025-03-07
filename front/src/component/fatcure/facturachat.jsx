@@ -9,6 +9,7 @@ import {
   TableRow,
   Typography,
   Modal,
+  TextField,
 } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import CreatebcModala from './createa.jsx'; // Ensure correct file name
@@ -19,7 +20,10 @@ const Boncommande = () => {
   
   // State to hold the delivery notes
   const [deliveryNotes, setDeliveryNotes] = useState([]);
-  
+
+  // State for search query
+  const [searchQuery, setSearchQuery] = useState('');
+
   // Modal state
   const [open, setOpen] = useState(false);
 
@@ -29,8 +33,8 @@ const Boncommande = () => {
   const addDeliveryNote = () => {
     handleClose();
     fetchDeliveryNotes();
-
   };
+
   // Fetch delivery notes from the backend
   const fetchDeliveryNotes = async () => {
     try {
@@ -41,8 +45,11 @@ const Boncommande = () => {
     }
   };
 
-  // Add the new delivery note to the state
- 
+  // Filtered delivery notes based on search query
+  const filteredDeliveryNotes = deliveryNotes.filter((note) =>
+    note.codey.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+
   useEffect(() => {
     fetchDeliveryNotes();
   }, []);
@@ -53,9 +60,19 @@ const Boncommande = () => {
         BON DE COMMANDE
       </Typography>
 
+      {/* Search Field */}
+      <TextField
+        label="Rechercher par Code"
+        variant="outlined"
+        fullWidth
+        value={searchQuery}
+        onChange={(e) => setSearchQuery(e.target.value)}
+        sx={{ mb: 3 }}
+      />
+
       {/* Button to open the modal for creating a new delivery note */}
       <Button variant="contained" color="primary" onClick={handleOpen}>
-      Créer un Bon De Commande
+        Créer un Bon De Commande
       </Button>
 
       {/* Delivery Notes Table */}
@@ -70,29 +87,29 @@ const Boncommande = () => {
           </TableRow>
         </TableHead>
         <TableBody>
-  {deliveryNotes && Array.isArray(deliveryNotes) && deliveryNotes.length > 0 ? (
-    deliveryNotes.map((note) => (
-      <TableRow key={note.id || note.code}> {/* Use a unique identifier */}
-        <TableCell>{note.codey}</TableCell>
-        <TableCell>{note.spulierName || "N/A"}</TableCell>
-        <TableCell>{note.timbre ? "Oui" : "Non"}</TableCell>
-        <TableCell>{note.createdAt ? new Date(note.createdAt).toLocaleDateString() : "N/A"}</TableCell>
-        <TableCell>
-          <Button
-            variant="outlined"
-            onClick={() => navigate(`/bon-commandea/${note.code}/${note.spulierId}/${note.codey}`)}
-          >
-            Voir
-          </Button>
-        </TableCell>
-      </TableRow>
-    ))
-  ) : (
-    <TableRow>
-      <TableCell colSpan={5}>Aucune donnée disponible</TableCell>
-    </TableRow>
-  )}
-</TableBody>
+          {filteredDeliveryNotes && Array.isArray(filteredDeliveryNotes) && filteredDeliveryNotes.length > 0 ? (
+            filteredDeliveryNotes.map((note) => (
+              <TableRow key={note.id || note.code}> {/* Use a unique identifier */}
+                <TableCell>{note.codey}</TableCell>
+                <TableCell>{note.spulierName || "N/A"}</TableCell>
+                <TableCell>{note.timbre ? "Oui" : "Non"}</TableCell>
+                <TableCell>{note.createdAt ? new Date(note.createdAt).toLocaleDateString() : "N/A"}</TableCell>
+                <TableCell>
+                  <Button
+                    variant="outlined"
+                    onClick={() => navigate(`/bon-commandea/${note.code}/${note.spulierId}/${note.codey}`)}
+                  >
+                    Voir
+                  </Button>
+                </TableCell>
+              </TableRow>
+            ))
+          ) : (
+            <TableRow>
+              <TableCell colSpan={5}>Aucune donnée disponible</TableCell>
+            </TableRow>
+          )}
+        </TableBody>
       </Table>
 
       {/* Modal for creating a new delivery note */}
@@ -110,7 +127,7 @@ const Boncommande = () => {
             width: 500,
           }}
         >
-          <CreatebcModala onAddDeliveryNote={addDeliveryNote}  />
+          <CreatebcModala onAddDeliveryNote={addDeliveryNote} />
         </Box>
       </Modal>
     </Box>

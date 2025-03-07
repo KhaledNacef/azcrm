@@ -9,6 +9,7 @@ import {
   TableRow,
   Typography,
   Modal,
+  TextField,
 } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import Createbv from './createbv.jsx';
@@ -18,12 +19,13 @@ const Boncommandev = () => {
   const navigate = useNavigate();
   const [deliveryNotes, setDeliveryNotes] = useState([]); // State for storing delivery notes
   const [open, setOpen] = useState(false); // Modal state
+  const [searchQuery, setSearchQuery] = useState(''); // Search query state
 
   // Function to fetch delivery notes
   const fetchDeliveryNotes = async () => {
     try {
       const response = await axios.get('https://api.azcrm.deviceshopleader.com/api/bonlivraison/facturev/get');
-      console.log("API Response:", response.data); // ✅ Debugging log
+      console.log('API Response:', response.data); // ✅ Debugging log
       setDeliveryNotes(response.data); // ✅ Ensure it's always an array
     } catch (error) {
       console.error('Error fetching delivery notes:', error);
@@ -45,11 +47,26 @@ const Boncommandev = () => {
     fetchDeliveryNotes(); // ✅ Refresh table after adding
   };
 
+  // Filtered delivery notes based on search query
+  const filteredNotes = deliveryNotes.filter(note =>
+    note.codey.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+
   return (
     <Box sx={{ p: 3 }}>
       <Typography variant="h4" mb={3}>
         Bon De Livraison
       </Typography>
+
+      {/* Search bar */}
+      <TextField
+        label="Rechercher par Code"
+        variant="outlined"
+        fullWidth
+        value={searchQuery}
+        onChange={(e) => setSearchQuery(e.target.value)}
+        sx={{ mb: 3 }}
+      />
 
       {/* Button to create a new delivery note */}
       <Button variant="contained" color="primary" onClick={handleOpen}>
@@ -68,33 +85,33 @@ const Boncommandev = () => {
           </TableRow>
         </TableHead>
         <TableBody>
-  {deliveryNotes.length > 0 ? (
-    deliveryNotes.map((note) => (
-      <TableRow key={note.code}>
-        <TableCell>{note.codey}</TableCell>
-        <TableCell>{note.clientName || "N/A"}</TableCell>
-        <TableCell>{note.timbre ? "Oui" : "Non"}</TableCell>
-        <TableCell>
-          {note.createdAt ? new Date(note.createdAt).toLocaleDateString() : "N/A"}
-        </TableCell>
-        <TableCell>
-          <Button
-            variant="outlined"
-            onClick={() => navigate(`/bon-commandefacturee/${note.code}/${note.clientId}/${note.codey}`)}
-          >
-            Voir
-          </Button>
-        </TableCell>
-      </TableRow>
-    ))
-  ) : (
-    <TableRow>
-      <TableCell colSpan={5} align="center">
-        Aucune donnée disponible
-      </TableCell>
-    </TableRow>
-  )}
-</TableBody>
+          {filteredNotes.length > 0 ? (
+            filteredNotes.map((note) => (
+              <TableRow key={note.code}>
+                <TableCell>{note.codey}</TableCell>
+                <TableCell>{note.clientName || 'N/A'}</TableCell>
+                <TableCell>{note.timbre ? 'Oui' : 'Non'}</TableCell>
+                <TableCell>
+                  {note.createdAt ? new Date(note.createdAt).toLocaleDateString() : 'N/A'}
+                </TableCell>
+                <TableCell>
+                  <Button
+                    variant="outlined"
+                    onClick={() => navigate(`/bon-commandefacturee/${note.code}/${note.clientId}/${note.codey}`)}
+                  >
+                    Voir
+                  </Button>
+                </TableCell>
+              </TableRow>
+            ))
+          ) : (
+            <TableRow>
+              <TableCell colSpan={5} align="center">
+                Aucune donnée disponible
+              </TableCell>
+            </TableRow>
+          )}
+        </TableBody>
       </Table>
 
       {/* Modal for creating a delivery note */}

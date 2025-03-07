@@ -79,19 +79,18 @@ const [open, setOpen] = useState(false);
 
   return (
     <Box sx={{ p: 3 }}>
-    <Button variant="outlined" onClick={() => navigate(-1)} sx={{ mb: 2 }}>
-      Retour
-    </Button>
-    <Button variant="contained" color="primary" onClick={handlePrint} sx={{ mb: 2, ml: 2 }}>
-      Imprimer
-    </Button>
-      <Button variant="contained" color="primary" onClick={handleOpen}>
-          Créer un Bon Facture
-          </Button>
-              <Button variant="outlined" onClick={() => navigate(`/gestion/${codey}`)} sx={{ mb: 2 }}>
-                   Gestion De Stock
-                 </Button>
-           
+ <Button variant="outlined" onClick={() => navigate(-1)} sx={{ mb: 2, mr: 2 }}>
+    Retour
+  </Button>
+  <Button variant="contained" color="primary" onClick={handlePrint} sx={{ mb: 2, mr: 2 }}>
+    Imprimer
+  </Button>
+  <Button variant="contained" color="primary" onClick={handleOpen} sx={{ mb: 2, mr: 2 }}>
+    Créer un Bon D'ACHAT
+  </Button>
+  <Button variant="outlined" onClick={() => navigate(`/gestion/${codey}`)} sx={{ mb: 2 }}>
+    Gestion De Stock
+  </Button>
 
     {/* Printable content */}
     <Box

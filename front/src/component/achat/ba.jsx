@@ -8,18 +8,20 @@ import {
   TableHead,
   TableRow,
   Typography,
+  TextField,
 } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
 const BonAchatPage = () => {
   const navigate = useNavigate();
-  
+
   // State to hold the delivery notes
   const [deliveryNotes, setDeliveryNotes] = useState([]);
-  
-  // Modal state
- 
+
+  // State for search query
+  const [searchQuery, setSearchQuery] = useState('');
+
   // Fetch delivery notes from the backend
   const fetchDeliveryNotes = async () => {
     try {
@@ -30,20 +32,30 @@ const BonAchatPage = () => {
     }
   };
 
-  // Add the new delivery note to the state
- 
+  // Filtered delivery notes based on search query
+  const filteredDeliveryNotes = deliveryNotes.filter((note) =>
+    note.codey.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+
   useEffect(() => {
     fetchDeliveryNotes();
   }, []);
- 
+
   return (
     <Box sx={{ p: 3 }}>
       <Typography variant="h4" mb={3}>
         BON D'ACHAT
       </Typography>
 
-      {/* Button to open the modal for creating a new delivery note */}
-   
+      {/* Search Field */}
+      <TextField
+        label="Search by Code"
+        variant="outlined"
+        fullWidth
+        value={searchQuery}
+        onChange={(e) => setSearchQuery(e.target.value)}
+        sx={{ mb: 3 }}
+      />
 
       {/* Delivery Notes Table */}
       <Table sx={{ mt: 3 }}>
@@ -57,33 +69,30 @@ const BonAchatPage = () => {
           </TableRow>
         </TableHead>
         <TableBody>
-        {deliveryNotes && Array.isArray(deliveryNotes) && deliveryNotes.length > 0 ? (
-  deliveryNotes.map((note) => (
-    <TableRow key={note.code}>
-      <TableCell>{note.codey}</TableCell>
-      <TableCell>{note.spulierName || "N/A"}</TableCell>
-        <TableCell>{note.timbre ? "Oui" : "Non"}</TableCell>
-      <TableCell>{note.createdAt ? new Date(note.createdAt).toLocaleDateString() : "N/A"}</TableCell>
-      <TableCell>
-        <Button
-          variant="outlined"
-          onClick={() => navigate(`/bon-dachat/${note.code}/${note.spulierId}/${note.codey}`)}
-        >
-          Voir
-        </Button>
-      </TableCell>
-    </TableRow>
-  ))
-) : (
-  <TableRow>
-    <TableCell colSpan={5}>Aucune donnée disponible</TableCell>
-  </TableRow>
-)}
- </TableBody>
+          {filteredDeliveryNotes && Array.isArray(filteredDeliveryNotes) && filteredDeliveryNotes.length > 0 ? (
+            filteredDeliveryNotes.map((note) => (
+              <TableRow key={note.code}>
+                <TableCell>{note.codey}</TableCell>
+                <TableCell>{note.spulierName || "N/A"}</TableCell>
+                <TableCell>{note.timbre ? "Oui" : "Non"}</TableCell>
+                <TableCell>{note.createdAt ? new Date(note.createdAt).toLocaleDateString() : "N/A"}</TableCell>
+                <TableCell>
+                  <Button
+                    variant="outlined"
+                    onClick={() => navigate(`/bon-dachat/${note.code}/${note.spulierId}/${note.codey}`)}
+                  >
+                    Voir
+                  </Button>
+                </TableCell>
+              </TableRow>
+            ))
+          ) : (
+            <TableRow>
+              <TableCell colSpan={5}>Aucune donnée disponible</TableCell>
+            </TableRow>
+          )}
+        </TableBody>
       </Table>
-
-      {/* Modal for creating a new delivery note */}
- 
     </Box>
   );
 };
