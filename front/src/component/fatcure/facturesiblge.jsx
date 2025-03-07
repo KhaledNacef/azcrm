@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import { Box, Typography, Button, Table, TableHead, TableRow, TableCell, TableBody, CircularProgress } from '@mui/material';
+import { Box, Typography, Button, Table, TableHead, TableRow, TableCell, TableBody, CircularProgress,Modal  } from '@mui/material';
 import './fdesign.css';
 import CreateDeliveryNoteModala from '../achat/crate.jsx'; // Ensure correct file name
 
