@@ -73,7 +73,7 @@ const Boncommande = () => {
   {deliveryNotes && Array.isArray(deliveryNotes) && deliveryNotes.length > 0 ? (
     deliveryNotes.map((note) => (
       <TableRow key={note.id || note.code}> {/* Use a unique identifier */}
-        <TableCell>{note.code}</TableCell>
+        <TableCell>{note.codey}</TableCell>
         <TableCell>{note.spulierName || "N/A"}</TableCell>
         <TableCell>{note.timbre ? "Oui" : "Non"}</TableCell>
         <TableCell>{note.createdAt ? new Date(note.createdAt).toLocaleDateString() : "N/A"}</TableCell>

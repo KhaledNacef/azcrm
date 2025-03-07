@@ -88,7 +88,7 @@ const [open, setOpen] = useState(false);
       <Button variant="contained" color="primary" onClick={handleOpen}>
           Créer un Bon Facture
           </Button>
-              <Button variant="outlined" onClick={() => navigate(`/gestion/${code}/`)} sx={{ mb: 2 }}>
+              <Button variant="outlined" onClick={() => navigate(`/gestion/${deliveryNote.codey}/`)} sx={{ mb: 2 }}>
                    Gestion De Stock
                  </Button>
            
@@ -154,7 +154,7 @@ const [open, setOpen] = useState(false);
       </Box>
 
       <Typography variant="h4" mb={3} textAlign="center">
-        Bon De Commande - {code}
+        Bon De Commande - {deliveryNote.codey}
       </Typography>
 
       <Table>
@@ -234,7 +234,7 @@ const [open, setOpen] = useState(false);
             width: 500,
           }}
         >
-          <CreateDeliveryNoteModala onAddDeliveryNote={addDeliveryNote} code={code}  />
+          <CreateDeliveryNoteModala onAddDeliveryNote={addDeliveryNote} codey={deliveryNote.codey}  />
         </Box>
       </Modal>
   </Box>

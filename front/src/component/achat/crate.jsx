@@ -13,7 +13,7 @@ import {
   TableHead,
 } from "@mui/material";
 
-const CreateDeliveryNoteModala = ({ onAddDeliveryNote,code }) => {
+const CreateDeliveryNoteModala = ({ onAddDeliveryNote,codey }) => {
 
   const [supplier, setSupplier] = useState(0);
   const [suppliern, setSuppliern] = useState("");
@@ -25,14 +25,20 @@ const CreateDeliveryNoteModala = ({ onAddDeliveryNote,code }) => {
   const [quantite, setQuantite] = useState(1);
   const [availableProducts, setAvailableProducts] = useState([]);
   const [suppliers, setSuppliers] = useState([]);
+    const [code,setCode]= useState('');
 
   const API_BASE_URL = "https://api.azcrm.deviceshopleader.com/api";
 
   // Generate unique code for the delivery note
-
+  const generateUniqueCode = () => {
+    const timestamp = new Date().getTime();
+    const randomString = Math.random().toString(36).substring(2, 8).toUpperCase();
+    return `DN-${timestamp}-${randomString}`;
+  };
 
   useEffect(() => {
-
+    const newCode = generateUniqueCode();
+    setCode(newCode); // Set generated code
 
     const fetchData = async () => {
       try {
@@ -103,6 +109,7 @@ const CreateDeliveryNoteModala = ({ onAddDeliveryNote,code }) => {
       timbre: timbre,
       products: products,
       spulierName:suppliern,
+      codey:codey
     };
 
     try {

@@ -15,6 +15,8 @@ import {
 
 const CreatebcModala = ({ onAddDeliveryNote }) => {
   const [code, setCode] = useState("");
+  const [codey, setCodey] = useState("");
+
   const [supplier, setSupplier] = useState(0);
   const [suppliern, setSuppliern] = useState("");
   const [timbre, setTimbre] = useState(false);
@@ -33,10 +35,16 @@ const CreatebcModala = ({ onAddDeliveryNote }) => {
     const randomString = Math.random().toString(36).substring(2, 8).toUpperCase();
     return `DN-${timestamp}-${randomString}`;
   };
+  const generateUniqueCodey = () => {
+    const timestamp = new Date().getTime();
+    const randomString = Math.random().toString(36).substring(2, 8).toUpperCase();
+    return `DN-${timestamp}-${randomString}`;
+  };
+ 
  
 
   useEffect(() => {
-
+    setCodey(generateUniqueCodey())
     setCode(generateUniqueCode());
 
     const fetchData = async () => {
@@ -96,6 +104,7 @@ const CreatebcModala = ({ onAddDeliveryNote }) => {
       timbre,
       products,
       spulierName:suppliern,
+      codey:codey
 
     };
 

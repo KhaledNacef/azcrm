@@ -158,7 +158,7 @@ const addDeliveryNote = () => {
     <Button variant="contained" color="primary" onClick={handleOpen}>
               Créer un Bon Facture
               </Button>
-              <Button variant="outlined" onClick={() => navigate(`/gestionv/${code}/`)} sx={{ mb: 2 }}>
+              <Button variant="outlined" onClick={() => navigate(`/gestionv/${deliveryNote.codey}/`)} sx={{ mb: 2 }}>
         Gestion De Stock
       </Button>
 
@@ -222,7 +222,7 @@ const addDeliveryNote = () => {
         </Box>
 
         <Typography variant="h4" mb={3} textAlign="center">
-        Bon De Livraison- {code}
+        Bon De Livraison- {deliveryNote.codey}
         </Typography>
 
         <Table>
@@ -293,7 +293,7 @@ const addDeliveryNote = () => {
             width: 500,
           }}
         >
-          <CreateDeliveryNoteModal onAddDeliveryNote={addDeliveryNote} code={code} />
+          <CreateDeliveryNoteModal onAddDeliveryNote={addDeliveryNote} codey={deliveryNote.codey} />
         </Box>
       </Modal>
     </Box>

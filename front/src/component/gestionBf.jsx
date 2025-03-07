@@ -17,16 +17,16 @@ const CompareProducts = () => {
   const [bonCommande, setBonCommande] = useState([]);
   const [facture, setFacture] = useState([]);
   const [missingProducts, setMissingProducts] = useState([]);
-  const { code } = useParams();
+  const { codey } = useParams();
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         const bonResponse = await axios.get(
-          `https://api.azcrm.deviceshopleader.com/api/boncommandallproducts/factureap/${code}`
+          `https://api.azcrm.deviceshopleader.com/api/boncommandallproducts/factureap/${codey}`
         );
         const factureResponse = await axios.get(
-          `https://api.azcrm.deviceshopleader.com/api/bonachat/stock/getallstockdelv/${code}`
+          `https://api.azcrm.deviceshopleader.com/api/bonachat/stock/getallstockdelv/${codey}`
         );
 
         setBonCommande(bonResponse.data);

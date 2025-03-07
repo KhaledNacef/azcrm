@@ -26,6 +26,10 @@ const FactureVP =  {
   code: {
     type: DataTypes.STRING,
     allowNull: true,
+  },
+  codey: {
+    type: DataTypes.STRING,
+    allowNull: true,
   }
   
   

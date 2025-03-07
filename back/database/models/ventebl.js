@@ -31,6 +31,10 @@ const Vente =  {
   code: {
     type: DataTypes.STRING,
     allowNull: false,
+  },
+  codey: {
+    type: DataTypes.STRING,
+    allowNull: true,
   }
   
   

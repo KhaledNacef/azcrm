@@ -7,13 +7,13 @@ const CompareProductsv = () => {
   const [bonCommande, setBonCommande] = useState([]);
   const [facture, setFacture] = useState([]);
   const [missingProducts, setMissingProducts] = useState([]);
-  const { code} = useParams();
+  const { codey} = useParams();
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const bonResponse = await axios.get(`https://api.azcrm.deviceshopleader.com/api/bonlivraison/facturev/${code}`);
-        const factureResponse = await axios.get(`https://api.azcrm.deviceshopleader.com/api/bs/bs/stock/${code}`);
+        const bonResponse = await axios.get(`https://api.azcrm.deviceshopleader.com/api/bonlivraison/facturev/${codey}`);
+        const factureResponse = await axios.get(`https://api.azcrm.deviceshopleader.com/api/bs/bs/stock/${codey}`);
 
         setBonCommande(bonResponse.data);
         setFacture(factureResponse.data);
