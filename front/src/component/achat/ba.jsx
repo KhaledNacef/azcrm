@@ -8,10 +8,8 @@ import {
   TableHead,
   TableRow,
   Typography,
-  Modal,
 } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
-import CreateDeliveryNoteModala from './crate.jsx'; // Ensure correct file name
 import axios from 'axios';
 
 const BonAchatPage = () => {
@@ -21,11 +19,7 @@ const BonAchatPage = () => {
   const [deliveryNotes, setDeliveryNotes] = useState([]);
   
   // Modal state
-  const [open, setOpen] = useState(false);
-
-  const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
-  
+ 
   // Fetch delivery notes from the backend
   const fetchDeliveryNotes = async () => {
     try {
@@ -41,15 +35,11 @@ const BonAchatPage = () => {
   useEffect(() => {
     fetchDeliveryNotes();
   }, []);
-  const addDeliveryNote = () => {
-    handleClose();
-    fetchDeliveryNotes();
-
-  };
+ 
   return (
     <Box sx={{ p: 3 }}>
       <Typography variant="h4" mb={3}>
-        FACTURE D'ACHAT
+        BON D'ACHAT
       </Typography>
 
       {/* Button to open the modal for creating a new delivery note */}
@@ -72,14 +62,14 @@ const BonAchatPage = () => {
         {deliveryNotes && Array.isArray(deliveryNotes) && deliveryNotes.length > 0 ? (
   deliveryNotes.map((note) => (
     <TableRow key={note.code}>
-      <TableCell>{note.codey}</TableCell>
+      <TableCell>{note.code}</TableCell>
       <TableCell>{note.spulierName || "N/A"}</TableCell>
         <TableCell>{note.timbre ? "Oui" : "Non"}</TableCell>
       <TableCell>{note.createdAt ? new Date(note.createdAt).toLocaleDateString() : "N/A"}</TableCell>
       <TableCell>
         <Button
           variant="outlined"
-          onClick={() => navigate(`/bon-dachat/${note.code}/${note.spulierId}/${note.codey}`)}
+          onClick={() => navigate(`/bon-dachat/${note.code}/${note.spulierId}`)}
         >
           Voir
         </Button>
@@ -95,23 +85,7 @@ const BonAchatPage = () => {
       </Table>
 
       {/* Modal for creating a new delivery note */}
-      <Modal open={open} onClose={handleClose}>
-        <Box
-          sx={{
-            position: 'absolute',
-            top: '50%',
-            left: '50%',
-            transform: 'translate(-50%, -50%)',
-            bgcolor: 'background.paper',
-            boxShadow: 24,
-            p: 4,
-            borderRadius: 2,
-            width: 500,
-          }}
-        >
-          <CreateDeliveryNoteModala onAddDeliveryNote={addDeliveryNote}  />
-        </Box>
-      </Modal>
+ 
     </Box>
   );
 };

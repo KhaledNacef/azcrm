@@ -3,14 +3,15 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { Box, Typography, Table, TableHead, TableRow, TableCell, TableBody,Button } from '@mui/material';
 import Grid from '@mui/material/Grid2';
 import './fvdesign.css';
-
+import CreateDeliveryNoteModal from '../vente/cratebl.jsx';
 const Bvsinlge = () => {
-  const { code, clientId,codey } = useParams();
+  const { code, clientId } = useParams();
   const printRef = useRef();
   const navigate = useNavigate();
 
   const [client, setClient] = useState({});
   const [deliveryNote, setDeliveryNote] = useState([]);
+  const [open, setOpen] = useState(false); // Modal state
 
   useEffect(() => {
     const fetchClientData = async () => {
@@ -63,7 +64,12 @@ const Bvsinlge = () => {
     const year = today.getFullYear();
     return `${day}/${month}/${year}`;
 }
+const handleOpen = () => setOpen(true);
+const handleClose = () => setOpen(false);
 
+const addDeliveryNote = () => {
+  handleClose();
+};
 
   const handleExportToExcel = () => {
     const companyInfo = [
@@ -149,13 +155,11 @@ const Bvsinlge = () => {
       <Button variant="contained" color="primary" onClick={handlePrint} sx={{ mb: 2, ml: 2 }}>
         Imprimer
       </Button>
-      <Button
-        variant="contained"
-        color="secondary"
-        onClick={handleExportToExcel}
-        sx={{ mb: 2, ml: 2 }}
-      >
-        Télécharger en Excel
+    <Button variant="contained" color="primary" onClick={handleOpen}>
+              Créer un Bon Facture
+              </Button>
+              <Button variant="outlined" onClick={() => navigate(`/gestion/${code}/`)} sx={{ mb: 2 }}>
+        Gestion De Stock
       </Button>
 
       {/* Printable content */}
@@ -218,7 +222,7 @@ const Bvsinlge = () => {
         </Box>
 
         <Typography variant="h4" mb={3} textAlign="center">
-        Bon De Livraison- {codey}
+        Bon De Livraison- {code}
         </Typography>
 
         <Table>
@@ -275,6 +279,23 @@ const Bvsinlge = () => {
           </Box>
         </Box>
       </Box>
+      <Modal open={open} onClose={handleClose}>
+        <Box
+          sx={{
+            position: 'absolute',
+            top: '50%',
+            left: '50%',
+            transform: 'translate(-50%, -50%)',
+            bgcolor: 'background.paper',
+            boxShadow: 24,
+            p: 4,
+            borderRadius: 2,
+            width: 500,
+          }}
+        >
+          <CreateDeliveryNoteModal onAddDeliveryNote={addDeliveryNote} code={code} />
+        </Box>
+      </Modal>
     </Box>
   );
 };

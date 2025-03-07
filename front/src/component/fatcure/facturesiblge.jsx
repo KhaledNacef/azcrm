@@ -3,9 +3,10 @@ import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { Box, Typography, Button, Table, TableHead, TableRow, TableCell, TableBody, CircularProgress } from '@mui/material';
 import './fdesign.css';
+import CreateDeliveryNoteModala from '../achat/crate.jsx'; // Ensure correct file name
 
 const BCsingleACHAT = () => {
-  const { code, supplierId ,codey} = useParams();
+  const { code, supplierId } = useParams();
   const navigate = useNavigate();
   const printRef = useRef();
   const [supplier, setSupplier] = useState({});
@@ -13,6 +14,17 @@ const BCsingleACHAT = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const previousLocation = window.location.pathname;
+
+const [open, setOpen] = useState(false);
+
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
+
+  const addDeliveryNote = () => {
+    handleClose();
+
+  };
+
 
   useEffect(() => {
     const fetchData = async () => {
@@ -73,6 +85,13 @@ const BCsingleACHAT = () => {
     <Button variant="contained" color="primary" onClick={handlePrint} sx={{ mb: 2, ml: 2 }}>
       Imprimer
     </Button>
+      <Button variant="contained" color="primary" onClick={handleOpen}>
+          Créer un Bon Facture
+          </Button>
+              <Button variant="outlined" onClick={() => navigate(`/gestion/${code}/`)} sx={{ mb: 2 }}>
+                   Gestion De Stock
+                 </Button>
+           
 
     {/* Printable content */}
     <Box
@@ -135,7 +154,7 @@ const BCsingleACHAT = () => {
       </Box>
 
       <Typography variant="h4" mb={3} textAlign="center">
-        Bon De Commande - {codey}
+        Bon De Commande - {code}
       </Typography>
 
       <Table>
@@ -201,6 +220,23 @@ const BCsingleACHAT = () => {
         </Box>
       </Box>
     </Box>
+    <Modal open={open} onClose={handleClose}>
+        <Box
+          sx={{
+            position: 'absolute',
+            top: '50%',
+            left: '50%',
+            transform: 'translate(-50%, -50%)',
+            bgcolor: 'background.paper',
+            boxShadow: 24,
+            p: 4,
+            borderRadius: 2,
+            width: 500,
+          }}
+        >
+          <CreateDeliveryNoteModala onAddDeliveryNote={addDeliveryNote} code={code}  />
+        </Box>
+      </Modal>
   </Box>
   );
 };

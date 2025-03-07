@@ -5,7 +5,7 @@ import Grid from '@mui/material/Grid2';
 import './cssbl.css';
 
 const SingleDeliverysortie = () => {
-  const { code, clientId,codey } = useParams();
+  const { code, clientId } = useParams();
   const printRef = useRef();
   const navigate = useNavigate();
 
@@ -218,7 +218,7 @@ const SingleDeliverysortie = () => {
         </Box>
 
         <Typography variant="h4" mb={3} textAlign="center">
-          Bon de Sortie - {codey}
+          Bon de Sortie - {code}
         </Typography>
 
         <Table>

@@ -22,7 +22,6 @@ const CreatebcModala = ({ onAddDeliveryNote }) => {
   const [newProduct, setNewProduct] = useState("");
   const [tva, setTva] = useState(0);
   const [prixU_HT, setPrixU_HT] = useState(0);
- const [codey, setCodey] = useState("");
   
   const [quantite, setQuantite] = useState(1);
   const [availableProducts, setAvailableProducts] = useState([]);
@@ -34,15 +33,11 @@ const CreatebcModala = ({ onAddDeliveryNote }) => {
     const randomString = Math.random().toString(36).substring(2, 8).toUpperCase();
     return `DN-${timestamp}-${randomString}`;
   };
-  const generateUniqueCodey = () => {
-    const randomString = Math.random().toString(36).substring(2, 8).toUpperCase();
-    return `DN-${randomString}`;
-  };
+ 
 
   useEffect(() => {
 
     setCode(generateUniqueCode());
-    setCodey(generateUniqueCodey());
 
     const fetchData = async () => {
       try {
@@ -101,7 +96,6 @@ const CreatebcModala = ({ onAddDeliveryNote }) => {
       timbre,
       products,
       spulierName:suppliern,
-      codey:codey
 
     };
 
@@ -144,7 +138,7 @@ const CreatebcModala = ({ onAddDeliveryNote }) => {
         label="Timbre"
         select
         value={timbre}
-        onChange={(e) => setTimbre(e.target.value === "true")}
+        onChange={(e) => setTimbre(e.target.value)}
         fullWidth
         margin="normal"
       >

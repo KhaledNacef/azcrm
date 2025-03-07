@@ -71,7 +71,7 @@ const Boncommandev = () => {
   {deliveryNotes.length > 0 ? (
     deliveryNotes.map((note) => (
       <TableRow key={note.code}>
-        <TableCell>{note.codey}</TableCell>
+        <TableCell>{note.code}</TableCell>
         <TableCell>{note.clientName || "N/A"}</TableCell>
         <TableCell>{note.timbre ? "Oui" : "Non"}</TableCell>
         <TableCell>
@@ -80,7 +80,7 @@ const Boncommandev = () => {
         <TableCell>
           <Button
             variant="outlined"
-            onClick={() => navigate(`/bon-commandefacturee/${note.code}/${note.clientId}/${note.codey}`)}
+            onClick={() => navigate(`/bon-commandefacturee/${note.code}/${note.clientId}`)}
           >
             Voir
           </Button>

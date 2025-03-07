@@ -13,11 +13,9 @@ import {
   TableHead,
 } from "@mui/material";
 
-const CreateDeliveryNoteModal = ({ onAddDeliveryNote }) => {
-  const [code, setCode] = useState("");
+const CreateDeliveryNoteModal = ({ onAddDeliveryNote,code }) => {
   const [client, setClient] = useState("");
   const [timbre, setTimbre] = useState(false);
-    const [codey, setCodey] = useState("");
   
   const [products, setProducts] = useState([]);
   const [newProduct, setNewProduct] = useState("");
@@ -26,21 +24,12 @@ const CreateDeliveryNoteModal = ({ onAddDeliveryNote }) => {
   const [availableProducts, setAvailableProducts] = useState([]);
   const [clients, setClients] = useState([]);
 
-  const generateUniqueCode = () => {
-    const timestamp = new Date().getTime();
-    const randomString = Math.random().toString(36).substring(2, 8).toUpperCase();
-    return `DN-${timestamp}-${randomString}`;
-  };
-  const generateUniqueCodey = () => {
-    const randomString = Math.random().toString(36).substring(2, 8).toUpperCase();
-    return `DN-${randomString}`;
-  };
+
 
   const API_BASE_URL = "https://api.azcrm.deviceshopleader.com/api";
 
   useEffect(() => {
     setCode(generateUniqueCode());
-    setCodey(generateUniqueCodey());
 
     const fetchData = async () => {
       try {
@@ -89,7 +78,6 @@ const CreateDeliveryNoteModal = ({ onAddDeliveryNote }) => {
       timbre,
       products,
       clientName: clients.find((cl) => cl.id === client)?.fullname || "",
-      codey:codey
     };
 
     try {

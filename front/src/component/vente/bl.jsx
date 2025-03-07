@@ -8,16 +8,13 @@ import {
   TableHead,
   TableRow,
   Typography,
-  Modal,
 } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
-import CreateDeliveryNoteModal from './cratebl.jsx';
 import axios from 'axios';
 
 const BonsortiePage = () => {
   const navigate = useNavigate();
   const [deliveryNotes, setDeliveryNotes] = useState([]); // State for storing delivery notes
-  const [open, setOpen] = useState(false); // Modal state
 
   // Function to fetch delivery notes
   const fetchDeliveryNotes = async () => {
@@ -35,15 +32,7 @@ const BonsortiePage = () => {
     fetchDeliveryNotes();
   }, []); // ✅ Runs only once
 
-  // Modal handlers
-  const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
 
-  // Function to refresh data after adding a note
-  const addDeliveryNote = () => {
-    handleClose();
-    fetchDeliveryNotes(); // ✅ Refresh table after adding
-  };
 
   return (
     <Box sx={{ p: 3 }}>
@@ -52,9 +41,7 @@ const BonsortiePage = () => {
       </Typography>
 
       {/* Button to create a new delivery note */}
-      <Button variant="contained" color="primary" onClick={handleOpen}>
-        Créer un Bon De Sortie
-      </Button>
+    
 
       {/* Delivery Notes Table */}
       <Table sx={{ mt: 3 }}>
@@ -71,7 +58,7 @@ const BonsortiePage = () => {
   {deliveryNotes.length > 0 ? (
     deliveryNotes.map((note) => (
       <TableRow key={note.code}>
-        <TableCell>{note.codey}</TableCell>
+        <TableCell>{note.code}</TableCell>
         <TableCell>{note.clientName || "N/A"}</TableCell>
         <TableCell>{note.timbre ? "Oui" : "Non"}</TableCell>
         <TableCell>
@@ -80,7 +67,7 @@ const BonsortiePage = () => {
         <TableCell>
           <Button
             variant="outlined"
-            onClick={() => navigate(`/bon-livraison/${note.code}/${note.clientId}/${note.codey}`)}
+            onClick={() => navigate(`/bon-livraison/${note.code}/${note.clientId}`)}
           >
             Voir
           </Button>
@@ -98,23 +85,7 @@ const BonsortiePage = () => {
       </Table>
 
       {/* Modal for creating a delivery note */}
-      <Modal open={open} onClose={handleClose}>
-        <Box
-          sx={{
-            position: 'absolute',
-            top: '50%',
-            left: '50%',
-            transform: 'translate(-50%, -50%)',
-            bgcolor: 'background.paper',
-            boxShadow: 24,
-            p: 4,
-            borderRadius: 2,
-            width: 500,
-          }}
-        >
-          <CreateDeliveryNoteModal onAddDeliveryNote={addDeliveryNote} />
-        </Box>
-      </Modal>
+
     </Box>
   );
 };

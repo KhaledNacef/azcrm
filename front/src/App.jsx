@@ -14,6 +14,7 @@ import Boncommande from './component/fatcure/facturachat.jsx';
 import Boncommandev from './component/fatcurev/facturvente.jsx';
 import BCsingleACHAT from './component/fatcure/facturesiblge.jsx'
 import Bvsinlge from './component/fatcurev/facturesinglevente.jsx';
+import CompareProducts from './component/gestionBf.jsx';
 const App = () => {
   return (
     <Router>
@@ -35,6 +36,8 @@ const App = () => {
           <Route path="/bon-commandefacturee/:code/:clientId/:codey" element={<Bvsinlge />} />
           <Route path="/bon-commande" element={<Boncommande />} />
           <Route path="/bon-commandea/:code/:supplierId/:codey" element={<BCsingleACHAT />} />
+          <Route path="/gestion/:code" element={<CompareProducts />} />
+
         </Route>
       </Routes>
     </Router>

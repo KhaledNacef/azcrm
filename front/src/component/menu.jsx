@@ -42,7 +42,7 @@ const SidebarMenu = () => {
           alt="User Profile"
           sx={{ width: 70, height: 70, mb: 1, border: '3px solid white' }}
         />
-        <Typography variant="h6" sx={{ fontWeight: 'bold' }}>John Doe</Typography>
+        <Typography variant="h6" sx={{ fontWeight: 'bold' }}>NACEF KHALED</Typography>
         <Typography variant="body2" sx={{ opacity: 0.8 }}>{getCurrentDate()}</Typography>
       </Box>
 

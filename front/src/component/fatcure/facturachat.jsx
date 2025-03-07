@@ -73,14 +73,14 @@ const Boncommande = () => {
   {deliveryNotes && Array.isArray(deliveryNotes) && deliveryNotes.length > 0 ? (
     deliveryNotes.map((note) => (
       <TableRow key={note.id || note.code}> {/* Use a unique identifier */}
-        <TableCell>{note.codey}</TableCell>
+        <TableCell>{note.code}</TableCell>
         <TableCell>{note.spulierName || "N/A"}</TableCell>
         <TableCell>{note.timbre ? "Oui" : "Non"}</TableCell>
         <TableCell>{note.createdAt ? new Date(note.createdAt).toLocaleDateString() : "N/A"}</TableCell>
         <TableCell>
           <Button
             variant="outlined"
-            onClick={() => navigate(`/bon-commandea/${note.code}/${note.spulierId}/${note.codey}`)}
+            onClick={() => navigate(`/bon-commandea/${note.code}/${note.spulierId}`)}
           >
             Voir
           </Button>
