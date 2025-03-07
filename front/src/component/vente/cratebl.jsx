@@ -29,7 +29,6 @@ const CreateDeliveryNoteModal = ({ onAddDeliveryNote,code }) => {
   const API_BASE_URL = "https://api.azcrm.deviceshopleader.com/api";
 
   useEffect(() => {
-    setCode(generateUniqueCode());
 
     const fetchData = async () => {
       try {
