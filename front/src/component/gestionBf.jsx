@@ -38,7 +38,7 @@ const CompareProducts = () => {
     };
 
     fetchData();
-  }, [code]);
+  }, [codey]);
 
   const compareProducts = (bonCommandeData, factureData) => {
     const missing = bonCommandeData.map((product) => {
@@ -62,7 +62,7 @@ const CompareProducts = () => {
         Comparaison des Produits
       </Typography>
 
-      <Typography variant="h6">Bon de Commande - {code}</Typography>
+      <Typography variant="h6">Bon de Commande - {codey}</Typography>
       <TableContainer component={Paper}>
         <Table>
           <TableHead>
