@@ -222,7 +222,7 @@ const addDeliveryNote = () => {
         </Box>
 
         <Typography variant="h4" mb={3} textAlign="center">
-        Bon De Livraison- {deliveryNote.codey}
+        Bon De Livraison- {deliveryNote[1].codey}
         </Typography>
 
         <Table>
@@ -293,7 +293,7 @@ const addDeliveryNote = () => {
             width: 500,
           }}
         >
-          <CreateDeliveryNoteModal onAddDeliveryNote={addDeliveryNote} codey={deliveryNote.codey} />
+          <CreateDeliveryNoteModal onAddDeliveryNote={addDeliveryNote} codey={deliveryNote[1].codey} />
         </Box>
       </Modal>
     </Box>

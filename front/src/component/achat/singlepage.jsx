@@ -134,7 +134,7 @@ const SingleDeliveryNote = () => {
       </Box>
 
       <Typography variant="h4" mb={3} textAlign="center">
-        Bon D'Achat - {deliveryNote.codey}
+        Bon D'Achat - {deliveryNote[1].codey}
       </Typography>
 
       <Table>

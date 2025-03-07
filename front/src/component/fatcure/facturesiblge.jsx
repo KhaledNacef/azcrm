@@ -154,7 +154,7 @@ const [open, setOpen] = useState(false);
       </Box>
 
       <Typography variant="h4" mb={3} textAlign="center">
-        Bon De Commande - {deliveryNote.codey}
+        Bon De Commande - {deliveryNote[1].codey}
       </Typography>
 
       <Table>
@@ -234,7 +234,7 @@ const [open, setOpen] = useState(false);
             width: 500,
           }}
         >
-          <CreateDeliveryNoteModala onAddDeliveryNote={addDeliveryNote} codey={deliveryNote.codey}  />
+          <CreateDeliveryNoteModala onAddDeliveryNote={addDeliveryNote} codey={deliveryNote[1].codey}  />
         </Box>
       </Modal>
   </Box>

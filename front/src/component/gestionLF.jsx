@@ -43,7 +43,7 @@ const CompareProductsv = () => {
         Comparaison des Produits
       </Typography>
 
-      <Typography variant="h6">Bon de Commande-{code}</Typography>
+      <Typography variant="h6">Bon de Livraison-{code}</Typography>
       <TableContainer component={Paper}>
         <Table>
           <TableHead>
@@ -64,7 +64,7 @@ const CompareProductsv = () => {
       </TableContainer>
 
       <Typography variant="h6" style={{ marginTop: 20 }}>
-        Facture--{code}
+        Facture--{codey}
       </Typography>
       <TableContainer component={Paper}>
         <Table>

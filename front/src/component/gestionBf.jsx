@@ -83,7 +83,7 @@ const CompareProducts = () => {
       </TableContainer>
 
       <Typography variant="h6" style={{ marginTop: 20 }}>
-        Facture - {code}
+        Facture - {codey}
       </Typography>
       <TableContainer component={Paper}>
         <Table>
