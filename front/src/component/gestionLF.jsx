@@ -12,7 +12,7 @@ const CompareProducts = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const bonResponse = await axios.get(`https://api.azcrm.deviceshopleader.com/api/boncommandallproducts/factureap/${code}`);
+        const bonResponse = await axios.get(`https://api.azcrm.deviceshopleader.com/api/bonlivraison/facturev/${code}`);
         const factureResponse = await axios.get(`https://api.azcrm.deviceshopleader.com/api/bs/bs/stock/${code}`);
 
         setBonCommande(bonResponse.data);
