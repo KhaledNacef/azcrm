@@ -32,7 +32,7 @@ const getFactureAByCode = async (req, res) => {
 // Add a new FactureA
 async function addFactureA(req, res) {
   try {
-    const { code,spulierId ,timbre, products,spulierName ,codey} = req.body;
+    const { code,spulierId ,timbre, products,spulierName } = req.body;
 
     // Step 1: Create the DeliveryNote (Bon d'achat)
     const deliveryNote = await FactureA.create({
@@ -40,7 +40,6 @@ async function addFactureA(req, res) {
       timbre:timbre,
       code:code,
       spulierName:spulierName,
-      codey:codey
     });
 
     // Step 2: Handle stock and stockP for each product

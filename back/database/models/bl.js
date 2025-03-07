@@ -26,12 +26,7 @@ const DeliveryNote =  {
     spulierName: {
       type: DataTypes.STRING,
       allowNull: true,
-    },
-    codey: {
-      type: DataTypes.STRING,
-      allowNull: true,
     }
-
   
 
 
