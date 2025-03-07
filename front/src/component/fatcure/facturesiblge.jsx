@@ -6,7 +6,7 @@ import './fdesign.css';
 import CreateDeliveryNoteModala from '../achat/crate.jsx'; // Ensure correct file name
 
 const BCsingleACHAT = () => {
-  const { code, supplierId } = useParams();
+  const { code, supplierId,codey } = useParams();
   const navigate = useNavigate();
   const printRef = useRef();
   const [supplier, setSupplier] = useState({});
@@ -88,7 +88,7 @@ const [open, setOpen] = useState(false);
       <Button variant="contained" color="primary" onClick={handleOpen}>
           Créer un Bon Facture
           </Button>
-              <Button variant="outlined" onClick={() => navigate(`/gestion/${deliveryNote.codey}/`)} sx={{ mb: 2 }}>
+              <Button variant="outlined" onClick={() => navigate(`/gestion/${codey}`)} sx={{ mb: 2 }}>
                    Gestion De Stock
                  </Button>
            
@@ -154,7 +154,7 @@ const [open, setOpen] = useState(false);
       </Box>
 
       <Typography variant="h4" mb={3} textAlign="center">
-        Bon De Commande - {deliveryNote[1].codey}
+        Bon De Commande - {codey}
       </Typography>
 
       <Table>
@@ -234,7 +234,7 @@ const [open, setOpen] = useState(false);
             width: 500,
           }}
         >
-          <CreateDeliveryNoteModala onAddDeliveryNote={addDeliveryNote} codey={deliveryNote[1].codey}  />
+          <CreateDeliveryNoteModala onAddDeliveryNote={addDeliveryNote} codey={codey}  />
         </Box>
       </Modal>
   </Box>

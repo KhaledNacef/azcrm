@@ -5,7 +5,7 @@ import Grid from '@mui/material/Grid2';
 import './fvdesign.css';
 import CreateDeliveryNoteModal from '../vente/cratebl.jsx';
 const Bvsinlge = () => {
-  const { code, clientId } = useParams();
+  const { code, clientId,codey } = useParams();
   const printRef = useRef();
   const navigate = useNavigate();
 
@@ -86,7 +86,7 @@ const addDeliveryNote = () => {
       ['Fax', client?.fax || 'Code TVA inconnu'],
     ];
   
-    const deliveryNoteDetails = [['Bon de Livraison', deliveryNote.code]];
+    const deliveryNoteDetails = [['Bon de Livraison', deliveryNote[0].code]];
   
     const tableHeaders = ['Produit', 'Quantité', 'Unité', 'Prix U HT ($)', 'Prix Net ($)'];
     const productRows = deliveryNote.map((product) => [
@@ -143,7 +143,7 @@ const addDeliveryNote = () => {
     XLSX.utils.book_append_sheet(workbook, worksheet, 'Bon de Livraison');
   
     // Export the workbook as a file
-    XLSX.writeFile(workbook, `Bon_de_Livraison_${deliveryNote.code}.xlsx`);
+    XLSX.writeFile(workbook, `Bon_de_Livraison_${deliveryNote[0].code}.xlsx`);
   };
   
 
@@ -158,7 +158,7 @@ const addDeliveryNote = () => {
     <Button variant="contained" color="primary" onClick={handleOpen}>
               Créer un Bon Facture
               </Button>
-              <Button variant="outlined" onClick={() => navigate(`/gestionv/${deliveryNote.codey}/`)} sx={{ mb: 2 }}>
+              <Button variant="outlined" onClick={() => navigate(`/gestionv/${codey}`)} sx={{ mb: 2 }}>
         Gestion De Stock
       </Button>
 
@@ -222,7 +222,7 @@ const addDeliveryNote = () => {
         </Box>
 
         <Typography variant="h4" mb={3} textAlign="center">
-        Bon De Livraison- {deliveryNote[1].codey}
+        Bon De Livraison- {codey}
         </Typography>
 
         <Table>
@@ -263,19 +263,11 @@ const addDeliveryNote = () => {
         <Box sx={{ display: 'flex', justifyContent: 'space-between', mt: 4 }}>
           <Box sx={{ textAlign: 'center' }}>
             <Typography variant="body1">Signature du Client</Typography>
-            <img
-              src="path/to/supplier/signature.png"
-              alt="Signature du fournisseur"
-              style={{ width: 150, marginTop: 10 }}
-            />
+           
           </Box>
           <Box sx={{ textAlign: 'center' }}>
             <Typography variant="body1">Signature de Ma Société</Typography>
-            <img
-              src="path/to/company/signature.png"
-              alt="Signature de la société"
-              style={{ width: 150, marginTop: 10 }}
-            />
+           
           </Box>
         </Box>
       </Box>
@@ -293,7 +285,7 @@ const addDeliveryNote = () => {
             width: 500,
           }}
         >
-          <CreateDeliveryNoteModal onAddDeliveryNote={addDeliveryNote} codey={deliveryNote[1].codey} />
+          <CreateDeliveryNoteModal onAddDeliveryNote={addDeliveryNote} codey={codey} />
         </Box>
       </Modal>
     </Box>
