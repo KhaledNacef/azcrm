@@ -12,6 +12,8 @@ import {
   TableRow,
   TableHead,
 } from '@mui/material';
+import Snackbar from '@mui/material/Snackbar';
+
 
 
 const Createbv = ({ onAddDeliveryNote }) => {
@@ -101,7 +103,15 @@ const Createbv = ({ onAddDeliveryNote }) => {
 
     try {
       await axios.post(`${API_BASE_URL}/bonlivraison/facturev`, newNote);
-      alert("Bon de Sortie créé avec succès");
+
+      <Snackbar
+        anchorOrigin={{ vertical, horizontal }}
+        open={open}
+        onClose={handleClose}
+        message="Bon de Sortie créé avec succès"
+        key={vertical + horizontal}
+      />
+      
       onAddDeliveryNote(newNote);
     } catch (error) {
       console.error("Erreur lors de la création du Bon de Sortie:", error);
