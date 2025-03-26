@@ -80,7 +80,13 @@ const CreateDeliveryNoteModal = ({ onAddDeliveryNote, codey }) => {
     const selectedProduct = availableProducts.find((p) => p.designation === newProduct);
     if (!selectedProduct) return;
 
-    const convertedPrice = convertPrice(selectedProduct.prixU_HT);
+
+    
+    const tva = selectedProduct.prixU_HT * (selectedProduct.tva / 100); // assuming tva is a percentage
+
+    // Convert price from TND to selected currency
+    const convertedPrice = convertPrice(tva);
+
 
     setProducts((prev) => [
       ...prev,

@@ -71,9 +71,10 @@ const Createbv = ({ onAddDeliveryNote }) => {
         setOpenSnackbar(true);
         return;
       }
+      const tva = selectedProduct.prixU_HT * (selectedProduct.tva / 100); // assuming tva is a percentage
 
       // Convert price from TND to selected currency
-      const convertedPrice = convertPrice(selectedProduct.prixU_HT);
+      const convertedPrice = convertPrice(tva);
 
       setProducts([...products, {
         designation: selectedProduct.designation,
