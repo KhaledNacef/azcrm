@@ -109,19 +109,12 @@ const StockPage = () => {
                   <TableRow key={product.id}>
                     <TableCell>{product.id}</TableCell>
                     <TableCell>{product.designation}</TableCell>
-                    <TableCell>
-                      <img
-                        src={product.photo}
-                        alt={product.designation}
-                        style={{ width: '50px', height: '50px', objectFit: 'cover' }}
-                      />
-                    </TableCell>
                     <TableCell>{product.Unite}</TableCell>
                     <TableCell>{product.quantite}</TableCell>
-                    <TableCell>{product.prixU_HT.toFixed(2)} $</TableCell>
+                    <TableCell>{product.prixU_HT.toFixed(2)} </TableCell>
                     <TableCell>{product.tva} %</TableCell>
-                    <TableCell>{netHT.toFixed(2)} $</TableCell>
-                    <TableCell>{netTTC.toFixed(2)} $</TableCell>
+                    <TableCell>{netHT.toFixed(2)} </TableCell>
+                    <TableCell>{netTTC.toFixed(2)} </TableCell>
                   </TableRow>
                 );
               })
