@@ -91,7 +91,6 @@ const StockPage = () => {
             <TableRow>
               <TableCell><strong>ID</strong></TableCell>
               <TableCell><strong>Produit</strong></TableCell>
-              <TableCell><strong>Photo</strong></TableCell>
               <TableCell><strong>Unité</strong></TableCell>
               <TableCell><strong>Quantité</strong></TableCell>
               <TableCell><strong>Prix U (HT)</strong></TableCell>

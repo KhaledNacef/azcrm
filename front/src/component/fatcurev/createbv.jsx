@@ -17,8 +17,8 @@ import {
 const Createbv = ({ onAddDeliveryNote }) => {
   const [code, setCode] = useState('');
   const [client, setClient] = useState(0);
-  const [clientn, setClientn] = useState("");
-  const [codey, setCodey] = useState("");
+  const [clientn, setClientn] = useState('');
+  const [codey, setCodey] = useState('');
   const [timbre, setTimbre] = useState(false);
   const [products, setProducts] = useState([]);
   const [newProduct, setNewProduct] = useState('');
@@ -28,7 +28,7 @@ const Createbv = ({ onAddDeliveryNote }) => {
   const [selectedCurrency, setSelectedCurrency] = useState('USD');
   const [exchangeRates, setExchangeRates] = useState({});
   const [openSnackbar, setOpenSnackbar] = useState(false);
-  const [snackbarMessage, setSnackbarMessage] = useState("");
+  const [snackbarMessage, setSnackbarMessage] = useState('');
 
   const API_BASE_URL = 'https://api.azcrm.deviceshopleader.com/api';
   const CURRENCY_API_URL = 'https://v6.exchangerate-api.com/v6/9179a4fac368332ee3e66b7b/latest/USD'; // Your real API key
@@ -68,16 +68,22 @@ const Createbv = ({ onAddDeliveryNote }) => {
     const selectedProduct = availableProducts.find(p => p.designation === newProduct);
     if (selectedProduct) {
       if (parseInt(quantite, 10) > selectedProduct.stock) {
-        setSnackbarMessage("Quantité insuffisante en stock");
+        setSnackbarMessage('Quantité insuffisante en stock');
         setOpenSnackbar(true);
         return;
       }
+      
+      // Convert the price in TND to the selected currency
+      const convertedPrice = convertPrice(selectedProduct.prixU_HT);
+      
+      // Add the product with converted price
       setProducts([...products, {
         designation: selectedProduct.designation,
         Unite: selectedProduct.Unite,
-        prixU_HT: selectedProduct.prixU_HT, // Use the price in TND
+        prixU_HT: convertedPrice, // Original price in TND
         quantite: parseInt(quantite, 10),
       }]);
+      
       setNewProduct('');
       setQuantite(1);
     }
@@ -85,21 +91,31 @@ const Createbv = ({ onAddDeliveryNote }) => {
 
   const handleSubmit = async () => {
     if (!client || products.length === 0) {
-      setSnackbarMessage("Veuillez remplir tous les champs obligatoires.");
+      setSnackbarMessage('Veuillez remplir tous les champs obligatoires.');
       setOpenSnackbar(true);
       return;
     }
     try {
+      // Submitting with the converted product prices
       await axios.post(`${API_BASE_URL}/bonlivraison/facturev`, {
-        code, clientId: client, timbre, products, clientName: clientn, codey
+        code,
+        clientId: client,
+        timbre,
+        products: products.map(prod => ({
+          ...prod,
+          prixU_HT: prod.prixU_Converted, // Submit the converted price
+        })),
+        clientName: clientn,
+        codey
       });
-      setSnackbarMessage("Bon de Sortie créé avec succès");
+      
+      setSnackbarMessage('Bon de Sortie créé avec succès');
       setOpenSnackbar(true);
       onAddDeliveryNote({ code, clientId: client, timbre, products, clientName: clientn, codey });
     } catch (error) {
-      setSnackbarMessage("Échec de la création du Bon de Sortie");
+      setSnackbarMessage('Échec de la création du Bon de Sortie');
       setOpenSnackbar(true);
-      console.error("Erreur lors de la création du Bon de Sortie:", error);
+      console.error('Erreur lors de la création du Bon de Sortie:', error);
     }
   };
 
@@ -114,7 +130,7 @@ const Createbv = ({ onAddDeliveryNote }) => {
   return (
     <Box>
       <Typography variant="h6" mb={2}>Créer un Bon De Livraison</Typography>
-      
+
       {/* Client selection */}
       <TextField
         label="Client"
@@ -123,7 +139,7 @@ const Createbv = ({ onAddDeliveryNote }) => {
           const selectedClientId = parseInt(e.target.value, 10);
           const selectedClient = clients.find(cl => cl.id === selectedClientId);
           setClient(selectedClientId);
-          setClientn(selectedClient ? selectedClient.fullname : "");
+          setClientn(selectedClient ? selectedClient.fullname : '');
         }}
         select fullWidth margin="normal"
       >
@@ -174,7 +190,6 @@ const Createbv = ({ onAddDeliveryNote }) => {
               <TableCell>Produit</TableCell>
               <TableCell>Unité</TableCell>
               <TableCell>Prix U (TND)</TableCell>
-              <TableCell>Prix U ({selectedCurrency})</TableCell>
               <TableCell>Quantité</TableCell>
             </TableRow>
           </TableHead>
@@ -183,8 +198,7 @@ const Createbv = ({ onAddDeliveryNote }) => {
               <TableRow key={index}>
                 <TableCell>{prod.designation}</TableCell>
                 <TableCell>{prod.Unite}</TableCell>
-                <TableCell>{prod.prixU_HT} TND</TableCell>
-                <TableCell>{convertPrice(prod.prixU_HT)} {selectedCurrency}</TableCell>
+                <TableCell>{prod.prixU_HT }({selectedCurrency}) </TableCell>
                 <TableCell>{prod.quantite}</TableCell>
               </TableRow>
             ))}
@@ -193,7 +207,7 @@ const Createbv = ({ onAddDeliveryNote }) => {
       )}
 
       <Button variant="contained" color="primary" onClick={handleSubmit} fullWidth>Enregistrer</Button>
-      
+
       <Snackbar open={openSnackbar} autoHideDuration={5000} onClose={() => setOpenSnackbar(false)} message={snackbarMessage} />
     </Box>
   );
