@@ -168,7 +168,7 @@ const Dashboard = () => {
               {lowStockProducts.length > 0 ? (
                 lowStockProducts.map((product) => (
                   <TableRow key={product.id}>
-                    <TableCell>{product.name}</TableCell>
+                    <TableCell>{product.designation}</TableCell>
                     <TableCell>{product.quantite}</TableCell>
                   </TableRow>
                 ))
