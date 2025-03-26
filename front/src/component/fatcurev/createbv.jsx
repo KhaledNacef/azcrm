@@ -25,13 +25,13 @@ const Createbv = ({ onAddDeliveryNote }) => {
   const [quantite, setQuantite] = useState(1);
   const [availableProducts, setAvailableProducts] = useState([]);
   const [clients, setClients] = useState([]);
-  const [selectedCurrency, setSelectedCurrency] = useState('USD');
+  const [selectedCurrency, setSelectedCurrency] = useState('TND');
   const [exchangeRates, setExchangeRates] = useState({});
   const [openSnackbar, setOpenSnackbar] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState('');
 
   const API_BASE_URL = 'https://api.azcrm.deviceshopleader.com/api';
-  const CURRENCY_API_URL = 'https://v6.exchangerate-api.com/v6/9179a4fac368332ee3e66b7b/latest/USD'; // Your real API key
+  const CURRENCY_API_URL = 'https://v6.exchangerate-api.com/v6/9179a4fac368332ee3e66b7b/latest/TND'; // Base TND
 
   useEffect(() => {
     const generateUniqueCode = () => `DN-${new Date().getTime()}-${Math.random().toString(36).substring(2, 8).toUpperCase()}`;
@@ -52,11 +52,10 @@ const Createbv = ({ onAddDeliveryNote }) => {
     };
     fetchData();
 
-    // Fetch exchange rates from the API
     const fetchExchangeRates = async () => {
       try {
         const res = await axios.get(CURRENCY_API_URL);
-        setExchangeRates(res.data.conversion_rates); // Assuming API returns { USD: 1, EUR: 0.92, TND: 3, ... }
+        setExchangeRates(res.data.conversion_rates); // { USD: 0.32, EUR: 0.28, TND: 1, ... }
       } catch (error) {
         console.error('Erreur lors de la récupération des taux de change:', error);
       }
@@ -72,18 +71,17 @@ const Createbv = ({ onAddDeliveryNote }) => {
         setOpenSnackbar(true);
         return;
       }
-      
-      // Convert the price in TND to the selected currency
+
+      // Convert price from TND to selected currency
       const convertedPrice = convertPrice(selectedProduct.prixU_HT);
-      
-      // Add the product with converted price
+
       setProducts([...products, {
         designation: selectedProduct.designation,
         Unite: selectedProduct.Unite,
-        prixU_HT: convertedPrice, // Original price in TND
+        prixU_HT: convertedPrice, // Converted price
         quantite: parseInt(quantite, 10),
       }]);
-      
+
       setNewProduct('');
       setQuantite(1);
     }
@@ -96,19 +94,18 @@ const Createbv = ({ onAddDeliveryNote }) => {
       return;
     }
     try {
-      // Submitting with the converted product prices
       await axios.post(`${API_BASE_URL}/bonlivraison/facturev`, {
         code,
         clientId: client,
         timbre,
         products: products.map(prod => ({
           ...prod,
-          prixU_HT: prod.prixU_Converted, // Submit the converted price
+          prixU_HT: prod.prixU_HT, // Submit converted price
         })),
         clientName: clientn,
         codey
       });
-      
+
       setSnackbarMessage('Bon de Sortie créé avec succès');
       setOpenSnackbar(true);
       onAddDeliveryNote({ code, clientId: client, timbre, products, clientName: clientn, codey });
@@ -120,18 +117,16 @@ const Createbv = ({ onAddDeliveryNote }) => {
   };
 
   const convertPrice = (priceInTND) => {
-    // Convert the TND price to the selected currency
-    if (exchangeRates && exchangeRates[selectedCurrency]) {
-      return priceInTND * exchangeRates[selectedCurrency];
+    if (exchangeRates[selectedCurrency]) {
+      return (priceInTND * exchangeRates[selectedCurrency]).toFixed(2);
     }
-    return priceInTND; // Return TND price if conversion rates are unavailable
+    return priceInTND; // Default to TND if rates are unavailable
   };
 
   return (
     <Box>
       <Typography variant="h6" mb={2}>Créer un Bon De Livraison</Typography>
 
-      {/* Client selection */}
       <TextField
         label="Client"
         value={client}
@@ -146,50 +141,38 @@ const Createbv = ({ onAddDeliveryNote }) => {
         {clients.map(cl => <MenuItem key={cl.id} value={cl.id}>{cl.fullname}</MenuItem>)}
       </TextField>
 
-      {/* Timbre selection */}
       <TextField label="Timbre" select value={timbre} onChange={(e) => setTimbre(e.target.value)} fullWidth margin="normal">
         <MenuItem value={true}>Oui</MenuItem>
         <MenuItem value={false}>Non</MenuItem>
       </TextField>
 
-      {/* Product selection */}
       <TextField label="Produit" value={newProduct} onChange={(e) => setNewProduct(e.target.value)} select fullWidth margin="normal">
         {availableProducts.map(prod => <MenuItem key={prod.id} value={prod.designation}>{prod.designation}</MenuItem>)}
       </TextField>
 
-      {/* Quantity selection */}
-      <TextField
-        label="Quantité"
-        type="number"
-        value={quantite}
-        onChange={(e) => setQuantite(e.target.value)}
-        fullWidth margin="normal"
-      />
+      <TextField label="Quantité" type="number" value={quantite} onChange={(e) => setQuantite(e.target.value)} fullWidth margin="normal" />
 
-      {/* Currency selection */}
       <TextField
         label="Sélectionner la devise"
         select
         value={selectedCurrency}
         onChange={(e) => setSelectedCurrency(e.target.value)}
-        fullWidth
-        margin="normal"
+        fullWidth margin="normal"
       >
-        {['USD', 'EUR', 'TND'].map(currency => (
+        {Object.keys(exchangeRates).map(currency => (
           <MenuItem key={currency} value={currency}>{currency}</MenuItem>
         ))}
       </TextField>
 
       <Button onClick={handleAddProduct} variant="outlined" sx={{ mb: 2 }}>Ajouter Produit</Button>
 
-      {/* Displaying the added products */}
       {products.length > 0 && (
         <Table>
           <TableHead>
             <TableRow>
               <TableCell>Produit</TableCell>
               <TableCell>Unité</TableCell>
-              <TableCell>Prix U (TND)</TableCell>
+              <TableCell>Prix U ({selectedCurrency})</TableCell>
               <TableCell>Quantité</TableCell>
             </TableRow>
           </TableHead>
@@ -198,7 +181,7 @@ const Createbv = ({ onAddDeliveryNote }) => {
               <TableRow key={index}>
                 <TableCell>{prod.designation}</TableCell>
                 <TableCell>{prod.Unite}</TableCell>
-                <TableCell>{prod.prixU_HT }({selectedCurrency}) </TableCell>
+                <TableCell>{prod.prixU_HT}</TableCell>
                 <TableCell>{prod.quantite}</TableCell>
               </TableRow>
             ))}
