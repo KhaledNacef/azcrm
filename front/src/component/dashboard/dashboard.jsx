@@ -32,10 +32,10 @@ const Dashboard = () => {
   const [clientsCount, setClientsCount] = useState(0);
   const [suppliersCount, setSuppliersCount] = useState(0);
   const [productsCount, setProductsCount] = useState(0);
-  const [lowStockProducts, setLowStockProducts] = useState([]); // NEW STATE FOR LOW STOCK PRODUCTS
+  const [lowStockProducts, setLowStockProducts] = useState([]); // NOUVEL ÉTAT POUR LES PRODUITS EN STOCK BAS
   const [loading, setLoading] = useState(false);
 
-  // Fetch Clients
+  // Récupérer les clients
   useEffect(() => {
     axios
       .get('https://api.azcrm.deviceshopleader.com/api/clients/getclient')
@@ -43,11 +43,11 @@ const Dashboard = () => {
         setClientsCount(response.data.length);
       })
       .catch((error) => {
-        console.error('Error fetching clients data:', error);
+        console.error('Erreur lors de la récupération des données des clients:', error);
       });
   }, []);
 
-  // Fetch Suppliers
+  // Récupérer les fournisseurs
   const fetchFournisseurs = async () => {
     try {
       const response = await axios.get('https://api.azcrm.deviceshopleader.com/api/suplier/getsuppliers');
@@ -61,14 +61,14 @@ const Dashboard = () => {
     fetchFournisseurs();
   }, []);
 
-  // Fetch Products and Low Stock
+  // Récupérer les produits et stock bas
   useEffect(() => {
     const fetchStock = async () => {
       try {
         const response = await axios.get('https://api.azcrm.deviceshopleader.com/api/stock/getall');
         setProductsCount(response.data.length);
 
-        // FILTER PRODUCTS WITH QUANTITY ≤ 10
+        // FILTRER LES PRODUITS AVEC QUANTITÉ ≤ 10
         const filteredProducts = response.data
           .filter(product => product.quantite <= 10)
           .sort((a, b) => a.quantite - b.quantite)
@@ -83,7 +83,7 @@ const Dashboard = () => {
     fetchStock();
   }, []);
 
-  // Simulate Data Refresh
+  // Simuler le rafraîchissement des données
   const handleRefresh = () => {
     setLoading(true);
     setTimeout(() => {
@@ -95,10 +95,10 @@ const Dashboard = () => {
   return (
     <Container component="main" maxWidth="lg">
       <Box display="flex" justifyContent="space-between" alignItems="center" mb={3}>
-        <Typography variant="h4">Dashboard</Typography>
+        <Typography variant="h4">Tableau de bord</Typography>
         <Box display="flex" alignItems="center">
           <Typography variant="body1" color="textSecondary" mr={2}>
-            Last updated: {dateTime}
+            Dernière mise à jour : {dateTime}
           </Typography>
           <IconButton onClick={handleRefresh} disabled={loading} color="primary">
             {loading ? <CircularProgress size={24} /> : <RefreshIcon />}
@@ -107,7 +107,7 @@ const Dashboard = () => {
       </Box>
 
       <Grid container spacing={3}>
-        {/* Clients Count */}
+        {/* Nombre de clients */}
         <Grid item xs={12} sm={6} md={3}>
           <Card elevation={3}>
             <CardContent>
@@ -122,12 +122,12 @@ const Dashboard = () => {
           </Card>
         </Grid>
 
-        {/* Suppliers Count */}
+        {/* Nombre de fournisseurs */}
         <Grid item xs={12} sm={6} md={3}>
           <Card elevation={3}>
             <CardContent>
               <Box display="flex" justifyContent="space-between" alignItems="center" mb={1}>
-                <Typography variant="subtitle1" color="textSecondary">Suppliers</Typography>
+                <Typography variant="subtitle1" color="textSecondary">Fournisseurs</Typography>
                 <Avatar sx={{ bgcolor: 'warning.main' }}>
                   <BusinessIcon />
                 </Avatar>
@@ -137,12 +137,12 @@ const Dashboard = () => {
           </Card>
         </Grid>
 
-        {/* Products Count */}
+        {/* Nombre de produits */}
         <Grid item xs={12} sm={6} md={3}>
           <Card elevation={3}>
             <CardContent>
               <Box display="flex" justifyContent="space-between" alignItems="center" mb={1}>
-                <Typography variant="subtitle1" color="textSecondary">Products</Typography>
+                <Typography variant="subtitle1" color="textSecondary">Produits</Typography>
                 <Avatar sx={{ bgcolor: 'error.main' }}>
                   <InventoryIcon />
                 </Avatar>
@@ -153,15 +153,15 @@ const Dashboard = () => {
         </Grid>
       </Grid>
 
-      {/* LOW STOCK PRODUCTS TABLE */}
+      {/* TABLEAU DES PRODUITS EN STOCK BAS */}
       <Box mt={5}>
-        <Typography variant="h5" mb={2}>Low Stock Products (≤ 10 Quantity)</Typography>
+        <Typography variant="h5" mb={2}>Produits en stock bas (quantité ≤ 10)</Typography>
         <TableContainer component={Paper}>
           <Table>
             <TableHead>
               <TableRow>
-                <TableCell><strong>Product Name</strong></TableCell>
-                <TableCell><strong>Quantity</strong></TableCell>
+                <TableCell><strong>Nom du produit</strong></TableCell>
+                <TableCell><strong>Quantité</strong></TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
@@ -174,7 +174,7 @@ const Dashboard = () => {
                 ))
               ) : (
                 <TableRow>
-                  <TableCell colSpan={2} align="center">No low-stock products</TableCell>
+                  <TableCell colSpan={2} align="center">Aucun produit en stock bas</TableCell>
                 </TableRow>
               )}
             </TableBody>

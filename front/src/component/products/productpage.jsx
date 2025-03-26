@@ -17,23 +17,23 @@ import {
 import axios from 'axios';
 
 const ProductPage = () => {
-  const [products, setProducts] = useState([]); // All products
-  const [filteredProducts, setFilteredProducts] = useState([]); // Filtered products
-  const [searchQuery, setSearchQuery] = useState(''); // Search input
-  const [productName, setProductName] = useState(''); // New product name
-  const [productUnite, setProductUnite] = useState(''); // New product unite
-  const [editProductId, setEditProductId] = useState(null); // Product to edit
-  const [editProductName, setEditProductName] = useState(''); // Edited name
-  const [editProductUnite, setEditProductUnite] = useState(''); // Edited unite
+  const [products, setProducts] = useState([]); // Tous les produits
+  const [filteredProducts, setFilteredProducts] = useState([]); // Produits filtrés
+  const [searchQuery, setSearchQuery] = useState(''); // Recherche
+  const [productName, setProductName] = useState(''); // Nom du nouveau produit
+  const [productUnite, setProductUnite] = useState(''); // Unité du nouveau produit
+  const [editProductId, setEditProductId] = useState(null); // Produit à éditer
+  const [editProductName, setEditProductName] = useState(''); // Nom modifié
+  const [editProductUnite, setEditProductUnite] = useState(''); // Unité modifiée
   const API_BASE_URL = 'https://api.azcrm.deviceshopleader.com/api';
   const [isDataUpdated, setIsDataUpdated] = useState(false);
 
-  // Snackbar state
+  // État de la snackbar
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState('');
-  const [snackbarSeverity, setSnackbarSeverity] = useState('success'); // 'success' or 'error'
+  const [snackbarSeverity, setSnackbarSeverity] = useState('success'); // 'success' ou 'error'
 
-  // Fetch products from the backend
+  // Récupérer les produits depuis le backend
   useEffect(() => {
     const fetchProducts = async () => {
       try {
@@ -41,14 +41,14 @@ const ProductPage = () => {
         setProducts(response.data);
         setFilteredProducts(response.data);
       } catch (error) {
-        console.error('Error fetching products:', error);
+        console.error('Erreur lors de la récupération des produits :', error);
       }
     };
 
     fetchProducts();
   }, [isDataUpdated]);
 
-  // Handle search input
+  // Gérer la recherche
   const handleSearch = (event) => {
     const query = event.target.value.toLowerCase();
     setSearchQuery(query);
@@ -61,7 +61,7 @@ const ProductPage = () => {
     setFilteredProducts(filtered);
   };
 
-  // Handle add product
+  // Ajouter un produit
   const handleAddProduct = async () => {
     if (productName && productUnite) {
       try {
@@ -75,25 +75,25 @@ const ProductPage = () => {
         setFilteredProducts([...products, response.data]);
         setProductName('');
         setProductUnite('');
-        setIsDataUpdated(true); // Mark that data is updated
+        setIsDataUpdated(true); // Indiquer que les données sont mises à jour
 
-        // Show success snackbar
-        setSnackbarMessage('Product added successfully!');
+        // Afficher le message de succès dans la snackbar
+        setSnackbarMessage('Produit ajouté avec succès !');
         setSnackbarSeverity('success');
         setSnackbarOpen(true);
 
       } catch (error) {
-        console.error('Error creating product:', error);
+        console.error('Erreur lors de la création du produit :', error);
 
-        // Show error snackbar
-        setSnackbarMessage('Error creating product.');
+        // Afficher le message d\'erreur dans la snackbar
+        setSnackbarMessage('Erreur lors de la création du produit.');
         setSnackbarSeverity('error');
         setSnackbarOpen(true);
       }
     }
   };
 
-  // Handle edit product
+  // Modifier un produit
   const handleEditProduct = (product) => {
     setEditProductId(product.id);
     setEditProductName(product.designation);
@@ -119,21 +119,21 @@ const ProductPage = () => {
       setEditProductName('');
       setEditProductUnite('');
 
-      // Show success snackbar
-      setSnackbarMessage('Product updated successfully!');
+      // Afficher le message de succès dans la snackbar
+      setSnackbarMessage('Produit mis à jour avec succès !');
       setSnackbarSeverity('success');
       setSnackbarOpen(true);
     } catch (error) {
-      console.error('Error updating product:', error);
+      console.error('Erreur lors de la mise à jour du produit :', error);
 
-      // Show error snackbar
-      setSnackbarMessage('Error updating product.');
+      // Afficher le message d\'erreur dans la snackbar
+      setSnackbarMessage('Erreur lors de la mise à jour du produit.');
       setSnackbarSeverity('error');
       setSnackbarOpen(true);
     }
   };
 
-  // Handle delete product
+  // Supprimer un produit
   const handleDeleteProduct = async (productId) => {
     try {
       await axios.delete(`${API_BASE_URL}/product/proddel/${productId}`);
@@ -141,15 +141,15 @@ const ProductPage = () => {
       setProducts(remainingProducts);
       setFilteredProducts(remainingProducts);
 
-      // Show success snackbar
-      setSnackbarMessage('Product deleted successfully!');
+      // Afficher le message de succès dans la snackbar
+      setSnackbarMessage('Produit supprimé avec succès !');
       setSnackbarSeverity('success');
       setSnackbarOpen(true);
     } catch (error) {
-      console.error('Error deleting product:', error);
+      console.error('Erreur lors de la suppression du produit :', error);
 
-      // Show error snackbar
-      setSnackbarMessage('Error deleting product.');
+      // Afficher le message d\'erreur dans la snackbar
+      setSnackbarMessage('Erreur lors de la suppression du produit.');
       setSnackbarSeverity('error');
       setSnackbarOpen(true);
     }
@@ -165,10 +165,10 @@ const ProductPage = () => {
         Tous Les Produits
       </Typography>
 
-      {/* Add Product Section */}
+      {/* Section Ajouter un produit */}
       <Box sx={{ mb: 3 }}>
         <TextField
-          label="Product Name"
+          label="Nom du Produit"
           variant="outlined"
           fullWidth
           value={productName}
@@ -176,7 +176,7 @@ const ProductPage = () => {
           sx={{ mb: 2 }}
         />
         <TextField
-          label="Unite"
+          label="Unité"
           variant="outlined"
           fullWidth
           value={productUnite}
@@ -184,15 +184,15 @@ const ProductPage = () => {
           sx={{ mb: 2 }}
         />
         <Button variant="contained" color="primary" onClick={handleAddProduct}>
-          Add Product
+          Ajouter un Produit
         </Button>
       </Box>
 
-      {/* Edit Product Section */}
+      {/* Section Modifier un produit */}
       {editProductId && (
         <Box sx={{ mb: 3 }}>
           <TextField
-            label="Product Name"
+            label="Nom du Produit"
             variant="outlined"
             fullWidth
             value={editProductName}
@@ -200,7 +200,7 @@ const ProductPage = () => {
             sx={{ mb: 2 }}
           />
           <TextField
-            label="Unite"
+            label="Unité"
             variant="outlined"
             fullWidth
             value={editProductUnite}
@@ -208,14 +208,14 @@ const ProductPage = () => {
             sx={{ mb: 2 }}
           />
           <Button variant="contained" color="secondary" onClick={handleUpdateProduct}>
-            Update Product
+            Mettre à Jour le Produit
           </Button>
         </Box>
       )}
 
-      {/* Search Bar */}
+      {/* Barre de Recherche */}
       <TextField
-        label="Search by Name or ID"
+        label="Recherche par Nom ou ID"
         variant="outlined"
         fullWidth
         value={searchQuery}
@@ -223,14 +223,14 @@ const ProductPage = () => {
         sx={{ mb: 3 }}
       />
 
-      {/* Product Table */}
+      {/* Tableau des Produits */}
       <TableContainer component={Paper}>
         <Table>
           <TableHead>
             <TableRow>
               <TableCell><strong>ID</strong></TableCell>
-              <TableCell><strong>Name</strong></TableCell>
-              <TableCell><strong>Unite</strong></TableCell>
+              <TableCell><strong>Nom</strong></TableCell>
+              <TableCell><strong>Unité</strong></TableCell>
               <TableCell><strong>Actions</strong></TableCell>
             </TableRow>
           </TableHead>
@@ -247,14 +247,14 @@ const ProductPage = () => {
                       color="primary"
                       onClick={() => handleEditProduct(product)}
                     >
-                      Edit
+                      Modifier
                     </Button>
                     <Button
                       variant="outlined"
                       color="error"
                       onClick={() => handleDeleteProduct(product.id)}
                     >
-                      Delete
+                      Supprimer
                     </Button>
                   </TableCell>
                 </TableRow>
@@ -262,7 +262,7 @@ const ProductPage = () => {
             ) : (
               <TableRow>
                 <TableCell colSpan={4} align="center">
-                  No products found.
+                  Aucun produit trouvé.
                 </TableCell>
               </TableRow>
             )}
@@ -270,7 +270,7 @@ const ProductPage = () => {
         </Table>
       </TableContainer>
 
-      {/* Snackbar for notifications */}
+      {/* Snackbar pour les notifications */}
       <Snackbar
         open={snackbarOpen}
         autoHideDuration={6000}
