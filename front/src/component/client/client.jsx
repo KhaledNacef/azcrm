@@ -16,6 +16,8 @@ import {
   DialogActions,
   DialogContent,
   DialogTitle,
+  Snackbar,
+  Alert
 } from '@mui/material';
 
 const ClientPage = () => {
@@ -31,6 +33,12 @@ const ClientPage = () => {
     address: '',
     ville: '',
     pays: '',
+  });
+
+  const [snackbar, setSnackbar] = useState({
+    open: false,
+    message: '',
+    severity: 'success', // can be 'success', 'error', or 'info'
   });
 
   useEffect(() => {
@@ -74,8 +82,8 @@ const ClientPage = () => {
   const handleSaveClient = () => {
     const { fullname, pays, ville, tel, fax, address } = currentClient;
 
-    const clientData = { fullname, pays, ville, tel, fax, address }; // Ensure 'address' is used consistently
-    
+    const clientData = { fullname, pays, ville, tel, fax, address };
+
     if (editMode) {
       // Update the client via API
       axios
@@ -88,9 +96,19 @@ const ClientPage = () => {
             prevClients.map((c) => (c.id === currentClient.id ? response.data : c))
           );
           handleCloseDialog();
+          setSnackbar({
+            open: true,
+            message: 'Client mis à jour avec succès.',
+            severity: 'success',
+          });
         })
         .catch((error) => {
           console.error('Error updating client:', error);
+          setSnackbar({
+            open: true,
+            message: 'Erreur lors de la mise à jour du client.',
+            severity: 'error',
+          });
         });
     } else {
       // Create a new client via API
@@ -100,9 +118,19 @@ const ClientPage = () => {
           setClients([...clients, response.data]);
           setFilteredClients([...clients, response.data]);
           handleCloseDialog();
+          setSnackbar({
+            open: true,
+            message: 'Client ajouté avec succès.',
+            severity: 'success',
+          });
         })
         .catch((error) => {
           console.error('Error creating client:', error);
+          setSnackbar({
+            open: true,
+            message: 'Erreur lors de l\'ajout du client.',
+            severity: 'error',
+          });
         });
     }
   };
@@ -115,10 +143,24 @@ const ClientPage = () => {
         const remainingClients = clients.filter((client) => client.id !== clientId);
         setClients(remainingClients);
         setFilteredClients(remainingClients);
+        setSnackbar({
+          open: true,
+          message: 'Client supprimé avec succès.',
+          severity: 'success',
+        });
       })
       .catch((error) => {
         console.error('Error deleting client:', error);
+        setSnackbar({
+          open: true,
+          message: 'Erreur lors de la suppression du client.',
+          severity: 'error',
+        });
       });
+  };
+
+  const handleCloseSnackbar = () => {
+    setSnackbar((prevState) => ({ ...prevState, open: false }));
   };
 
   return (
@@ -205,7 +247,7 @@ const ClientPage = () => {
           <TextField
             label="Adresse"
             fullWidth
-            value={currentClient.address} // Update to match field name
+            value={currentClient.address}
             onChange={(e) => setCurrentClient({ ...currentClient, address: e.target.value })}
             sx={{ mb: 2 }}
           />
@@ -233,10 +275,18 @@ const ClientPage = () => {
           </Button>
         </DialogActions>
       </Dialog>
+
+      <Snackbar
+        open={snackbar.open}
+        autoHideDuration={6000}
+        onClose={handleCloseSnackbar}
+      >
+        <Alert onClose={handleCloseSnackbar} severity={snackbar.severity} sx={{ width: '100%' }}>
+          {snackbar.message}
+        </Alert>
+      </Snackbar>
     </Box>
   );
 };
 
 export default ClientPage;
-
-

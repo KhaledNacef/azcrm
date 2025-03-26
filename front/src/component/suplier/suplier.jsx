@@ -16,6 +16,8 @@ import {
   DialogActions,
   DialogContent,
   DialogTitle,
+  Snackbar,
+  Alert,
 } from '@mui/material';
 
 const FournisseurPage = () => {
@@ -28,6 +30,11 @@ const FournisseurPage = () => {
     fullname: '', pays: '', ville: '', tel: '', fax: '', codePostal: '', address: '', codeTVA: '', matriculefisacl: ''
   });
   const [editData, setEditData] = useState(null);
+  
+  // Snackbar state
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
+  const [snackbarMessage, setSnackbarMessage] = useState('');
+  const [snackbarSeverity, setSnackbarSeverity] = useState('success'); // success or error
 
   useEffect(() => {
     fetchFournisseurs();
@@ -40,6 +47,9 @@ const FournisseurPage = () => {
       setFilteredFournisseurs(response.data);
     } catch (error) {
       console.error("Erreur lors de la récupération des fournisseurs :", error);
+      setSnackbarMessage('Erreur lors de la récupération des fournisseurs');
+      setSnackbarSeverity('error');
+      setSnackbarOpen(true);
     }
   };
 
@@ -55,9 +65,14 @@ const FournisseurPage = () => {
       setFournisseurs([...fournisseurs, response.data.supplier]);
       setFilteredFournisseurs([...fournisseurs, response.data.supplier]);
       setOpenAddDialog(false);
-      fetchFournisseurs();
+      setSnackbarMessage('Fournisseur ajouté avec succès');
+      setSnackbarSeverity('success');
+      setSnackbarOpen(true);
     } catch (error) {
       console.error("Erreur lors de l'ajout du fournisseur :", error);
+      setSnackbarMessage('Erreur lors de l\'ajout du fournisseur');
+      setSnackbarSeverity('error');
+      setSnackbarOpen(true);
     }
   };
 
@@ -72,8 +87,14 @@ const FournisseurPage = () => {
       setFournisseurs(fournisseurs.map(f => (f.id === editData.id ? editData : f)));
       setFilteredFournisseurs(fournisseurs.map(f => (f.id === editData.id ? editData : f)));
       setOpenEditDialog(false);
+      setSnackbarMessage('Fournisseur mis à jour avec succès');
+      setSnackbarSeverity('success');
+      setSnackbarOpen(true);
     } catch (error) {
       console.error("Erreur lors de la mise à jour du fournisseur :", error);
+      setSnackbarMessage('Erreur lors de la mise à jour du fournisseur');
+      setSnackbarSeverity('error');
+      setSnackbarOpen(true);
     }
   };
 
@@ -82,12 +103,21 @@ const FournisseurPage = () => {
       await axios.delete(`https://api.azcrm.deviceshopleader.com/api/suplier/delsuppliers/${id}`);
       setFournisseurs(fournisseurs.filter(f => f.id !== id));
       setFilteredFournisseurs(filteredFournisseurs.filter(f => f.id !== id));
+      setSnackbarMessage('Fournisseur supprimé avec succès');
+      setSnackbarSeverity('success');
+      setSnackbarOpen(true);
     } catch (error) {
       console.error("Erreur lors de la suppression du fournisseur :", error);
+      setSnackbarMessage('Erreur lors de la suppression du fournisseur');
+      setSnackbarSeverity('error');
+      setSnackbarOpen(true);
     }
   };
 
-
+  // Close the snackbar
+  const handleSnackbarClose = () => {
+    setSnackbarOpen(false);
+  };
 
   return (
     <Box sx={{ p: 3 }}>
@@ -152,6 +182,13 @@ const FournisseurPage = () => {
           </DialogActions>
         </Dialog>
       )}
+
+      {/* Snackbar */}
+      <Snackbar open={snackbarOpen} autoHideDuration={6000} onClose={handleSnackbarClose}>
+        <Alert onClose={handleSnackbarClose} severity={snackbarSeverity} sx={{ width: '100%' }}>
+          {snackbarMessage}
+        </Alert>
+      </Snackbar>
     </Box>
   );
 };

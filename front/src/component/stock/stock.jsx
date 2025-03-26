@@ -10,31 +10,34 @@ import {
   TableRow,
   Paper,
   Typography,
-  Button,
+  Snackbar,
+  Alert,
 } from '@mui/material';
 import axios from 'axios';
+
 const StockPage = () => {
   const [products, setProducts] = useState([]); // All products
   const [filteredProducts, setFilteredProducts] = useState([]); // Filtered products
   const [searchQuery, setSearchQuery] = useState(''); // Search input
+  const [snackbarOpen, setSnackbarOpen] = useState(false); // Snackbar open state
+  const [snackbarMessage, setSnackbarMessage] = useState(''); // Snackbar message
+  const [snackbarSeverity, setSnackbarSeverity] = useState('success'); // Snackbar severity
 
   // Simulated product data
   useEffect(() => {
-   
-      const fetchstock = async () => {
-        try {
-          const response = await axios.get('https://api.azcrm.deviceshopleader.com/api/stock/getall');
-          setProducts(response.data);
-          setFilteredProducts(response.data);
-        } catch (error) {
-          console.error("Erreur lors de la récupération des fournisseurs :", error);
-        }
-      };
-     
-    
+    const fetchStock = async () => {
+      try {
+        const response = await axios.get('https://api.azcrm.deviceshopleader.com/api/stock/getall');
+        setProducts(response.data);
+        setFilteredProducts(response.data);
+      } catch (error) {
+        console.error("Erreur lors de la récupération des produits :", error);
+        showSnackbar('Error fetching products.', 'error');
+      }
+    };
 
-    fetchstock();
-    }, []);
+    fetchStock();
+  }, []);
 
   // Handle search input
   const handleSearch = (event) => {
@@ -52,6 +55,18 @@ const StockPage = () => {
   // Calculate Net Prices
   const calculateNetHT = (unitPrice, quantity) => unitPrice * quantity;
   const calculateNetTTC = (netHT, vat) => netHT + (netHT * vat) / 100;
+
+  // Show Snackbar function
+  const showSnackbar = (message, severity) => {
+    setSnackbarMessage(message);
+    setSnackbarSeverity(severity);
+    setSnackbarOpen(true);
+  };
+
+  // Handle Snackbar close
+  const handleSnackbarClose = () => {
+    setSnackbarOpen(false);
+  };
 
   return (
     <Box sx={{ p: 3 }}>
@@ -120,6 +135,21 @@ const StockPage = () => {
           </TableBody>
         </Table>
       </TableContainer>
+
+      {/* Snackbar for notifications */}
+      <Snackbar
+        open={snackbarOpen}
+        autoHideDuration={6000}
+        onClose={handleSnackbarClose}
+      >
+        <Alert
+          onClose={handleSnackbarClose}
+          severity={snackbarSeverity}
+          sx={{ width: '100%' }}
+        >
+          {snackbarMessage}
+        </Alert>
+      </Snackbar>
     </Box>
   );
 };

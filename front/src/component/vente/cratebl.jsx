@@ -11,12 +11,14 @@ import {
   TableCell,
   TableRow,
   TableHead,
+  Snackbar,
+  Alert,
 } from "@mui/material";
 
-const CreateDeliveryNoteModal = ({ onAddDeliveryNote,codey }) => {
+const CreateDeliveryNoteModal = ({ onAddDeliveryNote, codey }) => {
   const [client, setClient] = useState("");
   const [timbre, setTimbre] = useState(false);
-    const [code, setCode] = useState("");
+  const [code, setCode] = useState("");
   
   const [products, setProducts] = useState([]);
   const [newProduct, setNewProduct] = useState("");
@@ -24,6 +26,10 @@ const CreateDeliveryNoteModal = ({ onAddDeliveryNote,codey }) => {
   const [quantite, setQuantite] = useState(1);
   const [availableProducts, setAvailableProducts] = useState([]);
   const [clients, setClients] = useState([]);
+
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
+  const [snackbarMessage, setSnackbarMessage] = useState("");
+  const [snackbarSeverity, setSnackbarSeverity] = useState("success");
 
   const generateUniqueCode = () => {
     const timestamp = new Date().getTime();
@@ -73,7 +79,9 @@ const CreateDeliveryNoteModal = ({ onAddDeliveryNote,codey }) => {
 
   const handleSubmit = async () => {
     if (!client || products.length === 0) {
-      alert("Veuillez remplir tous les champs obligatoires.");
+      setSnackbarMessage("Veuillez remplir tous les champs obligatoires.");
+      setSnackbarSeverity("error");
+      setSnackbarOpen(true);
       return;
     }
 
@@ -83,17 +91,25 @@ const CreateDeliveryNoteModal = ({ onAddDeliveryNote,codey }) => {
       timbre,
       products,
       clientName: clients.find((cl) => cl.id === client)?.fullname || "",
-      codey:codey
+      codey: codey
     };
 
     try {
       await axios.post(`${API_BASE_URL}/bs/create`, newNote);
-      alert("Bon de Sortie créé avec succès");
+      setSnackbarMessage("Bon de Sortie créé avec succès");
+      setSnackbarSeverity("success");
+      setSnackbarOpen(true);
       onAddDeliveryNote(newNote);
     } catch (error) {
       console.error("Erreur lors de la création du Bon de Sortie:", error);
-      alert("Échec de la création du Bon de Sortie");
+      setSnackbarMessage("Échec de la création du Bon de Sortie");
+      setSnackbarSeverity("error");
+      setSnackbarOpen(true);
     }
+  };
+
+  const handleCloseSnackbar = () => {
+    setSnackbarOpen(false);
   };
 
   return (
@@ -103,7 +119,6 @@ const CreateDeliveryNoteModal = ({ onAddDeliveryNote,codey }) => {
       </Typography>
 
       {/* Client Selection */}
-
       <TextField
         label="Client"
         value={client}
@@ -203,6 +218,17 @@ const CreateDeliveryNoteModal = ({ onAddDeliveryNote,codey }) => {
       <Button variant="contained" color="primary" onClick={handleSubmit} fullWidth>
         Enregistrer
       </Button>
+
+      {/* Snackbar for Feedback */}
+      <Snackbar
+        open={snackbarOpen}
+        autoHideDuration={6000}
+        onClose={handleCloseSnackbar}
+      >
+        <Alert onClose={handleCloseSnackbar} severity={snackbarSeverity} sx={{ width: "100%" }}>
+          {snackbarMessage}
+        </Alert>
+      </Snackbar>
     </Box>
   );
 };

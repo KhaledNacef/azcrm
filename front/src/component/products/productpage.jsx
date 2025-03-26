@@ -11,6 +11,8 @@ import {
   Paper,
   Typography,
   Button,
+  Snackbar,
+  Alert,
 } from '@mui/material';
 import axios from 'axios';
 
@@ -25,6 +27,11 @@ const ProductPage = () => {
   const [editProductUnite, setEditProductUnite] = useState(''); // Edited unite
   const API_BASE_URL = 'https://api.azcrm.deviceshopleader.com/api';
   const [isDataUpdated, setIsDataUpdated] = useState(false);
+
+  // Snackbar state
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
+  const [snackbarMessage, setSnackbarMessage] = useState('');
+  const [snackbarSeverity, setSnackbarSeverity] = useState('success'); // 'success' or 'error'
 
   // Fetch products from the backend
   useEffect(() => {
@@ -70,8 +77,18 @@ const ProductPage = () => {
         setProductUnite('');
         setIsDataUpdated(true); // Mark that data is updated
 
+        // Show success snackbar
+        setSnackbarMessage('Product added successfully!');
+        setSnackbarSeverity('success');
+        setSnackbarOpen(true);
+
       } catch (error) {
         console.error('Error creating product:', error);
+
+        // Show error snackbar
+        setSnackbarMessage('Error creating product.');
+        setSnackbarSeverity('error');
+        setSnackbarOpen(true);
       }
     }
   };
@@ -101,8 +118,18 @@ const ProductPage = () => {
       setEditProductId(null);
       setEditProductName('');
       setEditProductUnite('');
+
+      // Show success snackbar
+      setSnackbarMessage('Product updated successfully!');
+      setSnackbarSeverity('success');
+      setSnackbarOpen(true);
     } catch (error) {
       console.error('Error updating product:', error);
+
+      // Show error snackbar
+      setSnackbarMessage('Error updating product.');
+      setSnackbarSeverity('error');
+      setSnackbarOpen(true);
     }
   };
 
@@ -113,9 +140,23 @@ const ProductPage = () => {
       const remainingProducts = products.filter((product) => product.id !== productId);
       setProducts(remainingProducts);
       setFilteredProducts(remainingProducts);
+
+      // Show success snackbar
+      setSnackbarMessage('Product deleted successfully!');
+      setSnackbarSeverity('success');
+      setSnackbarOpen(true);
     } catch (error) {
       console.error('Error deleting product:', error);
+
+      // Show error snackbar
+      setSnackbarMessage('Error deleting product.');
+      setSnackbarSeverity('error');
+      setSnackbarOpen(true);
     }
+  };
+
+  const handleSnackbarClose = () => {
+    setSnackbarOpen(false);
   };
 
   return (
@@ -228,6 +269,21 @@ const ProductPage = () => {
           </TableBody>
         </Table>
       </TableContainer>
+
+      {/* Snackbar for notifications */}
+      <Snackbar
+        open={snackbarOpen}
+        autoHideDuration={6000}
+        onClose={handleSnackbarClose}
+      >
+        <Alert
+          onClose={handleSnackbarClose}
+          severity={snackbarSeverity}
+          sx={{ width: '100%' }}
+        >
+          {snackbarMessage}
+        </Alert>
+      </Snackbar>
     </Box>
   );
 };

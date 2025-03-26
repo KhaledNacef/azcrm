@@ -11,17 +11,14 @@ import {
   TableCell,
   TableRow,
   TableHead,
+  Snackbar
 } from '@mui/material';
-import Snackbar from '@mui/material/Snackbar';
-
-
 
 const Createbv = ({ onAddDeliveryNote }) => {
-    const [code,setCode]= useState('');
+  const [code, setCode] = useState('');
   const [client, setClient] = useState(0);
   const [clientn, setClientn] = useState("");
   const [codey, setCodey] = useState("");
-
   const [timbre, setTimbre] = useState(false);
   const [products, setProducts] = useState([]);
   const [newProduct, setNewProduct] = useState('');
@@ -29,33 +26,20 @@ const Createbv = ({ onAddDeliveryNote }) => {
   const [quantite, setQuantite] = useState(1);
   const [availableProducts, setAvailableProducts] = useState([]);
   const [clients, setClients] = useState([]);
-  const [clientSelected, setClientSelected] = useState(false);
-  const [timbreSelected, setTimbreSelected] = useState(false);
-
-  const generateUniqueCode = () => {
-    const timestamp = new Date().getTime(); // Current timestamp (milliseconds)
-    const randomString = Math.random().toString(36).substring(2, 8).toUpperCase(); // Random alphanumeric string
-    return `DN-${timestamp}-${randomString}`; // Combine timestamp and random string
-  };
-  const generateUniqueCodey = () => {
-    const timestamp = new Date().getTime(); // Current timestamp (milliseconds)
-    const randomString = Math.random().toString(36).substring(2, 8).toUpperCase(); // Random alphanumeric string
-    return `DN-${timestamp}-${randomString}`; // Combine timestamp and random string
-  };
- 
-
-
+  const [openSnackbar, setOpenSnackbar] = useState(false);
+  const [snackbarMessage, setSnackbarMessage] = useState("");
+  
   const API_BASE_URL = 'https://api.azcrm.deviceshopleader.com/api';
 
   useEffect(() => {
-    const newCode = generateUniqueCode();
-    setCode(newCode); // Set generated code
-    setCodey(generateUniqueCodey())
+    const generateUniqueCode = () => `DN-${new Date().getTime()}-${Math.random().toString(36).substring(2, 8).toUpperCase()}`;
+    setCode(generateUniqueCode());
+    setCodey(generateUniqueCode());
 
     const fetchData = async () => {
       try {
         const [productRes, clientRes] = await Promise.all([
-          axios.get(`https://api.azcrm.deviceshopleader.com/api/stock/getall`),
+          axios.get(`${API_BASE_URL}/stock/getall`),
           axios.get(`${API_BASE_URL}/clients/getclient`),
         ]);
         setAvailableProducts(productRes.data);
@@ -64,22 +48,23 @@ const Createbv = ({ onAddDeliveryNote }) => {
         console.error('Erreur lors du chargement des données:', error);
       }
     };
-   
     fetchData();
   }, []);
 
   const handleAddProduct = () => {
-    if (newProduct && !products.some((p) => p.designation === newProduct)) {
-      const selectedProduct = availableProducts.find(p => p.designation === newProduct);
-      setProducts([
-        ...products,
-        {
-          designation: selectedProduct.designation,
-          Unite: selectedProduct.Unite,
-          prixU_HT: parseFloat(prixU_HT),
-          quantite: parseInt(quantite, 10),
-        },
-      ]);
+    const selectedProduct = availableProducts.find(p => p.designation === newProduct);
+    if (selectedProduct) {
+      if (parseInt(quantite, 10) > selectedProduct.stock) {
+        setSnackbarMessage("Quantité insuffisante en stock");
+        setOpenSnackbar(true);
+        return;
+      }
+      setProducts([...products, {
+        designation: selectedProduct.designation,
+        Unite: selectedProduct.Unite,
+        prixU_HT: parseFloat(prixU_HT),
+        quantite: parseInt(quantite, 10),
+      }]);
       setNewProduct('');
       setPrixU_HT(0);
       setQuantite(1);
@@ -88,126 +73,55 @@ const Createbv = ({ onAddDeliveryNote }) => {
 
   const handleSubmit = async () => {
     if (!client || products.length === 0) {
-      alert('Veuillez remplir tous les champs obligatoires.');
+      setSnackbarMessage("Veuillez remplir tous les champs obligatoires.");
+      setOpenSnackbar(true);
       return;
     }
-
-    const newNote = {
-      code:code,
-      clientId:client,
-      timbre,
-      products,
-      clientName:clientn,
-      codey:codey
-    };
-
     try {
-      await axios.post(`${API_BASE_URL}/bonlivraison/facturev`, newNote);
-
-      <Snackbar
-        anchorOrigin={{ vertical, horizontal }}
-        open={open}
-        onClose={handleClose}
-        message="Bon de Sortie créé avec succès"
-        key={vertical + horizontal}
-      />
-      
-      onAddDeliveryNote(newNote);
+      await axios.post(`${API_BASE_URL}/bonlivraison/facturev`, {
+        code, clientId: client, timbre, products, clientName: clientn, codey
+      });
+      setSnackbarMessage("Bon de Sortie créé avec succès");
+      setOpenSnackbar(true);
+      onAddDeliveryNote({ code, clientId: client, timbre, products, clientName: clientn, codey });
     } catch (error) {
+      setSnackbarMessage("Échec de la création du Bon de Sortie");
+      setOpenSnackbar(true);
       console.error("Erreur lors de la création du Bon de Sortie:", error);
-      alert("Échec de la création du Bon de Sortie");
     }
   };
-  
+
   return (
     <Box>
-      <Typography variant="h6" mb={2}>Créer un Bon De Livraison
-      </Typography>
-
-      {/* Code Selection */}
-    
-      {/* Client Selection - Only show if client is not selected */}
+      <Typography variant="h6" mb={2}>Créer un Bon De Livraison</Typography>
       <TextField
-  label="Client"
-  value={client}
-  onChange={(e) => {
-    const selectedClientId = parseInt(e.target.value, 10);
-    const selectedClient = clients.find(cl => cl.id === selectedClientId);
-    setClient(selectedClientId);
-    setClientn(selectedClient ? selectedClient.fullname : ""); // Ensure client name is set
-  }}
-  select
-  fullWidth
-  margin="normal"
->
-  {clients.map((cl) => (
-    <MenuItem key={cl.id} value={cl.id}>{cl.fullname}</MenuItem>
-  ))}
-</TextField>
-
-{/* Display selected client name */}
-{client && (
-  <Typography variant="body1" mb={2}>
-    Client sélectionné: {clients.find((cl) => cl.id === client)?.fullname}
-  </Typography>
-)}
-
-
-      {/* Timbre Selection - Only show if timbre is not selected */}
-      {!timbreSelected && (
-        <TextField
-          label="Timbre"
-          select
-          value={timbre}
-          onChange={(e) => {
-            setTimbre(e.target.value );
-            setTimbreSelected(true);
-          }}
-          fullWidth
-          margin="normal"
-        >
-          <MenuItem value={true}>Oui</MenuItem>
-          <MenuItem value={false}>Non</MenuItem>
-        </TextField>
-      )}
-
-      {/* Product Selection */}
-      <TextField
-        label="Produit"
-        value={newProduct}
-        onChange={(e) => setNewProduct(e.target.value)}
-        select
-        fullWidth
-        margin="normal"
+        label="Client"
+        value={client}
+        onChange={(e) => {
+          const selectedClientId = parseInt(e.target.value, 10);
+          const selectedClient = clients.find(cl => cl.id === selectedClientId);
+          setClient(selectedClientId);
+          setClientn(selectedClient ? selectedClient.fullname : "");
+        }}
+        select fullWidth margin="normal"
       >
-        {availableProducts.map((prod) => (
-          <MenuItem key={prod.id} value={prod.designation}>{prod.designation}</MenuItem>
-        ))}
+        {clients.map(cl => <MenuItem key={cl.id} value={cl.id}>{cl.fullname}</MenuItem>)}
       </TextField>
 
-      {/* Price and Quantity Inputs */}
-      <TextField
-        label="Prix U"
-        type="number"
-        value={prixU_HT}
-        onChange={(e) => setPrixU_HT(e.target.value)}
-        fullWidth
-        margin="normal"
-      />
-      <TextField
-        label="Quantité"
-        type="number"
-        value={quantite}
-        onChange={(e) => setQuantite(e.target.value)}
-        fullWidth
-        margin="normal"
-      />
+      <TextField label="Timbre" select value={timbre} onChange={(e) => setTimbre(e.target.value)} fullWidth margin="normal">
+        <MenuItem value={true}>Oui</MenuItem>
+        <MenuItem value={false}>Non</MenuItem>
+      </TextField>
 
-      <Button onClick={handleAddProduct} variant="outlined" sx={{ mb: 2 }}>
-        Ajouter Produit
-      </Button>
+      <TextField label="Produit" value={newProduct} onChange={(e) => setNewProduct(e.target.value)} select fullWidth margin="normal">
+        {availableProducts.map(prod => <MenuItem key={prod.id} value={prod.designation}>{prod.designation}</MenuItem>)}
+      </TextField>
 
-      {/* List of Added Products */}
+      <TextField label="Prix U" type="number" value={prixU_HT} onChange={(e) => setPrixU_HT(e.target.value)} fullWidth margin="normal" />
+      <TextField label="Quantité" type="number" value={quantite} onChange={(e) => setQuantite(e.target.value)} fullWidth margin="normal" />
+
+      <Button onClick={handleAddProduct} variant="outlined" sx={{ mb: 2 }}>Ajouter Produit</Button>
+
       {products.length > 0 && (
         <Table>
           <TableHead>
@@ -231,9 +145,8 @@ const Createbv = ({ onAddDeliveryNote }) => {
         </Table>
       )}
 
-      <Button variant="contained" color="primary" onClick={handleSubmit} fullWidth>
-        Enregistrer
-      </Button>
+      <Button variant="contained" color="primary" onClick={handleSubmit} fullWidth>Enregistrer</Button>
+      <Snackbar open={openSnackbar} autoHideDuration={5000} onClose={() => setOpenSnackbar(false)} message={snackbarMessage} />
     </Box>
   );
 };
