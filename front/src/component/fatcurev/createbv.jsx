@@ -146,9 +146,22 @@ const Createbv = ({ onAddDeliveryNote }) => {
         <MenuItem value={false}>Non</MenuItem>
       </TextField>
 
-      <TextField label="Produit" value={newProduct} onChange={(e) => setNewProduct(e.target.value)} select fullWidth margin="normal">
-        {availableProducts.map(prod => <MenuItem key={prod.id} value={prod.designation}>{prod.designation}</MenuItem>)}
-      </TextField>
+      <TextField 
+  label="Produit"
+  value={newProduct}
+  onChange={(e) => setNewProduct(e.target.value)}
+  select
+  fullWidth
+  margin="normal"
+>
+  {availableProducts
+    .filter(prod => prod.quantite > 0) // Only show products with stock greater than 0
+    .map(prod => (
+      <MenuItem key={prod.id} value={prod.designation}>
+        {`${prod.designation} - Quantité restante: ${prod.quantite}`}
+      </MenuItem>
+  ))}
+</TextField>
 
       <TextField label="Quantité" type="number" value={quantite} onChange={(e) => setQuantite(e.target.value)} fullWidth margin="normal" />
 

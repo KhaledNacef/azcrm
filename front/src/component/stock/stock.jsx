@@ -110,10 +110,10 @@ const StockPage = () => {
                     <TableCell>{product.designation}</TableCell>
                     <TableCell>{product.Unite}</TableCell>
                     <TableCell>{product.quantite}</TableCell>
-                    <TableCell>{product.prixU_HT.toFixed(2)} </TableCell>
+                    <TableCell>{product.prixU_HT.toFixed(2)} TND </TableCell>
                     <TableCell>{product.tva} %</TableCell>
-                    <TableCell>{netHT.toFixed(2)} </TableCell>
-                    <TableCell>{netTTC.toFixed(2)} </TableCell>
+                    <TableCell>{netHT.toFixed(2)} TND </TableCell>
+                    <TableCell>{netTTC.toFixed(2)} TND </TableCell>
                   </TableRow>
                 );
               })

@@ -167,20 +167,22 @@ const CreateDeliveryNoteModal = ({ onAddDeliveryNote, codey }) => {
       </TextField>
 
       {/* Product Selection */}
-      <TextField
-        label="Produit"
-        value={newProduct}
-        onChange={(e) => setNewProduct(e.target.value)}
-        select
-        fullWidth
-        margin="normal"
-      >
-        {availableProducts.map((prod) => (
-          <MenuItem key={prod.id} value={prod.designation}>
-            {prod.designation}
-          </MenuItem>
-        ))}
-      </TextField>
+        <TextField 
+       label="Produit"
+       value={newProduct}
+       onChange={(e) => setNewProduct(e.target.value)}
+       select
+       fullWidth
+       margin="normal"
+     >
+       {availableProducts
+         .filter(prod => prod.quantite > 0) // Only show products with stock greater than 0
+         .map(prod => (
+           <MenuItem key={prod.id} value={prod.designation}>
+             {`${prod.designation} - Quantité restante: ${prod.quantite}`}
+           </MenuItem>
+       ))}
+     </TextField>
 
       {/* Quantity Input */}
       <TextField

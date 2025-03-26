@@ -9,7 +9,13 @@ import {
   Paper,
   Avatar,
   IconButton,
-  CircularProgress
+  CircularProgress,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow
 } from '@mui/material';
 import { 
   Refresh as RefreshIcon,
@@ -26,6 +32,7 @@ const Dashboard = () => {
   const [clientsCount, setClientsCount] = useState(0);
   const [suppliersCount, setSuppliersCount] = useState(0);
   const [productsCount, setProductsCount] = useState(0);
+  const [lowStockProducts, setLowStockProducts] = useState([]); // NEW STATE FOR LOW STOCK PRODUCTS
   const [loading, setLoading] = useState(false);
 
   // Fetch Clients
@@ -54,12 +61,20 @@ const Dashboard = () => {
     fetchFournisseurs();
   }, []);
 
-  // Fetch Products
+  // Fetch Products and Low Stock
   useEffect(() => {
     const fetchStock = async () => {
       try {
         const response = await axios.get('https://api.azcrm.deviceshopleader.com/api/stock/getall');
         setProductsCount(response.data.length);
+
+        // FILTER PRODUCTS WITH QUANTITY ≤ 10
+        const filteredProducts = response.data
+          .filter(product => product.quantite <= 10)
+          .sort((a, b) => a.quantite - b.quantite)
+          .slice(0, 10);
+
+        setLowStockProducts(filteredProducts);
       } catch (error) {
         console.error("Erreur lors de la récupération des produits :", error);
       }
@@ -137,6 +152,35 @@ const Dashboard = () => {
           </Card>
         </Grid>
       </Grid>
+
+      {/* LOW STOCK PRODUCTS TABLE */}
+      <Box mt={5}>
+        <Typography variant="h5" mb={2}>Low Stock Products (≤ 10 Quantity)</Typography>
+        <TableContainer component={Paper}>
+          <Table>
+            <TableHead>
+              <TableRow>
+                <TableCell><strong>Product Name</strong></TableCell>
+                <TableCell><strong>Quantity</strong></TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {lowStockProducts.length > 0 ? (
+                lowStockProducts.map((product) => (
+                  <TableRow key={product.id}>
+                    <TableCell>{product.name}</TableCell>
+                    <TableCell>{product.quantite}</TableCell>
+                  </TableRow>
+                ))
+              ) : (
+                <TableRow>
+                  <TableCell colSpan={2} align="center">No low-stock products</TableCell>
+                </TableRow>
+              )}
+            </TableBody>
+          </Table>
+        </TableContainer>
+      </Box>
     </Container>
   );
 };
