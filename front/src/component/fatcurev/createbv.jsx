@@ -63,18 +63,25 @@ const Createbv = ({ onAddDeliveryNote }) => {
     fetchExchangeRates();
   }, []);
 
+  const convertPrice = (priceInTND) => {
+    if (exchangeRates[selectedCurrency]) {
+      return (priceInTND * exchangeRates[selectedCurrency]).toFixed(2);
+    }
+    return priceInTND; // Default to TND if rates are unavailable
+  };
+
   const handleAddProduct = () => {
     const selectedProduct = availableProducts.find(p => p.designation === newProduct);
     if (selectedProduct) {
-      if (parseInt(quantite, 10) > selectedProduct.stock) {
+      if (parseInt(quantite, 10) > selectedProduct.quantite) {
         setSnackbarMessage('Quantité insuffisante en stock');
         setOpenSnackbar(true);
         return;
       }
       const tva = selectedProduct.prixU_HT * (selectedProduct.tva / 100); // assuming tva is a percentage
-
+      const totalprice=tva+selectedProduct.prixU_HT;
       // Convert price from TND to selected currency
-      const convertedPrice = convertPrice(tva);
+      const convertedPrice = convertPrice(totalprice);
 
       setProducts([...products, {
         designation: selectedProduct.designation,
@@ -117,12 +124,7 @@ const Createbv = ({ onAddDeliveryNote }) => {
     }
   };
 
-  const convertPrice = (priceInTND) => {
-    if (exchangeRates[selectedCurrency]) {
-      return (priceInTND * exchangeRates[selectedCurrency]).toFixed(2);
-    }
-    return priceInTND; // Default to TND if rates are unavailable
-  };
+  
 
   return (
     <Box>
