@@ -35,6 +35,16 @@ const Dashboard = () => {
   const [lowStockProducts, setLowStockProducts] = useState([]); // NOUVEL ÉTAT POUR LES PRODUITS EN STOCK BAS
   const [loading, setLoading] = useState(false);
 
+  // Update the time every second
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setDateTime(moment().format('YYYY-MM-DD HH:mm:ss'));
+    }, 1000);
+
+    // Cleanup interval on component unmount
+    return () => clearInterval(interval);
+  }, []);
+
   // Récupérer les clients
   useEffect(() => {
     axios
