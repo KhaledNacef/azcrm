@@ -203,19 +203,11 @@ const [open, setOpen] = useState(false);
       <Box sx={{ display: 'flex', justifyContent: 'space-between', mt: 4 }}>
         <Box sx={{ textAlign: 'center' }}>
           <Typography variant="body1">Signature du Fournisseur</Typography>
-          <img
-            src="path/to/supplier/signature.png"
-            alt="Signature du fournisseur"
-            style={{ width: 150, marginTop: 10 }}
-          />
+          
         </Box>
         <Box sx={{ textAlign: 'center' }}>
           <Typography variant="body1">Signature de Ma Société</Typography>
-          <img
-            src="path/to/company/signature.png"
-            alt="Signature de la société"
-            style={{ width: 150, marginTop: 10 }}
-          />
+         
         </Box>
       </Box>
     </Box>
