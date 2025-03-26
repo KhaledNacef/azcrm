@@ -27,10 +27,10 @@ const SidebarMenu = () => {
     { label: 'Stock', path: '/stock', icon: <InventoryIcon /> },
     { label: 'Fournisseur', path: '/fournisseur', icon: <PeopleIcon /> },
     { label: 'Client', path: '/client', icon: <PersonIcon /> },
-    { label: 'Bon de Sortie', path: '/bon-livraison', icon: <ExitToAppIcon /> },
-    { label: 'Facture d’Achat', path: '/bon-dachat', icon: <ShoppingCartIcon /> },
     { label: 'Bon de Commande', path: '/bon-commande', icon: <ReceiptIcon /> },
+    { label: 'Facture d’Achat', path: '/bon-dachat', icon: <ShoppingCartIcon /> },
     { label: 'Bon de Livraison', path: '/bon-commandefacture', icon: <LocalShippingIcon /> },
+    { label: 'Bon de Sortie', path: '/bon-livraison', icon: <ExitToAppIcon /> }
   ];
 
   return (
@@ -58,12 +58,17 @@ const SidebarMenu = () => {
               borderRadius: '8px',
               mb: 1,
               '&:hover': { bgcolor: '#1976d2', color: 'white' },
-              transition: '0.3s'
-              
+              transition: '0.3s',
+              '&:hover .MuiListItemIcon-root': {
+                color: 'white',
+              },
+              '&:hover .MuiListItemText-root': {
+                color: 'white',
+              },
             }}
           >
-            <ListItemIcon sx={{ color: '#1976d2', minWidth: 40 , '&:hover': { color: 'white' }}}>{item.icon}</ListItemIcon>
-            <ListItemText primary={item.label} sx={{ fontWeight: 'bold',color:"black" }} />
+            <ListItemIcon sx={{ color: '#1976d2', minWidth: 40 }}>{item.icon}</ListItemIcon>
+            <ListItemText primary={item.label} sx={{ fontWeight: 'bold', color: 'black' }} />
           </ListItem>
         ))}
       </List>
