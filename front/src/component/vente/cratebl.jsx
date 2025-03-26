@@ -19,25 +19,19 @@ const CreateDeliveryNoteModal = ({ onAddDeliveryNote, codey }) => {
   const [client, setClient] = useState("");
   const [timbre, setTimbre] = useState(false);
   const [code, setCode] = useState("");
-  
   const [products, setProducts] = useState([]);
   const [newProduct, setNewProduct] = useState("");
-  const [prixU_HT, setPrixU_HT] = useState(0);
   const [quantite, setQuantite] = useState(1);
   const [availableProducts, setAvailableProducts] = useState([]);
   const [clients, setClients] = useState([]);
-
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState("");
   const [snackbarSeverity, setSnackbarSeverity] = useState("success");
-
-  const generateUniqueCode = () => {
-    const timestamp = new Date().getTime();
-    const randomString = Math.random().toString(36).substring(2, 8).toUpperCase();
-    return `DN-${timestamp}-${randomString}`;
-  };
+  const [selectedCurrency, setSelectedCurrency] = useState("TND");
+  const [exchangeRates, setExchangeRates] = useState({ TND: 1 });
 
   const API_BASE_URL = "https://api.azcrm.deviceshopleader.com/api";
+  const CURRENCY_API_URL = "https://v6.exchangerate-api.com/v6/9179a4fac368332ee3e66b7b/latest/TND";
 
   useEffect(() => {
     setCode(generateUniqueCode());
@@ -54,26 +48,51 @@ const CreateDeliveryNoteModal = ({ onAddDeliveryNote, codey }) => {
         console.error("Erreur lors du chargement des données:", error);
       }
     };
-   
+
+    const fetchExchangeRates = async () => {
+      try {
+        const res = await axios.get(CURRENCY_API_URL);
+        setExchangeRates(res.data.conversion_rates);
+      } catch (error) {
+        console.error("Erreur lors de la récupération des taux de change:", error);
+      }
+    };
+
     fetchData();
+    fetchExchangeRates();
   }, []);
+
+  const generateUniqueCode = () => {
+    const timestamp = new Date().getTime();
+    const randomString = Math.random().toString(36).substring(2, 8).toUpperCase();
+    return `DN-${timestamp}-${randomString}`;
+  };
+
+  const convertPrice = (priceInTND) => {
+    return exchangeRates[selectedCurrency]
+      ? (priceInTND * exchangeRates[selectedCurrency]).toFixed(2)
+      : priceInTND;
+  };
 
   const handleAddProduct = () => {
     if (!newProduct) return;
+
     const selectedProduct = availableProducts.find((p) => p.designation === newProduct);
     if (!selectedProduct) return;
+
+    const convertedPrice = convertPrice(selectedProduct.prixU_HT);
 
     setProducts((prev) => [
       ...prev,
       {
         designation: selectedProduct.designation,
         Unite: selectedProduct.Unite,
-        prixU_HT: parseFloat(prixU_HT),
+        prixU_HT: convertedPrice,
         quantite: parseInt(quantite, 10),
       },
     ]);
+
     setNewProduct("");
-    setPrixU_HT(0);
     setQuantite(1);
   };
 
@@ -91,7 +110,7 @@ const CreateDeliveryNoteModal = ({ onAddDeliveryNote, codey }) => {
       timbre,
       products,
       clientName: clients.find((cl) => cl.id === client)?.fullname || "",
-      codey: codey
+      codey,
     };
 
     try {
@@ -134,12 +153,6 @@ const CreateDeliveryNoteModal = ({ onAddDeliveryNote, codey }) => {
         ))}
       </TextField>
 
-      {client && (
-        <Typography variant="body1" mb={2}>
-          Client sélectionné: {clients.find((cl) => cl.id === client)?.fullname}
-        </Typography>
-      )}
-
       {/* Timbre Selection */}
       <TextField
         label="Timbre"
@@ -169,15 +182,7 @@ const CreateDeliveryNoteModal = ({ onAddDeliveryNote, codey }) => {
         ))}
       </TextField>
 
-      {/* Price and Quantity Inputs */}
-      <TextField
-        label="Prix U"
-        type="number"
-        value={prixU_HT}
-        onChange={(e) => setPrixU_HT(e.target.value)}
-        fullWidth
-        margin="normal"
-      />
+      {/* Quantity Input */}
       <TextField
         label="Quantité"
         type="number"
@@ -186,6 +191,22 @@ const CreateDeliveryNoteModal = ({ onAddDeliveryNote, codey }) => {
         fullWidth
         margin="normal"
       />
+
+      {/* Currency Selection */}
+      <TextField
+        label="Sélectionner la devise"
+        select
+        value={selectedCurrency}
+        onChange={(e) => setSelectedCurrency(e.target.value)}
+        fullWidth
+        margin="normal"
+      >
+        {Object.keys(exchangeRates).map((currency) => (
+          <MenuItem key={currency} value={currency}>
+            {currency}
+          </MenuItem>
+        ))}
+      </TextField>
 
       <Button onClick={handleAddProduct} variant="outlined" sx={{ mb: 2 }}>
         Ajouter Produit
@@ -198,7 +219,7 @@ const CreateDeliveryNoteModal = ({ onAddDeliveryNote, codey }) => {
             <TableRow>
               <TableCell>Produit</TableCell>
               <TableCell>Unité</TableCell>
-              <TableCell>Prix U</TableCell>
+              <TableCell>Prix U ({selectedCurrency})</TableCell>
               <TableCell>Quantité</TableCell>
             </TableRow>
           </TableHead>
@@ -207,7 +228,7 @@ const CreateDeliveryNoteModal = ({ onAddDeliveryNote, codey }) => {
               <TableRow key={index}>
                 <TableCell>{prod.designation}</TableCell>
                 <TableCell>{prod.Unite}</TableCell>
-                <TableCell>{prod.prixU_HT}$</TableCell>
+                <TableCell>{prod.prixU_HT}</TableCell>
                 <TableCell>{prod.quantite}</TableCell>
               </TableRow>
             ))}
@@ -218,17 +239,6 @@ const CreateDeliveryNoteModal = ({ onAddDeliveryNote, codey }) => {
       <Button variant="contained" color="primary" onClick={handleSubmit} fullWidth>
         Enregistrer
       </Button>
-
-      {/* Snackbar for Feedback */}
-      <Snackbar
-        open={snackbarOpen}
-        autoHideDuration={6000}
-        onClose={handleCloseSnackbar}
-      >
-        <Alert onClose={handleCloseSnackbar} severity={snackbarSeverity} sx={{ width: "100%" }}>
-          {snackbarMessage}
-        </Alert>
-      </Snackbar>
     </Box>
   );
 };
