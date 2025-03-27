@@ -207,7 +207,7 @@ const Createbv = ({ onAddDeliveryNote }) => {
 
       <Button variant="contained" color="primary" onClick={handleSubmit} fullWidth>Enregistrer</Button>
 
-      <Snackbar open={openSnackbar} autoHideDuration={5000} onClose={() => setOpenSnackbar(false)} message={snackbarMessage} />
+      <Snackbar open={openSnackbar}   anchorOrigin={{ vertical: 'top', horizontal: 'right' }}  autoHideDuration={5000} onClose={() => setOpenSnackbar(false)} message={snackbarMessage} />
     </Box>
   );
 };

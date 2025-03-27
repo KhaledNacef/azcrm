@@ -253,9 +253,11 @@ const CreatebcModala = ({ onAddDeliveryNote }) => {
       <Snackbar
         open={snackbarOpen}
         autoHideDuration={6000}
+        anchorOrigin={{ vertical: 'top', horizontal: 'right' }} // Position it at the top-right
         onClose={() => setSnackbarOpen(false)}
       >
-        <Alert onClose={() => setSnackbarOpen(false)} severity={snackbarSeverity}>
+        <Alert onClose={() => setSnackbarOpen(false)} severity={snackbarSeverity}   sx={{ width: '100%' }}
+        >
           {snackbarMessage}
         </Alert>
       </Snackbar>

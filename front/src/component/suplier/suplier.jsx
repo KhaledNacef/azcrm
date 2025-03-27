@@ -184,7 +184,7 @@ const FournisseurPage = () => {
       )}
 
       {/* Snackbar */}
-      <Snackbar open={snackbarOpen} autoHideDuration={6000} onClose={handleSnackbarClose}>
+      <Snackbar open={snackbarOpen}   anchorOrigin={{ vertical: 'top', horizontal: 'right' }}  autoHideDuration={6000} onClose={handleSnackbarClose}>
         <Alert onClose={handleSnackbarClose} severity={snackbarSeverity} sx={{ width: '100%' }}>
           {snackbarMessage}
         </Alert>

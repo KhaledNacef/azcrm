@@ -247,6 +247,17 @@ const CreateDeliveryNoteModal = ({ onAddDeliveryNote, codey }) => {
       <Button variant="contained" color="primary" onClick={handleSubmit} fullWidth>
         Enregistrer
       </Button>
+
+      <Snackbar
+  open={snackbarOpen}
+  autoHideDuration={4000}
+  onClose={handleCloseSnackbar}
+  anchorOrigin={{ vertical: "top", horizontal: "right" }}
+>
+  <Alert onClose={handleCloseSnackbar} severity={snackbarSeverity}>
+    {snackbarMessage}
+  </Alert>
+</Snackbar>
     </Box>
   );
 };

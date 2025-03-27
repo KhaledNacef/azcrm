@@ -272,18 +272,19 @@ const ProductPage = () => {
 
       {/* Snackbar pour les notifications */}
       <Snackbar
-        open={snackbarOpen}
-        autoHideDuration={6000}
-        onClose={handleSnackbarClose}
-      >
-        <Alert
-          onClose={handleSnackbarClose}
-          severity={snackbarSeverity}
-          sx={{ width: '100%' }}
-        >
-          {snackbarMessage}
-        </Alert>
-      </Snackbar>
+  open={snackbarOpen}
+  autoHideDuration={6000}
+  onClose={handleSnackbarClose}
+  anchorOrigin={{ vertical: 'top', horizontal: 'right' }} // Position it at the top-right
+>
+  <Alert
+    onClose={handleSnackbarClose}
+    severity={snackbarSeverity}
+    sx={{ width: '100%' }}
+  >
+    {snackbarMessage}
+  </Alert>
+</Snackbar>
     </Box>
   );
 };

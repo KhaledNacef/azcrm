@@ -1,6 +1,6 @@
 import React from 'react';
 import { List, ListItem, ListItemIcon, ListItemText, Box, Avatar, Typography } from '@mui/material';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import HomeIcon from '@mui/icons-material/Home';
 import InventoryIcon from '@mui/icons-material/Inventory';
 import PeopleIcon from '@mui/icons-material/People';
@@ -21,6 +21,8 @@ const getCurrentDate = () => {
 };
 
 const SidebarMenu = () => {
+  const location = useLocation(); // Get the current path
+
   const menuItems = [
     { label: 'Dashboard', path: '/dashboard', icon: <HomeIcon /> },
     { label: 'Produit', path: '/produit', icon: <InventoryIcon /> },
@@ -38,7 +40,7 @@ const SidebarMenu = () => {
       {/* Header Section */}
       <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', p: 3, bgcolor: 'white', color: 'black' }}>
         <Avatar
-          src="https://cdn-icons-png.flaticon.com/512/3237/3237447.png "
+          src="https://cdn-icons-png.flaticon.com/512/3237/3237447.png"
           alt="User Profile"
           sx={{ width: 70, height: 70, mb: 1, border: '3px solid white' }}
         />
@@ -48,29 +50,32 @@ const SidebarMenu = () => {
 
       {/* Menu List */}
       <List sx={{ flexGrow: 1, p: 2 }}>
-        {menuItems.map((item) => (
-          <ListItem
-            key={item.label}
-            button
-            component={Link}
-            to={item.path}
-            sx={{
-              borderRadius: '8px',
-              mb: 1,
-              '&:hover': { bgcolor: '#1976d2', color: 'white' },
-              transition: '0.3s',
-              '&:hover .MuiListItemIcon-root': {
-                color: 'white',
-              },
-              '&:hover .MuiListItemText-root': {
-                color: 'white',
-              },
-            }}
-          >
-            <ListItemIcon sx={{ color: '#1976d2', minWidth: 40 }}>{item.icon}</ListItemIcon>
-            <ListItemText primary={item.label} sx={{ fontWeight: 'bold', color: 'black' }} />
-          </ListItem>
-        ))}
+        {menuItems.map((item) => {
+          const isActive = location.pathname === item.path; // Check if item is active
+          return (
+            <ListItem
+              key={item.label}
+              button
+              component={Link}
+              to={item.path}
+              sx={{
+                borderRadius: '8px',
+                mb: 1,
+                bgcolor: isActive ? '#1976d2' : 'transparent',
+                color: isActive ? 'white' : 'black',
+                '&:hover': { bgcolor: '#1976d2', color: 'white' },
+                transition: '0.3s',
+                '&:hover .MuiListItemIcon-root': { color: 'white' },
+                '&:hover .MuiListItemText-root': { color: 'white' },
+                '& .MuiListItemIcon-root': { color: isActive ? 'white' : '#1976d2' },
+                '& .MuiListItemText-root': { fontWeight: 'bold' },
+              }}
+            >
+              <ListItemIcon>{item.icon}</ListItemIcon>
+              <ListItemText primary={item.label} />
+            </ListItem>
+          );
+        })}
       </List>
     </Box>
   );

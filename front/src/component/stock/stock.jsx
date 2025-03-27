@@ -132,6 +132,7 @@ const StockPage = () => {
       <Snackbar
         open={snackbarOpen}
         autoHideDuration={6000}
+        anchorOrigin={{ vertical: 'top', horizontal: 'right' }} 
         onClose={handleSnackbarClose}
       >
         <Alert

@@ -148,7 +148,8 @@ const CreateDeliveryNoteModala = ({ onAddDeliveryNote, codey }) => {
 
       <Button variant="contained" color="primary" onClick={handleSubmit} fullWidth>Enregistrer</Button>
 
-      <Snackbar open={snackbar.open} autoHideDuration={4000} onClose={() => setSnackbar({ ...snackbar, open: false })}>
+      <Snackbar open={snackbar.open}   anchorOrigin={{ vertical: 'top', horizontal: 'right' }} // Position it at the top-right
+ autoHideDuration={4000} onClose={() => setSnackbar({ ...snackbar, open: false })}>
         <Alert severity={snackbar.severity}>{snackbar.message}</Alert>
       </Snackbar>
     </Box>
