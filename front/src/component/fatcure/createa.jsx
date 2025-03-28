@@ -219,30 +219,30 @@ const CreatebcModala = ({ onAddDeliveryNote }) => {
       </Button>
 
       {/* Products Table */}
-      {products.length > 0 && (
-        <Table>
-          <TableHead>
-            <TableRow>
-              <TableCell>Produit</TableCell>
-              <TableCell>Unité</TableCell>
-              <TableCell>TVA (%)</TableCell>
-              <TableCell>Prix U HT</TableCell>
-              <TableCell>Quantité</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {products.map((prod, index) => (
-              <TableRow key={index}>
-                <TableCell>{prod.designation}</TableCell>
-                <TableCell>{prod.Unite}</TableCell>
-                <TableCell>{prod.tva}</TableCell>
-                <TableCell>{prod.prixU_HT}</TableCell>
-                <TableCell>{prod.quantite}</TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      )}
+           {products.length > 0 && (
+       <Box sx={{ maxHeight: 300, overflowY: 'auto', mt: 2, border: '1px solid #ccc', borderRadius: 2 }}>
+         <Table>
+           <TableHead>
+             <TableRow>
+               <TableCell>Produit</TableCell>
+               <TableCell>Unité</TableCell>
+               <TableCell>Prix U ({selectedCurrency})</TableCell>
+               <TableCell>Quantité</TableCell>
+             </TableRow>
+           </TableHead>
+           <TableBody>
+             {products.map((prod, index) => (
+               <TableRow key={index}>
+                 <TableCell>{prod.designation}</TableCell>
+                 <TableCell>{prod.Unite}</TableCell>
+                 <TableCell>{prod.prixU_HT}</TableCell>
+                 <TableCell>{prod.quantite}</TableCell>
+               </TableRow>
+             ))}
+           </TableBody>
+         </Table>
+       </Box>
+     )}
 
       {/* Submit Button */}
       <Button variant="contained" color="primary" onClick={handleSubmit} fullWidth>

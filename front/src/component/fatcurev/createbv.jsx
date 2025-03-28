@@ -29,6 +29,7 @@ const Createbv = ({ onAddDeliveryNote }) => {
   const [exchangeRates, setExchangeRates] = useState({});
   const [openSnackbar, setOpenSnackbar] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState('');
+  const [percentage, setPercentage] = useState(0);
 
   const API_BASE_URL = 'https://api.azcrm.deviceshopleader.com/api';
   const CURRENCY_API_URL = 'https://v6.exchangerate-api.com/v6/9179a4fac368332ee3e66b7b/latest/TND'; // Base TND
@@ -80,7 +81,7 @@ const Createbv = ({ onAddDeliveryNote }) => {
       }
       const tva = selectedProduct.prixU_HT * (selectedProduct.tva / 100); // assuming tva is a percentage
       const totalprice=tva+selectedProduct.prixU_HT;
-      // Convert price from TND to selected currency
+      totalprice += totalprice * (percentage / 100);
       const convertedPrice = convertPrice(totalprice);
 
       setProducts([...products, {
@@ -167,6 +168,7 @@ const Createbv = ({ onAddDeliveryNote }) => {
 </TextField>
 
       <TextField label="Quantité" type="number" value={quantite} onChange={(e) => setQuantite(e.target.value)} fullWidth margin="normal" />
+      <TextField label="Pourcentage de gain" type="number" value={percentage} onChange={(e) => setPercentage(parseFloat(e.target.value))} fullWidth margin="normal" />
 
       <TextField
         label="Sélectionner la devise"
@@ -183,27 +185,29 @@ const Createbv = ({ onAddDeliveryNote }) => {
       <Button onClick={handleAddProduct} variant="outlined" sx={{ mb: 2 }}>Ajouter Produit</Button>
 
       {products.length > 0 && (
-        <Table>
-          <TableHead>
-            <TableRow>
-              <TableCell>Produit</TableCell>
-              <TableCell>Unité</TableCell>
-              <TableCell>Prix U ({selectedCurrency})</TableCell>
-              <TableCell>Quantité</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {products.map((prod, index) => (
-              <TableRow key={index}>
-                <TableCell>{prod.designation}</TableCell>
-                <TableCell>{prod.Unite}</TableCell>
-                <TableCell>{prod.prixU_HT}</TableCell>
-                <TableCell>{prod.quantite}</TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      )}
+  <Box sx={{ maxHeight: 300, overflowY: 'auto', mt: 2, border: '1px solid #ccc', borderRadius: 2 }}>
+    <Table>
+      <TableHead>
+        <TableRow>
+          <TableCell>Produit</TableCell>
+          <TableCell>Unité</TableCell>
+          <TableCell>Prix U ({selectedCurrency})</TableCell>
+          <TableCell>Quantité</TableCell>
+        </TableRow>
+      </TableHead>
+      <TableBody>
+        {products.map((prod, index) => (
+          <TableRow key={index}>
+            <TableCell>{prod.designation}</TableCell>
+            <TableCell>{prod.Unite}</TableCell>
+            <TableCell>{prod.prixU_HT}</TableCell>
+            <TableCell>{prod.quantite}</TableCell>
+          </TableRow>
+        ))}
+      </TableBody>
+    </Table>
+  </Box>
+)}
 
       <Button variant="contained" color="primary" onClick={handleSubmit} fullWidth>Enregistrer</Button>
 
