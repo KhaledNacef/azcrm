@@ -83,11 +83,10 @@ const CreateDeliveryNoteModal = ({ onAddDeliveryNote, codey }) => {
 
 
 
-    const tva = selectedProduct.prixU_HT * (selectedProduct.tva / 100); // assuming tva is a percentage
-      const totalprice=tva+selectedProduct.prixU_HT;
-      totalprice += totalprice * (percentage / 100);
-      const convertedPrice = convertPrice(totalprice);
-
+    const tva = selectedProduct.prixU_HT * (selectedProduct.tva / 100);
+    const totalprice = tva + selectedProduct.prixU_HT;
+    const finalTotalPrice = totalprice + totalprice * (percentage / 100);
+    const convertedPrice = convertPrice(finalTotalPrice);
 
 
     setProducts((prev) => [
