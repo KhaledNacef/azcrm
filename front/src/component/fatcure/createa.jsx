@@ -226,7 +226,7 @@ const CreatebcModala = ({ onAddDeliveryNote }) => {
              <TableRow>
                <TableCell>Produit</TableCell>
                <TableCell>Unité</TableCell>
-               <TableCell>Prix U ({selectedCurrency})</TableCell>
+               <TableCell>Prix U (TND)</TableCell>
                <TableCell>Quantité</TableCell>
              </TableRow>
            </TableHead>
