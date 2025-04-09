@@ -202,18 +202,16 @@ const BCsingleACHAT = () => {
             <Typography variant="body1">
               <strong>Total TVA:</strong> {totalTVA.toFixed(2)}TND
             </Typography>
+            {timbre === 'true' && (
+                         <Typography variant="body1">
+                           <strong>Timbre:</strong> 1TND
+                         </Typography>
+                       )}
             <Typography variant="body1">
-              <strong>Total Net (TTC):</strong> {totalNetTTC.toFixed(2)}TND
+              <strong>Total Net (TTC):</strong> {totalWithTimbre.toFixed(2)}TND
             </Typography>
-            {/* Add Timbre Amount */}
-            {timbreAmount > 0 && (
-              <Typography variant="body1">
-                <strong>Timbre:</strong> 1TND
-              </Typography>
-            )}
-            <Typography variant="body1">
-              <strong>Total Final (TTC avec Timbre):</strong> {totalWithTimbre.toFixed(2)}TND
-            </Typography>
+            
+           
           </Box>
         </Box>
 
