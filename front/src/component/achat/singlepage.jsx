@@ -111,14 +111,23 @@ const SingleDeliveryNote = () => {
             }
           `}
         </style>
-        <Box sx={{ width: 794, height: 152, mb: 3, overflow: 'hidden' }}>
+        <Box sx={{ 
+          width: 742,
+          height: 152,
+          mx: 'auto', // Center horizontally
+          mb: 3,
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+          overflow: 'hidden'
+        }}>
           <img
             src={logo}
             alt="Company Logo"
             style={{ 
               width: '100%',
               height: '100%',
-              objectFit: 'cover' // This will ensure the image fills the container
+              objectFit: 'cover' // or 'contain' based on your preference
             }}
           />
         </Box>
