@@ -101,34 +101,38 @@ const StockPage = () => {
               <TableCell><strong>Prix Net (TTC)</strong></TableCell>
             </TableRow>
           </TableHead>
-          <TableBody>
-            {filteredProducts.length > 0 ? (
-              filteredProducts.map((product) => {
-                const netHT = calculateNetHT(product.prixU_HT, product.quantite);
-                const netTTC = calculateNetTTC(netHT, product.tva);
-                return (
-                  <TableRow key={product.id}>
-                    <TableCell>{product.id}</TableCell>
-                    <TableCell>{product.designation}</TableCell>
-                    <TableCell>{product.Unite}</TableCell>
-                    <TableCell>{product.quantite}</TableCell>
-                    <TableCell>{product.prixU_HT.toFixed(2)} TND </TableCell>
-                    <TableCell>{product.dernierprixU_HT.toFixed(2)} TND </TableCell>
-                    <TableCell>{product.moyenneprix.toFixed(2)} TND </TableCell>
-                    <TableCell>{product.tva} %</TableCell>
-                    <TableCell>{netHT.toFixed(2)} TND </TableCell>
-                    <TableCell>{netTTC.toFixed(2)} TND </TableCell>
-                  </TableRow>
-                );
-              })
-            ) : (
-              <TableRow>
-                <TableCell colSpan={9} align="center">
-                  No products found.
-                </TableCell>
-              </TableRow>
-            )}
-          </TableBody>
+          // Inside TableBody
+<TableBody>
+  {filteredProducts.length > 0 ? (
+    filteredProducts.map((product) => {
+      // Use moyenneprix if greater than 0, otherwise fall back to prixU_HT for calculations
+      const unitPriceForCalculations = product.moyenneprix > 0 ? product.moyenneprix : product.prixU_HT;
+      const netHT = calculateNetHT(unitPriceForCalculations, product.quantite);
+      const netTTC = calculateNetTTC(netHT, product.tva);
+
+      return (
+        <TableRow key={product.id}>
+          <TableCell>{product.id}</TableCell>
+          <TableCell>{product.designation}</TableCell>
+          <TableCell>{product.Unite}</TableCell>
+          <TableCell>{product.quantite}</TableCell>
+          <TableCell>{product.prixU_HT.toFixed(2)} TND</TableCell> {/* Display prixU_HT */}
+          <TableCell>{product.dernierprixU_HT.toFixed(2)} TND</TableCell>
+          <TableCell>{product.moyenneprix > 0 ? product.moyenneprix.toFixed(2) : '-'}</TableCell> {/* Display moyenneprix */}
+          <TableCell>{product.tva} %</TableCell>
+          <TableCell>{netHT.toFixed(2)} TND</TableCell> {/* Net HT calculation */}
+          <TableCell>{netTTC.toFixed(2)} TND</TableCell> {/* Net TTC calculation */}
+        </TableRow>
+      );
+    })
+  ) : (
+    <TableRow>
+      <TableCell colSpan={9} align="center">
+        No products found.
+      </TableCell>
+    </TableRow>
+  )}
+</TableBody>
         </Table>
       </TableContainer>
 
