@@ -195,26 +195,26 @@ const BCsingleACHAT = () => {
 
         {/* Total Section */}
         <Box sx={{ display: 'flex', justifyContent: 'flex-end', mt: 3 }}>
-          <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end' }}>
-            <Typography variant="body1">
-              <strong>Total Net (HT):</strong> {totalNetHT.toFixed(2)}TND
-            </Typography>
-            <Typography variant="body1">
-              <strong>Total TVA:</strong> {totalTVA.toFixed(2)}TND
-            </Typography>
-            {timbre === 'true' && (
-                         <Typography variant="body1">
-                           <strong>Timbre:</strong> 1TND
-                         </Typography>
-                       )}
-            <Typography variant="body1">
-              <strong>Total Net (TTC):</strong> {totalWithTimbre.toFixed(2)}TND
-            </Typography>
-            
-           
-          </Box>
-        </Box>
+  <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end' }}>
+    <Typography variant="body1">
+      <strong>Total Net (HT):</strong> {totalNetHT.toFixed(2)} TND
+    </Typography>
+    <Typography variant="body1">
+      <strong>Total TVA:</strong> {totalTVA.toFixed(2)} TND
+    </Typography>
 
+    {/* Show Timbre only if it's true */}
+    {timbre === 'true' && (
+      <Typography variant="body1">
+        <strong>Timbre:</strong> 1 TND
+      </Typography>
+    )}
+
+    <Typography variant="body1">
+      <strong>Total Net (TTC):</strong> {totalWithTimbre.toFixed(2)} TND
+    </Typography>
+  </Box>
+</Box>
         <Box sx={{ display: 'flex', justifyContent: 'space-between', mt: 4 }}>
           <Box sx={{ textAlign: 'center' }}>
             <Typography variant="body1">Signature du Fournisseur</Typography>

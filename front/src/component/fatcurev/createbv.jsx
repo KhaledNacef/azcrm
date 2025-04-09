@@ -17,7 +17,6 @@ import {
 const Createbv = ({ onAddDeliveryNote }) => {
   const [code, setCode] = useState('');
   const [client, setClient] = useState(0);
-  const [clientn, setClientn] = useState('');
   const [codey, setCodey] = useState('');
   const [products, setProducts] = useState([]);
   const [newProduct, setNewProduct] = useState('');
@@ -95,6 +94,7 @@ const Createbv = ({ onAddDeliveryNote }) => {
       setQuantite(1);
       setPrice('');
       setPercentage('');
+      setBaseCurrency('TND')
     }
   };
 
@@ -182,13 +182,7 @@ const Createbv = ({ onAddDeliveryNote }) => {
         margin="normal"
         disabled
       />
-      <TextField
-        label="Client"
-        value={clientn}
-        onChange={(e) => setClientn(e.target.value)}
-        fullWidth
-        margin="normal"
-      />
+      
       <TextField
         select
         label="Select Client"
@@ -199,7 +193,7 @@ const Createbv = ({ onAddDeliveryNote }) => {
       >
         {clients.map(client => (
           <MenuItem key={client.id} value={client.id}>
-            {client.name}
+            {client.fullname}
           </MenuItem>
         ))}
       </TextField>
