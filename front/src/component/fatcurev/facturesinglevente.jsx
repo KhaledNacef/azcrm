@@ -231,7 +231,7 @@ const addDeliveryNote = () => {
               <TableCell>Designaiton</TableCell>
               <TableCell>Quantité</TableCell>
               <TableCell>Unite</TableCell>
-              <TableCell>Prix U </TableCell>
+              <TableCell>Prix U({devise}) </TableCell>
               <TableCell>Prix Net </TableCell>
             </TableRow>
           </TableHead>

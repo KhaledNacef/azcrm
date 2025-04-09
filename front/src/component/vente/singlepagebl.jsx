@@ -216,7 +216,7 @@ const SingleDeliverysortie = () => {
         </Box>
 
         <Typography variant="h4" mb={3} textAlign="center">
-          Bon de Sortie - {codey}
+          Bon de Sortie - {codey}-{devise}
         </Typography>
 
         <Table>
@@ -225,7 +225,7 @@ const SingleDeliverysortie = () => {
               <TableCell>Designaiton</TableCell>
               <TableCell>Quantité</TableCell>
               <TableCell>Unite</TableCell>
-              <TableCell>Prix U </TableCell>
+              <TableCell>Prix U({devise}) </TableCell>
               <TableCell>Prix Net </TableCell>
             </TableRow>
           </TableHead>

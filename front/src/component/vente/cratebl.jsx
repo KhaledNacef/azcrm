@@ -82,7 +82,6 @@ const CreateDeliveryNoteModal = ({ onAddDeliveryNote, codey }) => {
       setPrice(newPrice.toFixed(2));
     }
   };
-
   const handleAddProduct = () => {
     if (!newProduct) return;
   
@@ -90,9 +89,12 @@ const CreateDeliveryNoteModal = ({ onAddDeliveryNote, codey }) => {
     if (!selectedProduct) return;
   
     const basePrice = selectedProduct.moyenneprix > 0 ? selectedProduct.moyenneprix : selectedProduct.prixU_HT;
-    const tva = basePrice * (selectedProduct.tva / 100);
-    const totalprice = basePrice + tva;
-    const finalTotalPrice = totalprice + totalprice * (percentage / 100);
+    const tva = basePrice * (selectedProduct.tva / 100);  // Calculate VAT
+    const totalprice = basePrice + tva;  // Add VAT to base price
+    const finalTotalPrice = totalprice + totalprice * (percentage / 100);  // Add gain percentage to the price
+  
+    // Update the price TextField with the final price
+    setPrice(finalTotalPrice.toFixed(2)); // Set the final price after VAT and percentage gain
   
     convertToCurrency(finalTotalPrice).then((convertedPrice) => {
       setProducts((prev) => [
@@ -100,7 +102,7 @@ const CreateDeliveryNoteModal = ({ onAddDeliveryNote, codey }) => {
         {
           designation: selectedProduct.designation,
           Unite: selectedProduct.Unite,
-          prixU_HT: convertedPrice,  // Set the converted price
+          prixU_HT: convertedPrice,  // Set the converted price in the products list
           quantite: parseInt(quantite, 10),
         },
       ]);
@@ -113,7 +115,6 @@ const CreateDeliveryNoteModal = ({ onAddDeliveryNote, codey }) => {
   
     setNewProduct("");
     setQuantite(1);
-    setPrice("");
     setPercentage(0);
   };
   
@@ -238,9 +239,11 @@ const CreateDeliveryNoteModal = ({ onAddDeliveryNote, codey }) => {
         fullWidth
         margin="normal"
       >
-        {['TND', 'EUR', 'USD', 'CAD', 'GBP'].map(currency => (
-          <MenuItem key={currency} value={currency}>{currency}</MenuItem>
-        ))}
+       {Object.keys(exchangeRates).map(currency => (
+                <MenuItem key={currency} value={currency}>
+                  {currency}
+                </MenuItem>
+              ))}
       </TextField>
 
       <Button onClick={handleAddProduct} variant="outlined" sx={{ mb: 2 }}>
