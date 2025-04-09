@@ -4,6 +4,7 @@ import axios from 'axios';
 import { Box, Typography, Button, Table, TableHead, TableRow, TableCell, TableBody, CircularProgress,Modal  } from '@mui/material';
 import './fdesign.css';
 import CreateDeliveryNoteModala from '../achat/crate.jsx'; // Ensure correct file name
+import logo from '../../assets/amounnet.png';  // Relative path
 
 const BCsingleACHAT = () => {
   const { code, supplierId,codey } = useParams();
@@ -127,7 +128,7 @@ const [open, setOpen] = useState(false);
       </style>
       <Box sx={{ display: 'flex', justifyContent: 'center', mb: 3 }}>
   <img
-    src='/amounnet.png'
+    src={logo}
     alt="Logo de Ma Société"
     style={{ width: 100 }}
   />

@@ -4,6 +4,8 @@ import { Box, Typography, Table, TableHead, TableRow, TableCell, TableBody,Butto
 import Grid from '@mui/material/Grid2';
 import './fvdesign.css';
 import CreateDeliveryNoteModal from '../vente/cratebl.jsx';
+import logo from '../../assets/amounnet.png';  // Relative path
+
 const Bvsinlge = () => {
   const { code, clientId,codey,devise } = useParams();
   const printRef = useRef();
@@ -193,7 +195,7 @@ const addDeliveryNote = () => {
         </style>
         <Box sx={{ display: 'flex', justifyContent: 'center', mb: 3 }}>
   <img
-    src='/amounnet.png'
+    src={logo}
     alt="Logo de Ma Société"
     style={{ width: 100 }}
   />

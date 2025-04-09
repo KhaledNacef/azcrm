@@ -3,6 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { Box, Typography, Table, TableHead, TableRow, TableCell, TableBody,Button } from '@mui/material';
 import Grid from '@mui/material/Grid2';
 import './cssbl.css';
+import logo from '../../assets/amounnet.png';  // Relative path
 
 const SingleDeliverysortie = () => {
   const { code, clientId,codey,devise } = useParams();
@@ -189,7 +190,7 @@ const SingleDeliverysortie = () => {
         </style>
         <Box sx={{ display: 'flex', justifyContent: 'center', mb: 3 }}>
   <img
-    src='/amounnet.png'
+    src={logo}
     alt="Logo de Ma Société"
     style={{ width: 100 }}
   />

@@ -3,6 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { Box, Typography, Button, Table, TableHead, TableRow, TableCell, TableBody, CircularProgress } from '@mui/material';
 import './cssba.css';
+import logo from '../../assets/amounnet.png';  // Relative path
 
 const SingleDeliveryNote = () => {
   const { code, supplierId,codey } = useParams();
@@ -107,7 +108,7 @@ const SingleDeliveryNote = () => {
       </style>
       <Box sx={{ display: 'flex', justifyContent: 'center', mb: 3 }}>
   <img
-    src='/amounnet.png'
+    src={logo}
     alt="Logo de Ma Société"
     style={{ width: 100 }}
   />
