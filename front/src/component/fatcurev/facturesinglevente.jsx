@@ -173,8 +173,6 @@ const addDeliveryNote = () => {
           p: 3,
           mt: 2,
           backgroundColor: '#fff',
-          maxWidth: 800, // Slightly larger than logo for padding
-          mx: 'auto' // Center the container
         }}
       >
         {/* Add style for print */}
