@@ -126,13 +126,17 @@ const BCsingleACHAT = () => {
             }
           `}
         </style>
-        <Box sx={{ width: '100%', mb: 3 }}>
-          <img
-            src={logo}
-            alt="Logo de Ma Société"
-            style={{ width: '100%', height: '60px', objectFit: 'contain' }}
-          />
-        </Box>
+          <Box sx={{ width: 794, height: 152, mb: 3, overflow: 'hidden' }}>
+                 <img
+                   src={logo}
+                   alt="Company Logo"
+                   style={{ 
+                     width: '100%',
+                     height: '100%',
+                     objectFit: 'cover' // This will ensure the image fills the container
+                   }}
+                 />
+               </Box>
         {/* Company and Supplier Information with Labels */}
         <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 3 }}>
           {/* Company Information (Left Column) */}
