@@ -101,7 +101,7 @@ const StockPage = () => {
               <TableCell><strong>Prix Net (TTC)</strong></TableCell>
             </TableRow>
           </TableHead>
-          // Inside TableBody
+          
 <TableBody>
   {filteredProducts.length > 0 ? (
     filteredProducts.map((product) => {
