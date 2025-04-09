@@ -156,14 +156,14 @@ const Createbv = ({ onAddDeliveryNote }) => {
         code,
         clientId: client,
         products,
-        clientName: clientn,
+        clientName: clients.find((cl) => cl.id === client)?.fullname || "",
         codey,
         devise: selectedCurrency
       });
 
       setSnackbarMessage('Delivery note created successfully');
       setOpenSnackbar(true);
-      onAddDeliveryNote({ code, clientId: client, products, clientName: clientn, codey });
+      onAddDeliveryNote();
     } catch (error) {
       setSnackbarMessage('Failed to create delivery note');
       setOpenSnackbar(true);

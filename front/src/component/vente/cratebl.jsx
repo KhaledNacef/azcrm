@@ -137,7 +137,6 @@ const CreateDeliveryNoteModal = ({ onAddDeliveryNote, codey }) => {
       code,
       clientId: client,
       products,
-      clientName: clients.find((cl) => cl.id === client)?.fullname || "",
       codey,
       devise: selectedCurrency,
     };
