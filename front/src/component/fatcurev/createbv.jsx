@@ -66,7 +66,7 @@ const Createbv = ({ onAddDeliveryNote }) => {
       const selectedProduct = availableProducts.find(p => p.designation === newProduct);
       if (selectedProduct) {
         const basePrice = selectedProduct.moyenneprix > 0 ? selectedProduct.moyenneprix : selectedProduct.prixU_HT;
-        const tvaMultiplier = 1 + (selectedProduct.TVA || 0) / 100;
+        const tvaMultiplier = 1 + (selectedProduct.tva || 0) / 100;
         const priceWithTva = basePrice * tvaMultiplier;
         
         // Convert to selected currency if not TND
@@ -106,7 +106,6 @@ const Createbv = ({ onAddDeliveryNote }) => {
       Unite: selectedProduct.Unite,
       prixU_HT: finalPrice,
       quantite: parseInt(quantite, 10),
-      TVA: selectedProduct.TVA || 0
     }]);
 
     setNewProduct('');
@@ -121,7 +120,7 @@ const Createbv = ({ onAddDeliveryNote }) => {
     const selectedProduct = availableProducts.find(p => p.designation === newProduct);
     if (selectedProduct) {
       const basePrice = selectedProduct.moyenneprix > 0 ? selectedProduct.moyenneprix : selectedProduct.prixU_HT;
-      const tvaMultiplier = 1 + (selectedProduct.TVA || 0) / 100;
+      const tvaMultiplier = 1 + (selectedProduct.tva || 0) / 100;
       const priceWithTva = basePrice * tvaMultiplier;
 
       const gain = ((newPrice - priceWithTva) / priceWithTva) * 100;
@@ -135,7 +134,7 @@ const Createbv = ({ onAddDeliveryNote }) => {
     const selectedProduct = availableProducts.find(p => p.designation === newProduct);
     if (selectedProduct) {
       const basePrice = selectedProduct.moyenneprix > 0 ? selectedProduct.moyenneprix : selectedProduct.prixU_HT;
-      const tvaMultiplier = 1 + (selectedProduct.TVA || 0) / 100;
+      const tvaMultiplier = 1 + (selectedProduct.tva || 0) / 100;
       const priceWithTva = basePrice * tvaMultiplier;
 
       const newPrice = priceWithTva * (1 + newPercentage / 100);
@@ -294,7 +293,6 @@ const Createbv = ({ onAddDeliveryNote }) => {
                 <TableCell>Unit</TableCell>
                 <TableCell>Price ({selectedCurrency})</TableCell>
                 <TableCell>Quantity</TableCell>
-                <TableCell>TVA (%)</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
@@ -304,7 +302,6 @@ const Createbv = ({ onAddDeliveryNote }) => {
                   <TableCell>{product.Unite}</TableCell>
                   <TableCell>{product.prixU_HT}</TableCell>
                   <TableCell>{product.quantite}</TableCell>
-                  <TableCell>{product.TVA || 0}</TableCell>
                 </TableRow>
               ))}
             </TableBody>

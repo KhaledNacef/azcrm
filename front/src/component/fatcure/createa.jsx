@@ -162,17 +162,10 @@ const CreatebcModala = ({ onAddDeliveryNote }) => {
       </TextField>
 
       {/* Timbre selection */}
-      <TextField
-        label="Timbre"
-        select
-        value={timbre}
-        onChange={(e) => setTimbre(e.target.value)}
-        fullWidth
-        margin="normal"
-      >
-        <MenuItem value={true}>Oui</MenuItem>
-        <MenuItem value={false}>Non</MenuItem>
-      </TextField>
+       <TextField label="Timbre" select value={timbre.toString()} onChange={(e) => setTimbre(e.target.value === "true")} fullWidth margin="normal">
+              <MenuItem value="true">Oui</MenuItem>
+              <MenuItem value="false">Non</MenuItem>
+            </TextField>
 
       {/* Product selection */}
       <TextField
