@@ -85,15 +85,15 @@ const CreateDeliveryNoteModal = ({ onAddDeliveryNote, codey }) => {
 
   const handleAddProduct = () => {
     if (!newProduct) return;
-
+  
     const selectedProduct = availableProducts.find((p) => p.designation === newProduct);
     if (!selectedProduct) return;
-
+  
     const basePrice = selectedProduct.moyenneprix > 0 ? selectedProduct.moyenneprix : selectedProduct.prixU_HT;
     const tva = basePrice * (selectedProduct.tva / 100);
     const totalprice = basePrice + tva;
     const finalTotalPrice = totalprice + totalprice * (percentage / 100);
-
+  
     convertToCurrency(finalTotalPrice).then((convertedPrice) => {
       setProducts((prev) => [
         ...prev,
@@ -104,14 +104,19 @@ const CreateDeliveryNoteModal = ({ onAddDeliveryNote, codey }) => {
           quantite: parseInt(quantite, 10),
         },
       ]);
+  
+      // Reset currency to TND after adding the first product
+      if (products.length === 0) {
+        setSelectedCurrency("TND");
+      }
     });
-
+  
     setNewProduct("");
     setQuantite(1);
     setPrice("");
     setPercentage(0);
   };
-
+  
   const convertToCurrency = async (amount) => {
     try {
       const exchangeRate = exchangeRates[selectedCurrency];
@@ -137,6 +142,7 @@ const CreateDeliveryNoteModal = ({ onAddDeliveryNote, codey }) => {
       code,
       clientId: client,
       products,
+      clientName: clients.find((cl) => cl.id === client)?.fullname || "",
       codey,
       devise: selectedCurrency,
     };

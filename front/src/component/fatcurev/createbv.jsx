@@ -94,7 +94,9 @@ const Createbv = ({ onAddDeliveryNote }) => {
       setQuantite(1);
       setPrice('');
       setPercentage('');
-      setBaseCurrency('TND')
+      if (products.length === 0) {
+        setSelectedCurrency('TND');
+      }
     }
   };
 
