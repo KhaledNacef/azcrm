@@ -31,13 +31,13 @@ const App = () => {
           <Route path="/fournisseur" element={<FournisseurPage />} />
           <Route path="/client" element={<ClientPage />} />
           <Route path="/bon-dachat" element={<BonAchatPage />} />
-          <Route path="/bon-dachat/:code/:supplierId/:codey" element={<SingleDeliveryNote />} />
+          <Route path="/bon-dachat/:code/:supplierId/:codey/:timbre" element={<SingleDeliveryNote />} />
           <Route path="/bon-livraison" element={<BonsortiePage />} />
           <Route path="/bon-livraison/:code/:clientId/:codey/:devise" element={<SingleDeliverysortie />} />
           <Route path="/bon-commandefacture" element={<Boncommandev />} />
           <Route path="/bon-commandefacturee/:code/:clientId/:codey/:devise" element={<Bvsinlge />} />
           <Route path="/bon-commande" element={<Boncommande />} />
-          <Route path="/bon-commandea/:code/:supplierId/:codey" element={<BCsingleACHAT />} />
+          <Route path="/bon-commandea/:code/:supplierId/:codey/:timbre" element={<BCsingleACHAT />} />
           <Route path="/gestion/:codey" element={<CompareProducts />} />
           <Route path="/gestionv/:codey" element={<CompareProductsv />} />
 

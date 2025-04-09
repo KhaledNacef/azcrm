@@ -97,7 +97,7 @@ const Boncommande = () => {
                 <TableCell>
                   <Button
                     variant="outlined"
-                    onClick={() => navigate(`/bon-commandea/${note.code}/${note.spulierId}/${note.codey}`)}
+                    onClick={() => navigate(`/bon-commandea/${note.code}/${note.spulierId}/${note.codey}/${note.timbre}`)}
                   >
                     Voir
                   </Button>

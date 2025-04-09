@@ -35,6 +35,7 @@ const Bvsinlge = () => {
         console.error('Error fetching delivery note data:', error);
       }
     };
+    
 
     fetchClientData();
     fetchDeliveryNoteData();

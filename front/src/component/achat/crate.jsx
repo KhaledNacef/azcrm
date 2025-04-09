@@ -134,7 +134,7 @@ const CreateDeliveryNoteModala = ({ onAddDeliveryNote, codey }) => {
       <TextField label="TVA (%)" type="number" value={tva} onChange={(e) => setTva(parseFloat(e.target.value) || 0)} fullWidth margin="normal" />
       <TextField label="Prix U HT" type="number" value={prixU_HT} onChange={(e) => setPrixU_HT(parseFloat(e.target.value) || 0)} fullWidth margin="normal" />
       <TextField label="Quantité" type="number" value={quantite} onChange={(e) => setQuantite(parseInt(e.target.value, 10) || 1)} fullWidth margin="normal" />
-      <TextField label="Rem (%)" type="number" value={tva} onChange={(e) => setRem(parseFloat(e.target.value) || 0)} fullWidth margin="normal" />
+      <TextField label="Rem (%)" type="number" value={rem} onChange={(e) => setRem(parseFloat(e.target.value) || 0)} fullWidth margin="normal" />
 
       <Button onClick={handleAddProduct} variant="outlined" sx={{ mb: 2 }}>Ajouter Produit</Button>
 
