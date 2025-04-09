@@ -46,7 +46,7 @@ const CreateDeliveryNoteModal = ({ onAddDeliveryNote, codey }) => {
         ]);
         setAvailableProducts(productRes.data);
         setClients(clientRes.data);
-        setExchangeRates(currencyRes.data.conversion_rates); // Store exchange rates
+        setExchangeRates(currencyRes.data.conversion_rates);
       } catch (error) {
         console.error("Erreur lors du chargement des données:", error);
       }
@@ -54,6 +54,20 @@ const CreateDeliveryNoteModal = ({ onAddDeliveryNote, codey }) => {
 
     fetchData();
   }, []);
+
+  // New effect to update price when product is selected
+  useEffect(() => {
+    if (newProduct) {
+      const selectedProduct = availableProducts.find(p => p.designation === newProduct);
+      if (selectedProduct) {
+        const basePrice = selectedProduct.moyenneprix > 0 ? selectedProduct.moyenneprix : selectedProduct.prixU_HT;
+        const tva = basePrice * (selectedProduct.tva / 100);
+        const priceWithTva = basePrice + tva;
+        setPrice(priceWithTva.toFixed(2));
+        setPercentage(0); // Reset percentage when product changes
+      }
+    }
+  }, [newProduct, availableProducts]);
 
   const generateUniqueCode = () => {
     const timestamp = new Date().getTime();
@@ -67,7 +81,9 @@ const CreateDeliveryNoteModal = ({ onAddDeliveryNote, codey }) => {
     const selectedProduct = availableProducts.find(p => p.designation === newProduct);
     if (selectedProduct) {
       const basePrice = selectedProduct.moyenneprix > 0 ? selectedProduct.moyenneprix : selectedProduct.prixU_HT;
-      const gain = ((newPrice - basePrice) / basePrice) * 100;
+      const tva = basePrice * (selectedProduct.tva / 100);
+      const priceWithTva = basePrice + tva;
+      const gain = ((newPrice - priceWithTva) / priceWithTva) * 100;
       setPercentage(gain.toFixed(2));
     }
   };
@@ -78,10 +94,13 @@ const CreateDeliveryNoteModal = ({ onAddDeliveryNote, codey }) => {
     const selectedProduct = availableProducts.find(p => p.designation === newProduct);
     if (selectedProduct) {
       const basePrice = selectedProduct.moyenneprix > 0 ? selectedProduct.moyenneprix : selectedProduct.prixU_HT;
-      const newPrice = basePrice * (1 + newPercentage / 100);
+      const tva = basePrice * (selectedProduct.tva / 100);
+      const priceWithTva = basePrice + tva;
+      const newPrice = priceWithTva * (1 + newPercentage / 100);
       setPrice(newPrice.toFixed(2));
     }
   };
+
   const handleAddProduct = () => {
     if (!newProduct) return;
   
@@ -89,28 +108,21 @@ const CreateDeliveryNoteModal = ({ onAddDeliveryNote, codey }) => {
     if (!selectedProduct) return;
   
     const basePrice = selectedProduct.moyenneprix > 0 ? selectedProduct.moyenneprix : selectedProduct.prixU_HT;
-    const tva = basePrice * (selectedProduct.tva / 100);  // Calculate VAT
-    const totalprice = basePrice + tva;  // Add VAT to base price
-    const finalTotalPrice = totalprice + totalprice * (percentage / 100);  // Add gain percentage to the price
+    const tva = basePrice * (selectedProduct.tva / 100);
+    const priceWithTva = basePrice + tva;
+    const finalPrice = parseFloat(price) || priceWithTva;
   
-    // Update the price TextField with the final price
-    setPrice(finalTotalPrice.toFixed(2)); // Set the final price after VAT and percentage gain
-  
-    convertToCurrency(finalTotalPrice).then((convertedPrice) => {
+    convertToCurrency(finalPrice).then((convertedPrice) => {
       setProducts((prev) => [
         ...prev,
         {
           designation: selectedProduct.designation,
           Unite: selectedProduct.Unite,
-          prixU_HT: convertedPrice,  // Set the converted price in the products list
+          prixU_HT: convertedPrice,
           quantite: parseInt(quantite, 10),
+          tva: selectedProduct.tva,
         },
       ]);
-  
-      // Reset currency to TND after adding the first product
-      if (products.length === 0) {
-        setSelectedCurrency("TND");
-      }
     });
   
     setNewProduct("");
@@ -127,7 +139,7 @@ const CreateDeliveryNoteModal = ({ onAddDeliveryNote, codey }) => {
       return (amount * exchangeRate).toFixed(2);
     } catch (error) {
       console.error("Erreur lors de la conversion de la devise:", error);
-      return amount; // Return original amount if conversion fails
+      return amount;
     }
   };
 
@@ -205,12 +217,15 @@ const CreateDeliveryNoteModal = ({ onAddDeliveryNote, codey }) => {
       </TextField>
 
       <TextField
-        label="Prix Unitaire"
+        label="Prix Unitaire (avec TVA)"
         type="number"
         value={price}
         onChange={handlePriceChange}
         fullWidth
         margin="normal"
+        InputProps={{
+          endAdornment: selectedCurrency,
+        }}
       />
 
       <TextField
@@ -229,21 +244,24 @@ const CreateDeliveryNoteModal = ({ onAddDeliveryNote, codey }) => {
         onChange={handlePercentageChange}
         fullWidth
         margin="normal"
+        InputProps={{
+          endAdornment: "%",
+        }}
       />
 
       <TextField
-        label="Sélectionner la devise"
+        label="Devise"
         select
         value={selectedCurrency}
         onChange={(e) => setSelectedCurrency(e.target.value)}
         fullWidth
         margin="normal"
       >
-       {Object.keys(exchangeRates).map(currency => (
-                <MenuItem key={currency} value={currency}>
-                  {currency}
-                </MenuItem>
-              ))}
+        {Object.keys(exchangeRates).map(currency => (
+          <MenuItem key={currency} value={currency}>
+            {currency}
+          </MenuItem>
+        ))}
       </TextField>
 
       <Button onClick={handleAddProduct} variant="outlined" sx={{ mb: 2 }}>

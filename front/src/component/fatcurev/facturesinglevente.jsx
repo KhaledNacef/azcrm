@@ -222,7 +222,7 @@ const addDeliveryNote = () => {
         </Box>
 
         <Typography variant="h4" mb={3} textAlign="center">
-        Bon De Livraison- {codey}/{devise}
+        Bon De Livraison- {codey}-{devise}
         </Typography>
 
         <Table>
@@ -231,7 +231,7 @@ const addDeliveryNote = () => {
               <TableCell>Designaiton</TableCell>
               <TableCell>Quantité</TableCell>
               <TableCell>Unite</TableCell>
-              <TableCell>Prix U({devise}) </TableCell>
+              <TableCell>Prix U ({devise}) </TableCell>
               <TableCell>Prix Net </TableCell>
             </TableRow>
           </TableHead>
@@ -241,8 +241,8 @@ const addDeliveryNote = () => {
                 <TableCell>{prod.designation}</TableCell>
                 <TableCell>{prod.quantite}</TableCell>
                 <TableCell>{prod.Unite}</TableCell>
-                <TableCell>{prod.prixU_HT}({devise})</TableCell>
-                <TableCell>{(prod.prixU_HT * prod.quantite).toFixed(2)}{devise}</TableCell>
+                <TableCell>{prod.prixU_HT} ({devise})</TableCell>
+                <TableCell>{(prod.prixU_HT * prod.quantite).toFixed(2)} ({devise})</TableCell>
               
               </TableRow>
             ))}

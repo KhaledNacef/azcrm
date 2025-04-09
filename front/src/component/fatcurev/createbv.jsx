@@ -11,7 +11,8 @@ import {
   TableCell,
   TableRow,
   TableHead,
-  Snackbar
+  Snackbar,
+  Alert
 } from '@mui/material';
 
 const Createbv = ({ onAddDeliveryNote }) => {
@@ -28,11 +29,11 @@ const Createbv = ({ onAddDeliveryNote }) => {
   const [percentage, setPercentage] = useState('');
   const [openSnackbar, setOpenSnackbar] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState('');
+  const [snackbarSeverity, setSnackbarSeverity] = useState('success');
   const [exchangeRates, setExchangeRates] = useState({});
-  const [baseCurrency, setBaseCurrency] = useState('TND');
 
   const API_BASE_URL = 'https://api.azcrm.deviceshopleader.com/api';
-  const EXCHANGE_RATE_API_URL = 'https://api.exchangerate-api.com/v4/latest/TND'; // Example API URL
+  const EXCHANGE_RATE_API_URL = 'https://api.exchangerate-api.com/v4/latest/TND';
 
   useEffect(() => {
     const generateUniqueCode = () => `DN-${new Date().getTime()}-${Math.random().toString(36).substring(2, 8).toUpperCase()}`;
@@ -51,53 +52,67 @@ const Createbv = ({ onAddDeliveryNote }) => {
         setExchangeRates(exchangeRateRes.data.rates);
       } catch (error) {
         console.error('Error loading data:', error);
+        setSnackbarMessage('Failed to load data');
+        setSnackbarSeverity('error');
+        setOpenSnackbar(true);
       }
     };
     fetchData();
   }, []);
 
+  // Automatically update price when product is selected
   useEffect(() => {
-    const selectedProduct = availableProducts.find(p => p.designation === newProduct);
-    if (selectedProduct) {
-      const basePrice = selectedProduct.moyenneprix > 0 ? selectedProduct.moyenneprix : selectedProduct.prixU_HT;
-      const tvaMultiplier = 1 + (selectedProduct.TVA || 0) / 100;
-      const priceWithTva = basePrice * tvaMultiplier;
-      setPrice(priceWithTva.toFixed(2));
-      setPercentage('');
+    if (newProduct) {
+      const selectedProduct = availableProducts.find(p => p.designation === newProduct);
+      if (selectedProduct) {
+        const basePrice = selectedProduct.moyenneprix > 0 ? selectedProduct.moyenneprix : selectedProduct.prixU_HT;
+        const tvaMultiplier = 1 + (selectedProduct.TVA || 0) / 100;
+        const priceWithTva = basePrice * tvaMultiplier;
+        
+        // Convert to selected currency if not TND
+        if (selectedCurrency !== 'TND' && exchangeRates[selectedCurrency]) {
+          const convertedPrice = priceWithTva * exchangeRates[selectedCurrency];
+          setPrice(convertedPrice.toFixed(2));
+        } else {
+          setPrice(priceWithTva.toFixed(2));
+        }
+        
+        setPercentage('');
+      }
     }
-  }, [newProduct]);
+  }, [newProduct, selectedCurrency, exchangeRates]);
 
   const handleAddProduct = () => {
     const selectedProduct = availableProducts.find(p => p.designation === newProduct);
-    if (selectedProduct) {
-      if (parseInt(quantite, 10) > selectedProduct.quantite) {
-        setSnackbarMessage('Insufficient stock quantity');
-        setOpenSnackbar(true);
-        return;
-      }
+    if (!selectedProduct) return;
 
-      const finalPrice = parseFloat(price);
-      if (isNaN(finalPrice)) {
-        setSnackbarMessage('Please enter a valid price');
-        setOpenSnackbar(true);
-        return;
-      }
-
-      setProducts([...products, {
-        designation: selectedProduct.designation,
-        Unite: selectedProduct.Unite,
-        prixU_HT: finalPrice,
-        quantite: parseInt(quantite, 10),
-      }]);
-
-      setNewProduct('');
-      setQuantite(1);
-      setPrice('');
-      setPercentage('');
-      if (products.length === 0) {
-        setSelectedCurrency('TND');
-      }
+    if (parseInt(quantite, 10) > selectedProduct.quantite) {
+      setSnackbarMessage('Insufficient stock quantity');
+      setSnackbarSeverity('error');
+      setOpenSnackbar(true);
+      return;
     }
+
+    const finalPrice = parseFloat(price);
+    if (isNaN(finalPrice)) {
+      setSnackbarMessage('Please enter a valid price');
+      setSnackbarSeverity('error');
+      setOpenSnackbar(true);
+      return;
+    }
+
+    setProducts([...products, {
+      designation: selectedProduct.designation,
+      Unite: selectedProduct.Unite,
+      prixU_HT: finalPrice,
+      quantite: parseInt(quantite, 10),
+      TVA: selectedProduct.TVA || 0
+    }]);
+
+    setNewProduct('');
+    setQuantite(1);
+    setPrice('');
+    setPercentage('');
   };
 
   const handlePriceChange = (e) => {
@@ -132,24 +147,17 @@ const Createbv = ({ onAddDeliveryNote }) => {
     const newCurrency = e.target.value;
     setSelectedCurrency(newCurrency);
 
-    if (newCurrency !== baseCurrency) {
-      const exchangeRate = exchangeRates[newCurrency];
-      if (exchangeRate) {
-        const selectedProduct = availableProducts.find(p => p.designation === newProduct);
-        if (selectedProduct) {
-          const basePrice = selectedProduct.moyenneprix > 0 ? selectedProduct.moyenneprix : selectedProduct.prixU_HT;
-          const tvaMultiplier = 1 + (selectedProduct.TVA || 0) / 100;
-          const priceWithTva = basePrice * tvaMultiplier;
-          const convertedPrice = priceWithTva * exchangeRate;
-          setPrice(convertedPrice.toFixed(2));
-        }
-      }
+    // Convert existing price to new currency
+    if (price && exchangeRates[newCurrency] && exchangeRates[selectedCurrency]) {
+      const conversionRate = exchangeRates[newCurrency] / exchangeRates[selectedCurrency];
+      setPrice((parseFloat(price) * conversionRate).toFixed(2));
     }
   };
 
   const handleSubmit = async () => {
     if (!client || products.length === 0) {
       setSnackbarMessage('Please fill in all required fields.');
+      setSnackbarSeverity('error');
       setOpenSnackbar(true);
       return;
     }
@@ -164,10 +172,12 @@ const Createbv = ({ onAddDeliveryNote }) => {
       });
 
       setSnackbarMessage('Delivery note created successfully');
+      setSnackbarSeverity('success');
       setOpenSnackbar(true);
       onAddDeliveryNote();
     } catch (error) {
       setSnackbarMessage('Failed to create delivery note');
+      setSnackbarSeverity('error');
       setOpenSnackbar(true);
       console.error('Error creating delivery note:', error);
     }
@@ -176,10 +186,10 @@ const Createbv = ({ onAddDeliveryNote }) => {
   return (
     <Box>
       <Typography variant="h6">Create Bon de Livraison</Typography>
+      
       <TextField
         label="Code"
         value={code}
-        onChange={(e) => setCode(e.target.value)}
         fullWidth
         margin="normal"
         disabled
@@ -199,6 +209,7 @@ const Createbv = ({ onAddDeliveryNote }) => {
           </MenuItem>
         ))}
       </TextField>
+
       <TextField
         select
         label="Select Product"
@@ -207,33 +218,49 @@ const Createbv = ({ onAddDeliveryNote }) => {
         fullWidth
         margin="normal"
       >
-        {availableProducts.map(product => (
-          <MenuItem key={product.id} value={product.designation}>
-            {product.designation}
-          </MenuItem>
-        ))}
+        {availableProducts
+          .filter(product => product.quantite > 0)
+          .map(product => (
+            <MenuItem key={product.id} value={product.designation}>
+              {`${product.designation} (Stock: ${product.quantite})`}
+            </MenuItem>
+          ))}
       </TextField>
+
       <TextField
         label="Quantity"
+        type="number"
         value={quantite}
         onChange={(e) => setQuantite(e.target.value)}
         fullWidth
         margin="normal"
+        inputProps={{ min: 1 }}
       />
+
       <TextField
-        label="Price"
+        label={`Price (${selectedCurrency})`}
+        type="number"
         value={price}
         onChange={handlePriceChange}
         fullWidth
         margin="normal"
+        InputProps={{
+          endAdornment: selectedCurrency,
+        }}
       />
+
       <TextField
-        label="Percentage"
+        label="Percentage Gain"
+        type="number"
         value={percentage}
         onChange={handlePercentageChange}
         fullWidth
         margin="normal"
+        InputProps={{
+          endAdornment: '%',
+        }}
       />
+
       <TextField
         select
         label="Currency"
@@ -248,39 +275,67 @@ const Createbv = ({ onAddDeliveryNote }) => {
           </MenuItem>
         ))}
       </TextField>
-      <Button variant="contained" onClick={handleAddProduct} fullWidth>
+
+      <Button 
+        variant="contained" 
+        onClick={handleAddProduct} 
+        fullWidth
+        sx={{ mt: 2, mb: 2 }}
+      >
         Add Product
       </Button>
 
-      <Table>
-        <TableHead>
-          <TableRow>
-            <TableCell>Product</TableCell>
-            <TableCell>Quantity</TableCell>
-            <TableCell>Price</TableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {products.map((product, index) => (
-            <TableRow key={index}>
-              <TableCell>{product.designation}</TableCell>
-              <TableCell>{product.quantite}</TableCell>
-              <TableCell>{product.prixU_HT}</TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
+      {products.length > 0 && (
+        <Box sx={{ maxHeight: 300, overflowY: 'auto', mb: 2, border: '1px solid #ccc', borderRadius: 1 }}>
+          <Table>
+            <TableHead>
+              <TableRow>
+                <TableCell>Product</TableCell>
+                <TableCell>Unit</TableCell>
+                <TableCell>Price ({selectedCurrency})</TableCell>
+                <TableCell>Quantity</TableCell>
+                <TableCell>TVA (%)</TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {products.map((product, index) => (
+                <TableRow key={index}>
+                  <TableCell>{product.designation}</TableCell>
+                  <TableCell>{product.Unite}</TableCell>
+                  <TableCell>{product.prixU_HT}</TableCell>
+                  <TableCell>{product.quantite}</TableCell>
+                  <TableCell>{product.TVA || 0}</TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </Box>
+      )}
 
-      <Button variant="contained" onClick={handleSubmit} fullWidth>
+      <Button 
+        variant="contained" 
+        color="primary" 
+        onClick={handleSubmit} 
+        fullWidth
+        sx={{ mt: 2 }}
+      >
         Submit Delivery Note
       </Button>
 
       <Snackbar
         open={openSnackbar}
-        message={snackbarMessage}
         autoHideDuration={6000}
         onClose={() => setOpenSnackbar(false)}
-      />
+        anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
+      >
+        <Alert 
+          onClose={() => setOpenSnackbar(false)} 
+          severity={snackbarSeverity}
+          sx={{ width: '100%' }}
+        >
+          {snackbarMessage}
+        </Alert>
+      </Snackbar>
     </Box>
   );
 };
