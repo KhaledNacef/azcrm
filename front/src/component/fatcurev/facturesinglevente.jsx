@@ -198,7 +198,8 @@ const addDeliveryNote = () => {
   <img
     src={logo}
     alt="Logo de Ma Société"
-    style={{ width: 100 }}
+    style={{ width: 200,height:60 }}
+
   />
 </Box>
 
