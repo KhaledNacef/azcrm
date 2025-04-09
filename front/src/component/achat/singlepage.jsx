@@ -150,8 +150,6 @@ const SingleDeliveryNote = () => {
               <TableCell>Unite</TableCell>
               <TableCell>Quantité</TableCell>
               <TableCell>Prix U (HT)</TableCell>
-              <TableCell>Dernier Prix</TableCell>
-              <TableCell>Moyenne prix</TableCell>
               <TableCell>TVA (%)</TableCell>
               <TableCell>Rem (%)</TableCell>     
               <TableCell>Prix Net (HT)</TableCell>
@@ -189,15 +187,16 @@ const SingleDeliveryNote = () => {
             <Typography variant="body1">
               <strong>Total TVA:</strong> {totalTVA.toFixed(2)}TND
             </Typography>
-            <Typography variant="body1">
-              <strong>Total Net (TTC):</strong> {totalNetTTC.toFixed(2)}TND
-            </Typography>
-            {/* Add Timbre cost if applicable */}
             {timbre === 'true' && (
               <Typography variant="body1">
                 <strong>Timbre:</strong> 1TND
               </Typography>
             )}
+            <Typography variant="body1">
+              <strong>Total Net (TTC):</strong> {totalNetTTC.toFixed(2)}TND
+            </Typography>
+            {/* Add Timbre cost if applicable */}
+          
           </Box>
         </Box>
 

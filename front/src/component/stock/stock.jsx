@@ -94,6 +94,8 @@ const StockPage = () => {
               <TableCell><strong>Unité</strong></TableCell>
               <TableCell><strong>Quantité</strong></TableCell>
               <TableCell><strong>Prix U (HT)</strong></TableCell>
+              <TableCell><strong>Dernier Prix</strong></TableCell>
+              <TableCell><strong>Moyenne prix</strong></TableCell>
               <TableCell><strong>TVA (%)</strong></TableCell>
               <TableCell><strong>Prix Net (HT)</strong></TableCell>
               <TableCell><strong>Prix Net (TTC)</strong></TableCell>
@@ -111,6 +113,8 @@ const StockPage = () => {
                     <TableCell>{product.Unite}</TableCell>
                     <TableCell>{product.quantite}</TableCell>
                     <TableCell>{product.prixU_HT.toFixed(2)} TND </TableCell>
+                    <TableCell>{product.dernierprixU_HT.toFixed(2)} TND </TableCell>
+                    <TableCell>{product.moyenneprix.toFixed(2)} TND </TableCell>
                     <TableCell>{product.tva} %</TableCell>
                     <TableCell>{netHT.toFixed(2)} TND </TableCell>
                     <TableCell>{netTTC.toFixed(2)} TND </TableCell>
