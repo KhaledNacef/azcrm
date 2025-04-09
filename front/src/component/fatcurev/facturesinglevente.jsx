@@ -191,16 +191,13 @@ const addDeliveryNote = () => {
             }
           `}
         </style>
-        <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 3 }}>
-          <Box>
-            <img
-              src="https://pandp.tn/wp-content/uploads/2023/11/logo-pandp-shop-dark-bold1.png"
-              alt="Logo de Ma Société"
-              style={{ width: 100 }}
-            />
-          </Box>
-          
-        </Box>
+        <Box sx={{ display: 'flex', justifyContent: 'center', mb: 3 }}>
+  <img
+    src='/amounnet.png'
+    alt="Logo de Ma Société"
+    style={{ width: 100 }}
+  />
+</Box>
 
         {/* Company and Supplier Information with Labels */}
         <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 3 }}>
