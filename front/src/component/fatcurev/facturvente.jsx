@@ -27,6 +27,7 @@ const Boncommandev = () => {
       const response = await axios.get('https://api.azcrm.deviceshopleader.com/api/bonlivraison/facturev/get');
       console.log('API Response:', response.data); // ✅ Debugging log
       setDeliveryNotes(response.data); // ✅ Ensure it's always an array
+      
     } catch (error) {
       console.error('Error fetching delivery notes:', error);
     }
@@ -90,14 +91,14 @@ const Boncommandev = () => {
               <TableRow key={note.code}>
                 <TableCell>{note.codey}</TableCell>
                 <TableCell>{note.clientName || 'N/A'}</TableCell>
-                <TableCell>{note.timbre ? 'Oui' : 'Non'}</TableCell>
+                <TableCell>{note.devise}</TableCell>
                 <TableCell>
                   {note.createdAt ? new Date(note.createdAt).toLocaleDateString() : 'N/A'}
                 </TableCell>
                 <TableCell>
                   <Button
                     variant="outlined"
-                    onClick={() => navigate(`/bon-commandefacturee/${note.code}/${note.clientId}/${note.codey}`)}
+                    onClick={() => navigate(`/bon-commandefacturee/${note.code}/${note.clientId}/${note.codey}/${note.devise}`)}
                   >
                     Voir
                   </Button>

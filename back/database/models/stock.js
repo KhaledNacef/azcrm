@@ -45,6 +45,19 @@ const Stock = {
   codey: {
     type: DataTypes.STRING,
     allowNull: true,
+  },
+  rem: {
+    type: DataTypes.FLOAT,
+    allowNull: true, // Allow null because it's computed dynamically
+  },
+  
+  dernierprixU_HT: {
+    type: DataTypes.FLOAT,
+    allowNull: true,
+  },
+  moyenneprix: {
+    type: DataTypes.FLOAT,
+    allowNull: true,
   }
 };
 

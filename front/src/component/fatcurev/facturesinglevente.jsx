@@ -5,7 +5,7 @@ import Grid from '@mui/material/Grid2';
 import './fvdesign.css';
 import CreateDeliveryNoteModal from '../vente/cratebl.jsx';
 const Bvsinlge = () => {
-  const { code, clientId,codey } = useParams();
+  const { code, clientId,codey,devise } = useParams();
   const printRef = useRef();
   const navigate = useNavigate();
 
@@ -222,7 +222,7 @@ const addDeliveryNote = () => {
         </Box>
 
         <Typography variant="h4" mb={3} textAlign="center">
-        Bon De Livraison- {codey}
+        Bon De Livraison- {codey}/{devise}
         </Typography>
 
         <Table>
@@ -241,8 +241,8 @@ const addDeliveryNote = () => {
                 <TableCell>{prod.designation}</TableCell>
                 <TableCell>{prod.quantite}</TableCell>
                 <TableCell>{prod.Unite}</TableCell>
-                <TableCell>{prod.prixU_HT}$</TableCell>
-                <TableCell>{(prod.prixU_HT * prod.quantite).toFixed(2)}$</TableCell>
+                <TableCell>{prod.prixU_HT}({devise})</TableCell>
+                <TableCell>{(prod.prixU_HT * prod.quantite).toFixed(2)}{devise}</TableCell>
               
               </TableRow>
             ))}

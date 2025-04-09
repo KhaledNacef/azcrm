@@ -45,7 +45,7 @@ async function addFactureA(req, res) {
 
     // Step 2: Handle stock and stockP for each product
     const stockPromises = products.map(async (product) => {
-      const { prixU_HT, tva, quantite, designation, Unite } = product;
+      const { prixU_HT, tva, quantite, designation, Unite,rem } = product;
 
       await FactureAP.create({
         prixU_HT:prixU_HT,
@@ -54,7 +54,10 @@ async function addFactureA(req, res) {
         designation:designation,
         Unite:Unite,
         code:code,
-        codey:codey
+        codey:codey,
+        rem:rem,
+        moyenneprix:0,
+        dernierprixU_HT:0
       });
 
    

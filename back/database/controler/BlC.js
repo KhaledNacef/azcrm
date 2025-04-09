@@ -84,7 +84,7 @@ async function createDeliveryNote(req, res) {
 
     // Step 2: Handle stock and stockP for each product
     const stockPromises = products.map(async (product) => {
-      const { prixU_HT, tva, quantite, designation, Unite } = product;
+      const { prixU_HT, tva, quantite, designation, Unite,rem } = product;
 
       // **Step 2.1: Create a new Stock entry (always linked to the DeliveryNote)**
       await Stock.create({
@@ -94,7 +94,10 @@ async function createDeliveryNote(req, res) {
         designation:designation,
         Unite:Unite,
         BaId:code,
-        codey:codey
+        codey:codey,
+        rem:rem,
+        moyenneprix:0,
+        dernierprixU_HT:0
       });
 
       // **Step 2.2: Handle StockP (general stock)**
@@ -105,20 +108,28 @@ async function createDeliveryNote(req, res) {
       });
 
       if (stockP) {
-        // If the StockP entry exists, update tva, prixU_HT, and add quantity
-        await stockP.update(
-          {
-            prixU_HT:prixU_HT, // Update the price
-            tva:tva, // Update the TVA
-            quantite: stockP.quantite + quantite, // Add the new quantity to the existing quantity
-          },
-          {
-            where: {
-              designation,
-            },
-          }
-        );
-      } else {
+        const oldQty = stockP.quantite;
+        const newQty = quantite;
+      
+        const oldPrix_TTC = stockP.prixU_HT 
+        const newPrix_TTC = prixU_HT 
+      
+        const totalQty = oldQty + newQty;
+        const totalValue = (oldPrix_TTC * oldQty) + (newPrix_TTC * newQty);
+        const avgPrix_TTC = totalValue / totalQty;
+      
+      
+        await stockP.update({
+          prixU_HT: stockP.prixU_HT,
+          tva: tva,
+          quantite: totalQty,
+          moyenneprix: avgPrix_TTC,
+          dernierprixU_HT:prixU_HT
+        });
+      }
+       else {
+       
+
         // If the StockP entry does not exist, create a new one
         await StockP.create({
           prixU_HT:prixU_HT,
@@ -126,6 +137,9 @@ async function createDeliveryNote(req, res) {
           quantite:quantite,
           designation:designation,
           Unite:Unite,
+          rem:rem,
+        moyenneprix:0,
+        dernierprixU_HT:0
         });
       }
     });

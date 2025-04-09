@@ -164,6 +164,7 @@ const [open, setOpen] = useState(false);
             <TableCell>Quantité</TableCell>
             <TableCell>Prix U (HT)</TableCell>
             <TableCell>TVA (%)</TableCell>
+            <TableCell>Rem (%)</TableCell>
             <TableCell>Prix Net (HT)</TableCell>
             <TableCell>Prix Net (TTC)</TableCell>
           </TableRow>
@@ -176,6 +177,7 @@ const [open, setOpen] = useState(false);
                         <TableCell>{prod.quantite}</TableCell>
                         <TableCell>{prod.prixU_HT}TND</TableCell>
                         <TableCell>{prod.tva}%</TableCell>
+                        <TableCell>{prod.rem}%</TableCell>
                         <TableCell>{(prod.prixU_HT * prod.quantite).toFixed(2)}TND</TableCell>
                         <TableCell>
                           {((prod.prixU_HT * prod.quantite) * (1 + prod.tva / 100)).toFixed(2)}TND

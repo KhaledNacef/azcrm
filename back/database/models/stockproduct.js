@@ -38,6 +38,19 @@ const StockP = {
     type: DataTypes.STRING,
     allowNull: true,
   },
+  
+  dernierprixU_HT: {
+    type: DataTypes.FLOAT,
+    allowNull: true,
+  },
+  rem: {
+    type: DataTypes.FLOAT,
+    allowNull: true, // Allow null because it's computed dynamically
+  },
+  moyenneprix: {
+    type: DataTypes.FLOAT,
+    allowNull: true,
+  }
 };
 
 

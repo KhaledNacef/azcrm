@@ -11,10 +11,6 @@ const Bs = {
     type: DataTypes.INTEGER,
     allowNull: false
   },
-  timbre: {
-    type: DataTypes.BOOLEAN,
-    allowNull: false
-  },
   code: {
     type: DataTypes.STRING,
     allowNull: true
@@ -25,6 +21,10 @@ const Bs = {
     allowNull: false
   },
   codey: {
+    type: DataTypes.STRING,
+    allowNull: true,
+  },
+  devise: {
     type: DataTypes.STRING,
     allowNull: true,
   }

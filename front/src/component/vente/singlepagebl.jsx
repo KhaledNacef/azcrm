@@ -5,7 +5,7 @@ import Grid from '@mui/material/Grid2';
 import './cssbl.css';
 
 const SingleDeliverysortie = () => {
-  const { code, clientId,codey } = useParams();
+  const { code, clientId,codey,devise } = useParams();
   const printRef = useRef();
   const navigate = useNavigate();
 
@@ -237,8 +237,8 @@ const SingleDeliverysortie = () => {
                 <TableCell>{prod.designation}</TableCell>
                 <TableCell>{prod.quantite}</TableCell>
                 <TableCell>{prod.Unite}</TableCell>
-                <TableCell>{prod.prixU_HT}$</TableCell>
-                <TableCell>{(prod.prixU_HT * prod.quantite).toFixed(2)}$</TableCell>
+                <TableCell>{prod.prixU_HT}{devise}</TableCell>
+                <TableCell>{(prod.prixU_HT * prod.quantite).toFixed(2)}{devise}</TableCell>
               
               </TableRow>
             ))}

@@ -26,7 +26,8 @@ const CreatebcModala = ({ onAddDeliveryNote }) => {
   const [newProduct, setNewProduct] = useState("");
   const [tva, setTva] = useState(0);
   const [prixU_HT, setPrixU_HT] = useState(0);
-  
+  const [rem, setRem] = useState(0);
+
   const [quantite, setQuantite] = useState(1);
   const [availableProducts, setAvailableProducts] = useState([]);
   const [suppliers, setSuppliers] = useState([]);
@@ -92,6 +93,7 @@ const CreatebcModala = ({ onAddDeliveryNote }) => {
         tva: Number(tva),
         prixU_HT: Number(prixU_HT),
         quantite: Number(quantite),
+        rem:rem
       },
     ]);
 
@@ -99,6 +101,7 @@ const CreatebcModala = ({ onAddDeliveryNote }) => {
     setTva(0);
     setPrixU_HT(0);
     setQuantite(1);
+    setRem(0);
 
     setSnackbarMessage("Produit ajouté avec succès.");
     setSnackbarSeverity("success");
@@ -193,6 +196,14 @@ const CreatebcModala = ({ onAddDeliveryNote }) => {
         type="number"
         value={tva}
         onChange={(e) => setTva(Number(e.target.value))}
+        fullWidth
+        margin="normal"
+      />
+       <TextField
+        label="Rem (%)"
+        type="number"
+        value={rem}
+        onChange={(e) => setRem(Number(e.target.value))}
         fullWidth
         margin="normal"
       />

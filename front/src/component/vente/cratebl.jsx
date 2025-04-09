@@ -17,7 +17,6 @@ import {
 
 const CreateDeliveryNoteModal = ({ onAddDeliveryNote, codey }) => {
   const [client, setClient] = useState("");
-  const [timbre, setTimbre] = useState(false);
   const [code, setCode] = useState("");
   const [products, setProducts] = useState([]);
   const [newProduct, setNewProduct] = useState("");
@@ -28,8 +27,8 @@ const CreateDeliveryNoteModal = ({ onAddDeliveryNote, codey }) => {
   const [snackbarMessage, setSnackbarMessage] = useState("");
   const [snackbarSeverity, setSnackbarSeverity] = useState("success");
   const [selectedCurrency, setSelectedCurrency] = useState("TND");
-  const [exchangeRates, setExchangeRates] = useState({ TND: 1 });
   const [percentage, setPercentage] = useState(0);
+  const [price, setPrice] = useState('');
 
   const API_BASE_URL = "https://api.azcrm.deviceshopleader.com/api";
   const CURRENCY_API_URL = "https://v6.exchangerate-api.com/v6/9179a4fac368332ee3e66b7b/latest/TND";
@@ -69,11 +68,26 @@ const CreateDeliveryNoteModal = ({ onAddDeliveryNote, codey }) => {
     return `DN-${timestamp}-${randomString}`;
   };
 
-  const convertPrice = (priceInTND) => {
-    return exchangeRates[selectedCurrency]
-      ? (priceInTND * exchangeRates[selectedCurrency]).toFixed(2)
-      : priceInTND;
+  const handlePriceChange = (e) => {
+    const newPrice = parseFloat(e.target.value);
+    setPrice(e.target.value);
+    const selectedProduct = availableProducts.find(p => p.designation === newProduct);
+    if (selectedProduct && selectedProduct.prixU_HT > 0) {
+      const gain = ((newPrice - selectedProduct.prixU_HT) / selectedProduct.prixU_HT) * 100;
+      setPercentage(gain.toFixed(2));
+    }
   };
+
+  const handlePercentageChange = (e) => {
+    const newPercentage = parseFloat(e.target.value);
+    setPercentage(e.target.value);
+    const selectedProduct = availableProducts.find(p => p.designation === newProduct);
+    if (selectedProduct) {
+      const newPrice = selectedProduct.prixU_HT * (1 + newPercentage / 100);
+      setPrice(newPrice.toFixed(2));
+    }
+  };
+
 
   const handleAddProduct = () => {
     if (!newProduct) return;
@@ -86,7 +100,6 @@ const CreateDeliveryNoteModal = ({ onAddDeliveryNote, codey }) => {
     const tva = selectedProduct.prixU_HT * (selectedProduct.tva / 100);
     const totalprice = tva + selectedProduct.prixU_HT;
     const finalTotalPrice = totalprice + totalprice * (percentage / 100);
-    const convertedPrice = convertPrice(finalTotalPrice);
 
 
     setProducts((prev) => [
@@ -94,7 +107,7 @@ const CreateDeliveryNoteModal = ({ onAddDeliveryNote, codey }) => {
       {
         designation: selectedProduct.designation,
         Unite: selectedProduct.Unite,
-        prixU_HT: convertedPrice,
+        prixU_HT: finalTotalPrice,
         quantite: parseInt(quantite, 10),
       },
     ]);
@@ -114,10 +127,10 @@ const CreateDeliveryNoteModal = ({ onAddDeliveryNote, codey }) => {
     const newNote = {
       code,
       clientId: client,
-      timbre,
       products,
       clientName: clients.find((cl) => cl.id === client)?.fullname || "",
       codey,
+      devise:selectedCurrency
     };
 
     try {
@@ -160,18 +173,7 @@ const CreateDeliveryNoteModal = ({ onAddDeliveryNote, codey }) => {
         ))}
       </TextField>
 
-      {/* Timbre Selection */}
-      <TextField
-        label="Timbre"
-        select
-        value={timbre.toString()}
-        onChange={(e) => setTimbre(JSON.parse(e.target.value))}
-        fullWidth
-        margin="normal"
-      >
-        <MenuItem value="true">Oui</MenuItem>
-        <MenuItem value="false">Non</MenuItem>
-      </TextField>
+     
 
       {/* Product Selection */}
         <TextField 
@@ -190,7 +192,13 @@ const CreateDeliveryNoteModal = ({ onAddDeliveryNote, codey }) => {
            </MenuItem>
        ))}
      </TextField>
-
+  <TextField
+        label="Prix Unitaire"
+        type="number"
+        value={price}
+        onChange={handlePriceChange}
+        fullWidth margin="normal"
+      />
       {/* Quantity Input */}
       <TextField
         label="Quantité"
@@ -200,21 +208,23 @@ const CreateDeliveryNoteModal = ({ onAddDeliveryNote, codey }) => {
         fullWidth
         margin="normal"
       />
-      <TextField label="Pourcentage de gain" type="number" value={percentage} onChange={(e) => setPercentage(parseFloat(e.target.value))} fullWidth margin="normal" />
-
+ <TextField
+        label="Pourcentage de gain"
+        type="number"
+        value={percentage}
+        onChange={handlePercentageChange}
+        fullWidth margin="normal"
+      />
       {/* Currency Selection */}
-      <TextField
+  <TextField
         label="Sélectionner la devise"
         select
         value={selectedCurrency}
         onChange={(e) => setSelectedCurrency(e.target.value)}
-        fullWidth
-        margin="normal"
+        fullWidth margin="normal"
       >
-        {Object.keys(exchangeRates).map((currency) => (
-          <MenuItem key={currency} value={currency}>
-            {currency}
-          </MenuItem>
+        {['TND', 'EUR', 'USD', 'CAD', 'GBP'].map(currency => (
+          <MenuItem key={currency} value={currency}>{currency}</MenuItem>
         ))}
       </TextField>
 
