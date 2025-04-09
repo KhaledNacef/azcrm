@@ -13,7 +13,6 @@ import {
   TableHead,
   Snackbar
 } from '@mui/material';
-import { devise } from '../../../../back/database/models/bs';
 
 const Createbv = ({ onAddDeliveryNote }) => {
   const [code, setCode] = useState('');

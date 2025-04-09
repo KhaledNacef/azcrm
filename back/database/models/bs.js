@@ -9,16 +9,15 @@ const Bs = {
   },
   clientId: {
     type: DataTypes.INTEGER,
-    allowNull: false
+    allowNull: false,
   },
   code: {
     type: DataTypes.STRING,
-    allowNull: true
-  }
-  ,
+    allowNull: true,
+  },
   clientName: {
     type: DataTypes.STRING,
-    allowNull: false
+    allowNull: false,
   },
   codey: {
     type: DataTypes.STRING,
@@ -28,9 +27,7 @@ const Bs = {
     type: DataTypes.STRING,
     allowNull: true,
   }
+};
 
-}
-
-
-
+// Ensure the model is exported correctly
 module.exports = Bs;
