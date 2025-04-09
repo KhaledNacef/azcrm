@@ -34,9 +34,12 @@ const SingleDeliveryNote = () => {
 
   if (loading) return <CircularProgress />;
   if (error) return <Typography color="error">{error}</Typography>;
-
-  const totalNetHT = deliveryNote.reduce((acc, prod) => acc + prod.prixU_HT * prod.quantite, 0);
-  const totalTVA = totalNetHT * (deliveryNote[0]?.tva / 100);
+  const totalNetHT = deliveryNote.reduce((acc, prod) => {
+    const basePrice = prod.moyenneprix > 0 ? prod.moyenneprix : prod.prixU_HT;
+    return acc + basePrice * prod.quantite;
+  }, 0);
+  
+  const totalTVA = totalNetHT * (deliveryNote[0]?.tva / 100 || 0);
   const totalNetTTC = totalNetHT + totalTVA;
   function displayDate() {
     const today = new Date();
@@ -144,6 +147,8 @@ const SingleDeliveryNote = () => {
             <TableCell>Unite</TableCell>
             <TableCell>Quantité</TableCell>
             <TableCell>Prix U (HT)</TableCell>
+            <TableCell>Dernier Prix</TableCell>
+            <TableCell>Moyenne prix</TableCell>
             <TableCell>TVA (%)</TableCell>
             <TableCell>Rem (%)</TableCell>     
             <TableCell>Prix Net (HT)</TableCell>
@@ -151,21 +156,28 @@ const SingleDeliveryNote = () => {
           </TableRow>
         </TableHead>
         <TableBody>
-          {deliveryNote.map((prod, index) => (
-            <TableRow key={index}>
-              <TableCell>{prod.designation}</TableCell>
-              <TableCell>{prod.Unite}</TableCell>
-              <TableCell>{prod.quantite}</TableCell>
-              <TableCell>{prod.prixU_HT}TND</TableCell>
-              <TableCell>{prod.tva}%</TableCell>
-              <TableCell>{prod.rem}%</TableCell>
-              <TableCell>{(prod.prixU_HT * prod.quantite).toFixed(2)}TND</TableCell>
-              <TableCell>
-                {((prod.prixU_HT * prod.quantite) * (1 + prod.tva / 100)).toFixed(2)}TND
-              </TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
+  {deliveryNote.map((prod, index) => {
+    const basePrice = prod.moyenneprix > 0 ? prod.moyenneprix : prod.prixU_HT;
+    const netHT = basePrice * prod.quantite;
+    const netTTC = netHT * (1 + prod.tva / 100);
+
+    return (
+      <TableRow key={index}>
+        <TableCell>{prod.designation}</TableCell>
+        <TableCell>{prod.Unite}</TableCell>
+        <TableCell>{prod.quantite}</TableCell>
+        <TableCell>{prod.prixU_HT}TND</TableCell>
+        <TableCell>{prod.dernierprixU_HT}TND</TableCell>
+        <TableCell>{prod.moyenneprix}TND</TableCell>
+        <TableCell>{prod.tva}%</TableCell>
+        <TableCell>{prod.rem}%</TableCell>
+        <TableCell>{netHT.toFixed(2)}TND</TableCell>
+        <TableCell>{netTTC.toFixed(2)}TND</TableCell>
+      </TableRow>
+    );
+  })}
+</TableBody>
+
       </Table>
 
       {/* Total Section - Moved to the Right Side */}
