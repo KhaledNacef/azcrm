@@ -71,80 +71,93 @@ async function getAllDeliveryNotes(req, res) {
 // Controller to create a DeliveryNote
 async function createDeliveryNote(req, res) {
   try {
-    const {code, spulierId, timbre, products,spulierName,codey } = req.body;
+    const {code, spulierId, timbre, products, spulierName, codey} = req.body;
 
-    // Step 1: Create the DeliveryNote (Bon d'achat)
+    // Create the DeliveryNote
     const deliveryNote = await DeliveryNote.create({
-      spulierId:spulierId,
-      timbre:timbre,
-      code:code,
-      spulierName:spulierName,
-      codey:codey
+      spulierId: spulierId,
+      timbre: timbre,
+      code: code,
+      spulierName: spulierName,
+      codey: codey
     });
 
-    // Step 2: Handle stock and stockP for each product
+    // Process each product
     const stockPromises = products.map(async (product) => {
-      const { prixU_HT, tva, quantite, designation, Unite,rem } = product;
+      const {prixU_HT, tva, quantite, designation, Unite, rem} = product;
 
-      // **Step 2.1: Create a new Stock entry (always linked to the DeliveryNote)**
+      // Create Stock entry
       await Stock.create({
-        prixU_HT:prixU_HT,
-        tva:tva,
-        quantite:quantite,
-        designation:designation,
-        Unite:Unite,
-        BaId:code,
-        codey:codey,
-        rem:rem,
-        moyenneprix:0,
-        dernierprixU_HT:0
+        prixU_HT: prixU_HT,
+        tva: tva,
+        quantite: quantite,
+        designation: designation,
+        Unite: Unite,
+        BaId: code,
+        codey: codey,
+        rem: rem,
+        moyenneprix: 0,
+        dernierprixU_HT: 0
       });
 
-      // **Step 2.2: Handle StockP (general stock)**
-      const stockP = await StockP.findOne({
-        where: {
-          designation,
-        },
-      });
+      // Handle StockP
+      const stockP = await StockP.findOne({ where: { designation } });
 
       if (stockP) {
         const oldQty = stockP.quantite;
         const newQty = quantite;
-      
-        const oldPrix_TTC = stockP.prixU_HT 
-        const newPrix_TTC = prixU_HT 
-      
         const totalQty = oldQty + newQty;
-        const totalValue = (oldPrix_TTC * oldQty) + (newPrix_TTC * newQty);
-        const avgPrix_TTC = totalValue / totalQty;
-      
-      
-        await stockP.update({
-          prixU_HT: stockP.prixU_HT,
-          tva: tva,
-          quantite: totalQty,
-          moyenneprix: avgPrix_TTC,
-          dernierprixU_HT:prixU_HT
-        });
-      }
-       else {
-       
 
-        // If the StockP entry does not exist, create a new one
+        if (stockP.moyenneprix && stockP.moyenneprix > 0) {
+          // Case 1: moyenneprix exists
+          const oldAvgPrice = stockP.moyenneprix;
+          const newPrice = prixU_HT;
+          
+          const totalValue = (oldAvgPrice * oldQty) + (newPrice * newQty);
+          const newAvgPrice = totalValue / totalQty;
+
+          await stockP.update({
+            prixU_HT: oldAvgPrice, // prixU_HT = old moyenne prix
+            tva: tva,
+            quantite: totalQty,
+            moyenneprix: newAvgPrice, // recalculated moyenne
+            dernierprixU_HT: newPrice, // dernier prix = new price
+            Unite: Unite,
+            rem: rem
+          });
+        } else {
+          // Case 2: no moyenneprix
+          const existingPrice = stockP.prixU_HT;
+          const newPrice = prixU_HT;
+          
+          const totalValue = (existingPrice * oldQty) + (newPrice * newQty);
+          const newAvgPrice = totalValue / totalQty;
+
+          await stockP.update({
+            prixU_HT: existingPrice, // keep existing prixU_HT
+            tva: tva,
+            quantite: totalQty,
+            moyenneprix: newAvgPrice, // calculate new moyenne
+            dernierprixU_HT: newPrice, // dernier prix = new price
+            Unite: Unite,
+            rem: rem
+          });
+        }
+      } else {
+        // New StockP entry
         await StockP.create({
-          prixU_HT:prixU_HT,
-          tva:tva,
-          quantite:quantite,
-          designation:designation,
-          Unite:Unite,
-          rem:rem,
-        moyenneprix:0,
-        dernierprixU_HT:0
+          prixU_HT: prixU_HT,
+          tva: tva,
+          quantite: quantite,
+          designation: designation,
+          Unite: Unite,
+          rem: rem,
+          moyenneprix: 0, // initial moyenne = first price
+          dernierprixU_HT: 0 // initial dernier prix = first price
         });
       }
     });
 
-    // Wait for all Stock and StockP entries to be processed
     await Promise.all(stockPromises);
 
     return res.status(201).json({
