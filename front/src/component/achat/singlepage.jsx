@@ -217,15 +217,31 @@ const SingleDeliveryNote = () => {
         </Box>
 
         {/* Company and Supplier Information with Labels */}
-        <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 3 }}>
-          <Box sx={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 2 }}>
+        <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 3, direction: language === 'ar' ? 'rtl' : 'ltr' }}>
+          <Box sx={{
+            flex: 1,
+            display: 'flex',
+            flexDirection: 'column',
+            gap: 2,
+            marginLeft: language === 'ar' ? '0' : '1rem',  // Company info goes to the left for Arabic, right for others
+            marginRight: language === 'ar' ? '1rem' : '0', // Company info margin for Arabic
+            textAlign: language === 'ar' ? 'right' : 'left' // Align text correctly for Arabic
+          }}>
             <Typography variant="body1"><strong>{translations[language].companyName}:</strong> Amounette Company</Typography>
             <Typography variant="body1"><strong>{translations[language].companyAddress}:</strong> cité wahat</Typography>
             <Typography variant="body1"><strong>{translations[language].companyPhone}:</strong> +987654321</Typography>
             <Typography variant="body1"><strong>{translations[language].companyTVA}:</strong> TVA123456789</Typography>
           </Box>
 
-          <Box sx={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 2, marginLeft: '30%' }}>
+          <Box sx={{
+            flex: 1,
+            display: 'flex',
+            flexDirection: 'column',
+            gap: 2,
+            marginLeft: language === 'ar' ? '0' : '1rem',  // Supplier info margin for Arabic
+            marginRight: language === 'ar' ? '1rem' : '0', // Supplier info margin for other languages
+            textAlign: language === 'ar' ? 'left' : 'right' // Align text correctly for Arabic
+          }}>
             <Typography variant="body1"><strong>{translations[language].supplierName}:</strong> {supplier.fullname}</Typography>
             <Typography variant="body1"><strong>{translations[language].supplierAddress}:</strong> {supplier?.address || 'Adresse inconnue'}</Typography>
             <Typography variant="body1"><strong>{translations[language].supplierPhone}:</strong> {supplier?.tel || 'Numéro inconnu'}</Typography>
