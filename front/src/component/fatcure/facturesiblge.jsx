@@ -206,31 +206,37 @@ const BCsingleACHAT = () => {
       >
         <style>
           {`
-            @media print {
-              body {
-                font-size: 12px !important;
-                direction: ${printLanguage === 'ar' ? 'rtl' : 'ltr'};
-                text-align: ${printLanguage === 'ar' ? 'right' : 'left'};
-              }
-              .MuiTypography-root {
-                font-size: 12px !important;
-              }
-              .MuiButton-root {
-                display: none !important;
-              }
-              .MuiTableCell-root {
-                font-size: 12px !important;
-                text-align: ${printLanguage === 'ar' ? 'right' : 'left'};
-              }
-              .info-container {
-                display: flex;
-                justify-content: space-between;
-                width: 100%;
-              }
-              .company-info, .supplier-info {
-                width: 45%;
-              }
-            }
+           @media print {
+  body {
+    font-size: 12px !important;
+    direction: ${printLanguage === 'ar' ? 'rtl' : 'ltr'};
+    text-align: ${printLanguage === 'ar' ? 'right' : 'left'};
+  }
+  .MuiTypography-root {
+    font-size: 12px !important;
+  }
+  .MuiButton-root {
+    display: none !important;
+  }
+  .MuiTableCell-root {
+    font-size: 12px !important;
+    text-align: ${printLanguage === 'ar' ? 'right' : 'left'};
+  }
+  .info-container {
+    position: relative;
+    width: 100%;
+  }
+  .company-info, .supplier-info {
+    position: absolute;
+    width: 45%;
+  }
+  .company-info {
+    left: 0;
+  }
+  .supplier-info {
+    right: 0;
+  }
+}
           `}
         </style>
         <Box sx={{ 
