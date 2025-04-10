@@ -84,6 +84,9 @@ const SingleDeliveryNote = () => {
             direction: rtl;
             text-align: right;
           }
+          .MuiTable-root {
+            direction: rtl;
+          }
         ` : ''}
       </style>
     `;
@@ -178,40 +181,36 @@ const SingleDeliveryNote = () => {
           {language === 'ar' ? 'إشعار الشراء' : language === 'fr' ? 'Bon D\'Achat' : 'Purchase Receipt'} - {codey}
         </Typography>
 
-        <Table>
+        <Table sx={{ width: '60%', margin: '0 auto' }}>
           <TableHead>
             <TableRow>
               <TableCell>{language === 'ar' ? 'التسمية' : language === 'fr' ? 'Designation' : 'Designation'}</TableCell>
               <TableCell>{language === 'ar' ? 'الوحدة' : language === 'fr' ? 'Unite' : 'Unit'}</TableCell>
               <TableCell>{language === 'ar' ? 'الكمية' : language === 'fr' ? 'Quantité' : 'Quantity'}</TableCell>
-              <TableCell>{language === 'ar' ? 'سعر الوحدة (HT)' : language === 'fr' ? 'Prix unitaire (HT)' : 'Unit Price (HT)'}</TableCell>
-              <TableCell>{language === 'ar' ? 'الإجمالي (HT)' : language === 'fr' ? 'Total (HT)' : 'Total (HT)'}</TableCell>
+              <TableCell>{language === 'ar' ? 'سعر الوحدة (HT)' : language === 'fr' ? 'Prix Unité (HT)' : 'Unit Price (HT)'}</TableCell>
+              <TableCell>{language === 'ar' ? 'الإجمالي' : language === 'fr' ? 'Total' : 'Total'}</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
-            {deliveryNote.map((prod, index) => (
-              <TableRow key={index}>
+            {deliveryNote.map((prod) => (
+              <TableRow key={prod.id}>
                 <TableCell>{prod.designation}</TableCell>
-                <TableCell>{prod.unite}</TableCell>
+                <TableCell>{prod.Unite}</TableCell>
                 <TableCell>{prod.quantite}</TableCell>
                 <TableCell>{prod.prixU_HT}</TableCell>
                 <TableCell>{prod.prixU_HT * prod.quantite}</TableCell>
               </TableRow>
             ))}
-            <TableRow>
-              <TableCell colSpan={4}><strong>{language === 'ar' ? 'الإجمالي الصافي (HT):' : language === 'fr' ? 'Total Net (HT):' : 'Total Net (HT):'}</strong></TableCell>
-              <TableCell>{totalNetHT}</TableCell>
-            </TableRow>
-            <TableRow>
-              <TableCell colSpan={4}><strong>{language === 'ar' ? 'إجمالي ضريبة القيمة المضافة (TVA):' : language === 'fr' ? 'Total TVA:' : 'Total VAT:'}</strong></TableCell>
-              <TableCell>{totalTVA}</TableCell>
-            </TableRow>
-            <TableRow>
-              <TableCell colSpan={4}><strong>{language === 'ar' ? 'الإجمالي الصافي (TTC):' : language === 'fr' ? 'Total Net (TTC):' : 'Total Net (TTC):'}</strong></TableCell>
-              <TableCell>{totalNetTTC}</TableCell>
-            </TableRow>
           </TableBody>
         </Table>
+
+        <Box sx={{ display: 'flex', justifyContent: 'space-between', marginTop: '20px', marginBottom: '10px' }}>
+          <Typography variant="body1"><strong>{language === 'ar' ? 'الإجمالي الصافي (HT):' : language === 'fr' ? 'Total Net (HT):' : 'Total Net (HT):'}</strong> {totalNetHT}</Typography>
+          <Typography variant="body1"><strong>{language === 'ar' ? 'الإجمالي TVA:' : language === 'fr' ? 'Total TVA:' : 'Total TVA:'}</strong> {totalTVA}</Typography>
+        </Box>
+        <Typography variant="h6" textAlign="right">
+          <strong>{language === 'ar' ? 'الإجمالي الصافي (TTC):' : language === 'fr' ? 'Total Net (TTC):' : 'Total Net (TTC):'}</strong> {totalNetTTC}
+        </Typography>
       </Box>
     </Box>
   );
