@@ -337,7 +337,7 @@ const Bvsinlge = () => {
 
     {/* Company Info */}
     <Box sx={{ textAlign: isArabic ? 'right' : 'left', mr: isArabic ? 0 : 'auto' }}>
-      <img src={logo} alt="Logo" style={{ maxWidth: '150px', marginBottom: '10px' }} />
+      
       <Typography variant="body2">
         <strong>{translations[printLanguage].companyName}:</strong> Ma Société
       </Typography>
