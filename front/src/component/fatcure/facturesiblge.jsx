@@ -142,23 +142,25 @@ const BCsingleACHAT = () => {
         </Box>
 
         {/* Company and Supplier Information with Labels */}
-        <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 3 }}>
-          <Box sx={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 2 }}>
-            <Typography variant="body1"><strong>{language === 'fr' ? 'Nom de la société' : language === 'en' ? 'Company Name' : 'اسم الشركة'}:</strong> Amounette Company</Typography>
-            <Typography variant="body1"><strong>{language === 'fr' ? 'Adresse de la société' : language === 'en' ? 'Company Address' : 'عنوان الشركة'}:</strong> cité wahat</Typography>
-            <Typography variant="body1"><strong>{language === 'fr' ? 'Téléphone de la société' : language === 'en' ? 'Company Phone' : 'هاتف الشركة'}:</strong> +987654321</Typography>
-            <Typography variant="body1"><strong>{language === 'fr' ? 'Code TVA de la société' : language === 'en' ? 'Company VAT Code' : 'رمز ضريبة القيمة المضافة'}:</strong> TVA123456789</Typography>
-          </Box>
+        <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 3, direction: language === 'ar' ? 'rtl' : 'ltr' }}>
+  {/* Supplier Information - Align Left in Arabic */}
+  <Box sx={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 2, marginRight: language === 'ar' ? '1rem' : '0' }}>
+    <Typography variant="body1"><strong>{language === 'fr' ? 'Nom du fournisseur' : language === 'en' ? 'Supplier Name' : 'اسم المورد'}:</strong> {supplier.fullname}</Typography>
+    <Typography variant="body1"><strong>{language === 'fr' ? 'Adresse du fournisseur' : language === 'en' ? 'Supplier Address' : 'عنوان المورد'}:</strong> {supplier?.address || 'Adresse inconnue'}</Typography>
+    <Typography variant="body1"><strong>{language === 'fr' ? 'Téléphone du fournisseur' : language === 'en' ? 'Supplier Phone' : 'هاتف المورد'}:</strong> {supplier?.tel || 'Numéro inconnu'}</Typography>
+    <Typography variant="body1"><strong>{language === 'fr' ? 'Code TVA' : language === 'en' ? 'VAT Code' : 'رمز ضريبة القيمة المضافة'}:</strong> {supplier?.codeTVA || 'codeTVA inconnu'}</Typography>
+  </Box>
 
-          <Typography>{displayDate()}</Typography>
+  {/* Company Information - Align Right in Arabic */}
+  <Box sx={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 2, marginLeft: language === 'ar' ? '1rem' : '0' }}>
+    <Typography variant="body1"><strong>{language === 'fr' ? 'Nom de la société' : language === 'en' ? 'Company Name' : 'اسم الشركة'}:</strong> Amounette Company</Typography>
+    <Typography variant="body1"><strong>{language === 'fr' ? 'Adresse de la société' : language === 'en' ? 'Company Address' : 'عنوان الشركة'}:</strong> cité wahat</Typography>
+    <Typography variant="body1"><strong>{language === 'fr' ? 'Téléphone de la société' : language === 'en' ? 'Company Phone' : 'هاتف الشركة'}:</strong> +987654321</Typography>
+    <Typography variant="body1"><strong>{language === 'fr' ? 'Code TVA de la société' : language === 'en' ? 'Company VAT Code' : 'رمز ضريبة القيمة المضافة'}:</strong> TVA123456789</Typography>
+  </Box>
 
-          <Box sx={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 2, marginLeft: '30%' }}>
-            <Typography variant="body1"><strong>{language === 'fr' ? 'Nom du fournisseur' : language === 'en' ? 'Supplier Name' : 'اسم المورد'}:</strong> {supplier.fullname}</Typography>
-            <Typography variant="body1"><strong>{language === 'fr' ? 'Adresse du fournisseur' : language === 'en' ? 'Supplier Address' : 'عنوان المورد'}:</strong> {supplier?.address || 'Adresse inconnue'}</Typography>
-            <Typography variant="body1"><strong>{language === 'fr' ? 'Téléphone du fournisseur' : language === 'en' ? 'Supplier Phone' : 'هاتف المورد'}:</strong> {supplier?.tel || 'Numéro inconnu'}</Typography>
-            <Typography variant="body1"><strong>{language === 'fr' ? 'Code TVA' : language === 'en' ? 'VAT Code' : 'رمز ضريبة القيمة المضافة'}:</strong> {supplier?.codeTVA || 'codeTVA inconnu'}</Typography>
-          </Box>
-        </Box>
+  <Typography>{displayDate()}</Typography>
+</Box>
 
         <Typography variant="h4" mb={3} textAlign="center">
           {language === 'fr' ? 'Bon De Commande' : language === 'en' ? 'Order Form' : 'نموذج الطلب'} - {codey}
@@ -181,11 +183,11 @@ const BCsingleACHAT = () => {
             {deliveryNote.map((prod, index) => (
               <TableRow key={index}>
                 <TableCell>{prod.designation}</TableCell>
-                <TableCell>{prod.unite}</TableCell>
+                <TableCell>{prod.Unite}</TableCell>
                 <TableCell>{prod.quantite}</TableCell>
                 <TableCell>{prod.prixU_HT}</TableCell>
                 <TableCell>{prod.tva}</TableCell>
-                <TableCell>{prod.remise}</TableCell>
+                <TableCell>{prod.rem}</TableCell>
                 <TableCell>{prod.prixU_HT * prod.quantite}</TableCell>
               </TableRow>
             ))}
