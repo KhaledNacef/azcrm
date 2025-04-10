@@ -112,24 +112,25 @@ const BCsingleACHAT = () => {
           direction: language === 'ar' ? 'rtl' : 'ltr',  // Set RTL for Arabic
         }}
       >
-        <style>
-          {`
-            @media print {
-              body {
-                font-size: 12px !important;
-              }
-              .MuiTypography-root {
-                font-size: 12px !important;
-              }
-              .MuiButton-root {
-                display: none !important;
-              }
-              .MuiTableCell-root {
-                font-size: 12px !important;
-              }
-            }
-          `}
-        </style>
+       <style>
+  {`
+    @media print {
+      body {
+        font-size: 12px !important;
+        direction: ${language === 'ar' ? 'rtl' : 'ltr'} !important;
+      }
+      .MuiTypography-root {
+        font-size: 12px !important;
+      }
+      .MuiButton-root {
+        display: none !important;
+      }
+      .MuiTableCell-root {
+        font-size: 12px !important;
+      }
+    }
+  `}
+</style>
 
         {/* Logo */}
         <Box sx={{ width: 742, height: 152, mx: 'auto', mb: 3, display: 'flex', justifyContent: 'center', alignItems: 'center', overflow: 'hidden' }}>
