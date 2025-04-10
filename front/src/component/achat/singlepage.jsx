@@ -159,87 +159,59 @@ const SingleDeliveryNote = () => {
         </Box>
         <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 3 }}>
           <Box sx={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 2 }}>
-            <Typography variant="body1"><strong>{language === 'ar' ? 'اسم الشركة:' : 'Nom de la société:'}</strong> Amounette Compnay</Typography>
-            <Typography variant="body1"><strong>{language === 'ar' ? 'عنوان الشركة:' : 'Adresse de la société:'}</strong> cité wahat</Typography>
-            <Typography variant="body1"><strong>{language === 'ar' ? 'هاتف الشركة:' : 'Téléphone de la société:'}</strong> +987654321</Typography>
-            <Typography variant="body1"><strong>{language === 'ar' ? 'رمز TVA الشركة:' : 'Code TVA de la société:'}</strong> TVA123456789</Typography>
+            <Typography variant="body1"><strong>{language === 'ar' ? 'اسم الشركة:' : language === 'fr' ? 'Nom de la société:' : 'Company Name:'}</strong> Amounette Compnay</Typography>
+            <Typography variant="body1"><strong>{language === 'ar' ? 'عنوان الشركة:' : language === 'fr' ? 'Adresse de la société:' : 'Company Address:'}</strong> cité wahat</Typography>
+            <Typography variant="body1"><strong>{language === 'ar' ? 'هاتف الشركة:' : language === 'fr' ? 'Téléphone de la société:' : 'Company Phone:'}</strong> +987654321</Typography>
+            <Typography variant="body1"><strong>{language === 'ar' ? 'رمز TVA الشركة:' : language === 'fr' ? 'Code TVA de la société:' : 'Company VAT Code:'}</strong> TVA123456789</Typography>
           </Box>
 
           <Typography>{displayDate()}</Typography>
           <Box sx={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 2, marginLeft: '30%' }}>
-            <Typography variant="body1"><strong>{language === 'ar' ? 'اسم المورد:' : 'Nom du fournisseur:'}</strong> {supplier.fullname}</Typography>
-            <Typography variant="body1"><strong>{language === 'ar' ? 'عنوان المورد:' : 'Adresse du fournisseur:'}</strong> {supplier?.address || 'Adresse inconnue'}</Typography>
-            <Typography variant="body1"><strong>{language === 'ar' ? 'هاتف المورد:' : 'Téléphone du fournisseur:'}</strong> {supplier?.tel || 'Numéro inconnu'}</Typography>
-            <Typography variant="body1"><strong>{language === 'ar' ? 'رمز TVA:' : 'Code TVA:'}</strong> {supplier?.codeTVA || 'codeTVA inconnu'}</Typography>
+            <Typography variant="body1"><strong>{language === 'ar' ? 'اسم المورد:' : language === 'fr' ? 'Nom du fournisseur:' : 'Supplier Name:'}</strong> {supplier.fullname}</Typography>
+            <Typography variant="body1"><strong>{language === 'ar' ? 'عنوان المورد:' : language === 'fr' ? 'Adresse du fournisseur:' : 'Supplier Address:'}</strong> {supplier?.address || 'Adresse inconnue'}</Typography>
+            <Typography variant="body1"><strong>{language === 'ar' ? 'هاتف المورد:' : language === 'fr' ? 'Téléphone du fournisseur:' : 'Supplier Phone:'}</strong> {supplier?.tel || 'Numéro inconnu'}</Typography>
+            <Typography variant="body1"><strong>{language === 'ar' ? 'رمز TVA:' : language === 'fr' ? 'Code TVA:' : 'VAT Code:'}</strong> {supplier?.codeTVA || 'codeTVA inconnu'}</Typography>
           </Box>
         </Box>
 
         <Typography variant="h4" mb={3} textAlign="center">
-          {language === 'ar' ? 'إشعار الشراء' : 'Bon D\'Achat'} - {codey}
+          {language === 'ar' ? 'إشعار الشراء' : language === 'fr' ? 'Bon D\'Achat' : 'Purchase Receipt'} - {codey}
         </Typography>
 
         <Table>
           <TableHead>
             <TableRow>
-              <TableCell>{language === 'ar' ? 'التسمية' : 'Designation'}</TableCell>
-              <TableCell>{language === 'ar' ? 'الوحدة' : 'Unite'}</TableCell>
-              <TableCell>{language === 'ar' ? 'الكمية' : 'Quantité'}</TableCell>
-              <TableCell>{language === 'ar' ? 'سعر الوحدة (HT)' : 'Prix U (HT)'}</TableCell>
-              <TableCell>{language === 'ar' ? 'ضريبة القيمة المضافة (%)' : 'TVA (%)'}</TableCell>
-              <TableCell>{language === 'ar' ? 'الخصم (%)' : 'Rem (%)'}</TableCell>
-              <TableCell>{language === 'ar' ? 'السعر الإجمالي (HT)' : 'Prix Net (HT)'}</TableCell>
-              <TableCell>{language === 'ar' ? 'السعر الإجمالي (TTC)' : 'Prix Net (TTC)'}</TableCell>
+              <TableCell>{language === 'ar' ? 'التسمية' : language === 'fr' ? 'Designation' : 'Designation'}</TableCell>
+              <TableCell>{language === 'ar' ? 'الوحدة' : language === 'fr' ? 'Unite' : 'Unit'}</TableCell>
+              <TableCell>{language === 'ar' ? 'الكمية' : language === 'fr' ? 'Quantité' : 'Quantity'}</TableCell>
+              <TableCell>{language === 'ar' ? 'سعر الوحدة (HT)' : language === 'fr' ? 'Prix unitaire (HT)' : 'Unit Price (HT)'}</TableCell>
+              <TableCell>{language === 'ar' ? 'الإجمالي (HT)' : language === 'fr' ? 'Total (HT)' : 'Total (HT)'}</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
-            {deliveryNote.map((prod, index) => {
-              const basePrice = prod.prixU_HT;
-              const netHT = basePrice * prod.quantite;
-              const netTTC = netHT * (1 + prod.tva / 100);
-
-              return (
-                <TableRow key={index}>
-                  <TableCell>{prod.designation}</TableCell>
-                  <TableCell>{prod.Unite}</TableCell>
-                  <TableCell>{prod.quantite}</TableCell>
-                  <TableCell>{prod.prixU_HT}TND</TableCell>
-                  <TableCell>{prod.tva}%</TableCell>
-                  <TableCell>{prod.rem}%</TableCell>
-                  <TableCell>{netHT.toFixed(2)}TND</TableCell>
-                  <TableCell>{netTTC.toFixed(2)}TND</TableCell>
-                </TableRow>
-              );
-            })}
+            {deliveryNote.map((prod, index) => (
+              <TableRow key={index}>
+                <TableCell>{prod.designation}</TableCell>
+                <TableCell>{prod.unite}</TableCell>
+                <TableCell>{prod.quantite}</TableCell>
+                <TableCell>{prod.prixU_HT}</TableCell>
+                <TableCell>{prod.prixU_HT * prod.quantite}</TableCell>
+              </TableRow>
+            ))}
+            <TableRow>
+              <TableCell colSpan={4}><strong>{language === 'ar' ? 'الإجمالي الصافي (HT):' : language === 'fr' ? 'Total Net (HT):' : 'Total Net (HT):'}</strong></TableCell>
+              <TableCell>{totalNetHT}</TableCell>
+            </TableRow>
+            <TableRow>
+              <TableCell colSpan={4}><strong>{language === 'ar' ? 'إجمالي ضريبة القيمة المضافة (TVA):' : language === 'fr' ? 'Total TVA:' : 'Total VAT:'}</strong></TableCell>
+              <TableCell>{totalTVA}</TableCell>
+            </TableRow>
+            <TableRow>
+              <TableCell colSpan={4}><strong>{language === 'ar' ? 'الإجمالي الصافي (TTC):' : language === 'fr' ? 'Total Net (TTC):' : 'Total Net (TTC):'}</strong></TableCell>
+              <TableCell>{totalNetTTC}</TableCell>
+            </TableRow>
           </TableBody>
         </Table>
-
-        <Box sx={{ display: 'flex', justifyContent: 'flex-end', mt: 3 }}>
-          <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end' }}>
-            <Typography variant="body1">
-              <strong>{language === 'ar' ? 'الإجمالي الصافي (HT):' : 'Total Net (HT):'}</strong> {totalNetHT.toFixed(2)}TND
-            </Typography>
-            <Typography variant="body1">
-              <strong>{language === 'ar' ? 'ضريبة القيمة المضافة:' : 'Total TVA:'}</strong> {totalTVA.toFixed(2)}TND
-            </Typography>
-            {timbre === 'true' && (
-              <Typography variant="body1">
-                <strong>{language === 'ar' ? 'طابع:' : 'Timbre:'}</strong> 1TND
-              </Typography>
-            )}
-            <Typography variant="body1">
-              <strong>{language === 'ar' ? 'الإجمالي الصافي (TTC):' : 'Total Net (TTC):'}</strong> {totalNetTTC.toFixed(2)}TND
-            </Typography>
-          </Box>
-        </Box>
-
-        <Box sx={{ display: 'flex', justifyContent: 'space-between', mt: 4 }}>
-          <Box sx={{ textAlign: 'center' }}>
-            <Typography variant="body1">{language === 'ar' ? 'توقيع المورد' : 'Signature du Fournisseur'}</Typography>
-          </Box>
-          <Box sx={{ textAlign: 'center' }}>
-            <Typography variant="body1">{language === 'ar' ? 'توقيع شركتي' : 'Signature de Ma Société'}</Typography>
-          </Box>
-        </Box>
       </Box>
     </Box>
   );
