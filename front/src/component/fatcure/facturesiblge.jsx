@@ -3,8 +3,8 @@ import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { Box, Typography, Button, Table, TableHead, TableRow, TableCell, TableBody, CircularProgress, Modal, Select, MenuItem } from '@mui/material';
 import './fdesign.css';
-import CreateDeliveryNoteModala from '../achat/crate.jsx';
-import logo from '../../assets/amounnet.png';
+import CreateDeliveryNoteModala from '../achat/crate.jsx'; // Ensure correct file name
+import logo from '../../assets/amounnet.png';  // Relative path
 
 const BCsingleACHAT = () => {
   const { code, supplierId, codey, timbre } = useParams();
@@ -14,9 +14,8 @@ const BCsingleACHAT = () => {
   const [deliveryNote, setDeliveryNote] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const previousLocation = window.location.pathname;
+  const [language, setLanguage] = useState('fr');  // Default language is French
   const [open, setOpen] = useState(false);
-  const [printLanguage, setPrintLanguage] = useState('fr');
 
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
@@ -50,11 +49,11 @@ const BCsingleACHAT = () => {
     const basePrice = prod.prixU_HT;
     return acc + basePrice * prod.quantite;
   }, 0);
-  
+
   const totalTVA = totalNetHT * (deliveryNote[0]?.tva / 100 || 0);
   const totalNetTTC = totalNetHT + totalTVA;
 
-  const timbreAmount = timbre === 'true' ? 1 : 0;
+  const timbreAmount = timbre === 'true' ? 1 : 0;  // If timbre is true, add 1 TND
   const totalWithTimbre = totalNetTTC + timbreAmount;
 
   function displayDate() {
@@ -71,101 +70,12 @@ const BCsingleACHAT = () => {
 
     document.body.innerHTML = printContents;
     window.print();
+
     window.onafterprint = () => {
       document.body.innerHTML = originalContents;
-      navigate(previousLocation);
+      navigate(window.location.pathname);  // Navigate back after printing
     };
   };
-
-  // Translation dictionary
-  const translations = {
-    fr: {
-      companyName: "Nom de la société",
-      companyAddress: "Adresse de la société",
-      companyPhone: "Téléphone de la société",
-      companyVAT: "Code TVA de la société",
-      supplierName: "Nom du fournisseur",
-      supplierAddress: "Adresse du fournisseur",
-      supplierPhone: "Téléphone du fournisseur",
-      supplierVAT: "Code TVA",
-      title: "Bon De Commande",
-      designation: "Designation",
-      unit: "Unite",
-      quantity: "Quantité",
-      unitPrice: "Prix U (HT)",
-      vat: "TVA (%)",
-      discount: "Rem (%)",
-      netPriceHT: "Prix Net (HT)",
-      netPriceTTC: "Prix Net (TTC)",
-      totalNetHT: "Total Net (HT)",
-      totalVAT: "Total TVA",
-      stamp: "Timbre",
-      totalNetTTC: "Total Net (TTC)",
-      supplierSignature: "Signature du Fournisseur",
-      companySignature: "Signature de Ma Société",
-      unknownAddress: "Adresse inconnue",
-      unknownPhone: "Numéro inconnu",
-      unknownVAT: "codeTVA inconnu"
-    },
-    en: {
-      companyName: "Company Name",
-      companyAddress: "Company Address",
-      companyPhone: "Company Phone",
-      companyVAT: "Company VAT Code",
-      supplierName: "Supplier Name",
-      supplierAddress: "Supplier Address",
-      supplierPhone: "Supplier Phone",
-      supplierVAT: "VAT Code",
-      title: "Purchase Order",
-      designation: "Designation",
-      unit: "Unit",
-      quantity: "Quantity",
-      unitPrice: "Unit Price (HT)",
-      vat: "VAT (%)",
-      discount: "Disc. (%)",
-      netPriceHT: "Net Price (HT)",
-      netPriceTTC: "Net Price (TTC)",
-      totalNetHT: "Total Net (HT)",
-      totalVAT: "Total VAT",
-      stamp: "Stamp",
-      totalNetTTC: "Total Net (TTC)",
-      supplierSignature: "Supplier Signature",
-      companySignature: "Company Signature",
-      unknownAddress: "Unknown address",
-      unknownPhone: "Unknown number",
-      unknownVAT: "Unknown VAT code"
-    },
-    ar: {
-      companyName: "اسم الشركة",
-      companyAddress: "عنوان الشركة",
-      companyPhone: "هاتف الشركة",
-      companyVAT: "رقم الضريبة للشركة",
-      supplierName: "اسم المورد",
-      supplierAddress: "عنوان المورد",
-      supplierPhone: "هاتف المورد",
-      supplierVAT: "رقم الضريبة",
-      title: "أمر الشراء",
-      designation: "الصنف",
-      unit: "الوحدة",
-      quantity: "الكمية",
-      unitPrice: "سعر الوحدة (بدون ضريبة)",
-      vat: "الضريبة (%)",
-      discount: "الخصم (%)",
-      netPriceHT: "السعر الصافي (بدون ضريبة)",
-      netPriceTTC: "السعر الصافي (بضريبة)",
-      totalNetHT: "المجموع الصافي (بدون ضريبة)",
-      totalVAT: "مجموع الضريبة",
-      stamp: "الطابع",
-      totalNetTTC: "المجموع الصافي (بضريبة)",
-      supplierSignature: "توقيع المورد",
-      companySignature: "توقيع الشركة",
-      unknownAddress: "عنوان غير معروف",
-      unknownPhone: "رقم غير معروف",
-      unknownVAT: "رقم ضريبة غير معروف"
-    }
-  };
-
-  const t = translations[printLanguage];
 
   return (
     <Box sx={{ p: 3 }}>
@@ -181,16 +91,15 @@ const BCsingleACHAT = () => {
       <Button variant="outlined" onClick={() => navigate(`/gestion/${codey}`)} sx={{ mb: 2 }}>
         Gestion De Stock
       </Button>
-      
-      <Select
-        value={printLanguage}
-        onChange={(e) => setPrintLanguage(e.target.value)}
-        sx={{ mb: 2, minWidth: 120 }}
-      >
-        <MenuItem value="fr">Français</MenuItem>
-        <MenuItem value="en">English</MenuItem>
-        <MenuItem value="ar">العربية</MenuItem>
-      </Select>
+
+      {/* Language Selector */}
+      <Box sx={{ mb: 2 }}>
+        <Select value={language} onChange={(e) => setLanguage(e.target.value)} displayEmpty>
+          <MenuItem value="fr">Français</MenuItem>
+          <MenuItem value="en">English</MenuItem>
+          <MenuItem value="ar">العربية</MenuItem>
+        </Select>
+      </Box>
 
       {/* Printable content */}
       <Box
@@ -200,115 +109,72 @@ const BCsingleACHAT = () => {
           p: 3,
           mt: 2,
           backgroundColor: '#fff',
-          direction: printLanguage === 'ar' ? 'rtl' : 'ltr',
-          textAlign: printLanguage === 'ar' ? 'right' : 'left'
+          direction: language === 'ar' ? 'rtl' : 'ltr',  // Set RTL for Arabic
         }}
       >
         <style>
           {`
-           @media print {
-  body {
-    font-size: 12px !important;
-    direction: ${printLanguage === 'ar' ? 'rtl' : 'ltr'};
-    text-align: ${printLanguage === 'ar' ? 'right' : 'left'};
-  }
-  .MuiTypography-root {
-    font-size: 12px !important;
-  }
-  .MuiButton-root {
-    display: none !important;
-  }
-  .MuiTableCell-root {
-    font-size: 12px !important;
-    text-align: ${printLanguage === 'ar' ? 'right' : 'left'};
-  }
-  .info-container {
-    position: relative;
-    width: 100%;
-  }
-  .company-info, .supplier-info {
-    position: absolute;
-    width: 45%;
-  }
-  .company-info {
-    left: 0;
-  }
-  .supplier-info {
-    right: 0;
-  }
-}
+            @media print {
+              body {
+                font-size: 12px !important;
+              }
+              .MuiTypography-root {
+                font-size: 12px !important;
+              }
+              .MuiButton-root {
+                display: none !important;
+              }
+              .MuiTableCell-root {
+                font-size: 12px !important;
+              }
+            }
           `}
         </style>
-        <Box sx={{ 
-          width: 742,
-          height: 152,
-          mx: 'auto',
-          mb: 3,
-          display: 'flex',
-          justifyContent: 'center',
-          alignItems: 'center',
-          overflow: 'hidden'
-        }}>
+
+        {/* Logo */}
+        <Box sx={{ width: 742, height: 152, mx: 'auto', mb: 3, display: 'flex', justifyContent: 'center', alignItems: 'center', overflow: 'hidden' }}>
           <img
             src={logo}
             alt="Company Logo"
-            style={{ 
-              width: '100%',
-              height: '100%',
-              objectFit: 'cover'
-            }}
+            style={{ width: '100%', height: '100%', objectFit: 'cover' }}
           />
         </Box>
-        
-        {/* Company and Supplier Information */}
-        <Box className="info-container" sx={{ mb: 3 }}>
-          {/* Company Information - Left side for FR/EN, Right side for AR */}
-          <Box className="company-info" sx={{ 
-            textAlign: printLanguage === 'ar' ? 'right' : 'left',
-            order: printLanguage === 'ar' ? 2 : 1
-          }}>
-            <Typography variant="body1"><strong>{t.companyName}:</strong> Amounette Company</Typography>
-            <Typography variant="body1"><strong>{t.companyAddress}:</strong> cité wahat</Typography>
-            <Typography variant="body1"><strong>{t.companyPhone}:</strong> +987654321</Typography>
-            <Typography variant="body1"><strong>{t.companyVAT}:</strong> TVA123456789</Typography>
+
+        {/* Company and Supplier Information with Labels */}
+        <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 3 }}>
+          <Box sx={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 2 }}>
+            <Typography variant="body1"><strong>{language === 'fr' ? 'Nom de la société' : language === 'en' ? 'Company Name' : 'اسم الشركة'}:</strong> Amounette Company</Typography>
+            <Typography variant="body1"><strong>{language === 'fr' ? 'Adresse de la société' : language === 'en' ? 'Company Address' : 'عنوان الشركة'}:</strong> cité wahat</Typography>
+            <Typography variant="body1"><strong>{language === 'fr' ? 'Téléphone de la société' : language === 'en' ? 'Company Phone' : 'هاتف الشركة'}:</strong> +987654321</Typography>
+            <Typography variant="body1"><strong>{language === 'fr' ? 'Code TVA de la société' : language === 'en' ? 'Company VAT Code' : 'رمز ضريبة القيمة المضافة'}:</strong> TVA123456789</Typography>
           </Box>
-          
-          {/* Date - Centered */}
-          <Box sx={{ 
-            display: 'flex',
-            alignItems: 'center',
-            order: 2
-          }}>
-            <Typography>{displayDate()}</Typography>
-          </Box>
-          
-          {/* Supplier Information - Right side for FR/EN, Left side for AR */}
-          <Box className="supplier-info" sx={{ 
-            textAlign: printLanguage === 'ar' ? 'right' : 'left',
-            order: printLanguage === 'ar' ? 1 : 3
-          }}>
-            <Typography variant="body1"><strong>{t.supplierName}:</strong> {supplier.fullname}</Typography>
-            <Typography variant="body1"><strong>{t.supplierAddress}:</strong> {supplier?.address || t.unknownAddress}</Typography>
-            <Typography variant="body1"><strong>{t.supplierPhone}:</strong> {supplier?.tel || t.unknownPhone}</Typography>
-            <Typography variant="body1"><strong>{t.supplierVAT}:</strong> {supplier?.codeTVA || t.unknownVAT}</Typography>
+
+          <Typography>{displayDate()}</Typography>
+
+          <Box sx={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 2, marginLeft: '30%' }}>
+            <Typography variant="body1"><strong>{language === 'fr' ? 'Nom du fournisseur' : language === 'en' ? 'Supplier Name' : 'اسم المورد'}:</strong> {supplier.fullname}</Typography>
+            <Typography variant="body1"><strong>{language === 'fr' ? 'Adresse du fournisseur' : language === 'en' ? 'Supplier Address' : 'عنوان المورد'}:</strong> {supplier?.address || 'Adresse inconnue'}</Typography>
+            <Typography variant="body1"><strong>{language === 'fr' ? 'Téléphone du fournisseur' : language === 'en' ? 'Supplier Phone' : 'هاتف المورد'}:</strong> {supplier?.tel || 'Numéro inconnu'}</Typography>
+            <Typography variant="body1"><strong>{language === 'fr' ? 'Code TVA' : language === 'en' ? 'VAT Code' : 'رمز ضريبة القيمة المضافة'}:</strong> {supplier?.codeTVA || 'codeTVA inconnu'}</Typography>
           </Box>
         </Box>
 
         <Typography variant="h4" mb={3} textAlign="center">
-          {t.title} - {codey}
+          {language === 'fr' ? 'Bon De Commande' : language === 'en' ? 'Order Form' : 'نموذج الطلب'} - {codey}
         </Typography>
 
-        <Table sx={{ direction: printLanguage === 'ar' ? 'rtl' : 'ltr' }}>
+        {/* Table */}
+        <Table>
           <TableHead>
             <TableRow>
-              <TableCell sx={{ textAlign: printLanguage === 'ar' ? 'right' : 'left', fontWeight: 'bold' }}>{t.designation}</TableCell>
-              <TableCell sx={{ textAlign: printLanguage === 'ar' ? 'right' : 'left', fontWeight: 'bold' }}>{t.unit}</TableCell>
-              <TableCell sx={{ textAlign: printLanguage === 'ar' ? 'right' : 'left', fontWeight: 'bold' }}>{t.quantity}</TableCell>
-              <TableCell sx={{ textAlign: printLanguage === 'ar' ? 'right' : 'left', fontWeight: 'bold' }}>{t.unitPrice}</TableCell>
-              <TableCell sx={{ textAlign: printLanguage === 'ar' ? 'right' : 'left', fontWeight: 'bold' }}>{t.vat}</TableCell>
-              <TableCell sx={{ textAlign: printLanguage === 'ar' ? 'right' : 'left', fontWeight: 'bold' }}>{t.discount}</TableCell>
-              <TableCell sx={{ textAlign: printLanguage === 'ar' ? 'right' : 'left', fontWeight: 'bold' }}>{t.netPriceHT}</TableCell>
-              <TableCell sx={{ textAlign: printLanguage === 'ar' ? 'right' : 'left', fontWeight: 'bold' }}>{t.netPriceTTC}</TableCell>
+              <TableCell>{language === 'fr' ? 'Designation' : language === 'en' ? 'Designation' : 'التسمية'}</TableCell>
+              <TableCell>{language === 'fr' ? 'Unite' : language === 'en' ? 'Unit' : 'وحدة'}</TableCell>
+              <TableCell>{language === 'fr' ? 'Quantité' : language === 'en' ? 'Quantity' : 'الكمية'}</TableCell>
+              <TableCell>{language === 'fr' ? 'Prix U (HT)' : language === 'en' ? 'Unit Price (HT)' : 'سعر الوحدة (بدون TVA)'}</TableCell>
+              <TableCell>{language === 'fr' ? 'TVA (%)' : language === 'en' ? 'VAT (%)' : 'ضريبة القيمة المضافة (%)'}</TableCell>
+              <TableCell>{language === 'fr' ? 'Rem (%)' : language === 'en' ? 'Discount (%)' : 'خصم (%)'}</TableCell>
+              <TableCell>{language === 'fr' ? 'Prix Net (HT)' : language === 'en' ? 'Net Price (HT)' : 'السعر الصافي (بدون TVA)'}</TableCell>
+              <TableCell>{language === 'fr' ? 'Prix Net (TTC)' : language === 'en' ? 'Net Price (TTC)' : 'السعر الصافي (مع TVA)'}</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -319,14 +185,14 @@ const BCsingleACHAT = () => {
 
               return (
                 <TableRow key={index}>
-                  <TableCell sx={{ textAlign: printLanguage === 'ar' ? 'right' : 'left' }}>{prod.designation}</TableCell>
-                  <TableCell sx={{ textAlign: printLanguage === 'ar' ? 'right' : 'left' }}>{prod.Unite}</TableCell>
-                  <TableCell sx={{ textAlign: printLanguage === 'ar' ? 'right' : 'left' }}>{prod.quantite}</TableCell>
-                  <TableCell sx={{ textAlign: printLanguage === 'ar' ? 'right' : 'left' }}>{prod.prixU_HT}TND</TableCell>
-                  <TableCell sx={{ textAlign: printLanguage === 'ar' ? 'right' : 'left' }}>{prod.tva}%</TableCell>
-                  <TableCell sx={{ textAlign: printLanguage === 'ar' ? 'right' : 'left' }}>{prod.rem}%</TableCell>
-                  <TableCell sx={{ textAlign: printLanguage === 'ar' ? 'right' : 'left' }}>{netHT.toFixed(2)}TND</TableCell>
-                  <TableCell sx={{ textAlign: printLanguage === 'ar' ? 'right' : 'left' }}>{netTTC.toFixed(2)}TND</TableCell>
+                  <TableCell>{prod.designation}</TableCell>
+                  <TableCell>{prod.Unite}</TableCell>
+                  <TableCell>{prod.quantite}</TableCell>
+                  <TableCell>{prod.prixU_HT}TND</TableCell>
+                  <TableCell>{prod.tva}%</TableCell>
+                  <TableCell>{prod.rem}%</TableCell>
+                  <TableCell>{netHT.toFixed(2)}TND</TableCell>
+                  <TableCell>{netTTC.toFixed(2)}TND</TableCell>
                 </TableRow>
               );
             })}
@@ -334,69 +200,23 @@ const BCsingleACHAT = () => {
         </Table>
 
         {/* Total Section */}
-        <Box sx={{ 
-          display: 'flex', 
-          justifyContent: 'flex-end', 
-          mt: 3,
-          direction: printLanguage === 'ar' ? 'rtl' : 'ltr'
-        }}>
-          <Box sx={{ 
-            display: 'flex', 
-            flexDirection: 'column', 
-            alignItems: 'flex-end'
-          }}>
-            <Typography variant="body1">
-              <strong>{t.totalNetHT}:</strong> {totalNetHT.toFixed(2)} TND
-            </Typography>
-            <Typography variant="body1">
-              <strong>{t.totalVAT}:</strong> {totalTVA.toFixed(2)} TND
-            </Typography>
-
-            {timbre === 'true' && (
-              <Typography variant="body1">
-                <strong>{t.stamp}:</strong> 1 TND
-              </Typography>
-            )}
-
-            <Typography variant="body1">
-              <strong>{t.totalNetTTC}:</strong> {totalWithTimbre.toFixed(2)} TND
-            </Typography>
-          </Box>
-        </Box>
-        
-        {/* Signatures */}
-        <Box sx={{ 
-          display: 'flex', 
-          justifyContent: 'space-between', 
-          mt: 4,
-          direction: printLanguage === 'ar' ? 'rtl' : 'ltr'
-        }}>
-          <Box sx={{ textAlign: printLanguage === 'ar' ? 'right' : 'left' }}>
-            <Typography variant="body1">{t.supplierSignature}</Typography>
-          </Box>
-          <Box sx={{ textAlign: printLanguage === 'ar' ? 'left' : 'right' }}>
-            <Typography variant="body1">{t.companySignature}</Typography>
+        <Box sx={{ display: 'flex', justifyContent: 'flex-end', gap: 3, mt: 3 }}>
+          <Box sx={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
+            <Typography variant="h6">{language === 'fr' ? 'Total HT' : language === 'en' ? 'Total HT' : 'الإجمالي بدون TVA'}: {totalNetHT.toFixed(2)} TND</Typography>
+            <Typography variant="h6">{language === 'fr' ? 'TVA' : language === 'en' ? 'VAT' : 'ضريبة القيمة المضافة'}: {totalTVA.toFixed(2)} TND</Typography>
+            <Typography variant="h6">{language === 'fr' ? 'Total TTC' : language === 'en' ? 'Total TTC' : 'الإجمالي مع TVA'}: {totalNetTTC.toFixed(2)} TND</Typography>
+            <Typography variant="h6">{language === 'fr' ? 'Timbre Fiscal' : language === 'en' ? 'Fiscal Stamp' : 'الطابع الضريبي'}: {timbreAmount} TND</Typography>
+            <Typography variant="h6">{language === 'fr' ? 'Total avec Timbre' : language === 'en' ? 'Total with Stamp' : 'الإجمالي مع الطابع'}: {totalWithTimbre.toFixed(2)} TND</Typography>
           </Box>
         </Box>
       </Box>
 
       {/* Modal for Creating Delivery Note */}
-      <Modal open={open} onClose={handleClose}>
-        <Box
-          sx={{
-            position: 'absolute',
-            top: '50%',
-            left: '50%',
-            transform: 'translate(-50%, -50%)',
-            bgcolor: 'background.paper',
-            boxShadow: 24,
-            p: 4,
-            borderRadius: 2,
-            width: 500,
-          }}
-        >
-          <CreateDeliveryNoteModala onAddDeliveryNote={addDeliveryNote} codey={codey} />
-        </Box>
+      <Modal
+        open={open}
+        onClose={handleClose}
+      >
+        <CreateDeliveryNoteModala />
       </Modal>
     </Box>
   );
