@@ -1,15 +1,90 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { Box, Typography, Table, TableHead, TableRow, TableCell, TableBody,Button } from '@mui/material';
+import { Box, Typography, Table, TableHead, TableRow, TableCell, TableBody, Button, Menu, MenuItem } from '@mui/material';
 import Grid from '@mui/material/Grid2';
 import './cssbl.css';
-import logo from '../../assets/amounnet.png';  // Relative path
+import logo from '../../assets/amounnet.png';
+import * as XLSX from 'xlsx';
+
+// Translation dictionaries
+const translations = {
+  en: {
+    companyName: "Company Name",
+    companyAddress: "Company Address",
+    companyPhone: "Company Phone",
+    companyVAT: "Company VAT",
+    clientName: "Client Name",
+    clientAddress: "Client Address",
+    clientPhone: "Client Phone",
+    clientFax: "Fax",
+    deliveryNote: "Delivery Note",
+    designation: "Designation",
+    quantity: "Quantity",
+    unit: "Unit",
+    unitPrice: "Unit Price",
+    netPrice: "Net Price",
+    totalNet: "Total Net",
+    clientSignature: "Client Signature",
+    companySignature: "Company Signature",
+    date: "Date",
+    downloadExcel: "Download Excel",
+    print: "Print",
+    back: "Back"
+  },
+  fr: {
+    companyName: "Nom de la société",
+    companyAddress: "Adresse de la société",
+    companyPhone: "Téléphone de la société",
+    companyVAT: "Code TVA de la société",
+    clientName: "Nom du Client",
+    clientAddress: "Adresse du Client",
+    clientPhone: "Téléphone du Client",
+    clientFax: "Fax",
+    deliveryNote: "Bon de Sortie",
+    designation: "Designation",
+    quantity: "Quantité",
+    unit: "Unité",
+    unitPrice: "Prix U",
+    netPrice: "Prix Net",
+    totalNet: "Total Net",
+    clientSignature: "Signature du Client",
+    companySignature: "Signature de la Société",
+    date: "Date",
+    downloadExcel: "Télécharger en Excel",
+    print: "Imprimer",
+    back: "Retour"
+  },
+  ar: {
+    companyName: "اسم الشركة",
+    companyAddress: "عنوان الشركة",
+    companyPhone: "هاتف الشركة",
+    companyVAT: "الرقم الضريبي",
+    clientName: "اسم العميل",
+    clientAddress: "عنوان العميل",
+    clientPhone: "هاتف العميل",
+    clientFax: "فاكس",
+    deliveryNote: "إذن صرف",
+    designation: "الوصف",
+    quantity: "الكمية",
+    unit: "الوحدة",
+    unitPrice: "سعر الوحدة",
+    netPrice: "السعر الصافي",
+    totalNet: "المجموع الصافي",
+    clientSignature: "توقيع العميل",
+    companySignature: "توقيع الشركة",
+    date: "التاريخ",
+    downloadExcel: "تحميل إكسل",
+    print: "طباعة",
+    back: "رجوع"
+  }
+};
 
 const SingleDeliverysortie = () => {
-  const { code, clientId,codey,devise } = useParams();
+  const { code, clientId, codey, devise } = useParams();
   const printRef = useRef();
   const navigate = useNavigate();
-
+  const [printLanguage, setPrintLanguage] = useState('fr');
+  const [anchorEl, setAnchorEl] = useState(null);
   const [client, setClient] = useState({});
   const [deliveryNote, setDeliveryNote] = useState([]);
 
@@ -39,21 +114,16 @@ const SingleDeliverysortie = () => {
   }, [code, clientId]);
 
   const totalNettc = deliveryNote.reduce((acc, prod) => acc + (prod.prixU_HT || 0) * (prod.quantite || 0), 0) || 0;
- 
+
   const handlePrint = () => {
     const originalContents = document.body.innerHTML;
     const printContents = printRef.current.innerHTML;
 
-    // Replace the body content with printable content
     document.body.innerHTML = printContents;
-
-    // Trigger the print dialog
     window.print();
-
-    // After printing is done, restore the original content and navigate back
     window.onafterprint = () => {
-      document.body.innerHTML = originalContents; // Restore original page content
-      navigate(previousLocation); // Navigate back to the previous page
+      document.body.innerHTML = originalContents;
+      window.location.reload();
     };
   };
 
@@ -63,27 +133,33 @@ const SingleDeliverysortie = () => {
     const month = String(today.getMonth() + 1).padStart(2, '0');
     const year = today.getFullYear();
     return `${day}/${month}/${year}`;
-}
-
+  }
 
   const handleExportToExcel = () => {
     const companyInfo = [
-      ['Nom de la société', 'Ma Société'],
-      ['Adresse de la société', 'Adresse de Ma Société'],
-      ['Téléphone de la société', '+987654321'],
-      ['Code TVA de la société', 'TVA123456789'],
+      [translations[printLanguage].companyName, 'Amounette Company'],
+      [translations[printLanguage].companyAddress, 'cité wahat'],
+      [translations[printLanguage].companyPhone, '+987654321'],
+      [translations[printLanguage].companyVAT, 'TVA123456789'],
     ];
   
     const clientInfo = [
-      ['Nom du Client', client?.fullname || 'Fournisseur Inconnu'],
-      ['Adresse du Client', client?.address || 'Adresse inconnue'],
-      ['Téléphone du Client', client?.tel || 'Numéro inconnu'],
-      ['Fax', client?.fax || 'Code TVA inconnu'],
+      [translations[printLanguage].clientName, client?.fullname || 'Unknown Client'],
+      [translations[printLanguage].clientAddress, client?.address || 'Unknown Address'],
+      [translations[printLanguage].clientPhone, client?.tel || 'Unknown Number'],
+      [translations[printLanguage].clientFax, client?.fax || 'Unknown VAT'],
     ];
   
-    const deliveryNoteDetails = [['Bon de Livraison', deliveryNote.code]];
+    const deliveryNoteDetails = [[translations[printLanguage].deliveryNote, code]];
   
-    const tableHeaders = ['Produit', 'Quantité', 'Unité', 'Prix U HT ($)', 'Prix Net ($)'];
+    const tableHeaders = [
+      translations[printLanguage].designation,
+      translations[printLanguage].quantity,
+      translations[printLanguage].unit,
+      `${translations[printLanguage].unitPrice} (${devise})`,
+      translations[printLanguage].netPrice
+    ];
+    
     const productRows = deliveryNote.map((product) => [
       product.designation,
       product.quantite,
@@ -92,12 +168,11 @@ const SingleDeliverysortie = () => {
       (product.prixU_HT * product.quantite).toFixed(2),
     ]);
   
-    const totalNet = [['Total Net ($)', `${totalNettc.toFixed(2)}`]];
+    const totalNet = [[translations[printLanguage].totalNet, `${totalNettc.toFixed(2)} ${devise}`]];
   
-    // Build the worksheet data
     const worksheetData = [
-      [], // Empty row
-      ['Informations de la société', '', '', '', '', 'Informations du client'],
+      [],
+      [translations[printLanguage].companyName, '', '', '', '', translations[printLanguage].clientName],
       ...companyInfo.map((row, i) => [
         row[0], row[1], '', '', clientInfo[i]?.[0] || '', clientInfo[i]?.[1] || '',
       ]),
@@ -110,45 +185,59 @@ const SingleDeliverysortie = () => {
       ...totalNet,
     ];
   
-    // Create worksheet and add data
     const worksheet = XLSX.utils.aoa_to_sheet(worksheetData);
-  
-    // Define borders for all cells
     const borderStyle = { top: { style: 'thin' }, bottom: { style: 'thin' }, left: { style: 'thin' }, right: { style: 'thin' } };
   
-    // Apply borders to every cell in the worksheet
     Object.keys(worksheet).forEach((cellKey) => {
-      if (!cellKey.startsWith('!')) { // Skip metadata keys like '!cols'
+      if (!cellKey.startsWith('!')) {
         worksheet[cellKey].s = { border: borderStyle };
       }
     });
   
-    // Set column widths for better readability
     worksheet['!cols'] = [
-      { wch: 20 }, // Company field labels
-      { wch: 30 }, // Company field values
-      { wch: 5 },  // Spacer
-      { wch: 5 },  // Spacer
-      { wch: 20 }, // Client field labels
-      { wch: 30 }, // Client field values
+      { wch: 20 },
+      { wch: 30 },
+      { wch: 5 },
+      { wch: 5 },
+      { wch: 20 },
+      { wch: 30 },
     ];
   
-    // Create workbook and append the worksheet
     const workbook = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(workbook, worksheet, 'Bon de Livraison');
-  
-    // Export the workbook as a file
-    XLSX.writeFile(workbook, `Bon_de_Livraison_${deliveryNote.code}.xlsx`);
+    XLSX.utils.book_append_sheet(workbook, worksheet, translations[printLanguage].deliveryNote);
+    XLSX.writeFile(workbook, `${translations[printLanguage].deliveryNote}_${code}.xlsx`);
   };
-  
+
+  const handleLanguageMenuOpen = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleLanguageMenuClose = () => {
+    setAnchorEl(null);
+  };
+
+  const selectLanguage = (lang) => {
+    setPrintLanguage(lang);
+    handleLanguageMenuClose();
+  };
+
+  const isArabic = printLanguage === 'ar';
 
   return (
     <Box sx={{ p: 3 }}>
-      <Button variant="outlined" onClick={() => navigate(-1)} sx={{ mb: 2 }}>
-        Retour
+      <Button variant="outlined" onClick={() => navigate(-1)} sx={{ mb: 2, mr: 2 }}>
+        {translations[printLanguage].back}
       </Button>
-      <Button variant="contained" color="primary" onClick={handlePrint} sx={{ mb: 2, ml: 2 }}>
-        Imprimer
+      <Button variant="contained" color="primary" onClick={handlePrint} sx={{ mb: 2, mr: 2 }}>
+        {translations[printLanguage].print}
+      </Button>
+      <Button 
+        variant="contained" 
+        color="secondary" 
+        onClick={handleLanguageMenuOpen}
+        sx={{ mb: 2, mr: 2 }}
+      >
+        {printLanguage.toUpperCase()}
       </Button>
       <Button
         variant="contained"
@@ -156,8 +245,18 @@ const SingleDeliverysortie = () => {
         onClick={handleExportToExcel}
         sx={{ mb: 2, ml: 2 }}
       >
-        Télécharger en Excel
+        {translations[printLanguage].downloadExcel}
       </Button>
+
+      <Menu
+        anchorEl={anchorEl}
+        open={Boolean(anchorEl)}
+        onClose={handleLanguageMenuClose}
+      >
+        <MenuItem onClick={() => selectLanguage('fr')}>FR</MenuItem>
+        <MenuItem onClick={() => selectLanguage('en')}>EN</MenuItem>
+        <MenuItem onClick={() => selectLanguage('ar')}>AR</MenuItem>
+      </Menu>
 
       {/* Printable content */}
       <Box
@@ -167,23 +266,41 @@ const SingleDeliverysortie = () => {
           p: 3,
           mt: 2,
           backgroundColor: '#fff',
+          direction: isArabic ? 'rtl' : 'ltr',
         }}
       >
-        {/* Add style for print */}
         <style>
           {`
             @media print {
               body {
                 font-size: 12px !important;
-              }
-              .MuiTypography-root {
-                font-size: 12px !important;
+                direction: ${isArabic ? 'rtl' : 'ltr'};
               }
               .MuiButton-root {
                 display: none !important;
               }
+              .MuiTypography-root {
+                font-size: 12px !important;
+              }
               .MuiTableCell-root {
                 font-size: 12px !important;
+                text-align: ${isArabic ? 'right' : 'left'};
+              }
+              .company-info {
+                margin-right: ${isArabic ? '0' : 'auto'};
+                margin-left: ${isArabic ? 'auto' : '0'};
+                text-align: ${isArabic ? 'right' : 'left'};
+              }
+              .client-info {
+                margin-left: ${isArabic ? '0' : 'auto'};
+                margin-right: ${isArabic ? 'auto' : '0'};
+                text-align: ${isArabic ? 'left' : 'right'};
+              }
+              .signature-left {
+                text-align: ${isArabic ? 'right' : 'left'};
+              }
+              .signature-right {
+                text-align: ${isArabic ? 'left' : 'right'};
               }
             }
           `}
@@ -191,7 +308,7 @@ const SingleDeliverysortie = () => {
         <Box sx={{ 
           width: 742,
           height: 152,
-          mx: 'auto', // Center horizontally
+          mx: 'auto',
           mb: 3,
           display: 'flex',
           justifyContent: 'center',
@@ -204,77 +321,102 @@ const SingleDeliverysortie = () => {
             style={{ 
               width: '100%',
               height: '100%',
-              objectFit: 'cover' // or 'contain' based on your preference
+              objectFit: 'cover'
             }}
           />
         </Box>
-
-        {/* Company and Supplier Information with Labels */}
-        <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 3 }}>
-          {/* Company Information (Left Column) */}
-          <Box sx={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 2 }}>
-  <Typography variant="body1"><strong>Nom de la société:</strong> Amounette Compnay</Typography>
-  <Typography variant="body1"><strong>Adresse de la société:</strong> cité wahat</Typography>
-  <Typography variant="body1"><strong>Téléphone de la société:</strong> +987654321</Typography>
-  <Typography variant="body1"><strong>Code TVA de la société:</strong> TVA123456789</Typography>
-</Box>
-            <Typography> {displayDate()}</Typography>
-          {/* Supplier Information (Right Column) */}
-          <Box sx={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 2, marginLeft: '30%' }}>
-            <Typography variant="body1"><strong>Nom du Client:</strong> {client.fullname}</Typography>
-            <Typography variant="body1"><strong>Adresse du Client:</strong> {client?.address || 'Adresse inconnue'}</Typography>
-            <Typography variant="body1"><strong>Téléphone du Client:</strong> {client?.tel || 'Numéro inconnu'}</Typography>
-            <Typography variant="body1"><strong>Fax:</strong> {client?.fax || 'codeTVA inconnu'}</Typography>
+        
+        {/* Company and Client Information */}
+        <Box sx={{ 
+          display: 'flex', 
+          justifyContent: 'space-between', 
+          mb: 3,
+          flexDirection: isArabic ? 'row-reverse' : 'row'
+        }}>
+          {/* Company Information */}
+          <Box sx={{ 
+            flex: 1, 
+            display: 'flex', 
+            flexDirection: 'column', 
+            gap: 2,
+            textAlign: isArabic ? 'right' : 'left',
+            mr: isArabic ? 0 : 'auto',
+            ml: isArabic ? 'auto' : 0
+          }}>
+            <Typography variant="body1"><strong>{translations[printLanguage].companyName}:</strong> Amounette Company</Typography>
+            <Typography variant="body1"><strong>{translations[printLanguage].companyAddress}:</strong> cité wahat</Typography>
+            <Typography variant="body1"><strong>{translations[printLanguage].companyPhone}:</strong> +987654321</Typography>
+            <Typography variant="body1"><strong>{translations[printLanguage].companyVAT}:</strong> TVA123456789</Typography>
+          </Box>
+          
+          {/* Date */}
+          <Typography sx={{ alignSelf: 'flex-start' }}>
+            <strong>{translations[printLanguage].date}:</strong> {displayDate()}
+          </Typography>
+          
+          {/* Client Information */}
+          <Box sx={{ 
+            flex: 1, 
+            display: 'flex', 
+            flexDirection: 'column', 
+            gap: 2,
+            textAlign: isArabic ? 'left' : 'right',
+            ml: isArabic ? 0 : 'auto',
+            mr: isArabic ? 'auto' : 0
+          }}>
+            <Typography variant="body1"><strong>{translations[printLanguage].clientName}:</strong> {client.fullname}</Typography>
+            <Typography variant="body1"><strong>{translations[printLanguage].clientAddress}:</strong> {client?.address || 'Unknown Address'}</Typography>
+            <Typography variant="body1"><strong>{translations[printLanguage].clientPhone}:</strong> {client?.tel || 'Unknown Number'}</Typography>
+            <Typography variant="body1"><strong>{translations[printLanguage].clientFax}:</strong> {client?.fax || 'Unknown VAT'}</Typography>
           </Box>
         </Box>
 
         <Typography variant="h4" mb={3} textAlign="center">
-          Bon de Sortie - {codey}-{devise}
+          {translations[printLanguage].deliveryNote} - {codey}-{devise}
         </Typography>
 
         <Table>
           <TableHead>
             <TableRow>
-              <TableCell>Designaiton</TableCell>
-              <TableCell>Quantité</TableCell>
-              <TableCell>Unite</TableCell>
-              <TableCell>Prix U ({devise}) </TableCell>
-              <TableCell>Prix Net </TableCell>
+              <TableCell sx={{ textAlign: isArabic ? 'right' : 'left' }}>{translations[printLanguage].designation}</TableCell>
+              <TableCell sx={{ textAlign: isArabic ? 'right' : 'left' }}>{translations[printLanguage].quantity}</TableCell>
+              <TableCell sx={{ textAlign: isArabic ? 'right' : 'left' }}>{translations[printLanguage].unit}</TableCell>
+              <TableCell sx={{ textAlign: isArabic ? 'right' : 'left' }}>{translations[printLanguage].unitPrice} ({devise})</TableCell>
+              <TableCell sx={{ textAlign: isArabic ? 'right' : 'left' }}>{translations[printLanguage].netPrice}</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
             {deliveryNote.map((prod, index) => (
               <TableRow key={index}>
-                <TableCell>{prod.designation}</TableCell>
-                <TableCell>{prod.quantite}</TableCell>
-                <TableCell>{prod.Unite}</TableCell>
-                <TableCell>{prod.prixU_HT} ({devise})</TableCell>
-                <TableCell>{(prod.prixU_HT * prod.quantite).toFixed(2)} {devise}</TableCell>
-              
+                <TableCell sx={{ textAlign: isArabic ? 'right' : 'left' }}>{prod.designation}</TableCell>
+                <TableCell sx={{ textAlign: isArabic ? 'right' : 'left' }}>{prod.quantite}</TableCell>
+                <TableCell sx={{ textAlign: isArabic ? 'right' : 'left' }}>{prod.Unite}</TableCell>
+                <TableCell sx={{ textAlign: isArabic ? 'right' : 'left' }}>{prod.prixU_HT} ({devise})</TableCell>
+                <TableCell sx={{ textAlign: isArabic ? 'right' : 'left' }}>{(prod.prixU_HT * prod.quantite).toFixed(2)} {devise}</TableCell>
               </TableRow>
             ))}
           </TableBody>
         </Table>
 
-        {/* Total Section - Moved to the Right Side */}
         <Box sx={{ display: 'flex', justifyContent: 'flex-end', mt: 3 }}>
           <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end' }}>
-         
-          
             <Typography variant="body1">
-              <strong>Total Net :</strong> {totalNettc.toFixed(2)}$
+              <strong>{translations[printLanguage].totalNet}:</strong> {totalNettc.toFixed(2)} {devise}
             </Typography>
           </Box>
         </Box>
 
-        <Box sx={{ display: 'flex', justifyContent: 'space-between', mt: 4 }}>
-          <Box sx={{ textAlign: 'center' }}>
-            <Typography variant="body1">Signature du Client</Typography>
-          
+        <Box sx={{ 
+          display: 'flex', 
+          justifyContent: 'space-between', 
+          mt: 4,
+          flexDirection: isArabic ? 'row-reverse' : 'row'
+        }}>
+          <Box sx={{ textAlign: isArabic ? 'right' : 'left' }}>
+            <Typography variant="body1">{translations[printLanguage].clientSignature}</Typography>
           </Box>
-          <Box sx={{ textAlign: 'center' }}>
-            <Typography variant="body1">Signature de Ma Société</Typography>
-          
+          <Box sx={{ textAlign: isArabic ? 'left' : 'right' }}>
+            <Typography variant="body1">{translations[printLanguage].companySignature}</Typography>
           </Box>
         </Box>
       </Box>

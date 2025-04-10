@@ -251,15 +251,15 @@ const Bvsinlge = () => {
 
       {/* Printable content */}
       <Box
-        ref={printRef}
-        sx={{
-          border: '1px solid #ccc',
-          p: 3,
-          mt: 2,
-          backgroundColor: '#fff',
-          direction: isArabic ? 'rtl' : 'ltr',
-        }}
-      >
+  ref={printRef}
+  sx={{
+    border: '1px solid #ccc',
+    p: 3,
+    mt: 2,
+    backgroundColor: '#fff',
+    direction: isArabic ? 'rtl' : 'ltr',
+  }}
+>
         <style>
           {`
             @media print {
@@ -318,49 +318,40 @@ const Bvsinlge = () => {
         </Box>
         
         {/* Company and Client Information */}
-        <Box sx={{ 
-          display: 'flex', 
-          justifyContent: 'space-between', 
-          mb: 3,
-          flexDirection: isArabic ? 'row-reverse' : 'row'
-        }}>
-          {/* Company Information */}
-          <Box sx={{ 
-            flex: 1, 
-            display: 'flex', 
-            flexDirection: 'column', 
-            gap: 2,
-            textAlign: isArabic ? 'right' : 'left',
-            mr: isArabic ? 0 : 'auto',
-            ml: isArabic ? 'auto' : 0
-          }}>
-            <Typography variant="body1"><strong>{translations[printLanguage].companyName}:</strong> Amounette Company</Typography>
-            <Typography variant="body1"><strong>{translations[printLanguage].companyAddress}:</strong> cité wahat</Typography>
-            <Typography variant="body1"><strong>{translations[printLanguage].companyPhone}:</strong> +987654321</Typography>
-            <Typography variant="body1"><strong>{translations[printLanguage].companyVAT}:</strong> TVA123456789</Typography>
-          </Box>
-          
-          {/* Date */}
-          <Typography sx={{ alignSelf: 'flex-start' }}>
-            <strong>{translations[printLanguage].date}:</strong> {displayDate()}
-          </Typography>
-          
-          {/* Client Information */}
-          <Box sx={{ 
-            flex: 1, 
-            display: 'flex', 
-            flexDirection: 'column', 
-            gap: 2,
-            textAlign: isArabic ? 'left' : 'right',
-            ml: isArabic ? 0 : 'auto',
-            mr: isArabic ? 'auto' : 0
-          }}>
-            <Typography variant="body1"><strong>{translations[printLanguage].clientName}:</strong> {client.fullname}</Typography>
-            <Typography variant="body1"><strong>{translations[printLanguage].clientAddress}:</strong> {client?.address || 'Adresse inconnue'}</Typography>
-            <Typography variant="body1"><strong>{translations[printLanguage].clientPhone}:</strong> {client?.tel || 'Numéro inconnu'}</Typography>
-            <Typography variant="body1"><strong>{translations[printLanguage].clientFax}:</strong> {client?.fax || 'codeTVA inconnu'}</Typography>
-          </Box>
-        </Box>
+        <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 2 }}>
+    {/* Client Info */}
+    <Box sx={{ textAlign: isArabic ? 'left' : 'right', ml: isArabic ? 0 : 'auto' }}>
+      <Typography variant="body2">
+        <strong>{translations[printLanguage].clientName}:</strong> {client?.fullname}
+      </Typography>
+      <Typography variant="body2">
+        <strong>{translations[printLanguage].clientAddress}:</strong> {client?.address}
+      </Typography>
+      <Typography variant="body2">
+        <strong>{translations[printLanguage].clientPhone}:</strong> {client?.tel}
+      </Typography>
+      <Typography variant="body2">
+        <strong>{translations[printLanguage].clientFax}:</strong> {client?.fax}
+      </Typography>
+    </Box>
+
+    {/* Company Info */}
+    <Box sx={{ textAlign: isArabic ? 'right' : 'left', mr: isArabic ? 0 : 'auto' }}>
+      <img src={logo} alt="Logo" style={{ maxWidth: '150px', marginBottom: '10px' }} />
+      <Typography variant="body2">
+        <strong>{translations[printLanguage].companyName}:</strong> Ma Société
+      </Typography>
+      <Typography variant="body2">
+        <strong>{translations[printLanguage].companyAddress}:</strong> Adresse de Ma Société
+      </Typography>
+      <Typography variant="body2">
+        <strong>{translations[printLanguage].companyPhone}:</strong> +987654321
+      </Typography>
+      <Typography variant="body2">
+        <strong>{translations[printLanguage].companyVAT}:</strong> TVA123456789
+      </Typography>
+    </Box>
+  </Box>
 
         <Typography variant="h4" mb={3} textAlign="center">
           {translations[printLanguage].deliveryNote}- {codey}-{devise}
