@@ -127,7 +127,6 @@ const SingleDeliveryNote = () => {
   const totalTVA = totalNetHT * (deliveryNote[0]?.tva / 100 || 0);
   let totalNetTTC = totalNetHT + totalTVA;
 
-  // If timbre is true, add the timbre cost to the total
   if (timbre === 'true') {
     totalNetTTC += 1;  // Add 1 TND for timbre
   }
@@ -143,22 +142,16 @@ const SingleDeliveryNote = () => {
   const handlePrint = () => {
     const originalContents = document.body.innerHTML;
     const printContents = printRef.current.innerHTML;
-
-    // Replace the body content with printable content
     document.body.innerHTML = printContents;
-
-    // Trigger the print dialog
     window.print();
-
-    // After printing is done, restore the original content and navigate back
     window.onafterprint = () => {
-      document.body.innerHTML = originalContents; // Restore original page content
-      navigate(previousLocation); // Navigate back to the previous page
+      document.body.innerHTML = originalContents;
+      navigate(previousLocation);
     };
   };
 
   return (
-    <Box sx={{ p: 3 }}>
+    <Box sx={{ p: 3, direction: language === 'ar' ? 'rtl' : 'ltr' }}>
       <Button variant="outlined" onClick={() => navigate(-1)} sx={{ mb: 2 }}>
         {translations[language].back}
       </Button>
@@ -284,42 +277,20 @@ const SingleDeliveryNote = () => {
                 </TableRow>
               );
             })}
+            <TableRow>
+              <TableCell colSpan={7} align="right">{translations[language].totalHT}</TableCell>
+              <TableCell>{totalNetHT.toFixed(2)} TND</TableCell>
+            </TableRow>
+            <TableRow>
+              <TableCell colSpan={7} align="right">{translations[language].totalVAT}</TableCell>
+              <TableCell>{totalTVA.toFixed(2)} TND</TableCell>
+            </TableRow>
+            <TableRow>
+              <TableCell colSpan={7} align="right">{translations[language].totalTTC}</TableCell>
+              <TableCell>{totalNetTTC.toFixed(2)} TND</TableCell>
+            </TableRow>
           </TableBody>
         </Table>
-
-        {/* Total Section - Moved to the Right Side */}
-        <Box sx={{ display: 'flex', justifyContent: 'flex-end', mt: 3 }}>
-          <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end' }}>
-            <Typography variant="body1">
-              <strong>{translations[language].totalNetHT}:</strong> {totalNetHT.toFixed(2)}TND
-            </Typography>
-            <Typography variant="body1">
-              <strong>{translations[language].totalVAT}:</strong> {totalTVA.toFixed(2)}TND
-            </Typography>
-            {timbre === 'true' && (
-              <Typography variant="body1">
-                <strong>{translations[language].timbre}:</strong> 1TND
-              </Typography>
-            )}
-            <Typography variant="h6">
-              <strong>{translations[language].totalNetTTC}:</strong> {totalNetTTC.toFixed(2)}TND
-            </Typography>
-          </Box>
-        </Box>
-
-        {/* Signatures Section */}
-        <Box sx={{ display: 'flex', justifyContent: 'space-between', mt: 4 }}>
-          <Box sx={{ flex: 1, textAlign: 'center' }}>
-            <Typography variant="body1">
-              <strong>{translations[language].signatureSupplier}</strong>
-            </Typography>
-          </Box>
-          <Box sx={{ flex: 1, textAlign: 'center' }}>
-            <Typography variant="body1">
-              <strong>{translations[language].signatureCompany}</strong>
-            </Typography>
-          </Box>
-        </Box>
       </Box>
     </Box>
   );
