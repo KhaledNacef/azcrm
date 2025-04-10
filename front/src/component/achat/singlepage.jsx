@@ -215,28 +215,32 @@ const SingleDeliveryNote = () => {
           />
         </Box>
 
-        {/* Company and Supplier Information with Labels */}
-        <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 3 }}>
-          <Box sx={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 2 }}>
-            <Typography variant="body1"><strong>{translations[language].companyName}:</strong> Amounette Company</Typography>
-            <Typography variant="body1"><strong>{translations[language].companyAddress}:</strong> cité wahat</Typography>
-            <Typography variant="body1"><strong>{translations[language].companyPhone}:</strong> +987654321</Typography>
-            <Typography variant="body1"><strong>{translations[language].companyTVA}:</strong> TVA123456789</Typography>
+        {/* Company and Supplier Info */}
+        <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
+          <Box sx={{ width: '45%' }}>
+            <Typography variant="h6">
+              {translations[language].companyName}: {supplier.societe}
+            </Typography>
+            <Typography>{translations[language].companyAddress}: {supplier.adresse}</Typography>
+            <Typography>{translations[language].companyPhone}: {supplier.tel}</Typography>
+            <Typography>{translations[language].companyTVA}: {supplier.code_tva}</Typography>
           </Box>
-
-          <Box sx={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 2, marginLeft: '30%' }}>
-            <Typography variant="body1"><strong>{translations[language].supplierName}:</strong> {supplier.fullname}</Typography>
-            <Typography variant="body1"><strong>{translations[language].supplierAddress}:</strong> {supplier?.address || 'Adresse inconnue'}</Typography>
-            <Typography variant="body1"><strong>{translations[language].supplierPhone}:</strong> {supplier?.tel || 'Numéro inconnu'}</Typography>
-            <Typography variant="body1"><strong>{translations[language].supplierTVA}:</strong> {supplier?.codeTVA || 'codeTVA inconnu'}</Typography>
+          <Box sx={{ width: '45%' }}>
+            <Typography variant="h6">
+              {translations[language].supplierName}: {supplier.nom}
+            </Typography>
+            <Typography>{translations[language].supplierAddress}: {supplier.adresse}</Typography>
+            <Typography>{translations[language].supplierPhone}: {supplier.tel}</Typography>
+            <Typography>{translations[language].supplierTVA}: {supplier.code_tva}</Typography>
           </Box>
         </Box>
 
-        <Typography variant="h4" mb={3} textAlign="center">
-          {translations[language].bonDeAchat} - {codey}
+        {/* Delivery Note */}
+        <Typography variant="h5" sx={{ mt: 3, textAlign: 'center' }}>
+          {translations[language].bonDeAchat}
         </Typography>
 
-        <Table>
+        <Table sx={{ mt: 2 }}>
           <TableHead>
             <TableRow>
               <TableCell>{translations[language].designation}</TableCell>
@@ -250,55 +254,38 @@ const SingleDeliveryNote = () => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {deliveryNote.map((prod, index) => {
-              const basePrice = prod.prixU_HT;
-              const netHT = basePrice * prod.quantite;
-              const netTTC = netHT * (1 + prod.tva / 100);
-
-              return (
-                <TableRow key={index}>
-                  <TableCell>{prod.designation}</TableCell>
-                  <TableCell>{prod.Unite}</TableCell>
-                  <TableCell>{prod.quantite}</TableCell>
-                  <TableCell>{prod.prixU_HT}TND</TableCell>
-                  <TableCell>{prod.tva}%</TableCell>
-                  <TableCell>{prod.rem}%</TableCell>
-                  <TableCell>{netHT.toFixed(2)}TND</TableCell>
-                  <TableCell>{netTTC.toFixed(2)}TND</TableCell>
-                </TableRow>
-              );
-            })}
+            {deliveryNote.map((prod, index) => (
+              <TableRow key={index}>
+                <TableCell>{prod.designation}</TableCell>
+                <TableCell>{prod.unite}</TableCell>
+                <TableCell>{prod.quantite}</TableCell>
+                <TableCell>{prod.prixU_HT}</TableCell>
+                <TableCell>{prod.tva}</TableCell>
+                <TableCell>{prod.rem}</TableCell>
+                <TableCell>{prod.prixNet_HT}</TableCell>
+                <TableCell>{prod.prixNet_TTC}</TableCell>
+              </TableRow>
+            ))}
           </TableBody>
         </Table>
 
-        {/* Total Section - Moved to the Right Side */}
-        <Box sx={{ display: 'flex', justifyContent: 'flex-end', mt: 3 }}>
-          <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end' }}>
-            <Typography variant="body1">
-              <strong>{translations[language].prixNetHT}:</strong> {totalNetHT.toFixed(2)}TND
+        <Box sx={{ mt: 3, display: 'flex', justifyContent: 'space-between' }}>
+          <Box>
+            <Typography variant="body2">
+              {translations[language].timbre}: {timbre === 'true' ? '1 TND' : '0 TND'}
             </Typography>
-            <Typography variant="body1">
-              <strong>{translations[language].prixNetHT}:</strong> {totalTVA.toFixed(2)}TND
-            </Typography>
-            {timbre === 'true' && (
-              <Typography variant="body1">
-                <strong>{translations[language].timbre}:</strong> 1TND
-              </Typography>
-            )}
-            <Typography variant="body1">
-              <strong>{translations[language].prixNetTTC}:</strong> {totalNetTTC.toFixed(2)}TND
-            </Typography>
+            <Typography variant="h6" sx={{ mt: 2 }}>
+          {translations[language].prixNetTTC}: {totalNetTTC} TND
+        </Typography>
           </Box>
-        </Box>
-
-        <Box sx={{ display: 'flex', justifyContent: 'space-between', mt: 4 }}>
-          <Box sx={{ textAlign: 'center' }}>
+          <Box>
             <Typography variant="body2">{translations[language].signatureFournisseur}</Typography>
-          </Box>
-          <Box sx={{ textAlign: 'center' }}>
             <Typography variant="body2">{translations[language].signatureSociete}</Typography>
           </Box>
         </Box>
+
+        {/* Total Price */}
+       
       </Box>
     </Box>
   );
