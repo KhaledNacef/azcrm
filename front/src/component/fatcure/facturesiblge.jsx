@@ -16,7 +16,7 @@ const BCsingleACHAT = () => {
   const [error, setError] = useState(null);
   const previousLocation = window.location.pathname;
   const [open, setOpen] = useState(false);
-  const [printLanguage, setPrintLanguage] = useState('fr'); // Default to French
+  const [printLanguage, setPrintLanguage] = useState('fr');
 
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
@@ -200,7 +200,8 @@ const BCsingleACHAT = () => {
           p: 3,
           mt: 2,
           backgroundColor: '#fff',
-          direction: printLanguage === 'ar' ? 'rtl' : 'ltr'
+          direction: printLanguage === 'ar' ? 'rtl' : 'ltr',
+          textAlign: printLanguage === 'ar' ? 'right' : 'left'
         }}
       >
         <style>
@@ -208,6 +209,8 @@ const BCsingleACHAT = () => {
             @media print {
               body {
                 font-size: 12px !important;
+                direction: ${printLanguage === 'ar' ? 'rtl' : 'ltr'};
+                text-align: ${printLanguage === 'ar' ? 'right' : 'left'};
               }
               .MuiTypography-root {
                 font-size: 12px !important;
@@ -217,6 +220,10 @@ const BCsingleACHAT = () => {
               }
               .MuiTableCell-root {
                 font-size: 12px !important;
+                text-align: ${printLanguage === 'ar' ? 'right' : 'left'};
+              }
+              .table-header {
+                direction: ${printLanguage === 'ar' ? 'rtl' : 'ltr'};
               }
             }
           `}
@@ -243,68 +250,61 @@ const BCsingleACHAT = () => {
         </Box>
         
         {/* Company and Supplier Information */}
-        <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 3 }}>
-          {/* For Arabic, swap the order of company and supplier info */}
-          {printLanguage === 'ar' ? (
-            <>
-              {/* Supplier Information (Right Column in RTL) */}
-              <Box sx={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 2 }}>
-                <Typography variant="body1"><strong>{t.supplierName}:</strong> {supplier.fullname}</Typography>
-                <Typography variant="body1"><strong>{t.supplierAddress}:</strong> {supplier?.address || t.unknownAddress}</Typography>
-                <Typography variant="body1"><strong>{t.supplierPhone}:</strong> {supplier?.tel || t.unknownPhone}</Typography>
-                <Typography variant="body1"><strong>{t.supplierVAT}:</strong> {supplier?.codeTVA || t.unknownVAT}</Typography>
-              </Box>
-              
-              {/* Date */}
-              <Typography>{displayDate()}</Typography>
-              
-              {/* Company Information (Left Column in RTL) */}
-              <Box sx={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 2, marginRight: '30%' }}>
-                <Typography variant="body1"><strong>{t.companyName}:</strong> Amounette Company</Typography>
-                <Typography variant="body1"><strong>{t.companyAddress}:</strong> cité wahat</Typography>
-                <Typography variant="body1"><strong>{t.companyPhone}:</strong> +987654321</Typography>
-                <Typography variant="body1"><strong>{t.companyVAT}:</strong> TVA123456789</Typography>
-              </Box>
-            </>
-          ) : (
-            <>
-              {/* Company Information (Left Column) */}
-              <Box sx={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 2 }}>
-                <Typography variant="body1"><strong>{t.companyName}:</strong> Amounette Company</Typography>
-                <Typography variant="body1"><strong>{t.companyAddress}:</strong> cité wahat</Typography>
-                <Typography variant="body1"><strong>{t.companyPhone}:</strong> +987654321</Typography>
-                <Typography variant="body1"><strong>{t.companyVAT}:</strong> TVA123456789</Typography>
-              </Box>
-              
-              {/* Date */}
-              <Typography>{displayDate()}</Typography>
-              
-              {/* Supplier Information (Right Column) */}
-              <Box sx={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 2, marginLeft: '30%' }}>
-                <Typography variant="body1"><strong>{t.supplierName}:</strong> {supplier.fullname}</Typography>
-                <Typography variant="body1"><strong>{t.supplierAddress}:</strong> {supplier?.address || t.unknownAddress}</Typography>
-                <Typography variant="body1"><strong>{t.supplierPhone}:</strong> {supplier?.tel || t.unknownPhone}</Typography>
-                <Typography variant="body1"><strong>{t.supplierVAT}:</strong> {supplier?.codeTVA || t.unknownVAT}</Typography>
-              </Box>
-            </>
-          )}
+        <Box sx={{ 
+          display: 'flex', 
+          justifyContent: 'space-between', 
+          mb: 3,
+          flexDirection: printLanguage === 'ar' ? 'row-reverse' : 'row'
+        }}>
+          {/* Company Information */}
+          <Box sx={{ 
+            flex: 1, 
+            display: 'flex', 
+            flexDirection: 'column', 
+            gap: 2,
+            textAlign: printLanguage === 'ar' ? 'right' : 'left',
+            marginRight: printLanguage === 'ar' ? '30%' : 0,
+            marginLeft: printLanguage === 'ar' ? 0 : '30%'
+          }}>
+            <Typography variant="body1"><strong>{t.companyName}:</strong> Amounette Company</Typography>
+            <Typography variant="body1"><strong>{t.companyAddress}:</strong> cité wahat</Typography>
+            <Typography variant="body1"><strong>{t.companyPhone}:</strong> +987654321</Typography>
+            <Typography variant="body1"><strong>{t.companyVAT}:</strong> TVA123456789</Typography>
+          </Box>
+          
+          {/* Date */}
+          <Typography sx={{ alignSelf: 'flex-start' }}>{displayDate()}</Typography>
+          
+          {/* Supplier Information */}
+          <Box sx={{ 
+            flex: 1, 
+            display: 'flex', 
+            flexDirection: 'column', 
+            gap: 2,
+            textAlign: printLanguage === 'ar' ? 'right' : 'left'
+          }}>
+            <Typography variant="body1"><strong>{t.supplierName}:</strong> {supplier.fullname}</Typography>
+            <Typography variant="body1"><strong>{t.supplierAddress}:</strong> {supplier?.address || t.unknownAddress}</Typography>
+            <Typography variant="body1"><strong>{t.supplierPhone}:</strong> {supplier?.tel || t.unknownPhone}</Typography>
+            <Typography variant="body1"><strong>{t.supplierVAT}:</strong> {supplier?.codeTVA || t.unknownVAT}</Typography>
+          </Box>
         </Box>
 
         <Typography variant="h4" mb={3} textAlign="center">
           {t.title} - {codey}
         </Typography>
 
-        <Table>
-          <TableHead>
+        <Table sx={{ direction: printLanguage === 'ar' ? 'rtl' : 'ltr' }}>
+          <TableHead className="table-header">
             <TableRow>
-              <TableCell>{t.designation}</TableCell>
-              <TableCell>{t.unit}</TableCell>
-              <TableCell>{t.quantity}</TableCell>
-              <TableCell>{t.unitPrice}</TableCell>
-              <TableCell>{t.vat}</TableCell>
-              <TableCell>{t.discount}</TableCell>
-              <TableCell>{t.netPriceHT}</TableCell>
-              <TableCell>{t.netPriceTTC}</TableCell>
+              <TableCell sx={{ textAlign: printLanguage === 'ar' ? 'right' : 'left' }}>{t.designation}</TableCell>
+              <TableCell sx={{ textAlign: printLanguage === 'ar' ? 'right' : 'left' }}>{t.unit}</TableCell>
+              <TableCell sx={{ textAlign: printLanguage === 'ar' ? 'right' : 'left' }}>{t.quantity}</TableCell>
+              <TableCell sx={{ textAlign: printLanguage === 'ar' ? 'right' : 'left' }}>{t.unitPrice}</TableCell>
+              <TableCell sx={{ textAlign: printLanguage === 'ar' ? 'right' : 'left' }}>{t.vat}</TableCell>
+              <TableCell sx={{ textAlign: printLanguage === 'ar' ? 'right' : 'left' }}>{t.discount}</TableCell>
+              <TableCell sx={{ textAlign: printLanguage === 'ar' ? 'right' : 'left' }}>{t.netPriceHT}</TableCell>
+              <TableCell sx={{ textAlign: printLanguage === 'ar' ? 'right' : 'left' }}>{t.netPriceTTC}</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -315,14 +315,14 @@ const BCsingleACHAT = () => {
 
               return (
                 <TableRow key={index}>
-                  <TableCell>{prod.designation}</TableCell>
-                  <TableCell>{prod.Unite}</TableCell>
-                  <TableCell>{prod.quantite}</TableCell>
-                  <TableCell>{prod.prixU_HT}TND</TableCell>
-                  <TableCell>{prod.tva}%</TableCell>
-                  <TableCell>{prod.rem}%</TableCell>
-                  <TableCell>{netHT.toFixed(2)}TND</TableCell>
-                  <TableCell>{netTTC.toFixed(2)}TND</TableCell>
+                  <TableCell sx={{ textAlign: printLanguage === 'ar' ? 'right' : 'left' }}>{prod.designation}</TableCell>
+                  <TableCell sx={{ textAlign: printLanguage === 'ar' ? 'right' : 'left' }}>{prod.Unite}</TableCell>
+                  <TableCell sx={{ textAlign: printLanguage === 'ar' ? 'right' : 'left' }}>{prod.quantite}</TableCell>
+                  <TableCell sx={{ textAlign: printLanguage === 'ar' ? 'right' : 'left' }}>{prod.prixU_HT}TND</TableCell>
+                  <TableCell sx={{ textAlign: printLanguage === 'ar' ? 'right' : 'left' }}>{prod.tva}%</TableCell>
+                  <TableCell sx={{ textAlign: printLanguage === 'ar' ? 'right' : 'left' }}>{prod.rem}%</TableCell>
+                  <TableCell sx={{ textAlign: printLanguage === 'ar' ? 'right' : 'left' }}>{netHT.toFixed(2)}TND</TableCell>
+                  <TableCell sx={{ textAlign: printLanguage === 'ar' ? 'right' : 'left' }}>{netTTC.toFixed(2)}TND</TableCell>
                 </TableRow>
               );
             })}
@@ -330,8 +330,17 @@ const BCsingleACHAT = () => {
         </Table>
 
         {/* Total Section */}
-        <Box sx={{ display: 'flex', justifyContent: 'flex-end', mt: 3 }}>
-          <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end' }}>
+        <Box sx={{ 
+          display: 'flex', 
+          justifyContent: 'flex-end', 
+          mt: 3,
+          direction: printLanguage === 'ar' ? 'rtl' : 'ltr'
+        }}>
+          <Box sx={{ 
+            display: 'flex', 
+            flexDirection: 'column', 
+            alignItems: 'flex-end'
+          }}>
             <Typography variant="body1">
               <strong>{t.totalNetHT}:</strong> {totalNetHT.toFixed(2)} TND
             </Typography>
@@ -351,7 +360,12 @@ const BCsingleACHAT = () => {
           </Box>
         </Box>
         
-        <Box sx={{ display: 'flex', justifyContent: 'space-between', mt: 4 }}>
+        <Box sx={{ 
+          display: 'flex', 
+          justifyContent: 'space-between', 
+          mt: 4,
+          direction: printLanguage === 'ar' ? 'rtl' : 'ltr'
+        }}>
           <Box sx={{ textAlign: printLanguage === 'ar' ? 'right' : 'left' }}>
             <Typography variant="body1">{t.supplierSignature}</Typography>
           </Box>
