@@ -143,38 +143,57 @@ const BCsingleACHAT = () => {
 
         {/* Company and Supplier Information with Labels */}
         <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 3, direction: language === 'ar' ? 'rtl' : 'ltr' }}>
-  {/* Supplier Information (Left Corner for Arabic) */}
-  <Box sx={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 2, marginLeft: language === 'ar' ? '1rem' : '0' }}>
-    <Typography variant="body1">
-      <strong>{language === 'fr' ? 'Nom du fournisseur' : language === 'en' ? 'Supplier Name' : 'اسم المورد'}:</strong> {supplier.fullname}
-    </Typography>
-    <Typography variant="body1">
-      <strong>{language === 'fr' ? 'Adresse du fournisseur' : language === 'en' ? 'Supplier Address' : 'عنوان المورد'}:</strong> {supplier?.address || 'Adresse inconnue'}
-    </Typography>
-    <Typography variant="body1">
-      <strong>{language === 'fr' ? 'Téléphone du fournisseur' : language === 'en' ? 'Supplier Phone' : 'هاتف المورد'}:</strong> {supplier?.tel || 'Numéro inconnu'}
-    </Typography>
-    <Typography variant="body1">
-      <strong>{language === 'fr' ? 'Code TVA' : language === 'en' ? 'VAT Code' : 'رمز ضريبة القيمة المضافة'}:</strong> {supplier?.codeTVA || 'codeTVA inconnu'}
-    </Typography>
-  </Box>
 
-  {/* Company Information (Right Corner for Arabic) */}
-  <Box sx={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 2, marginRight: language === 'ar' ? '1rem' : '0', textAlign: language === 'ar' ? 'right' : 'left' }}>
-    <Typography variant="body1">
-      <strong>{language === 'fr' ? 'Nom de la société' : language === 'en' ? 'Company Name' : 'اسم الشركة'}:</strong> Amounette Company
-    </Typography>
-    <Typography variant="body1">
-      <strong>{language === 'fr' ? 'Adresse de la société' : language === 'en' ? 'Company Address' : 'عنوان الشركة'}:</strong> cité wahat
-    </Typography>
-    <Typography variant="body1">
-      <strong>{language === 'fr' ? 'Téléphone de la société' : language === 'en' ? 'Company Phone' : 'هاتف الشركة'}:</strong> +987654321
-    </Typography>
-    <Typography variant="body1">
-      <strong>{language === 'fr' ? 'Code TVA de la société' : language === 'en' ? 'Company VAT Code' : 'رمز ضريبة القيمة المضافة'}:</strong> TVA123456789
-    </Typography>
-  </Box>
+{/* Company Information (Left Corner for Arabic, Right Corner for Others) */}
+<Box sx={{
+  flex: 1,
+  display: 'flex',
+  flexDirection: 'column',
+  gap: 2,
+  marginLeft: language === 'ar' ? '0' : '1rem',  // Company info goes to the left for Arabic, right for others
+  marginRight: language === 'ar' ? '1rem' : '0', // Company info margin for Arabic
+  textAlign: language === 'ar' ? 'right' : 'left' // Align text correctly for Arabic
+}}>
+  <Typography variant="body1">
+    <strong>{language === 'fr' ? 'Nom de la société' : language === 'en' ? 'Company Name' : 'اسم الشركة'}:</strong> Amounette Company
+  </Typography>
+  <Typography variant="body1">
+    <strong>{language === 'fr' ? 'Adresse de la société' : language === 'en' ? 'Company Address' : 'عنوان الشركة'}:</strong> cité wahat
+  </Typography>
+  <Typography variant="body1">
+    <strong>{language === 'fr' ? 'Téléphone de la société' : language === 'en' ? 'Company Phone' : 'هاتف الشركة'}:</strong> +987654321
+  </Typography>
+  <Typography variant="body1">
+    <strong>{language === 'fr' ? 'Code TVA de la société' : language === 'en' ? 'Company VAT Code' : 'رمز ضريبة القيمة المضافة'}:</strong> TVA123456789
+  </Typography>
 </Box>
+
+{/* Supplier Information (Right Corner for Arabic, Left Corner for Others) */}
+<Box sx={{
+  flex: 1,
+  display: 'flex',
+  flexDirection: 'column',
+  gap: 2,
+  marginLeft: language === 'ar' ? '0' : '1rem',  // Supplier info margin for Arabic
+  marginRight: language === 'ar' ? '1rem' : '0', // Supplier info margin for other languages
+  textAlign: language === 'ar' ? 'left' : 'right' // Align text correctly for Arabic
+}}>
+  <Typography variant="body1">
+    <strong>{language === 'fr' ? 'Nom du fournisseur' : language === 'en' ? 'Supplier Name' : 'اسم المورد'}:</strong> {supplier.fullname}
+  </Typography>
+  <Typography variant="body1">
+    <strong>{language === 'fr' ? 'Adresse du fournisseur' : language === 'en' ? 'Supplier Address' : 'عنوان المورد'}:</strong> {supplier?.address || 'Adresse inconnue'}
+  </Typography>
+  <Typography variant="body1">
+    <strong>{language === 'fr' ? 'Téléphone du fournisseur' : language === 'en' ? 'Supplier Phone' : 'هاتف المورد'}:</strong> {supplier?.tel || 'Numéro inconnu'}
+  </Typography>
+  <Typography variant="body1">
+    <strong>{language === 'fr' ? 'Code TVA' : language === 'en' ? 'VAT Code' : 'رمز ضريبة القيمة المضافة'}:</strong> {supplier?.codeTVA || 'codeTVA inconnu'}
+  </Typography>
+</Box>
+
+</Box>
+
 
         <Typography variant="h4" mb={3} textAlign="center">
           {language === 'fr' ? 'Bon De Commande' : language === 'en' ? 'Order Form' : 'نموذج الطلب'} - {codey}
