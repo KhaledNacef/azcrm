@@ -6,8 +6,9 @@ import './fdesign.css';
 import CreateDeliveryNoteModala from '../achat/crate.jsx'; // Ensure correct file name
 import logo from '../../assets/amounnet.png';  // Relative path
 
+
 const BCsingleACHAT = () => {
-  const { code, supplierId, codey, timbre } = useParams();  // 'timbre' from URL params
+  const { code, supplierId, codey, timbre } = useParams();
   const navigate = useNavigate();
   const printRef = useRef();
   const [supplier, setSupplier] = useState({});
@@ -55,8 +56,8 @@ const BCsingleACHAT = () => {
   const totalTVA = totalNetHT * (deliveryNote[0]?.tva / 100 || 0);
   const totalNetTTC = totalNetHT + totalTVA;
 
-  const timbreAmount = timbre === 'true' ? 1 : 0;  // If timbre is true, add 1 TND
-  const totalWithTimbre = totalNetTTC + timbreAmount;  // Add timbre to total net TTC
+  const timbreAmount = timbre === 'true' ? 1 : 0;
+  const totalWithTimbre = totalNetTTC + timbreAmount;
 
   function displayDate() {
     const today = new Date();
@@ -70,16 +71,12 @@ const BCsingleACHAT = () => {
     const originalContents = document.body.innerHTML;
     const printContents = printRef.current.innerHTML;
 
-    // Replace the body content with printable content
     document.body.innerHTML = printContents;
-
-    // Trigger the print dialog
     window.print();
 
-    // After printing is done, restore the original content and navigate back
     window.onafterprint = () => {
-      document.body.innerHTML = originalContents; // Restore original page content
-      navigate(previousLocation); // Navigate back to the previous page
+      document.body.innerHTML = originalContents;
+      navigate(previousLocation);
     };
   };
 
@@ -181,7 +178,6 @@ const BCsingleACHAT = () => {
           backgroundColor: '#fff',
         }}
       >
-        {/* Add style for print */}
         <style>
           {`
             @media print {
@@ -203,7 +199,7 @@ const BCsingleACHAT = () => {
         <Box sx={{
           width: 742,
           height: 152,
-          mx: 'auto', // Center horizontally
+          mx: 'auto',
           mb: 3,
           display: 'flex',
           justifyContent: 'center',
@@ -216,13 +212,12 @@ const BCsingleACHAT = () => {
             style={{
               width: '100%',
               height: '100%',
-              objectFit: 'cover' // or 'contain' based on your preference
+              objectFit: 'cover'
             }}
           />
         </Box>
-        {/* Company and Supplier Information with Labels */}
+        
         <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 3 }}>
-          {/* Company Information (Left Column) */}
           <Box sx={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 2 }}>
             <Typography variant="body1"><strong>{currentLang.companyName}:</strong> {currentLang.companyName}</Typography>
             <Typography variant="body1"><strong>{currentLang.companyAddress}:</strong> {currentLang.companyAddress}</Typography>
@@ -230,77 +225,61 @@ const BCsingleACHAT = () => {
             <Typography variant="body1"><strong>{currentLang.companyTVA}:</strong> {currentLang.companyTVA}</Typography>
           </Box>
 
-          {/* Supplier Information (Right Column) */}
           <Typography>{displayDate()}</Typography>
           <Box sx={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 2, marginLeft: '30%' }}>
-            <Typography variant="body1"><strong>{currentLang.supplierName}:</strong> {supplier.fullname}</Typography>
-            <Typography variant="body1"><strong>{currentLang.supplierAddress}:</strong> {supplier?.address || 'Adresse inconnue'}</Typography>
-            <Typography variant="body1"><strong>{currentLang.supplierPhone}:</strong> {supplier?.tel || 'Numéro inconnu'}</Typography>
-            <Typography variant="body1"><strong>{currentLang.supplierTVA}:</strong> {supplier?.codeTVA || 'codeTVA inconnu'}</Typography>
+            <Typography variant="body1"><strong>{currentLang.supplierName}:</strong> {supplier.nom}</Typography>
+            <Typography variant="body1"><strong>{currentLang.supplierAddress}:</strong> {supplier.adresse}</Typography>
+            <Typography variant="body1"><strong>{currentLang.supplierPhone}:</strong> {supplier.tel}</Typography>
+            <Typography variant="body1"><strong>{currentLang.supplierTVA}:</strong> {supplier.code_tva}</Typography>
           </Box>
         </Box>
 
-        <Typography variant="h4" mb={3} textAlign="center">
-          {currentLang.invoiceTitle} - {codey}
-        </Typography>
+        <Typography variant="h6">{currentLang.invoiceTitle}</Typography>
 
-        <Table>
-          <TableHead>
-            <TableRow>
-              <TableCell>{currentLang.designation}</TableCell>
-              <TableCell>{currentLang.unite}</TableCell>
-              <TableCell>{currentLang.quantity}</TableCell>
-              <TableCell>{currentLang.unitPriceHT}</TableCell>
-              <TableCell>{currentLang.tva}</TableCell>
-              <TableCell>{currentLang.rem}</TableCell>
-              <TableCell>{currentLang.netHT}</TableCell>
-              <TableCell>{currentLang.netTTC}</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {deliveryNote.map((prod, index) => {
-              const basePrice = prod.prixU_HT;
-              const netHT = basePrice * prod.quantite;
-              const netTTC = netHT * (1 + prod.tva / 100);
-
-              return (
-                <TableRow key={index}>
-                  <TableCell>{prod.designation}</TableCell>
-                  <TableCell>{prod.Unite}</TableCell>
-                  <TableCell>{prod.quantite}</TableCell>
-                  <TableCell>{prod.prixU_HT}TND</TableCell>
-                  <TableCell>{prod.tva}%</TableCell>
-                  <TableCell>{prod.remise}%</TableCell>
-                  <TableCell>{netHT}TND</TableCell>
-                  <TableCell>{netTTC}TND</TableCell>
+        <TableContainer component={Paper}>
+          <Table aria-label="simple table">
+            <TableHead>
+              <TableRow>
+                <TableCell>{currentLang.product}</TableCell>
+                <TableCell>{currentLang.quantity}</TableCell>
+                <TableCell>{currentLang.price}</TableCell>
+                <TableCell>{currentLang.total}</TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {deliveryNote.map((row) => (
+                <TableRow key={row.id}>
+                  <TableCell>{row.designation}</TableCell>
+                  <TableCell>{row.quantite}</TableCell>
+                  <TableCell>{row.prixU_HT}</TableCell>
+                  <TableCell>{(row.prixU_HT * row.quantite).toFixed(2)}</TableCell>
                 </TableRow>
-              );
-            })}
-          </TableBody>
-        </Table>
+              ))}
+            </TableBody>
+          </Table>
+        </TableContainer>
 
-        {/* Totals and Final Calculation */}
-        <Box sx={{ mt: 2, textAlign: 'right' }}>
-          <Typography variant="h6">{currentLang.totalNetHT}: {totalNetHT} TND</Typography>
-          <Typography variant="h6">{currentLang.totalTVA}: {totalTVA} TND</Typography>
-          <Typography variant="h6">{currentLang.totalNetTTC}: {totalNetTTC} TND</Typography>
-          {timbreAmount > 0 && <Typography variant="h6">{currentLang.timbre}: {timbreAmount} TND</Typography>}
-          <Typography variant="h6">{currentLang.totalNetTTC}: {totalWithTimbre} TND</Typography>
+        <Box sx={{ display: 'flex', justifyContent: 'flex-end', mt: 2 }}>
+          <Typography variant="h6">{currentLang.totalNetHT}: {totalNetHT.toFixed(2)} TND</Typography>
         </Box>
 
-          <Box sx={{ display: 'flex', justifyContent: 'space-between', mt: 4 }}>
-                  <Box sx={{ textAlign: 'center' }}>
-                    <Typography variant="body2">{currentLang.signatureFournisseur}</Typography>
-                  </Box>
-                  <Box sx={{ textAlign: 'center' }}>
-                    <Typography variant="body2">{currentLang.signatureSociete}</Typography>
-                  </Box>
-                </Box>
-      </Box>
+        <Box sx={{ display: 'flex', justifyContent: 'flex-end', mt: 2 }}>
+          <Typography variant="h6">{currentLang.totalTVA}: {totalTVA.toFixed(2)} TND</Typography>
+        </Box>
 
-      <Modal open={open} onClose={handleClose}>
-        <CreateDeliveryNoteModala />
-      </Modal>
+        <Box sx={{ display: 'flex', justifyContent: 'flex-end', mt: 2 }}>
+          <Typography variant="h6">{currentLang.timbre}: {timbreAmount} TND</Typography>
+        </Box>
+
+        <Box sx={{ display: 'flex', justifyContent: 'flex-end', mt: 2 }}>
+          <Typography variant="h6">{currentLang.totalNetTTC}: {totalWithTimbre.toFixed(2)} TND</Typography>
+        </Box>
+
+        <Box sx={{ mt: 5, display: 'flex', justifyContent: 'space-between' }}>
+          <Typography>{currentLang.signatureSupplier}</Typography>
+          <Typography>{currentLang.signatureCompany}</Typography>
+        </Box>
+      </Box>
     </Box>
   );
 };
