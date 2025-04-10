@@ -23,7 +23,21 @@ const BCsingleACHAT = () => {
   const addDeliveryNote = () => {
     handleClose();
   };
-
+  const translations = {
+    en: {
+      signatureFournisseur: 'Supplier Signature',
+      signatureSociete: 'Company Signature',
+    },
+    fr: {
+      signatureFournisseur: 'Signature du Fournisseur',
+      signatureSociete: 'Signature de la Société',
+    },
+    ar: {
+      signatureFournisseur: 'توقيع المورد',
+      signatureSociete: 'توقيع الشركة',
+    },
+  };
+  
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -206,9 +220,9 @@ const BCsingleACHAT = () => {
               <TableCell>{language === 'fr' ? 'Designation' : language === 'en' ? 'Designation' : 'التسمية'}</TableCell>
               <TableCell>{language === 'fr' ? 'Unite' : language === 'en' ? 'Unit' : 'وحدة'}</TableCell>
               <TableCell>{language === 'fr' ? 'Quantité' : language === 'en' ? 'Quantity' : 'الكمية'}</TableCell>
-              <TableCell>{language === 'fr' ? 'Prix U (HT)' : language === 'en' ? 'Unit Price (HT)' : 'سعر الوحدة (بدون TVA)'}</TableCell>
-              <TableCell>{language === 'fr' ? 'TVA (%)' : language === 'en' ? 'VAT (%)' : 'ضريبة القيمة المضافة (%)'}</TableCell>
-              <TableCell>{language === 'fr' ? 'Rem (%)' : language === 'en' ? 'Discount (%)' : 'خصم (%)'}</TableCell>
+              <TableCell>{language === 'fr' ? 'Prix U (HT)' : language === 'en' ? 'Unit Price(HT)' : 'سعر الوحدة(بدون TVA)'}</TableCell>
+              <TableCell>{language === 'fr' ? 'TVA (%)' : language === 'en' ? 'VAT(%)' : 'ضريبة القيمة المضافة(%)'}</TableCell>
+              <TableCell>{language === 'fr' ? 'Rem (%)' : language === 'en' ? 'Discount(%)' : 'خصم(%)'}</TableCell>
               <TableCell>{language === 'fr' ? 'Total HT' : language === 'en' ? 'Total HT' : 'إجمالي قبل الضريبة'}</TableCell>
             </TableRow>
           </TableHead>
@@ -237,6 +251,14 @@ const BCsingleACHAT = () => {
             <Typography variant="body1"><strong>{language === 'fr' ? 'Total Avec Timbre' : language === 'en' ? 'Total With Stamp' : 'الإجمالي مع الطابع'}:</strong> {totalWithTimbre.toFixed(2)} TND</Typography>
           </Box>
         </Box>
+           <Box sx={{ display: 'flex', justifyContent: 'space-between', mt: 4 }}>
+                  <Box sx={{ textAlign: 'center' }}>
+                    <Typography variant="body2">{translations[language].signatureFournisseur}</Typography>
+                  </Box>
+                  <Box sx={{ textAlign: 'center' }}>
+                    <Typography variant="body2">{translations[language].signatureSociete}</Typography>
+                  </Box>
+                </Box>
       </Box>
     </Box>
   );
