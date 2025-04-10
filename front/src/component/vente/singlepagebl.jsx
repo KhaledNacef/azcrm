@@ -1,6 +1,6 @@
-import React, { useState, useEffect, useRef } from 'react'; 
+import React, { useState, useEffect, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { Box, Typography, Button, Menu, MenuItem } from '@mui/material';
+import { Box, Typography, Table, TableHead, TableRow, TableCell, TableBody, Button, Menu, MenuItem } from '@mui/material';
 import Grid from '@mui/material/Grid2';
 import './cssbl.css';
 import logo from '../../assets/amounnet.png';
@@ -35,8 +35,8 @@ const translations = {
     companyPhone: "Téléphone de la société",
     companyVAT: "Code TVA de la société",
     clientName: "Nom du Client",
-    clientAddress: "Adresse de la Client",
-    clientPhone: "Téléphone de la Client",
+    clientAddress: "Adresse du Client",
+    clientPhone: "Téléphone du Client",
     clientFax: "Fax",
     deliveryNote: "Bon de Sortie",
     designation: "Designation",
@@ -76,7 +76,7 @@ const translations = {
 };
 
 const SingleDeliverysortie = () => {
-  const { code, clientId } = useParams();
+  const { code, clientId, codey, devise } = useParams();
   const printRef = useRef();
   const navigate = useNavigate();
   const [printLanguage, setPrintLanguage] = useState('fr');
@@ -201,22 +201,6 @@ const SingleDeliverysortie = () => {
                 font-size: 12px !important;
                 text-align: ${isArabic ? 'right' : 'left'};
               }
-              .company-info {
-                margin-right: ${isArabic ? '0' : 'auto'};
-                margin-left: ${isArabic ? 'auto' : '0'};
-                text-align: ${isArabic ? 'right' : 'left'};
-              }
-              .client-info {
-                margin-left: ${isArabic ? '0' : 'auto'};
-                margin-right: ${isArabic ? 'auto' : '0'};
-                text-align: ${isArabic ? 'left' : 'right'};
-              }
-              .signature-left {
-                text-align: ${isArabic ? 'right' : 'left'};
-              }
-              .signature-right {
-                text-align: ${isArabic ? 'left' : 'right'};
-              }
             }
           `}
         </style>
@@ -240,11 +224,38 @@ const SingleDeliverysortie = () => {
             }}
           />
         </Box>
-
+        
         {/* Company and Client Information */}
-        <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 2 }}>
-          {/* Client Info */}
-          <Box sx={{ textAlign: isArabic ? 'left' : 'right', ml: isArabic ? 0 : 'auto' }}>
+        <Box sx={{ 
+          display: 'flex', 
+          justifyContent: 'space-between', 
+          mb: 2,
+          flexDirection: isArabic ? 'row' : 'row'
+        }}>
+          <Box sx={{ 
+            textAlign: 'left',
+            order: isArabic ? 2 : 1,
+            flex: 1
+          }}>
+            <Typography variant="body2">
+              <strong>{translations[printLanguage].companyName}:</strong> Ma Société
+            </Typography>
+            <Typography variant="body2">
+              <strong>{translations[printLanguage].companyAddress}:</strong> Adresse de Ma Société
+            </Typography>
+            <Typography variant="body2">
+              <strong>{translations[printLanguage].companyPhone}:</strong> +987654321
+            </Typography>
+            <Typography variant="body2">
+              <strong>{translations[printLanguage].companyVAT}:</strong> TVA123456789
+            </Typography>
+          </Box>
+
+          <Box sx={{ 
+            textAlign: 'right',
+            order: isArabic ? 1 : 2,
+            flex: 1
+          }}>
             <Typography variant="body2">
               <strong>{translations[printLanguage].clientName}:</strong> {client?.fullname}
             </Typography>
@@ -258,93 +269,55 @@ const SingleDeliverysortie = () => {
               <strong>{translations[printLanguage].clientFax}:</strong> {client?.fax}
             </Typography>
           </Box>
-
-          {/* Company Info */}
-          <Box sx={{ textAlign: isArabic ? 'right' : 'left', mr: isArabic ? 0 : 'auto' }}>
-            <Typography variant="body2">
-              <strong>{translations[printLanguage].companyName}:</strong> Ma Société
-            </Typography>
-            <Typography variant="body2">
-              <strong>{translations[printLanguage].companyAddress}:</strong> Rue XYZ, Tunis
-            </Typography>
-            <Typography variant="body2">
-              <strong>{translations[printLanguage].companyPhone}:</strong> +216 12345678
-            </Typography>
-            <Typography variant="body2">
-              <strong>{translations[printLanguage].companyVAT}:</strong> 123456789
-            </Typography>
-          </Box>
         </Box>
 
-        {/* Delivery Note */}
-        <Typography variant="h6" sx={{ mb: 2, textAlign: 'center' }}>
-          <strong>{translations[printLanguage].deliveryNote}</strong>
+        <Typography variant="h4" mb={3} textAlign="center">
+          {translations[printLanguage].deliveryNote} - {codey}-{devise}
         </Typography>
 
-        <Grid container spacing={1}>
-          <Grid item xs={3} sx={{ textAlign: isArabic ? 'right' : 'left' }}>
-            <Typography variant="body2"><strong>{translations[printLanguage].designation}</strong></Typography>
-          </Grid>
-          <Grid item xs={2} sx={{ textAlign: isArabic ? 'right' : 'left' }}>
-            <Typography variant="body2"><strong>{translations[printLanguage].quantity}</strong></Typography>
-          </Grid>
-          <Grid item xs={2} sx={{ textAlign: isArabic ? 'right' : 'left' }}>
-            <Typography variant="body2"><strong>{translations[printLanguage].unit}</strong></Typography>
-          </Grid>
-          <Grid item xs={2} sx={{ textAlign: isArabic ? 'right' : 'left' }}>
-            <Typography variant="body2"><strong>{translations[printLanguage].unitPrice}</strong></Typography>
-          </Grid>
-          <Grid item xs={3} sx={{ textAlign: isArabic ? 'right' : 'left' }}>
-            <Typography variant="body2"><strong>{translations[printLanguage].netPrice}</strong></Typography>
-          </Grid>
-        </Grid>
+        <Table>
+          <TableHead>
+            <TableRow>
+              <TableCell sx={{ textAlign: isArabic ? 'right' : 'left' }}>{translations[printLanguage].designation}</TableCell>
+              <TableCell sx={{ textAlign: isArabic ? 'right' : 'left' }}>{translations[printLanguage].quantity}</TableCell>
+              <TableCell sx={{ textAlign: isArabic ? 'right' : 'left' }}>{translations[printLanguage].unit}</TableCell>
+              <TableCell sx={{ textAlign: isArabic ? 'right' : 'left' }}>{translations[printLanguage].unitPrice} ({devise})</TableCell>
+              <TableCell sx={{ textAlign: isArabic ? 'right' : 'left' }}>{translations[printLanguage].netPrice}</TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {deliveryNote.map((prod, index) => (
+              <TableRow key={index}>
+                <TableCell sx={{ textAlign: isArabic ? 'right' : 'left' }}>{prod.designation}</TableCell>
+                <TableCell sx={{ textAlign: isArabic ? 'right' : 'left' }}>{prod.quantite}</TableCell>
+                <TableCell sx={{ textAlign: isArabic ? 'right' : 'left' }}>{prod.Unite}</TableCell>
+                <TableCell sx={{ textAlign: isArabic ? 'right' : 'left' }}>{prod.prixU_HT} ({devise})</TableCell>
+                <TableCell sx={{ textAlign: isArabic ? 'right' : 'left' }}>{(prod.prixU_HT * prod.quantite).toFixed(2)} {devise}</TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
 
-        {/* Products */}
-        {deliveryNote?.map((prod) => (
-          <Grid container spacing={1} key={prod.code}>
-            <Grid item xs={3} sx={{ textAlign: isArabic ? 'right' : 'left' }}>
-              <Typography variant="body2">{prod?.designation}</Typography>
-            </Grid>
-            <Grid item xs={2} sx={{ textAlign: isArabic ? 'right' : 'left' }}>
-              <Typography variant="body2">{prod?.quantite}</Typography>
-            </Grid>
-            <Grid item xs={2} sx={{ textAlign: isArabic ? 'right' : 'left' }}>
-              <Typography variant="body2">{prod?.unite}</Typography>
-            </Grid>
-            <Grid item xs={2} sx={{ textAlign: isArabic ? 'right' : 'left' }}>
-              <Typography variant="body2">{prod?.prixU_HT}</Typography>
-            </Grid>
-            <Grid item xs={3} sx={{ textAlign: isArabic ? 'right' : 'left' }}>
-              <Typography variant="body2">{prod?.prixU_HT * prod?.quantite}</Typography>
-            </Grid>
-          </Grid>
-        ))}
-
-        {/* Total */}
-        <Grid container spacing={1} sx={{ mt: 2 }}>
-          <Grid item xs={8} sx={{ textAlign: isArabic ? 'right' : 'left' }}>
-            <Typography variant="body2"><strong>{translations[printLanguage].totalNet}</strong></Typography>
-          </Grid>
-          <Grid item xs={4} sx={{ textAlign: isArabic ? 'right' : 'left' }}>
-            <Typography variant="body2">{totalNettc}</Typography>
-          </Grid>
-        </Grid>
-
-        {/* Signatures */}
-        <Box sx={{ display: 'flex', justifyContent: 'space-between', mt: 4 }}>
-          <Box sx={{ textAlign: isArabic ? 'right' : 'left' }}>
-            <Typography variant="body2"><strong>{translations[printLanguage].clientSignature}</strong></Typography>
-            <Typography variant="body2">____________________________</Typography>
-          </Box>
-          <Box sx={{ textAlign: isArabic ? 'left' : 'right' }}>
-            <Typography variant="body2"><strong>{translations[printLanguage].companySignature}</strong></Typography>
-            <Typography variant="body2">____________________________</Typography>
+        <Box sx={{ display: 'flex', justifyContent: 'flex-end', mt: 3 }}>
+          <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end' }}>
+            <Typography variant="body1">
+              <strong>{translations[printLanguage].totalNet}:</strong> {totalNettc.toFixed(2)} {devise}
+            </Typography>
           </Box>
         </Box>
 
-        {/* Date */}
-        <Box sx={{ textAlign: 'center', mt: 4 }}>
-          <Typography variant="body2"><strong>{translations[printLanguage].date}:</strong> {displayDate()}</Typography>
+        <Box sx={{ 
+          display: 'flex', 
+          justifyContent: 'space-between', 
+          mt: 4,
+          flexDirection: isArabic ? 'row-reverse' : 'row'
+        }}>
+          <Box sx={{ textAlign: isArabic ? 'right' : 'left' }}>
+            <Typography variant="body1">{translations[printLanguage].clientSignature}</Typography>
+          </Box>
+          <Box sx={{ textAlign: isArabic ? 'left' : 'right' }}>
+            <Typography variant="body1">{translations[printLanguage].companySignature}</Typography>
+          </Box>
         </Box>
       </Box>
     </Box>
