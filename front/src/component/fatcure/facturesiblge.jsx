@@ -173,51 +173,35 @@ const BCsingleACHAT = () => {
               <TableCell>{language === 'fr' ? 'Prix U (HT)' : language === 'en' ? 'Unit Price (HT)' : 'سعر الوحدة (بدون TVA)'}</TableCell>
               <TableCell>{language === 'fr' ? 'TVA (%)' : language === 'en' ? 'VAT (%)' : 'ضريبة القيمة المضافة (%)'}</TableCell>
               <TableCell>{language === 'fr' ? 'Rem (%)' : language === 'en' ? 'Discount (%)' : 'خصم (%)'}</TableCell>
-              <TableCell>{language === 'fr' ? 'Prix Net (HT)' : language === 'en' ? 'Net Price (HT)' : 'السعر الصافي (بدون TVA)'}</TableCell>
-              <TableCell>{language === 'fr' ? 'Prix Net (TTC)' : language === 'en' ? 'Net Price (TTC)' : 'السعر الصافي (مع TVA)'}</TableCell>
+              <TableCell>{language === 'fr' ? 'Total HT' : language === 'en' ? 'Total HT' : 'إجمالي قبل الضريبة'}</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
-            {deliveryNote.map((prod, index) => {
-              const basePrice = prod.prixU_HT;
-              const netHT = basePrice * prod.quantite;
-              const netTTC = netHT * (1 + prod.tva / 100);
-
-              return (
-                <TableRow key={index}>
-                  <TableCell>{prod.designation}</TableCell>
-                  <TableCell>{prod.Unite}</TableCell>
-                  <TableCell>{prod.quantite}</TableCell>
-                  <TableCell>{prod.prixU_HT}TND</TableCell>
-                  <TableCell>{prod.tva}%</TableCell>
-                  <TableCell>{prod.rem}%</TableCell>
-                  <TableCell>{netHT.toFixed(2)}TND</TableCell>
-                  <TableCell>{netTTC.toFixed(2)}TND</TableCell>
-                </TableRow>
-              );
-            })}
+            {deliveryNote.map((prod, index) => (
+              <TableRow key={index}>
+                <TableCell>{prod.designation}</TableCell>
+                <TableCell>{prod.unite}</TableCell>
+                <TableCell>{prod.quantite}</TableCell>
+                <TableCell>{prod.prixU_HT}</TableCell>
+                <TableCell>{prod.tva}</TableCell>
+                <TableCell>{prod.remise}</TableCell>
+                <TableCell>{prod.prixU_HT * prod.quantite}</TableCell>
+              </TableRow>
+            ))}
           </TableBody>
         </Table>
 
-        {/* Total Section */}
-        <Box sx={{ display: 'flex', justifyContent: 'flex-end', gap: 3, mt: 3 }}>
-          <Box sx={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
-            <Typography variant="h6">{language === 'fr' ? 'Total HT' : language === 'en' ? 'Total HT' : 'الإجمالي بدون TVA'}: {totalNetHT.toFixed(2)} TND</Typography>
-            <Typography variant="h6">{language === 'fr' ? 'TVA' : language === 'en' ? 'VAT' : 'ضريبة القيمة المضافة'}: {totalTVA.toFixed(2)} TND</Typography>
-            <Typography variant="h6">{language === 'fr' ? 'Total TTC' : language === 'en' ? 'Total TTC' : 'الإجمالي مع TVA'}: {totalNetTTC.toFixed(2)} TND</Typography>
-            <Typography variant="h6">{language === 'fr' ? 'Timbre Fiscal' : language === 'en' ? 'Fiscal Stamp' : 'الطابع الضريبي'}: {timbreAmount} TND</Typography>
-            <Typography variant="h6">{language === 'fr' ? 'Total avec Timbre' : language === 'en' ? 'Total with Stamp' : 'الإجمالي مع الطابع'}: {totalWithTimbre.toFixed(2)} TND</Typography>
+        {/* Totals Section */}
+        <Box sx={{ display: 'flex', justifyContent: 'flex-end', marginTop: '20px', direction: language === 'ar' ? 'rtl' : 'ltr' }}>
+          <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: language === 'ar' ? 'flex-end' : 'flex-start' }}>
+            <Typography variant="body1"><strong>{language === 'fr' ? 'Total HT' : language === 'en' ? 'Total HT' : 'الإجمالي قبل الضريبة'}:</strong> {totalNetHT.toFixed(2)} TND</Typography>
+            <Typography variant="body1"><strong>{language === 'fr' ? 'Total TVA' : language === 'en' ? 'Total VAT' : 'إجمالي ضريبة القيمة المضافة'}:</strong> {totalTVA.toFixed(2)} TND</Typography>
+            <Typography variant="body1"><strong>{language === 'fr' ? 'Total TTC' : language === 'en' ? 'Total TTC' : 'إجمالي شامل'}:</strong> {totalNetTTC.toFixed(2)} TND</Typography>
+            <Typography variant="body1"><strong>{language === 'fr' ? 'Timbre' : language === 'en' ? 'Stamp' : 'طابع'}:</strong> {timbreAmount} TND</Typography>
+            <Typography variant="body1"><strong>{language === 'fr' ? 'Total Avec Timbre' : language === 'en' ? 'Total With Stamp' : 'الإجمالي مع الطابع'}:</strong> {totalWithTimbre.toFixed(2)} TND</Typography>
           </Box>
         </Box>
       </Box>
-
-      {/* Modal for Creating Delivery Note */}
-      <Modal
-        open={open}
-        onClose={handleClose}
-      >
-        <CreateDeliveryNoteModala />
-      </Modal>
     </Box>
   );
 };
