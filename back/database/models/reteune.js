@@ -32,7 +32,7 @@ const Reteune =  {
       allowNull: true,
     },
     Totalretune: {
-      type: DataTypes.STRING,
+      type: DataTypes.FLOAT,
       allowNull: true,
     }
 

@@ -9,6 +9,14 @@ import {
   TableRow,
   Typography,
   TextField,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
+  CircularProgress,
+  Snackbar,
+  Alert,
 } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
@@ -16,53 +24,90 @@ import axios from 'axios';
 const BonAchatPage = () => {
   const navigate = useNavigate();
 
-  // State to hold the delivery notes
+  // States
   const [deliveryNotes, setDeliveryNotes] = useState([]);
-
-  // State for search query
   const [searchQuery, setSearchQuery] = useState('');
+  const [loading, setLoading] = useState(true);
+  const [selectedNote, setSelectedNote] = useState(null);
+  const [openDialog, setOpenDialog] = useState(false);
+  const [snackbar, setSnackbar] = useState({
+    open: false,
+    message: '',
+    severity: 'success',
+  });
 
-  // Fetch delivery notes from the backend
+  // Fetch delivery notes
   const fetchDeliveryNotes = async () => {
     try {
-      const response = await axios.get('https://api.azcrm.deviceshopleader.com/api/v1/bonachat/stock/getall'); // Adjust URL as needed
-      setDeliveryNotes(response.data); // Assuming API returns an array of delivery notes
+      setLoading(true);
+      const response = await axios.get('https://api.azcrm.deviceshopleader.com/api/v1/bonachat/stock/getall');
+      setDeliveryNotes(response.data);
     } catch (error) {
       console.error('Error fetching delivery notes:', error);
+      setSnackbar({
+        open: true,
+        message: 'Failed to fetch delivery notes',
+        severity: 'error',
+      });
+    } finally {
+      setLoading(false);
     }
   };
 
-  // Filtered delivery notes based on search query
+  // Filter notes based on search
   const filteredNotes = deliveryNotes.filter(note =>
-    note.codey.toLowerCase().includes(searchQuery.toLowerCase())
+    note.codey?.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
+  // Handle reteune creation
+  const handleCreateReteune = async () => {
+    if (!selectedNote) return;
+
+    try {
+      const payload = {
+        spulierId: selectedNote.spulierId,
+        timbre: selectedNote.timbre,
+        code: selectedNote.code,
+        spulierName: selectedNote.spulierName,
+        codey: selectedNote.codey,
+        Totalretune: 0,
+      };
+
+      await axios.post('https://api.azcrm.deviceshopleader.com/api/v1/retp', payload);
+      
+      setSnackbar({
+        open: true,
+        message: 'Reteune créé avec succès !',
+        severity: 'success',
+      });
+      
+      // Refresh the list
+      fetchDeliveryNotes();
+    } catch (error) {
+      console.error('Erreur lors de la création du reteune :', error);
+      setSnackbar({
+        open: true,
+        message: 'Erreur lors de la création du reteune',
+        severity: 'error',
+      });
+    } finally {
+      setOpenDialog(false);
+    }
+  };
+
+  // Confirmation dialog handlers
+  const handleOpenDialog = (note) => {
+    setSelectedNote(note);
+    setOpenDialog(true);
+  };
+
+  const handleCloseDialog = () => {
+    setOpenDialog(false);
+  };
 
   useEffect(() => {
     fetchDeliveryNotes();
   }, []);
-
-
-
-  const handleCreateReteune = async (note) => {
-    try {
-      const payload = {
-        spulierId: note.spulierId,
-        timbre: note.timbre,
-        code: note.code,           // if available
-        spulierName: note.spulierName,
-        codey: note.codey,
-        Totalretune: "0",          // set default or compute later
-      };
-  
-      const response = await axios.post('https://api.azcrm.deviceshopleader.com/api/v1/retp', payload);
-      alert('Reteune créé avec succès !');
-      console.log(response.data);
-    } catch (error) {
-      console.error('Erreur lors de la création du reteune :', error);
-      alert('Erreur lors de la création du reteune.');
-    }
-  };
 
   return (
     <Box sx={{ p: 3 }}>
@@ -72,13 +117,20 @@ const BonAchatPage = () => {
 
       {/* Search Field */}
       <TextField
-        label="Search by Code"
+        label="Rechercher par Code"
         variant="outlined"
         fullWidth
         value={searchQuery}
         onChange={(e) => setSearchQuery(e.target.value)}
         sx={{ mb: 3 }}
       />
+
+      {/* Loading State */}
+      {loading && (
+        <Box display="flex" justifyContent="center" my={4}>
+          <CircularProgress />
+        </Box>
+      )}
 
       {/* Delivery Notes Table */}
       <Table sx={{ mt: 3 }}>
@@ -92,38 +144,76 @@ const BonAchatPage = () => {
           </TableRow>
         </TableHead>
         <TableBody>
-          {filteredNotes.length  > 0 ? (
+          {!loading && filteredNotes.length > 0 ? (
             filteredNotes.map((note) => (
               <TableRow key={note.code}>
-                <TableCell>{note.codey}</TableCell>
-                <TableCell>{note.spulierName || "N/A"}</TableCell>
-                <TableCell>{note.timbre ? "Oui" : "Non"}</TableCell>
-                <TableCell>{note.createdAt ? new Date(note.createdAt).toLocaleDateString() : "N/A"}</TableCell>
+                <TableCell>{note.codey || 'N/A'}</TableCell>
+                <TableCell>{note.spulierName || 'N/A'}</TableCell>
+                <TableCell>{note.timbre ? 'Oui' : 'Non'}</TableCell>
                 <TableCell>
+                  {note.createdAt ? new Date(note.createdAt).toLocaleDateString() : 'N/A'}
+                </TableCell>
+                <TableCell sx={{ display: 'flex', gap: 1 }}>
                   <Button
                     variant="outlined"
                     onClick={() => navigate(`/bon-dachat/${note.code}/${note.spulierId}/${note.codey}/${note.timbre}`)}
                   >
                     Voir
                   </Button>
-                </TableCell>
-                <TableCell>
-                <Button
-                      variant="outlined"
-                      onClick={() => handleCreateReteune(note)}
-                    >
-                      Créer Retour
-                    </Button>
+                  <Button
+                    variant="contained"
+                    color="secondary"
+                    onClick={() => handleOpenDialog(note)}
+                  >
+                    Créer Retour
+                  </Button>
                 </TableCell>
               </TableRow>
             ))
           ) : (
             <TableRow>
-              <TableCell colSpan={5}>Aucune donnée disponible</TableCell>
+              <TableCell colSpan={5} align="center">
+                {loading ? 'Chargement...' : 'Aucune donnée disponible'}
+              </TableCell>
             </TableRow>
           )}
         </TableBody>
       </Table>
+
+      {/* Confirmation Dialog */}
+      <Dialog open={openDialog} onClose={handleCloseDialog}>
+        <DialogTitle>Confirmer la création</DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            Êtes-vous sûr de vouloir créer un retour pour le bon {selectedNote?.codey} ?
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleCloseDialog}>Annuler</Button>
+          <Button 
+            onClick={handleCreateReteune} 
+            color="primary"
+            variant="contained"
+          >
+            Confirmer
+          </Button>
+        </DialogActions>
+      </Dialog>
+
+      {/* Snackbar for notifications */}
+      <Snackbar
+        open={snackbar.open}
+        autoHideDuration={6000}
+        onClose={() => setSnackbar({ ...snackbar, open: false })}
+      >
+        <Alert
+          onClose={() => setSnackbar({ ...snackbar, open: false })}
+          severity={snackbar.severity}
+          sx={{ width: '100%' }}
+        >
+          {snackbar.message}
+        </Alert>
+      </Snackbar>
     </Box>
   );
 };
