@@ -3,7 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { Box, Typography, Button, Table, TableHead, TableRow, TableCell, TableBody, CircularProgress, Modal, Select, MenuItem } from '@mui/material';
 import './fdesign.css';
-import CreatebcModala from '../fatcure/createa.jsx'; // Ensure correct file name
+import CreateDeliveryNoteModala from '../achat/crate.jsx'; // Ensure correct file name
 import logo from '../../assets/amounnet.png';  // Relative path
 
 const BCsingleACHAT = () => {
@@ -283,7 +283,7 @@ const BCsingleACHAT = () => {
             width: 500,
           }}
         >
-          <CreatebcModala onAddDeliveryNote={addDeliveryNote} codey={codey} />
+          <CreateDeliveryNoteModala onAddDeliveryNote={addDeliveryNote} codey={codey} />
         </Box>
       </Modal>
     </Box>
