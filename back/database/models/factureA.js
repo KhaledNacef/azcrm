@@ -12,8 +12,8 @@ const FactureA =  {
     allowNull: false
   },
   timbre: {
-    type: DataTypes.STRING,
-    allowNull: false
+    type: DataTypes.BOOLEAN,
+    allowNull: false,
   },
   code: {
     type: DataTypes.STRING,
