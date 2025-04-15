@@ -43,7 +43,7 @@ const SingleDeliveryNote = () => {
   }, 0);
 
   const totalTVA = totalNetHT * (deliveryNote[0]?.tva / 100 || 0);
-  const totalNetTTC = totalNetHT + totalTVA;
+  let totalNetTTC = totalNetHT + totalTVA;
 
   // If timbre is true, add the timbre cost to the total
   if (timbre === 'true') {
@@ -316,7 +316,7 @@ const SingleDeliveryNote = () => {
             <Typography variant="body2">{translations[language].signatureSociete}</Typography>
           </Box>
         </Box>
-        {displayDate}
+        {displayDate()}
       </Box>
     </Box>
   );

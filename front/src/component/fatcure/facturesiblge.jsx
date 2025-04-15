@@ -65,7 +65,7 @@ const BCsingleACHAT = () => {
   }, 0);
 
   const totalTVA = totalNetHT * (deliveryNote[0]?.tva / 100 || 0);
-  const totalNetTTC = totalNetHT + totalTVA;
+  let totalNetTTC = totalNetHT + totalTVA;
 
   if (timbre === 'true') {
     totalNetTTC += 1;  // Add 1 TND for timbre
