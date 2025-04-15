@@ -1,4 +1,4 @@
-const db = require('../models');
+const db = require('../index'); 
 const Reteune=db.models.reteune
 
 // Create new reteune
