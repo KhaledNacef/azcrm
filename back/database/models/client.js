@@ -30,6 +30,10 @@ const Client ={
   address: {
     type: DataTypes.STRING,
     allowNull: false,
+  },
+  matriculefisacl: {
+    type: DataTypes.STRING,
+    allowNull: false,
   }
 };
 

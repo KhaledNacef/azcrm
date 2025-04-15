@@ -34,10 +34,6 @@ const Supplier = {
     type: DataTypes.STRING,
     allowNull: false,
   },
-  codeTVA: {
-    type: DataTypes.STRING,
-    allowNull: false,
-  },
   matriculefisacl: {
     type: DataTypes.STRING,
     allowNull: false,

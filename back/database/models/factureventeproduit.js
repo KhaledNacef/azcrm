@@ -30,7 +30,11 @@ const FactureVP =  {
   codey: {
     type: DataTypes.STRING,
     allowNull: true,
-  }
+  },
+  rem: {
+    type: DataTypes.FLOAT,
+    allowNull: true, 
+  },
   
   
 };

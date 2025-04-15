@@ -22,7 +22,7 @@ async function createbv(req, res) {
 
     // Step 2: Handle the products
     const stockPromises = products.map(async (product) => {
-      const { prixU_HT, quantite, designation, Unite } = product;
+      const { prixU_HT, quantite, designation, Unite,rem } = product;
 
       // Create a new Vente entry (always linked to the Bs)
       await FactureVP.create({
@@ -32,6 +32,7 @@ async function createbv(req, res) {
         Unite: Unite,
         code:code,
         codey:codey,
+        rem:rem
       });
 
 

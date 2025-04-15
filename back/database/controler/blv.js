@@ -74,7 +74,7 @@ async function createBs(req, res) {
 
     // Step 2: Handle the products
     const stockPromises = products.map(async (product) => {
-      const { prixU_HT, quantite, designation, Unite } = product;
+      const { prixU_HT, quantite, designation, Unite,rem } = product;
 
       // Create a new Vente entry (always linked to the Bs)
       await Vente.create({
@@ -85,6 +85,7 @@ async function createBs(req, res) {
         Unite: Unite,
         code:code,
         codey:codey,
+        rem:rem
       });
 
       // Handle StockP (general stock)

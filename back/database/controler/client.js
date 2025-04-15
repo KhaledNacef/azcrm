@@ -32,8 +32,8 @@ exports.getClientById = async (req, res) => {
 // Create a new client
 exports.createClient = async (req, res) => {
   try {
-    const { fullname, pays, ville, tel, fax, address } = req.body;
-    const newClient = await Client.create({ fullname, pays, ville, tel, fax, address });
+    const { fullname, pays, ville, tel, fax, address,matriculefisacl } = req.body;
+    const newClient = await Client.create({ fullname, pays, ville, tel, fax, address,matriculefisacl });
     res.status(201).json(newClient);
   } catch (error) {
     res.status(500).json({ error: error.message });

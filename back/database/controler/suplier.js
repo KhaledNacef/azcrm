@@ -39,7 +39,7 @@ async function getidSuppliers(req, res) {
 // Create a new supplier
 async function createSupplier(req, res) {
   try {
-    const { fullname, pays, ville, tel, fax, codePostal, address, codeTVA,matriculefisacl } = req.body;
+    const { fullname, pays, ville, tel, fax, codePostal, address,matriculefisacl } = req.body;
 
     const newSupplier = await Supplier.create({
       fullname,
@@ -49,7 +49,6 @@ async function createSupplier(req, res) {
       fax,
       codePostal,
       address,
-      codeTVA,
       matriculefisacl
     });
 
@@ -69,7 +68,7 @@ async function createSupplier(req, res) {
 async function updateSupplier(req, res) {
   try {
     const { id } = req.params;
-    const { fullname, pays, ville, tel, fax, codePostal, address, codeTVA,matriculefisacl } = req.body;
+    const { fullname, pays, ville, tel, fax, codePostal, address, matriculefisacl } = req.body;
 
     const supplier = await Supplier.findByPk(id);
 
@@ -87,7 +86,6 @@ async function updateSupplier(req, res) {
       fax,
       codePostal,
       address,
-      codeTVA,
       matriculefisacl
     });
 
