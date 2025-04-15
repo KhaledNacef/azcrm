@@ -1,5 +1,5 @@
 const db = require('../models');
-const Reteune = db.Reteune;
+const Reteune=db.models.reteune
 
 // Create new reteune
 exports.createReteune = async (req, res) => {
