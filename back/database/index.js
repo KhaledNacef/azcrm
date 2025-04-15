@@ -14,6 +14,7 @@ const FactureA=require('./models/factureA.js')
 const FactureV=require('./models/factureV.js')
 const FactureAP=require('../database/models/factureachatproduit.js')
 const FactureVP=require('./models/factureventeproduit.js')
+const Reteune=require('./models/reteune.js')
 const db = new Sequelize({
   dialect: 'mysql',     
   host: '195.200.15.61',    
@@ -35,6 +36,7 @@ const factureA=db.define('factureA',FactureA)
 const factureV=db.define('factureV',FactureV)
 const factureap=db.define('factureap',FactureAP)
 const facturevp=db.define('facturevp',FactureVP)
+const reteune=db.define('reteune',Reteune)
 
 
 

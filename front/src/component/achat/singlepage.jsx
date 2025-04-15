@@ -19,8 +19,8 @@ const SingleDeliveryNote = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const supplierRes = await axios.get(`https://api.azcrm.deviceshopleader.com/api/suplier/getidsuppliers/${supplierId}`);
-        const productRes = await axios.get(`https://api.azcrm.deviceshopleader.com/api/bonachat/stock/getallstockdelv/${code}`);
+        const supplierRes = await axios.get(`https://api.azcrm.deviceshopleader.com/api/v1/suplier/getidsuppliers/${supplierId}`);
+        const productRes = await axios.get(`https://api.azcrm.deviceshopleader.com/api/v1/bonachat/stock/getallstockdelv/${code}`);
 
         setSupplier(supplierRes.data);
         setDeliveryNote(productRes.data);

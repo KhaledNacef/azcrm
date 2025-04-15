@@ -12,8 +12,8 @@ const CompareProductsv = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const bonResponse = await axios.get(`https://api.azcrm.deviceshopleader.com/api/bonlivraison/codey/${codey}`);
-        const factureResponse = await axios.get(`https://api.azcrm.deviceshopleader.com/api/bs/bs/codey/${codey}`);
+        const bonResponse = await axios.get(`https://api.azcrm.deviceshopleader.com/api/v1/bonlivraison/codey/${codey}`);
+        const factureResponse = await axios.get(`https://api.azcrm.deviceshopleader.com/api/v1/bs/bs/codey/${codey}`);
 
         setBonCommande(bonResponse.data);
         setFacture(factureResponse.data);

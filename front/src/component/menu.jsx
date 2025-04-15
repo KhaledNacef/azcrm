@@ -9,6 +9,7 @@ import ExitToAppIcon from '@mui/icons-material/ExitToApp';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import ReceiptIcon from '@mui/icons-material/Receipt';
 import LocalShippingIcon from '@mui/icons-material/LocalShipping';
+import AttachMoneyIcon from '@mui/icons-material/AttachMoney'; // Added for Reteune
 
 const getCurrentDate = () => {
   const date = new Date();
@@ -21,7 +22,7 @@ const getCurrentDate = () => {
 };
 
 const SidebarMenu = () => {
-  const location = useLocation(); // Get the current path
+  const location = useLocation();
 
   const menuItems = [
     { label: 'Dashboard', path: '/dashboard', icon: <HomeIcon /> },
@@ -32,7 +33,8 @@ const SidebarMenu = () => {
     { label: 'Bon de Commande', path: '/bon-commande', icon: <ReceiptIcon /> },
     { label: 'Facture d’Achat', path: '/bon-dachat', icon: <ShoppingCartIcon /> },
     { label: 'Bon de Livraison', path: '/bon-commandefacture', icon: <LocalShippingIcon /> },
-    { label: 'Bon de Sortie', path: '/bon-livraison', icon: <ExitToAppIcon /> }
+    { label: 'Bon de Sortie', path: '/bon-livraison', icon: <ExitToAppIcon /> },
+    { label: 'Reteune', path: '/reteune', icon: <AttachMoneyIcon /> } // Added Reteune with money icon
   ];
 
   return (
@@ -51,7 +53,7 @@ const SidebarMenu = () => {
       {/* Menu List */}
       <List sx={{ flexGrow: 1, p: 2 }}>
         {menuItems.map((item) => {
-          const isActive = location.pathname === item.path; // Check if item is active
+          const isActive = location.pathname === item.path;
           return (
             <ListItem
               key={item.label}

@@ -91,7 +91,7 @@ const Bvsinlge = () => {
   useEffect(() => {
     const fetchClientData = async () => {
       try {
-        const response = await fetch(`https://api.azcrm.deviceshopleader.com/api/clients/getclietn/${clientId}`);
+        const response = await fetch(`https://api.azcrm.deviceshopleader.com/api/v1/clients/getclietn/${clientId}`);
         const data = await response.json();
         setClient(data);
       } catch (error) {
@@ -101,7 +101,7 @@ const Bvsinlge = () => {
 
     const fetchDeliveryNoteData = async () => {
       try {
-        const response = await fetch(`https://api.azcrm.deviceshopleader.com/api/bonlivraison/facturev/${code}`);
+        const response = await fetch(`https://api.azcrm.deviceshopleader.com/api/v1/bonlivraison/facturev/${code}`);
         const data = await response.json();
         setDeliveryNote(data);
       } catch (error) {

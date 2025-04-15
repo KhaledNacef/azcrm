@@ -31,7 +31,7 @@ const CreatebcModala = ({ onAddDeliveryNote }) => {
   const [quantite, setQuantite] = useState(1);
   const [availableProducts, setAvailableProducts] = useState([]);
   const [suppliers, setSuppliers] = useState([]);
-  const API_BASE_URL = "https://api.azcrm.deviceshopleader.com/api";
+  const API_BASE_URL = "https://api.azcrm.deviceshopleader.com/api/v1";
 
   // Snackbar state
   const [snackbarOpen, setSnackbarOpen] = useState(false);

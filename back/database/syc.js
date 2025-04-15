@@ -9,6 +9,7 @@ const Bs =db.models.bs
 const Vente=db.models.vente
 const StockP=db.models.stockP
 const DeliveryNote =db.models.deliveryNote
+const Reteune =db.models.reteune
 
 async function syncDatabase() {
   try {

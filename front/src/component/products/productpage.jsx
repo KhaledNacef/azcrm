@@ -25,7 +25,7 @@ const ProductPage = () => {
   const [editProductId, setEditProductId] = useState(null); // Produit à éditer
   const [editProductName, setEditProductName] = useState(''); // Nom modifié
   const [editProductUnite, setEditProductUnite] = useState(''); // Unité modifiée
-  const API_BASE_URL = 'https://api.azcrm.deviceshopleader.com/api';
+  const API_BASE_URL = 'https://api.azcrm.deviceshopleader.com/api/v1';
   const [isDataUpdated, setIsDataUpdated] = useState(false);
 
   // État de la snackbar

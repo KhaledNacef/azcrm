@@ -48,7 +48,7 @@ const Dashboard = () => {
   // Récupérer les clients
   useEffect(() => {
     axios
-      .get('https://api.azcrm.deviceshopleader.com/api/clients/getclient')
+      .get('https://api.azcrm.deviceshopleader.com/api/v1/clients/getclient')
       .then((response) => {
         setClientsCount(response.data.length);
       })
@@ -60,7 +60,7 @@ const Dashboard = () => {
   // Récupérer les fournisseurs
   const fetchFournisseurs = async () => {
     try {
-      const response = await axios.get('https://api.azcrm.deviceshopleader.com/api/suplier/getsuppliers');
+      const response = await axios.get('https://api.azcrm.deviceshopleader.com/api/v1/suplier/getsuppliers');
       setSuppliersCount(response.data.length);
     } catch (error) {
       console.error("Erreur lors de la récupération des fournisseurs :", error);
@@ -75,7 +75,7 @@ const Dashboard = () => {
   useEffect(() => {
     const fetchStock = async () => {
       try {
-        const response = await axios.get('https://api.azcrm.deviceshopleader.com/api/stock/getall');
+        const response = await axios.get('https://api.azcrm.deviceshopleader.com/api/v1/stock/getall');
         setProductsCount(response.data.length);
 
         // FILTRER LES PRODUITS AVEC QUANTITÉ ≤ 10

@@ -33,7 +33,7 @@ const Createbv = ({ onAddDeliveryNote }) => {
   const [exchangeRates, setExchangeRates] = useState({});
   const [rem, setRem] = useState(0);
 
-  const API_BASE_URL = 'https://api.azcrm.deviceshopleader.com/api';
+  const API_BASE_URL = 'https://api.azcrm.deviceshopleader.com/api/v1';
   const EXCHANGE_RATE_API_URL = 'https://api.exchangerate-api.com/v4/latest/TND';
 
   useEffect(() => {

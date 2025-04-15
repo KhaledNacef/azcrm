@@ -16,7 +16,8 @@ import BCsingleACHAT from './component/fatcure/facturesiblge.jsx'
 import Bvsinlge from './component/fatcurev/facturesinglevente.jsx';
 import CompareProducts from './component/gestionBf.jsx';
 import CompareProductsv from './component/gestionLF.jsx';
-
+import Reteune from './component/ReteuneFolder/retenue.jsx';
+import AllReteune from './component/ReteuneFolder/allReteune.jsx';
 const App = () => {
   return (
     <Router>
@@ -32,6 +33,9 @@ const App = () => {
           <Route path="/client" element={<ClientPage />} />
           <Route path="/bon-dachat" element={<BonAchatPage />} />
           <Route path="/bon-dachat/:code/:supplierId/:codey/:timbre" element={<SingleDeliveryNote />} />
+          <Route path="/REt0/:code/:supplierId/:codey/:timbre" element={<Reteune />} />
+          <Route path="/RET1" element={<AllReteune />} />
+
           <Route path="/bon-livraison" element={<BonsortiePage />} />
           <Route path="/bon-livraison/:code/:clientId/:codey/:devise" element={<SingleDeliverysortie />} />
           <Route path="/bon-commandefacture" element={<Boncommandev />} />

@@ -13,7 +13,7 @@ import {
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
-const BonAchatPage = () => {
+const AllReteune = () => {
   const navigate = useNavigate();
 
   // State to hold the delivery notes
@@ -25,7 +25,7 @@ const BonAchatPage = () => {
   // Fetch delivery notes from the backend
   const fetchDeliveryNotes = async () => {
     try {
-      const response = await axios.get('https://api.azcrm.deviceshopleader.com/api/v1/bonachat/stock/getall'); // Adjust URL as needed
+      const response = await axios.get('https://api.azcrm.deviceshopleader.com/api/v1/reteune/reta'); // Adjust URL as needed
       setDeliveryNotes(response.data); // Assuming API returns an array of delivery notes
     } catch (error) {
       console.error('Error fetching delivery notes:', error);
@@ -41,28 +41,6 @@ const BonAchatPage = () => {
   useEffect(() => {
     fetchDeliveryNotes();
   }, []);
-
-
-
-  const handleCreateReteune = async (note) => {
-    try {
-      const payload = {
-        spulierId: note.spulierId,
-        timbre: note.timbre,
-        code: note.code,           // if available
-        spulierName: note.spulierName,
-        codey: note.codey,
-        Totalretune: "0",          // set default or compute later
-      };
-  
-      const response = await axios.post('https://api.azcrm.deviceshopleader.com/api/v1/retp', payload);
-      alert('Reteune créé avec succès !');
-      console.log(response.data);
-    } catch (error) {
-      console.error('Erreur lors de la création du reteune :', error);
-      alert('Erreur lors de la création du reteune.');
-    }
-  };
 
   return (
     <Box sx={{ p: 3 }}>
@@ -102,18 +80,10 @@ const BonAchatPage = () => {
                 <TableCell>
                   <Button
                     variant="outlined"
-                    onClick={() => navigate(`/bon-dachat/${note.code}/${note.spulierId}/${note.codey}/${note.timbre}`)}
+                    onClick={() => navigate(`/REt0/${note.code}/${note.spulierId}/${note.codey}/${note.timbre}`)}
                   >
                     Voir
                   </Button>
-                </TableCell>
-                <TableCell>
-                <Button
-                      variant="outlined"
-                      onClick={() => handleCreateReteune(note)}
-                    >
-                      Créer Retour
-                    </Button>
                 </TableCell>
               </TableRow>
             ))
@@ -128,4 +98,4 @@ const BonAchatPage = () => {
   );
 };
 
-export default BonAchatPage;
+export default AllReteune;

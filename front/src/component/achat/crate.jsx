@@ -30,7 +30,7 @@ const CreateDeliveryNoteModala = ({ onAddDeliveryNote, codey }) => {
   const [snackbar, setSnackbar] = useState({ open: false, message: "", severity: "info" });
   const [rem, setRem] = useState(0);
 
-  const API_BASE_URL = "https://api.azcrm.deviceshopleader.com/api";
+  const API_BASE_URL = "https://api.azcrm.deviceshopleader.com/api/v1";
 
   const generateUniqueCode = () => {
     const timestamp = new Date().getTime();
