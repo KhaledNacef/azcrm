@@ -53,7 +53,7 @@ const translations = {
     date: "Date",
     print: "Imprimer",
     back: "Retour",
-    matriculefisacl:'matriculefisacl',
+    matriculefisacl:'Matriculefisacl',
     remise: "Remise"
 
 

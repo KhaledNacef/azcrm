@@ -98,6 +98,7 @@ const SingleDeliveryNote = () => {
       timbre: 'Timbre',
       signatureFournisseur: 'Signature du Fournisseur',
       signatureSociete: 'Signature de Ma Société',
+      matriculefisacl:'Matriculefisacl'
     },
     ar: {
       companyName: 'اسم الشركة',
@@ -120,6 +121,8 @@ const SingleDeliveryNote = () => {
       timbre: 'الطابع',
       signatureFournisseur: 'توقيع المورد',
       signatureSociete: 'توقيع الشركة',
+      matriculefisacl:"الرقم الجبائي",
+
     },
     en: {
       companyName: 'Company Name',
@@ -142,6 +145,8 @@ const SingleDeliveryNote = () => {
       timbre: 'Stamp',
       signatureFournisseur: 'Supplier Signature',
       signatureSociete: 'Company Signature',
+      matriculefisacl:"tax identification number",
+
     },
   };
 
@@ -230,7 +235,7 @@ const SingleDeliveryNote = () => {
             <Typography variant="body1"><strong>{translations[language].companyName}:</strong> Amounette Company</Typography>
             <Typography variant="body1"><strong>{translations[language].companyAddress}:</strong> cité wahat</Typography>
             <Typography variant="body1"><strong>{translations[language].companyPhone}:</strong> +987654321</Typography>
-            <Typography variant="body1"><strong>{translations[language].companyTVA}:</strong> TVA123456789</Typography>
+            <Typography variant="body1"><strong>{translations[language].matriculefisacl}:</strong> TVA123456789</Typography>
           </Box>
 
           <Box sx={{
@@ -245,7 +250,7 @@ const SingleDeliveryNote = () => {
             <Typography variant="body1"><strong>{translations[language].supplierName}:</strong> {supplier.fullname}</Typography>
             <Typography variant="body1"><strong>{translations[language].supplierAddress}:</strong> {supplier?.address || 'Adresse inconnue'}</Typography>
             <Typography variant="body1"><strong>{translations[language].supplierPhone}:</strong> {supplier?.tel || 'Numéro inconnu'}</Typography>
-            <Typography variant="body1"><strong>{translations[language].supplierTVA}:</strong> {supplier?.codeTVA || 'codeTVA inconnu'}</Typography>
+            <Typography variant="body1"><strong>{translations[language].matriculefisacl}:</strong> {supplier?.matriculefisacl || 'Matriculefisacl inconnu'}</Typography>
           </Box>
         </Box>
 

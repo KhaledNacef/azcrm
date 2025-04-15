@@ -3,7 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { Box, Typography, Button, Table, TableHead, TableRow, TableCell, TableBody, CircularProgress, Modal, Select, MenuItem } from '@mui/material';
 import './fdesign.css';
-import CreateDeliveryNoteModala from '../achat/crate.jsx'; // Ensure correct file name
+import CreatebcModala from '../fatcure/createa.jsx'; // Ensure correct file name
 import logo from '../../assets/amounnet.png';  // Relative path
 
 const BCsingleACHAT = () => {
@@ -180,7 +180,7 @@ const BCsingleACHAT = () => {
     <strong>{language === 'fr' ? 'Téléphone de la société' : language === 'en' ? 'Company Phone' : 'هاتف الشركة'}:</strong> +987654321
   </Typography>
   <Typography variant="body1">
-    <strong>{language === 'fr' ? 'Code TVA de la société' : language === 'en' ? 'Company VAT Code' : 'رمز ضريبة القيمة المضافة'}:</strong> TVA123456789
+    <strong>{language === 'fr' ? 'Matriculefisacl' : language === 'en' ? 'tax identification number' : "الرقم الجبائي" }:</strong> TVA123456789
   </Typography>
 </Box>
 
@@ -204,7 +204,7 @@ const BCsingleACHAT = () => {
     <strong>{language === 'fr' ? 'Téléphone du fournisseur' : language === 'en' ? 'Supplier Phone' : 'هاتف المورد'}:</strong> {supplier?.tel || 'Numéro inconnu'}
   </Typography>
   <Typography variant="body1">
-    <strong>{language === 'fr' ? 'Code TVA' : language === 'en' ? 'VAT Code' : 'رمز ضريبة القيمة المضافة'}:</strong> {supplier?.codeTVA || 'codeTVA inconnu'}
+    <strong>{language === 'fr' ? 'matriculefisacl' : language === 'en' ? 'tax identification number' :"الرقم الجبائي"}:</strong> {supplier?.matriculefisacl || 'codeTVA inconnu'}
   </Typography>
 </Box>
 
@@ -268,6 +268,24 @@ const BCsingleACHAT = () => {
                 {displayDate()}
 
       </Box>
+
+      <Modal open={open} onClose={handleClose}>
+        <Box
+          sx={{
+            position: 'absolute',
+            top: '50%',
+            left: '50%',
+            transform: 'translate(-50%, -50%)',
+            bgcolor: 'background.paper',
+            boxShadow: 24,
+            p: 4,
+            borderRadius: 2,
+            width: 500,
+          }}
+        >
+          <CreatebcModala onAddDeliveryNote={addDeliveryNote} codey={codey} />
+        </Box>
+      </Modal>
     </Box>
   );
 };
