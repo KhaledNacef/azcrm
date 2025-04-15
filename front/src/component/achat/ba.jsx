@@ -73,7 +73,7 @@ const BonAchatPage = () => {
         Totalretune: 0,
       };
 
-      await axios.post('https://api.azcrm.deviceshopleader.com/api/v1/retp', payload);
+      await axios.post('https://api.azcrm.deviceshopleader.com/api/v1/reteune/retp', payload);
       
       setSnackbar({
         open: true,
