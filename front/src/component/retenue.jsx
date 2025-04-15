@@ -1,16 +1,15 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { Box, Typography, Table, TableHead, TableRow, TableCell, TableBody, Button, Menu, MenuItem } from '@mui/material';
-import Grid from '@mui/material/Grid2';
-import './cssbl.css';
+import { Box, Typography, Table, TableHead, TableRow, TableCell, TableBody, Button, Modal, Menu, MenuItem } from '@mui/material';
+import Grid from '@mui/material/Grid';
+import './fvdesign.css';
+import CreateDeliveryNoteModal from '../vente/cratebl.jsx';
 import logo from '../../assets/amounnet.png';
 
-// Translation dictionaries
 const translations = {
   en: {
     companyName: "Company Name",
     companyAddress: "Company Address",
-    matriculefisacl:"tax identification number",
     companyPhone: "Company Phone",
     companyVAT: "Company VAT",
     clientName: "Client Name",
@@ -27,8 +26,7 @@ const translations = {
     clientSignature: "Client Signature",
     companySignature: "Company Signature",
     date: "Date",
-    print: "Print",
-    back: "Back",
+    matriculefisacl:"tax identification number",
     remise: "Discount",
 
   },
@@ -41,7 +39,7 @@ const translations = {
     clientAddress: "Adresse du Client",
     clientPhone: "Téléphone du Client",
     clientFax: "Fax",
-    deliveryNote: "Bon de Sortie",
+    deliveryNote: "Bon De Livraison",
     designation: "Designation",
     quantity: "Quantité",
     unit: "Unité",
@@ -51,11 +49,8 @@ const translations = {
     clientSignature: "Signature du Client",
     companySignature: "Signature de la Société",
     date: "Date",
-    print: "Imprimer",
-    back: "Retour",
     matriculefisacl:'matriculefisacl',
     remise: "Remise"
-
 
   },
   ar: {
@@ -67,7 +62,7 @@ const translations = {
     clientAddress: "عنوان العميل",
     clientPhone: "هاتف العميل",
     clientFax: "فاكس",
-    deliveryNote: "إذن صرف",
+    deliveryNote: "إذن تسليم",
     designation: "الوصف",
     quantity: "الكمية",
     unit: "الوحدة",
@@ -77,15 +72,13 @@ const translations = {
     clientSignature: "توقيع العميل",
     companySignature: "توقيع الشركة",
     date: "التاريخ",
-    print: "طباعة",
-    back: "رجوع",
     matriculefisacl:"الرقم الجبائي",
     remise: "خصم",
 
   }
 };
 
-const SingleDeliverysortie = () => {
+const Retenue = () => {
   const { code, clientId, codey, devise } = useParams();
   const printRef = useRef();
   const navigate = useNavigate();
@@ -93,6 +86,7 @@ const SingleDeliverysortie = () => {
   const [anchorEl, setAnchorEl] = useState(null);
   const [client, setClient] = useState({});
   const [deliveryNote, setDeliveryNote] = useState([]);
+  const [open, setOpen] = useState(false);
 
   useEffect(() => {
     const fetchClientData = async () => {
@@ -107,7 +101,7 @@ const SingleDeliverysortie = () => {
 
     const fetchDeliveryNoteData = async () => {
       try {
-        const response = await fetch(`https://api.azcrm.deviceshopleader.com/api/bs/bs/stock/${code}`);
+        const response = await fetch(`https://api.azcrm.deviceshopleader.com/api/bonlivraison/facturev/${code}`);
         const data = await response.json();
         setDeliveryNote(data);
       } catch (error) {
@@ -133,13 +127,12 @@ const SingleDeliverysortie = () => {
     };
   };
 
-  function displayDate() {
-    const today = new Date();
-    const day = String(today.getDate()).padStart(2, '0');
-    const month = String(today.getMonth() + 1).padStart(2, '0');
-    const year = today.getFullYear();
-    return `${day}/${month}/${year}`;
-  }
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
+
+  const addDeliveryNote = () => {
+    handleClose();
+  };
 
   const handleLanguageMenuOpen = (event) => {
     setAnchorEl(event.currentTarget);
@@ -159,10 +152,10 @@ const SingleDeliverysortie = () => {
   return (
     <Box sx={{ p: 3 }}>
       <Button variant="outlined" onClick={() => navigate(-1)} sx={{ mb: 2, mr: 2 }}>
-        {translations[printLanguage].back}
+        Retour
       </Button>
       <Button variant="contained" color="primary" onClick={handlePrint} sx={{ mb: 2, mr: 2 }}>
-        {translations[printLanguage].print}
+        Imprimer
       </Button>
       <Button 
         variant="contained" 
@@ -171,6 +164,12 @@ const SingleDeliverysortie = () => {
         sx={{ mb: 2, mr: 2 }}
       >
         {printLanguage.toUpperCase()}
+      </Button>
+      <Button variant="contained" color="primary" onClick={handleOpen} sx={{ mb: 2, mr: 2 }}>
+        Créer un Bon Sortie
+      </Button>
+      <Button variant="outlined" onClick={() => navigate(`/gestionv/${codey}`)} sx={{ mb: 2 }}>
+        Gestion De Stock
       </Button>
 
       <Menu
@@ -183,7 +182,6 @@ const SingleDeliverysortie = () => {
         <MenuItem onClick={() => selectLanguage('ar')}>AR</MenuItem>
       </Menu>
 
-      {/* Printable content */}
       <Box
         ref={printRef}
         sx={{
@@ -234,19 +232,9 @@ const SingleDeliverysortie = () => {
             }}
           />
         </Box>
-        
-        {/* Company and Client Information */}
-        <Box sx={{ 
-          display: 'flex', 
-          justifyContent: 'space-between', 
-          mb: 2,
-          flexDirection: isArabic ? 'row' : 'row'
-        }}>
-          <Box sx={{ 
-            textAlign: 'left',
-            order: isArabic ? 2 : 1,
-            flex: 1
-          }}>
+
+        <Grid container spacing={2} sx={{ mb: 4 }}>
+          <Grid item xs={6} sx={{ textAlign: isArabic ? 'right' : 'left' }}>
             <Typography variant="body2">
               <strong>{translations[printLanguage].companyName}:</strong> Ma Société
             </Typography>
@@ -259,13 +247,9 @@ const SingleDeliverysortie = () => {
             <Typography variant="body2">
               <strong>{translations[printLanguage].companyVAT}:</strong> TVA123456789
             </Typography>
-          </Box>
+          </Grid>
 
-          <Box sx={{ 
-            textAlign: 'right',
-            order: isArabic ? 1 : 2,
-            flex: 1
-          }}>
+          <Grid item xs={6} sx={{ textAlign: isArabic ? 'left' : 'right' }}>
             <Typography variant="body2">
               <strong>{translations[printLanguage].clientName}:</strong> {client?.fullname}
             </Typography>
@@ -278,14 +262,14 @@ const SingleDeliverysortie = () => {
             <Typography variant="body2">
               <strong>{translations[printLanguage].clientFax}:</strong> {client?.fax}
             </Typography>
-             <Typography variant="body2">
+            <Typography variant="body2">
               <strong>{translations[printLanguage].matriculefisacl}:</strong> {client?.matriculefisacl}
             </Typography>
-          </Box>
-        </Box>
+          </Grid>
+        </Grid>
 
         <Typography variant="h4" mb={3} textAlign="center">
-          {translations[printLanguage].deliveryNote} - {codey}-{devise}
+          {translations[printLanguage].deliveryNote}- {codey}-{devise}
         </Typography>
 
         <Table>
@@ -307,7 +291,7 @@ const SingleDeliverysortie = () => {
                 <TableCell sx={{ textAlign: isArabic ? 'right' : 'left' }}>{prod.Unite}</TableCell>
                 <TableCell sx={{ textAlign: isArabic ? 'right' : 'left' }}>{prod.prixU_HT} ({devise})</TableCell>
                 <TableCell sx={{ textAlign: isArabic ? 'right' : 'left' }}>{prod.rem} ({devise})</TableCell>
-                <TableCell sx={{ textAlign: isArabic ? 'right' : 'left' }}>{(prod.prixU_HT * prod.quantite).toFixed(2)} {devise}</TableCell>
+                <TableCell sx={{ textAlign: isArabic ? 'right' : 'left' }}>{(prod.prixU_HT * prod.quantite).toFixed(2)} ({devise})</TableCell>
               </TableRow>
             ))}
           </TableBody>
@@ -316,7 +300,7 @@ const SingleDeliverysortie = () => {
         <Box sx={{ display: 'flex', justifyContent: 'flex-end', mt: 3 }}>
           <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end' }}>
             <Typography variant="body1">
-              <strong>{translations[printLanguage].totalNet}:</strong> {totalNettc.toFixed(2)} {devise}
+              <strong>{translations[printLanguage].totalNet}:</strong> {totalNettc.toFixed(2)}$
             </Typography>
           </Box>
         </Box>
@@ -335,8 +319,26 @@ const SingleDeliverysortie = () => {
           </Box>
         </Box>
       </Box>
+
+      <Modal open={open} onClose={handleClose}>
+        <Box
+          sx={{
+            position: 'absolute',
+            top: '50%',
+            left: '50%',
+            transform: 'translate(-50%, -50%)',
+            bgcolor: 'background.paper',
+            boxShadow: 24,
+            p: 4,
+            borderRadius: 2,
+            width: 500,
+          }}
+        >
+          <CreateDeliveryNoteModal onAddDeliveryNote={addDeliveryNote} codey={codey} />
+        </Box>
+      </Modal>
     </Box>
   );
 };
 
-export default SingleDeliverysortie;
+export default Retenue;

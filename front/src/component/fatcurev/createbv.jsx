@@ -31,6 +31,7 @@ const Createbv = ({ onAddDeliveryNote }) => {
   const [snackbarMessage, setSnackbarMessage] = useState('');
   const [snackbarSeverity, setSnackbarSeverity] = useState('success');
   const [exchangeRates, setExchangeRates] = useState({});
+  const [rem, setRem] = useState(0);
 
   const API_BASE_URL = 'https://api.azcrm.deviceshopleader.com/api';
   const EXCHANGE_RATE_API_URL = 'https://api.exchangerate-api.com/v4/latest/TND';
@@ -106,12 +107,15 @@ const Createbv = ({ onAddDeliveryNote }) => {
       Unite: selectedProduct.Unite,
       prixU_HT: finalPrice,
       quantite: parseInt(quantite, 10),
+      rem:rem
     }]);
 
     setNewProduct('');
     setQuantite(1);
     setPrice('');
     setPercentage('');
+    setRem(0);
+
   };
 
   const handlePriceChange = (e) => {
@@ -122,7 +126,7 @@ const Createbv = ({ onAddDeliveryNote }) => {
       const basePrice = selectedProduct.moyenneprix > 0 ? selectedProduct.moyenneprix : selectedProduct.prixU_HT;
       const tvaMultiplier = 1 + (selectedProduct.tva || 0) / 100;
       const priceWithTva = basePrice * tvaMultiplier;
-
+      
       const gain = ((newPrice - priceWithTva) / priceWithTva) * 100;
       setPercentage(gain.toFixed(2));
     }
@@ -259,6 +263,13 @@ const Createbv = ({ onAddDeliveryNote }) => {
           endAdornment: '%',
         }}
       />
+      <TextField 
+      label="Rem (%)"
+       type="number"
+        value={rem} onChange={(e) => setRem(parseFloat(e.target.value) || 0)} 
+        fullWidth 
+        margin="normal" 
+        />
 
       <TextField
         select

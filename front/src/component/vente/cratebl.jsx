@@ -30,6 +30,7 @@ const CreateDeliveryNoteModal = ({ onAddDeliveryNote, codey }) => {
   const [percentage, setPercentage] = useState(0);
   const [price, setPrice] = useState("");
   const [exchangeRates, setExchangeRates] = useState({});
+  const [rem, setRem] = useState(0);
 
   const API_BASE_URL = "https://api.azcrm.deviceshopleader.com/api";
   const CURRENCY_API_URL = "https://v6.exchangerate-api.com/v6/9179a4fac368332ee3e66b7b/latest/TND";
@@ -121,6 +122,8 @@ const CreateDeliveryNoteModal = ({ onAddDeliveryNote, codey }) => {
           prixU_HT: convertedPrice,
           quantite: parseInt(quantite, 10),
           tva: selectedProduct.tva,
+          rem:rem
+
         },
       ]);
     });
@@ -128,6 +131,8 @@ const CreateDeliveryNoteModal = ({ onAddDeliveryNote, codey }) => {
     setNewProduct("");
     setQuantite(1);
     setPercentage(0);
+    setRem(0);
+
   };
   
   const convertToCurrency = async (amount) => {
@@ -236,6 +241,13 @@ const CreateDeliveryNoteModal = ({ onAddDeliveryNote, codey }) => {
         fullWidth
         margin="normal"
       />
+      <TextField 
+      label="Rem (%)" 
+      type="number" 
+      value={rem} onChange={(e) => setRem(parseFloat(e.target.value) || 0)} 
+      fullWidth 
+      margin="normal" 
+      />
 
       <TextField
         label="Pourcentage de gain"
@@ -277,6 +289,8 @@ const CreateDeliveryNoteModal = ({ onAddDeliveryNote, codey }) => {
                 <TableCell>Unité</TableCell>
                 <TableCell>Prix U ({selectedCurrency})</TableCell>
                 <TableCell>Quantité</TableCell>
+                <TableCell>Rem</TableCell>
+
               </TableRow>
             </TableHead>
             <TableBody>
@@ -286,6 +300,8 @@ const CreateDeliveryNoteModal = ({ onAddDeliveryNote, codey }) => {
                   <TableCell>{prod.Unite}</TableCell>
                   <TableCell>{prod.prixU_HT}</TableCell>
                   <TableCell>{prod.quantite}</TableCell>
+                  <TableCell>{prod.rem}</TableCell>
+
                 </TableRow>
               ))}
             </TableBody>

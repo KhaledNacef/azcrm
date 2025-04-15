@@ -33,6 +33,7 @@ const ClientPage = () => {
     address: '',
     ville: '',
     pays: '',
+    matriculefisacl: ''
   });
 
   const [snackbar, setSnackbar] = useState({
@@ -71,7 +72,7 @@ const ClientPage = () => {
 
   const handleOpenDialog = (client = null) => {
     setEditMode(!!client);
-    setCurrentClient(client || { fullname: '', tel: '', fax: '', address: '', ville: '', pays: '' });
+    setCurrentClient(client || { fullname: '', tel: '', fax: '', address: '', ville: '', pays: '', matriculefisacl: '' });
     setOpenDialog(true);
   };
 
@@ -80,12 +81,11 @@ const ClientPage = () => {
   };
 
   const handleSaveClient = () => {
-    const { fullname, pays, ville, tel, fax, address } = currentClient;
+    const { fullname, pays, ville, tel, fax, address, matriculefisacl } = currentClient;
 
-    const clientData = { fullname, pays, ville, tel, fax, address };
+    const clientData = { fullname, pays, ville, tel, fax, address, matriculefisacl };
 
     if (editMode) {
-      // Update the client via API
       axios
         .put(`https://api.azcrm.deviceshopleader.com/api/clients/upclient/${currentClient.id}`, clientData)
         .then((response) => {
@@ -111,7 +111,6 @@ const ClientPage = () => {
           });
         });
     } else {
-      // Create a new client via API
       axios
         .post('https://api.azcrm.deviceshopleader.com/api/clients/addclient', clientData)
         .then((response) => {
@@ -136,7 +135,6 @@ const ClientPage = () => {
   };
 
   const handleDeleteClient = (clientId) => {
-    // Delete client via API
     axios
       .delete(`https://api.azcrm.deviceshopleader.com/api/clients/delclient/${clientId}`)
       .then(() => {
@@ -265,6 +263,13 @@ const ClientPage = () => {
             onChange={(e) => setCurrentClient({ ...currentClient, pays: e.target.value })}
             sx={{ mb: 2 }}
           />
+          <TextField
+            label="Matricule Fiscale"
+            fullWidth
+            value={currentClient.matriculefisacl}
+            onChange={(e) => setCurrentClient({ ...currentClient, matriculefisacl: e.target.value })}
+            sx={{ mb: 2 }}
+          />
         </DialogContent>
         <DialogActions>
           <Button onClick={handleCloseDialog} color="secondary">
@@ -282,7 +287,7 @@ const ClientPage = () => {
         onClose={handleCloseSnackbar}
         anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
       >
-        <Alert onClose={handleCloseSnackbar}     severity={snackbar.severity} sx={{ width: '100%' }}>
+        <Alert onClose={handleCloseSnackbar} severity={snackbar.severity} sx={{ width: '100%' }}>
           {snackbar.message}
         </Alert>
       </Snackbar>

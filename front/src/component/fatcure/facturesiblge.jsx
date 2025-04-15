@@ -67,8 +67,10 @@ const BCsingleACHAT = () => {
   const totalTVA = totalNetHT * (deliveryNote[0]?.tva / 100 || 0);
   const totalNetTTC = totalNetHT + totalTVA;
 
-  const timbreAmount = timbre === 'true' ? 1 : 0;  // If timbre is true, add 1 TND
-  const totalWithTimbre = totalNetTTC + timbreAmount;
+  if (timbre === 'true') {
+    totalNetTTC += 1;  // Add 1 TND for timbre
+  }
+
 
   function displayDate() {
     const today = new Date();
@@ -246,9 +248,13 @@ const BCsingleACHAT = () => {
           <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: language === 'ar' ? 'flex-end' : 'flex-start' }}>
             <Typography variant="body1"><strong>{language === 'fr' ? 'Total HT' : language === 'en' ? 'Total HT' : 'الإجمالي قبل الضريبة'}:</strong> {totalNetHT.toFixed(2)} TND</Typography>
             <Typography variant="body1"><strong>{language === 'fr' ? 'Total TVA' : language === 'en' ? 'Total VAT' : 'إجمالي ضريبة القيمة المضافة'}:</strong> {totalTVA.toFixed(2)} TND</Typography>
-            <Typography variant="body1"><strong>{language === 'fr' ? 'Total TTC' : language === 'en' ? 'Total TTC' : 'إجمالي شامل'}:</strong> {totalNetTTC.toFixed(2)} TND</Typography>
-            <Typography variant="body1"><strong>{language === 'fr' ? 'Timbre' : language === 'en' ? 'Stamp' : 'طابع'}:</strong> {timbreAmount} TND</Typography>
-            <Typography variant="body1"><strong>{language === 'fr' ? 'Total Avec Timbre' : language === 'en' ? 'Total With Stamp' : 'الإجمالي مع الطابع'}:</strong> {totalWithTimbre.toFixed(2)} TND</Typography>
+            {timbre === 'true' && (
+            <Typography variant="body1">
+              <strong>{language === 'fr' ? 'Timbre' : language === 'en' ? 'Stamp' : 'طابع'}:</strong> 1 TND
+              </Typography>          
+              )}
+
+            <Typography variant="body1"><strong>{language === 'fr' ? 'Total TTC' : language === 'en' ? 'Total TTC' : 'الإجمالي شامل'}:</strong> {totalNetTTC.toFixed(2)} TND</Typography>
           </Box>
         </Box>
            <Box sx={{ display: 'flex', justifyContent: 'space-between', mt: 4 }}>
@@ -259,6 +265,8 @@ const BCsingleACHAT = () => {
                     <Typography variant="body2">{translations[language].signatureSociete}</Typography>
                   </Box>
                 </Box>
+                {displayDate()}
+
       </Box>
     </Box>
   );

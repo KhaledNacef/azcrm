@@ -27,7 +27,7 @@ const FournisseurPage = () => {
   const [openAddDialog, setOpenAddDialog] = useState(false);
   const [openEditDialog, setOpenEditDialog] = useState(false);
   const [formData, setFormData] = useState({
-    fullname: '', pays: '', ville: '', tel: '', fax: '', codePostal: '', address: '', codeTVA: '', matriculefisacl: ''
+    fullname: '', pays: '', ville: '', tel: '', fax: '', codePostal: '', address: '',  matriculefisacl: ''
   });
   const [editData, setEditData] = useState(null);
   
