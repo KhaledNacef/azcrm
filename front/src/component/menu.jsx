@@ -34,7 +34,7 @@ const SidebarMenu = () => {
     { label: 'Facture d’Achat', path: '/bon-dachat', icon: <ShoppingCartIcon /> },
     { label: 'Bon de Livraison', path: '/bon-commandefacture', icon: <LocalShippingIcon /> },
     { label: 'Bon de Sortie', path: '/bon-livraison', icon: <ExitToAppIcon /> },
-    { label: 'Reteune', path: '/reteune', icon: <AttachMoneyIcon /> } // Added Reteune with money icon
+    { label: 'Reteune', path: '/RET1', icon: <AttachMoneyIcon /> } // Added Reteune with money icon
   ];
 
   return (
