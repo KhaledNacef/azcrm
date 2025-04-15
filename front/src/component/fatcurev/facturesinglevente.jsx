@@ -49,7 +49,7 @@ const translations = {
     clientSignature: "Signature du Client",
     companySignature: "Signature de la Société",
     date: "Date",
-    matriculefisacl:'matriculefisacl',
+    matriculefisacl:'Matriculefisacl',
     remise: "Remise"
 
   },
