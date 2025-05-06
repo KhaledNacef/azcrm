@@ -1,6 +1,6 @@
 import React from 'react';
 import { List, ListItem, ListItemIcon, ListItemText, Box, Avatar, Typography } from '@mui/material';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import HomeIcon from '@mui/icons-material/Home';
 import InventoryIcon from '@mui/icons-material/Inventory';
 import PeopleIcon from '@mui/icons-material/People';
@@ -9,7 +9,7 @@ import ExitToAppIcon from '@mui/icons-material/ExitToApp';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import ReceiptIcon from '@mui/icons-material/Receipt';
 import LocalShippingIcon from '@mui/icons-material/LocalShipping';
-import AttachMoneyIcon from '@mui/icons-material/AttachMoney'; // Added for Reteune
+import AttachMoneyIcon from '@mui/icons-material/AttachMoney';
 
 const getCurrentDate = () => {
   const date = new Date();
@@ -23,6 +23,12 @@ const getCurrentDate = () => {
 
 const SidebarMenu = () => {
   const location = useLocation();
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    localStorage.removeItem('token');
+    navigate('/login');
+  };
 
   const menuItems = [
     { label: 'Dashboard', path: '/dashboard', icon: <HomeIcon /> },
@@ -34,7 +40,7 @@ const SidebarMenu = () => {
     { label: 'Facture d’Achat', path: '/bon-dachat', icon: <ShoppingCartIcon /> },
     { label: 'Bon de Livraison', path: '/bon-commandefacture', icon: <LocalShippingIcon /> },
     { label: 'Bon de Sortie', path: '/bon-livraison', icon: <ExitToAppIcon /> },
-    { label: 'Reteune', path: '/RET1', icon: <AttachMoneyIcon /> } // Added Reteune with money icon
+    { label: 'Reteune', path: '/RET1', icon: <AttachMoneyIcon /> },
   ];
 
   return (
@@ -78,6 +84,25 @@ const SidebarMenu = () => {
             </ListItem>
           );
         })}
+
+        {/* Logout Button */}
+        <ListItem
+          button
+          onClick={handleLogout}
+          sx={{
+            borderRadius: '8px',
+            mt: 'auto',
+            bgcolor: 'error.main',
+            color: 'white',
+            '&:hover': { bgcolor: 'error.dark' },
+            transition: '0.3s',
+            '& .MuiListItemIcon-root': { color: 'white' },
+            '& .MuiListItemText-root': { fontWeight: 'bold' },
+          }}
+        >
+          <ListItemIcon><ExitToAppIcon /></ListItemIcon>
+          <ListItemText primary="Se déconnecter" />
+        </ListItem>
       </List>
     </Box>
   );
