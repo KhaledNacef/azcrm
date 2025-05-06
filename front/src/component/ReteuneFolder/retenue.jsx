@@ -106,7 +106,7 @@ const Reteune = () => {
       </Select>
 
       <Box ref={printRef} sx={{ border: 1, p: 3, mt: 2, direction: language === 'ar' ? 'rtl' : 'ltr' }}>
-        <img src={logo} alt="Logo" style={{ width: 200, marginBottom: 20 }} />
+        <img src={logo} alt="Logo" style={{ width: "100%", marginBottom: 20 }} />
 
         {/* Payer Section */}
         <Box sx={{ mb: 4 }}>
