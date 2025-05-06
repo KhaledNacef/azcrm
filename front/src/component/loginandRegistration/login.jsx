@@ -96,7 +96,7 @@ const Login = () => {
             <Box mt={2} textAlign="center">
                 <Typography variant="body2">
                   Don't have an account? 
-                  <Button onClick={() => navigate('/signup')} color="primary" sx={{ textDecoration: 'underline' }}>
+                  <Button onClick={() => navigate('/register')} color="primary" sx={{ textDecoration: 'underline' }}>
                     Sign up
                   </Button>
                 </Typography>

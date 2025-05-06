@@ -59,6 +59,9 @@ const App = () => {
           </Route>
         </Route>
 
+        {/* Default route redirects to login if not authenticated */}
+        <Route path="/" element={<Navigate to="/login" replace />} />
+
         {/* Redirect unknown routes to login */}
         <Route path="*" element={<Navigate to="/login" replace />} />
       </Routes>
