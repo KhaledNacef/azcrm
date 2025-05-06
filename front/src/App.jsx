@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Navigate, Outlet } from 'react-router-dom';
 import Layout from './home.jsx';
 import ProductPage from './component/products/productpage.jsx';
 import FournisseurPage from './component/suplier/suplier.jsx';
@@ -18,35 +18,49 @@ import CompareProducts from './component/gestionBf.jsx';
 import CompareProductsv from './component/gestionLF.jsx';
 import Reteune from './component/ReteuneFolder/retenue.jsx';
 import AllReteune from './component/ReteuneFolder/allReteune.jsx';
+import Login from './component/loginandRegistration/login.jsx';
+import Registration from './component/loginandRegistration/registration.jsx';
+
+// Protect Route Component
+const RequireAuth = () => {
+  const isAuthenticated = localStorage.getItem('token'); // or whatever logic you use
+  return isAuthenticated ? <Outlet /> : <Navigate to="/login" replace />;
+};
+
 const App = () => {
   return (
     <Router>
       <Routes>
-      <Route path="/" element={<Navigate to="/dashboard" replace />} />
+        {/* Public routes */}
+        <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Registration />} />
 
-        {/* Wrap all routes under the Layout */}
-        <Route path="/" element={<Layout />}>
-          <Route path="/produit" element={<ProductPage />} />
-          <Route path="/dashboard" element={<Dashboard />} />
-          <Route path="/stock" element={<StockPage />} />
-          <Route path="/fournisseur" element={<FournisseurPage />} />
-          <Route path="/client" element={<ClientPage />} />
-          <Route path="/bon-dachat" element={<BonAchatPage />} />
-          <Route path="/bon-dachat/:code/:supplierId/:codey/:timbre" element={<SingleDeliveryNote />} />
-          <Route path="/REt0/:code/:supplierId/:codey/:timbre" element={<Reteune />} />
-          <Route path="/RET1" element={<AllReteune />} />
-
-          <Route path="/bon-livraison" element={<BonsortiePage />} />
-          <Route path="/bon-livraison/:code/:clientId/:codey/:devise" element={<SingleDeliverysortie />} />
-          <Route path="/bon-commandefacture" element={<Boncommandev />} />
-          <Route path="/bon-commandefacturee/:code/:clientId/:codey/:devise" element={<Bvsinlge />} />
-          <Route path="/bon-commande" element={<Boncommande />} />
-          <Route path="/bon-commandea/:code/:supplierId/:codey/:timbre" element={<BCsingleACHAT />} />
-          <Route path="/gestion/:codey" element={<CompareProducts />} />
-          <Route path="/gestionv/:codey" element={<CompareProductsv />} />
-
-
+        {/* Protected routes */}
+        <Route element={<RequireAuth />}>
+          <Route path="/" element={<Layout />}>
+            <Route index element={<Navigate to="/dashboard" replace />} />
+            <Route path="/produit" element={<ProductPage />} />
+            <Route path="/dashboard" element={<Dashboard />} />
+            <Route path="/stock" element={<StockPage />} />
+            <Route path="/fournisseur" element={<FournisseurPage />} />
+            <Route path="/client" element={<ClientPage />} />
+            <Route path="/bon-dachat" element={<BonAchatPage />} />
+            <Route path="/bon-dachat/:code/:supplierId/:codey/:timbre" element={<SingleDeliveryNote />} />
+            <Route path="/REt0/:code/:supplierId/:codey/:timbre" element={<Reteune />} />
+            <Route path="/RET1" element={<AllReteune />} />
+            <Route path="/bon-livraison" element={<BonsortiePage />} />
+            <Route path="/bon-livraison/:code/:clientId/:codey/:devise" element={<SingleDeliverysortie />} />
+            <Route path="/bon-commandefacture" element={<Boncommandev />} />
+            <Route path="/bon-commandefacturee/:code/:clientId/:codey/:devise" element={<Bvsinlge />} />
+            <Route path="/bon-commande" element={<Boncommande />} />
+            <Route path="/bon-commandea/:code/:supplierId/:codey/:timbre" element={<BCsingleACHAT />} />
+            <Route path="/gestion/:codey" element={<CompareProducts />} />
+            <Route path="/gestionv/:codey" element={<CompareProductsv />} />
+          </Route>
         </Route>
+
+        {/* Redirect unknown routes to login */}
+        <Route path="*" element={<Navigate to="/login" replace />} />
       </Routes>
     </Router>
   );
