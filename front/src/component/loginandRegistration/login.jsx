@@ -40,17 +40,17 @@ const Login = () => {
 
   return (
     <Container component="main" maxWidth="xs">
-      <Paper
-        elevation={3}
-        sx={{
-          padding: { xs: 3, sm: 4 },
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-          justifyContent: 'center', // Ensure content is centered
-          minHeight: '100vh', // Ensure it fills the viewport height
-        }}
-      >
+     <Paper
+  elevation={0}
+  sx={{
+    padding: { xs: 3, sm: 4 },
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    justifyContent: 'center',
+    minHeight: '100vh',
+  }}
+>
         <Typography variant="h5" align="center" gutterBottom>
           Login
         </Typography>
