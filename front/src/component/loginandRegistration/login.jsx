@@ -23,7 +23,7 @@ const Login = () => {
     try {
       // Send the login request to the server
       const response = await axios.post(
-        '/api/user/login',
+        'https://api.azcrm.deviceshopleader.com/api/v1/luser/login',
         { email, password },
         { withCredentials: true } // Ensure cookies (HttpOnly token) are included in the request
       );

@@ -64,6 +64,8 @@ const factureachatproduct = require('./database/router/factureapr');
 const factureventeproduct = require('./database/router/facturevpr');
 const reteune = require('./database/router/reteuner');
 const stock = require('./database/router/stockR');
+const user=require('./database/router/user')
+
 
 app.use('/api/v1/suplier', suplierRoutes);
 app.use('/api/v1/clients', clientRoutes);
@@ -76,6 +78,7 @@ app.use('/api/v1/bonlivraison', facturev);
 app.use('/api/v1/boncommandallproducts', factureachatproduct);
 app.use('/api/v1/bonlivraisonproducts', factureventeproduct);
 app.use('/api/v1/reteune', reteune);
+app.use('/api/v1/luser', user);
 
 // ========================
 // ⚠️ Error Handling

@@ -8,7 +8,7 @@ const db  = require('../index'); // Adjust the path to your model as needed
 const User =db.models.user
 
 // JWT Secret - Hardcoded (instead of process.env)
-const JWT_SECRET = 'your_secret_key'; // Change this to a secure key
+const JWT_SECRET = 'Zatla3599?!'; // Change this to a secure key
 
 // Register User
 const registerUser = async (req, res) => {
@@ -33,7 +33,7 @@ const registerUser = async (req, res) => {
     const user = await User.create({
       fullName,
       email,
-      password: hashedPassword,
+      password: hashedPassword
     });
 
     // Return success response
@@ -66,12 +66,14 @@ const loginUser = async (req, res) => {
       // Store token in HttpOnly cookie
       res.cookie('accessToken', accessToken, {
         httpOnly: true,
-        secure: process.env.NODE_ENV === 'production', // Only send over HTTPS in production
-        sameSite: 'Strict', // Prevent CSRF attacks
-        maxAge: 3 * 60 * 60 * 1000, // Token expires after 3 hours (in milliseconds)
+        secure: process.env.NODE_ENV === 'production',
+        sameSite: 'Strict',
+        maxAge: 3 * 60 * 60 * 1000,
       });
-  
-      res.json({ message: 'Logged in successfully' });
+      
+      // ✅ Return token for frontend to use
+      res.json({ message: 'Logged in successfully', token: accessToken });
+      
   
     } catch (error) {
       res.status(500).json({ error: 'Server error' });

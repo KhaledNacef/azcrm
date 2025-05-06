@@ -26,12 +26,14 @@ const Registration = () => {
 
     try {
       const response = await axios.post(
-        '/api/user/register',
-        { name, email, password },
+        'https://api.azcrm.deviceshopleader.com/api/v1/luser/register',
+        { fullName: name, email, password },
         { withCredentials: true }
       );
 
       if (response.data) {
+        localStorage.setItem('token', response.data.token);
+
         navigate('/login');
       }
     } catch (err) {
