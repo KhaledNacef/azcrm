@@ -1,6 +1,6 @@
 // controllers/userController.js
 
-const bcrypt = require('bcrypt');
+const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const { validationResult } = require('express-validator');
 const db  = require('../index'); // Adjust the path to your model as needed
