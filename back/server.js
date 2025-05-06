@@ -28,7 +28,8 @@ app.use(rateLimit({
 app.use(cors({
   origin: 'https://azcrm.deviceshopleader.com',
   methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE'],
-  allowedHeaders: ['Content-Type', 'Authorization']
+  allowedHeaders: ['Content-Type', 'Authorization'],
+  credentials: true // ✅ This is the missing part
 }));
 
 // 4. Data sanitization
