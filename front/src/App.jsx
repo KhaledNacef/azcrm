@@ -23,48 +23,46 @@ import Registration from './component/loginandRegistration/registration.jsx';
 
 // Protect Route Component
 const RequireAuth = () => {
-  const isAuthenticated = localStorage.getItem('token'); // or whatever logic you use
+  const isAuthenticated = localStorage.getItem('token'); 
   return isAuthenticated ? <Outlet /> : <Navigate to="/login" replace />;
 };
 
 const App = () => {
   return (
     <Router>
-      <Routes>
-        {/* Public routes */}
-        <Route path="/login" element={<Login />} />
-        <Route path="/register" element={<Registration />} />
+    <Routes>
+  {/* Public routes */}
+  <Route path="/login" element={<Login />} />
+  <Route path="/register" element={<Registration />} />
 
-        {/* Protected routes */}
-        <Route element={<RequireAuth />}>
-          <Route path="/" element={<Layout />}>
-            <Route index element={<Navigate to="/dashboard" replace />} />
-            <Route path="/produit" element={<ProductPage />} />
-            <Route path="/dashboard" element={<Dashboard />} />
-            <Route path="/stock" element={<StockPage />} />
-            <Route path="/fournisseur" element={<FournisseurPage />} />
-            <Route path="/client" element={<ClientPage />} />
-            <Route path="/bon-dachat" element={<BonAchatPage />} />
-            <Route path="/bon-dachat/:code/:supplierId/:codey/:timbre" element={<SingleDeliveryNote />} />
-            <Route path="/REt0/:code/:supplierId/:codey/:timbre" element={<Reteune />} />
-            <Route path="/RET1" element={<AllReteune />} />
-            <Route path="/bon-livraison" element={<BonsortiePage />} />
-            <Route path="/bon-livraison/:code/:clientId/:codey/:devise" element={<SingleDeliverysortie />} />
-            <Route path="/bon-commandefacture" element={<Boncommandev />} />
-            <Route path="/bon-commandefacturee/:code/:clientId/:codey/:devise" element={<Bvsinlge />} />
-            <Route path="/bon-commande" element={<Boncommande />} />
-            <Route path="/bon-commandea/:code/:supplierId/:codey/:timbre" element={<BCsingleACHAT />} />
-            <Route path="/gestion/:codey" element={<CompareProducts />} />
-            <Route path="/gestionv/:codey" element={<CompareProductsv />} />
-          </Route>
-        </Route>
+  {/* Protected routes */}
+  <Route element={<RequireAuth />}>
+    <Route path="/" element={<Layout />}>
+      <Route index element={<Navigate to="/dashboard" replace />} />
+      <Route path="dashboard" element={<Dashboard />} />
+      <Route path="produit" element={<ProductPage />} />
+      <Route path="stock" element={<StockPage />} />
+      <Route path="fournisseur" element={<FournisseurPage />} />
+      <Route path="client" element={<ClientPage />} />
+      <Route path="bon-dachat" element={<BonAchatPage />} />
+      <Route path="bon-dachat/:code/:supplierId/:codey/:timbre" element={<SingleDeliveryNote />} />
+      <Route path="REt0/:code/:supplierId/:codey/:timbre" element={<Reteune />} />
+      <Route path="RET1" element={<AllReteune />} />
+      <Route path="bon-livraison" element={<BonsortiePage />} />
+      <Route path="bon-livraison/:code/:clientId/:codey/:devise" element={<SingleDeliverysortie />} />
+      <Route path="bon-commandefacture" element={<Boncommandev />} />
+      <Route path="bon-commandefacturee/:code/:clientId/:codey/:devise" element={<Bvsinlge />} />
+      <Route path="bon-commande" element={<Boncommande />} />
+      <Route path="bon-commandea/:code/:supplierId/:codey/:timbre" element={<BCsingleACHAT />} />
+      <Route path="gestion/:codey" element={<CompareProducts />} />
+      <Route path="gestionv/:codey" element={<CompareProductsv />} />
+    </Route>
+  </Route>
 
-        {/* Default route redirects to login if not authenticated */}
-        <Route path="/" element={<Navigate to="/login" replace />} />
+  {/* Catch-all */}
+  <Route path="*" element={<Navigate to="/login" replace />} />
+</Routes>
 
-        {/* Redirect unknown routes to login */}
-        <Route path="*" element={<Navigate to="/login" replace />} />
-      </Routes>
     </Router>
   );
 };

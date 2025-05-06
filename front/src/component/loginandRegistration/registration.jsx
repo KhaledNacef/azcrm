@@ -32,7 +32,6 @@ const Registration = () => {
       );
 
       if (response.data) {
-        localStorage.setItem('token', response.data.token);
 
         navigate('/login');
       }
