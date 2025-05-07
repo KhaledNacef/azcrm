@@ -92,7 +92,11 @@ const BCsingleACHAT = () => {
       navigate(window.location.pathname);  // Navigate back after printing
     };
   };
-
+  const formattedDate = new Date(datee).toLocaleDateString('fr-FR', {
+    day: '2-digit',
+    month: '2-digit',
+    year: 'numeric',
+  });
   return (
     <Box sx={{ p: 3 }}>
       <Button variant="outlined" onClick={() => navigate(-1)} sx={{ mb: 2, mr: 2 }}>
@@ -212,7 +216,7 @@ const BCsingleACHAT = () => {
 
 
         <Typography variant="h4" mb={3} textAlign="center">
-          {language === 'fr' ? 'Bon De Commande' : language === 'en' ? 'Order Form' : 'نموذج الطلب'} - {id}/{new Date(datee)}
+          {language === 'fr' ? 'Bon De Commande' : language === 'en' ? 'Order Form' : 'نموذج الطلب'} - {id}/{formattedDate}
         </Typography>
 
         {/* Table */}

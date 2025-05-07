@@ -94,7 +94,11 @@ const Reteune = () => {
 
   if (loading) return <CircularProgress />;
   if (error) return <Typography color="error">{error}</Typography>;
-
+  const formattedDate = new Date(datee).toLocaleDateString('fr-FR', {
+    day: '2-digit',
+    month: '2-digit',
+    year: 'numeric',
+  });
   return (
     <Box sx={{ p: 3 }}>
       <Button variant="outlined" onClick={() => navigate(-1)} sx={{ mb: 2 }}>Back</Button>
@@ -145,7 +149,7 @@ const Reteune = () => {
         </Box>
 
         <Typography variant="h4" textAlign="center" sx={{ mb: 4 }}>
-          {translations[language].title} - {id}/{new Date(datee)}
+          {translations[language].title} - {id}/{formattedDate}
         </Typography>
 
         {/* Totals Table */}

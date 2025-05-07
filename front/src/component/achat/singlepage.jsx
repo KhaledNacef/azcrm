@@ -150,6 +150,12 @@ const SingleDeliveryNote = () => {
     },
   };
 
+  const formattedDate = new Date(datee).toLocaleDateString('fr-FR', {
+    day: '2-digit',
+    month: '2-digit',
+    year: 'numeric',
+  });
+
   return (
     <Box sx={{ p: 3 }}>
       <Button variant="outlined" onClick={() => navigate(-1)} sx={{ mb: 2 }}>
@@ -255,7 +261,7 @@ const SingleDeliveryNote = () => {
         </Box>
 
         <Typography variant="h4" mb={3} textAlign="center">
-          {translations[language].bonDeAchat} - {id}/{new Date(datee)}
+          {translations[language].bonDeAchat} - {id}/{formattedDate}
         </Typography>
 
         <Table>
