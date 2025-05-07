@@ -40,7 +40,7 @@ const SidebarMenu = () => {
     { label: 'Facture d’Achat', path: '/bon-dachat', icon: <ShoppingCartIcon /> },
     { label: 'Bon de Livraison', path: '/bon-commandefacture', icon: <LocalShippingIcon /> },
     { label: 'Bon de Sortie', path: '/bon-livraison', icon: <ExitToAppIcon /> },
-    { label: 'Reteune', path: '/RET1', icon: <AttachMoneyIcon /> },
+    { label: 'Retenue', path: '/RET1', icon: <AttachMoneyIcon /> },
   ];
 
   return (
