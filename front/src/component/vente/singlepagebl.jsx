@@ -285,7 +285,7 @@ const SingleDeliverysortie = () => {
         </Box>
 
         <Typography variant="h4" mb={3} textAlign="center">
-          {translations[printLanguage].deliveryNote} - {id}/{datee}
+          {translations[printLanguage].deliveryNote} - {id}/{new Date(datee)}
         </Typography>
 
         <Table>

@@ -255,7 +255,7 @@ const SingleDeliveryNote = () => {
         </Box>
 
         <Typography variant="h4" mb={3} textAlign="center">
-          {translations[language].bonDeAchat} - {id}/{datee}
+          {translations[language].bonDeAchat} - {id}/{new Date(datee)}
         </Typography>
 
         <Table>

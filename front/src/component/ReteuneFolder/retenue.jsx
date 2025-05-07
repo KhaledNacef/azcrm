@@ -145,7 +145,7 @@ const Reteune = () => {
         </Box>
 
         <Typography variant="h4" textAlign="center" sx={{ mb: 4 }}>
-          {translations[language].title} - {id}/{datee}
+          {translations[language].title} - {id}/{new Date(datee)}
         </Typography>
 
         {/* Totals Table */}

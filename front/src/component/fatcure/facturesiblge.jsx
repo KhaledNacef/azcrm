@@ -212,7 +212,7 @@ const BCsingleACHAT = () => {
 
 
         <Typography variant="h4" mb={3} textAlign="center">
-          {language === 'fr' ? 'Bon De Commande' : language === 'en' ? 'Order Form' : 'نموذج الطلب'} - {id}/{datee}
+          {language === 'fr' ? 'Bon De Commande' : language === 'en' ? 'Order Form' : 'نموذج الطلب'} - {id}/{new Date(datee)}
         </Typography>
 
         {/* Table */}
