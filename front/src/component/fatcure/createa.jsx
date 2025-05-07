@@ -103,7 +103,6 @@ const CreatebcModala = ({ onAddDeliveryNote }) => {
     setPrixU_HT(0);
     setQuantite(1);
     setRem(0);
-    setNum(0)
     setSnackbarMessage("Produit ajouté avec succès.");
     setSnackbarSeverity("success");
     setSnackbarOpen(true);
@@ -133,6 +132,8 @@ const CreatebcModala = ({ onAddDeliveryNote }) => {
       setSnackbarSeverity("success");
       setSnackbarOpen(true);
       onAddDeliveryNote(newNote);
+      setNum(0)
+
     } catch (error) {
       console.error("Error creating delivery note:", error.response?.data || error);
       setSnackbarMessage("Échec de la création du bon d'achat");

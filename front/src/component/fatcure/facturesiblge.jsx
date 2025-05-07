@@ -283,7 +283,7 @@ const BCsingleACHAT = () => {
             width: 500,
           }}
         >
-          <CreateDeliveryNoteModala onAddDeliveryNote={addDeliveryNote} codey={codey} />
+          <CreateDeliveryNoteModala onAddDeliveryNote={addDeliveryNote} codey={codey}  />
         </Box>
       </Modal>
     </Box>
