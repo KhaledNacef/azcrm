@@ -45,15 +45,15 @@ const App = () => {
       <Route path="fournisseur" element={<FournisseurPage />} />
       <Route path="client" element={<ClientPage />} />
       <Route path="bon-dachat" element={<BonAchatPage />} />
-      <Route path="bon-dachat/:code/:supplierId/:codey/:timbre" element={<SingleDeliveryNote />} />
-      <Route path="REt0/:code/:supplierId/:codey/:timbre" element={<Reteune />} />
+      <Route path="bon-dachat/:code/:supplierId/:codey/:timbre/:id/:datee" element={<SingleDeliveryNote />} />
+      <Route path="REt0/:code/:supplierId/:codey/:timbre/:id/:datee" element={<Reteune />} />
       <Route path="RET1" element={<AllReteune />} />
       <Route path="bon-livraison" element={<BonsortiePage />} />
-      <Route path="bon-livraison/:code/:clientId/:codey/:devise" element={<SingleDeliverysortie />} />
+      <Route path="bon-livraison/:code/:clientId/:codey/:devise/:id/:datee" element={<SingleDeliverysortie />} />
       <Route path="bon-commandefacture" element={<Boncommandev />} />
-      <Route path="bon-commandefacturee/:code/:clientId/:codey/:devise" element={<Bvsinlge />} />
+      <Route path="bon-commandefacturee/:code/:clientId/:codey/:devise/:id/:datee" element={<Bvsinlge />} />
       <Route path="bon-commande" element={<Boncommande />} />
-      <Route path="bon-commandea/:code/:supplierId/:codey/:timbre" element={<BCsingleACHAT />} />
+      <Route path="bon-commandea/:code/:supplierId/:codey/:timbre/:id/:datee" element={<BCsingleACHAT />} />
       <Route path="gestion/:codey" element={<CompareProducts />} />
       <Route path="gestionv/:codey" element={<CompareProductsv />} />
     </Route>
