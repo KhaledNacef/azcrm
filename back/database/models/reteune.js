@@ -12,7 +12,7 @@ const Reteune =  {
       primaryKey: true,
     },
     num: {
-      type: DataTypes.INTEGER,
+      type: DataTypes.STRING,
       allowNull: false,
     },
     spulierId: {
