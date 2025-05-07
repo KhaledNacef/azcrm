@@ -13,7 +13,7 @@ const DeliveryNote =  {
     },
      num: {
       type: DataTypes.INTEGER,
-      autoIncrement: true,
+      allowNull: false,
     },
     spulierId: {
       type: DataTypes.INTEGER,
