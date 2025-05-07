@@ -65,6 +65,7 @@ const BonAchatPage = () => {
 
     try {
       const payload = {
+        num:selectedNote.num,
         spulierId: selectedNote.spulierId,
         timbre: selectedNote.timbre,
         code: selectedNote.code,
@@ -147,7 +148,7 @@ const BonAchatPage = () => {
           {!loading && filteredNotes.length > 0 ? (
             filteredNotes.map((note) => (
               <TableRow key={note.code}>
-              <TableCell>{note.id}/{new Date(note.createdAt).toLocaleDateString()}</TableCell>
+              <TableCell>{note.num}</TableCell>
               <TableCell>{note.spulierName || 'N/A'}</TableCell>
                 <TableCell>{note.timbre ? 'Oui' : 'Non'}</TableCell>
                 <TableCell>
@@ -156,7 +157,7 @@ const BonAchatPage = () => {
                 <TableCell sx={{ display: 'flex', gap: 1 }}>
                   <Button
                     variant="outlined"
-                    onClick={() => navigate(`/bon-dachat/${note.code}/${note.spulierId}/${note.codey}/${note.timbre}/${note.id}/${note.createdAt}`)}
+                    onClick={() => navigate(`/bon-dachat/${note.code}/${note.spulierId}/${note.codey}/${note.timbre}/${note.num}`)}
                   >
                     Voir
                   </Button>

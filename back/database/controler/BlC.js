@@ -71,10 +71,11 @@ async function getAllDeliveryNotes(req, res) {
 // Controller to create a DeliveryNote
 async function createDeliveryNote(req, res) {
   try {
-    const {code, spulierId, timbre, products, spulierName, codey} = req.body;
+    const {code,num, spulierId, timbre, products, spulierName, codey} = req.body;
 
     // Create the DeliveryNote
     const deliveryNote = await DeliveryNote.create({
+      num:num,
       spulierId: spulierId,
       timbre: timbre,
       code: code,

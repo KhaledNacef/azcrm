@@ -6,7 +6,7 @@ import './cssba.css';
 import logo from '../../assets/amounnet.png';  // Relative path
 
 const SingleDeliveryNote = () => {
-  const { code, supplierId, codey, timbre,id,datee } = useParams();
+  const { code, supplierId, codey, timbre,num } = useParams();
   const navigate = useNavigate();
   const printRef = useRef();
   const [supplier, setSupplier] = useState({});
@@ -150,11 +150,7 @@ const SingleDeliveryNote = () => {
     },
   };
 
-  const formattedDate = new Date(datee).toLocaleDateString('fr-FR', {
-    day: '2-digit',
-    month: '2-digit',
-    year: 'numeric',
-  });
+  
 
   return (
     <Box sx={{ p: 3 }}>
@@ -261,7 +257,7 @@ const SingleDeliveryNote = () => {
         </Box>
 
         <Typography variant="h4" mb={3} textAlign="center">
-          {translations[language].bonDeAchat} - {id}/{formattedDate}
+          {translations[language].bonDeAchat} - {num}
         </Typography>
 
         <Table>

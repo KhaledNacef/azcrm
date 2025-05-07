@@ -7,6 +7,10 @@ const FactureA =  {
     autoIncrement: true,
     primaryKey: true,
   },
+   num: {
+      type: DataTypes.INTEGER,
+      autoIncrement: true,
+    },
   spulierId: {
     type: DataTypes.INTEGER,
     allowNull: false

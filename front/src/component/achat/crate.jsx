@@ -29,6 +29,7 @@ const CreateDeliveryNoteModala = ({ onAddDeliveryNote, codey }) => {
   const [code, setCode] = useState("");
   const [snackbar, setSnackbar] = useState({ open: false, message: "", severity: "info" });
   const [rem, setRem] = useState(0);
+  const [num, setNum] = useState(0);
 
   const API_BASE_URL = "https://api.azcrm.deviceshopleader.com/api/v1";
 
@@ -88,7 +89,7 @@ const CreateDeliveryNoteModala = ({ onAddDeliveryNote, codey }) => {
     setPrixU_HT(0);
     setQuantite(1);
     setRem(0);
-
+    setNum(0)
   };
 
   const handleSubmit = async () => {
@@ -99,6 +100,7 @@ const CreateDeliveryNoteModala = ({ onAddDeliveryNote, codey }) => {
 
     const newNote = {
       code,
+      num:num,
       spulierId: supplier,
       timbre,
       products,
@@ -118,6 +120,8 @@ const CreateDeliveryNoteModala = ({ onAddDeliveryNote, codey }) => {
   return (
     <Box>
       <Typography variant="h6" mb={2}>Créer un Bon d'Achat</Typography>
+      <TextField label="Numéro de bon d'achat" type="number" value={num} onChange={(e) => setNum(e.target.value || 0)} fullWidth margin="normal" />
+
       <TextField label="Fournisseur" value={supplier} onChange={handleSupplierChange} select fullWidth margin="normal">
         {suppliers.map((sup) => (<MenuItem key={sup.id} value={sup.id}>{sup.fullname}</MenuItem>))}
       </TextField>

@@ -11,6 +11,10 @@ const Reteune =  {
       autoIncrement: true,
       primaryKey: true,
     },
+    num: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+    },
     spulierId: {
       type: DataTypes.INTEGER,
       allowNull: false,

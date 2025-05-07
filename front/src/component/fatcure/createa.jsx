@@ -27,6 +27,7 @@ const CreatebcModala = ({ onAddDeliveryNote }) => {
   const [tva, setTva] = useState(0);
   const [prixU_HT, setPrixU_HT] = useState(0);
   const [rem, setRem] = useState(0);
+  const [num, setNum] = useState(0);
 
   const [quantite, setQuantite] = useState(1);
   const [availableProducts, setAvailableProducts] = useState([]);
@@ -102,7 +103,7 @@ const CreatebcModala = ({ onAddDeliveryNote }) => {
     setPrixU_HT(0);
     setQuantite(1);
     setRem(0);
-
+    setNum(0)
     setSnackbarMessage("Produit ajouté avec succès.");
     setSnackbarSeverity("success");
     setSnackbarOpen(true);
@@ -118,6 +119,7 @@ const CreatebcModala = ({ onAddDeliveryNote }) => {
 
     const newNote = {
       code,
+      num:num,
       spulierId: supplier, // Fixed key name
       timbre,
       products,
@@ -142,6 +144,9 @@ const CreatebcModala = ({ onAddDeliveryNote }) => {
   return (
     <Box>
       <Typography variant="h6" mb={2}>Créer un Bon De Commande</Typography>
+
+            <TextField label="Numéro de bon d'achat" type="number" value={num} onChange={(e) => setNum(e.target.value || 0)} fullWidth margin="normal" />
+      
 
       {/* Supplier selection */}
       <TextField
