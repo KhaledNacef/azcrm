@@ -89,7 +89,7 @@ const Boncommandev = () => {
           {filteredNotes.length > 0 ? (
             filteredNotes.map((note) => (
               <TableRow key={note.code}>
-                <TableCell>{note.codey}</TableCell>
+              <TableCell>{note.id}/{new Date(note.createdAt).toLocaleDateString()}</TableCell>
                 <TableCell>{note.clientName || 'N/A'}</TableCell>
                 <TableCell>{note.devise}</TableCell>
                 <TableCell>
@@ -98,7 +98,7 @@ const Boncommandev = () => {
                 <TableCell>
                   <Button
                     variant="outlined"
-                    onClick={() => navigate(`/bon-commandefacturee/${note.code}/${note.clientId}/${note.codey}/${note.devise}`)}
+                    onClick={() => navigate(`/bon-commandefacturee/${note.code}/${note.clientId}/${note.codey}/${note.devise}/${note.id}/${note.createdAt}`)}
                   >
                     Voir
                   </Button>

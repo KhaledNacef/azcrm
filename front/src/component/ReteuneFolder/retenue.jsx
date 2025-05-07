@@ -6,7 +6,7 @@ import './cssba.css';
 import logo from '../../assets/amounnet.png';
 
 const Reteune = () => {
-  const { code, supplierId, codey, timbre } = useParams();
+  const { code, supplierId, codey, timbre,id,datee } = useParams();
   const navigate = useNavigate();
   const printRef = useRef();
   const [supplier, setSupplier] = useState({});
@@ -145,7 +145,7 @@ const Reteune = () => {
         </Box>
 
         <Typography variant="h4" textAlign="center" sx={{ mb: 4 }}>
-          {translations[language].title}{codey}
+          {translations[language].title} - {id}/{datee}
         </Typography>
 
         {/* Totals Table */}

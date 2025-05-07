@@ -73,14 +73,14 @@ const AllReteune = () => {
           {filteredNotes.length  > 0 ? (
             filteredNotes.map((note) => (
               <TableRow key={note.code}>
-                <TableCell>{note.codey}</TableCell>
+              <TableCell>{note.id}/{new Date(note.createdAt).toLocaleDateString()}</TableCell>
                 <TableCell>{note.spulierName || "N/A"}</TableCell>
                 <TableCell>{note.timbre ? "Oui" : "Non"}</TableCell>
                 <TableCell>{note.createdAt ? new Date(note.createdAt).toLocaleDateString() : "N/A"}</TableCell>
                 <TableCell>
                   <Button
                     variant="outlined"
-                    onClick={() => navigate(`/REt0/${note.code}/${note.spulierId}/${note.codey}/${note.timbre}`)}
+                    onClick={() => navigate(`/REt0/${note.code}/${note.spulierId}/${note.codey}/${note.timbre}/${note.id}/${note.createdAt}`)}
                   >
                     Voir
                   </Button>

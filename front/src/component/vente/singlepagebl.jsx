@@ -86,7 +86,7 @@ const translations = {
 };
 
 const SingleDeliverysortie = () => {
-  const { code, clientId, codey, devise } = useParams();
+  const { code, clientId, codey, devise,id,datee } = useParams();
   const printRef = useRef();
   const navigate = useNavigate();
   const [printLanguage, setPrintLanguage] = useState('fr');
@@ -285,7 +285,7 @@ const SingleDeliverysortie = () => {
         </Box>
 
         <Typography variant="h4" mb={3} textAlign="center">
-          {translations[printLanguage].deliveryNote} - {codey}-{devise}
+          {translations[printLanguage].deliveryNote} - {id}/{datee}
         </Typography>
 
         <Table>

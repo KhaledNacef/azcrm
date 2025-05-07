@@ -7,7 +7,7 @@ import CreateDeliveryNoteModala from '../achat/crate.jsx'; // Ensure correct fil
 import logo from '../../assets/amounnet.png';  // Relative path
 
 const BCsingleACHAT = () => {
-  const { code, supplierId, codey, timbre } = useParams();
+  const { code, supplierId, codey, timbre,id,datee } = useParams();
   const navigate = useNavigate();
   const printRef = useRef();
   const [supplier, setSupplier] = useState({});
@@ -212,7 +212,7 @@ const BCsingleACHAT = () => {
 
 
         <Typography variant="h4" mb={3} textAlign="center">
-          {language === 'fr' ? 'Bon De Commande' : language === 'en' ? 'Order Form' : 'نموذج الطلب'} - {codey}
+          {language === 'fr' ? 'Bon De Commande' : language === 'en' ? 'Order Form' : 'نموذج الطلب'} - {id}/{datee}
         </Typography>
 
         {/* Table */}

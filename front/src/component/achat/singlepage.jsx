@@ -6,7 +6,7 @@ import './cssba.css';
 import logo from '../../assets/amounnet.png';  // Relative path
 
 const SingleDeliveryNote = () => {
-  const { code, supplierId, codey, timbre } = useParams();
+  const { code, supplierId, codey, timbre,id,datee } = useParams();
   const navigate = useNavigate();
   const printRef = useRef();
   const [supplier, setSupplier] = useState({});
@@ -255,7 +255,7 @@ const SingleDeliveryNote = () => {
         </Box>
 
         <Typography variant="h4" mb={3} textAlign="center">
-          {translations[language].bonDeAchat} - {codey}
+          {translations[language].bonDeAchat} - {id}/{datee}
         </Typography>
 
         <Table>
