@@ -120,7 +120,7 @@ const CreateDeliveryNoteModal = ({ onAddDeliveryNote, codey }) => {
           designation: selectedProduct.designation,
           Unite: selectedProduct.Unite,
           prixU_HT: convertedPrice,
-          quantite: parseInt(quantite, 10),
+          quantite: Number(quantite),
           tva: selectedProduct.tva,
           rem:rem
 
