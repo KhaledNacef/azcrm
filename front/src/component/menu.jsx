@@ -44,7 +44,7 @@ const SidebarMenu = () => {
   ];
 
   return (
-    <Box sx={{ width: 270, height: '100vh', bgcolor: 'white', boxShadow: 3, display: 'flex', flexDirection: 'column' }}>
+    <Box sx={{ width: 270, height: '100vh', bgcolor: '#242c44', boxShadow: 3, display: 'flex', flexDirection: 'column' }}>
       {/* Header Section */}
       <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', p: 3, bgcolor: 'white', color: 'black' }}>
         <Avatar
