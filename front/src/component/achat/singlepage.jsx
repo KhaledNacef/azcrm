@@ -39,8 +39,12 @@ const SingleDeliveryNote = () => {
 
   const totalNetHT = deliveryNote.reduce((acc, prod) => {
     const basePrice = prod.prixU_HT;
-    return acc + basePrice * prod.quantite;
+    const quantity = prod.quantite;
+    const remise = prod.rem && prod.rem > 0 ? prod.rem : 0; // percentage
+    const priceAfterRemise = basePrice * (1 - remise / 100);
+    return acc + priceAfterRemise * quantity;
   }, 0);
+  
 
   const totalTVA = totalNetHT * (deliveryNote[0]?.tva / 100 || 0);
   let totalNetTTC = totalNetHT + totalTVA;
@@ -287,8 +291,8 @@ const SingleDeliveryNote = () => {
                   <TableCell>{prod.prixU_HT}TND</TableCell>
                   <TableCell>{prod.tva}%</TableCell>
                   <TableCell>{prod.rem}%</TableCell>
-                  <TableCell>{netHT.toFixed(2)}TND</TableCell>
-                  <TableCell>{netTTC.toFixed(2)}TND</TableCell>
+                  <TableCell>{netHT.toFixed(3)}TND</TableCell>
+                  <TableCell>{netTTC.toFixed(3)}TND</TableCell>
                 </TableRow>
               );
             })}
@@ -299,10 +303,10 @@ const SingleDeliveryNote = () => {
         <Box sx={{ display: 'flex', justifyContent: 'flex-end', mt: 3 }}>
           <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end' }}>
             <Typography variant="body1">
-              <strong>{translations[language].prixNetHT}:</strong> {totalNetHT.toFixed(2)}TND
+              <strong>{translations[language].prixNetHT}:</strong> {totalNetHT.toFixed(3)}TND
             </Typography>
             <Typography variant="body1">
-              <strong>{translations[language].prixNetHT}:</strong> {totalTVA.toFixed(2)}TND
+              <strong>{translations[language].prixNetHT}:</strong> {totalTVA.toFixed(3)}TND
             </Typography>
             {timbre === 'true' && (
               <Typography variant="body1">
@@ -310,7 +314,7 @@ const SingleDeliveryNote = () => {
               </Typography>
             )}
             <Typography variant="body1">
-              <strong>{translations[language].prixNetTTC}:</strong> {totalNetTTC.toFixed(2)}TND
+              <strong>{translations[language].prixNetTTC}:</strong> {totalNetTTC.toFixed(3)}TND
             </Typography>
           </Box>
         </Box>

@@ -61,8 +61,12 @@ const BCsingleACHAT = () => {
 
   const totalNetHT = deliveryNote.reduce((acc, prod) => {
     const basePrice = prod.prixU_HT;
-    return acc + basePrice * prod.quantite;
+    const quantity = prod.quantite;
+    const remise = prod.rem && prod.rem > 0 ? prod.rem : 0; // percentage
+    const priceAfterRemise = basePrice * (1 - remise / 100);
+    return acc + priceAfterRemise * quantity;
   }, 0);
+  
 
   const totalTVA = totalNetHT * (deliveryNote[0]?.tva / 100 || 0);
   let totalNetTTC = totalNetHT + totalTVA;
@@ -234,10 +238,10 @@ const BCsingleACHAT = () => {
                 <TableCell>{prod.designation}</TableCell>
                 <TableCell>{prod.Unite}</TableCell>
                 <TableCell>{prod.quantite}</TableCell>
-                <TableCell>{prod.prixU_HT}</TableCell>
-                <TableCell>{prod.tva}</TableCell>
-                <TableCell>{prod.rem}</TableCell>
-                <TableCell>{prod.prixU_HT * prod.quantite}</TableCell>
+                <TableCell>{prod.prixU_HT}TND</TableCell>
+                <TableCell>{prod.tva}%</TableCell>
+                <TableCell>{prod.rem}%</TableCell>
+                <TableCell>{prod.prixU_HT * prod.quantite}TND</TableCell>
               </TableRow>
             ))}
           </TableBody>
@@ -246,15 +250,15 @@ const BCsingleACHAT = () => {
         {/* Totals Section */}
         <Box sx={{ display: 'flex', justifyContent: 'flex-end', marginTop: '20px', direction: language === 'ar' ? 'rtl' : 'ltr' }}>
           <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: language === 'ar' ? 'flex-end' : 'flex-start' }}>
-            <Typography variant="body1"><strong>{language === 'fr' ? 'Total HT' : language === 'en' ? 'Total HT' : 'الإجمالي قبل الضريبة'}:</strong> {totalNetHT.toFixed(2)} TND</Typography>
-            <Typography variant="body1"><strong>{language === 'fr' ? 'Total TVA' : language === 'en' ? 'Total VAT' : 'إجمالي ضريبة القيمة المضافة'}:</strong> {totalTVA.toFixed(2)} TND</Typography>
+            <Typography variant="body1"><strong>{language === 'fr' ? 'Total HT' : language === 'en' ? 'Total HT' : 'الإجمالي قبل الضريبة'}:</strong> {totalNetHT.toFixed(3)} TND</Typography>
+            <Typography variant="body1"><strong>{language === 'fr' ? 'Total TVA' : language === 'en' ? 'Total VAT' : 'إجمالي ضريبة القيمة المضافة'}:</strong> {totalTVA.toFixed(3)} TND</Typography>
             {timbre === 'true' && (
             <Typography variant="body1">
               <strong>{language === 'fr' ? 'Timbre' : language === 'en' ? 'Stamp' : 'طابع'}:</strong> 1 TND
               </Typography>          
               )}
 
-            <Typography variant="body1"><strong>{language === 'fr' ? 'Total TTC' : language === 'en' ? 'Total TTC' : 'الإجمالي شامل'}:</strong> {totalNetTTC.toFixed(2)} TND</Typography>
+            <Typography variant="body1"><strong>{language === 'fr' ? 'Total TTC' : language === 'en' ? 'Total TTC' : 'الإجمالي شامل'}:</strong> {totalNetTTC.toFixed(3)} TND</Typography>
           </Box>
         </Box>
            <Box sx={{ display: 'flex', justifyContent: 'space-between', mt: 4 }}>
