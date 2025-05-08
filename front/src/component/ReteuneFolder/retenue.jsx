@@ -48,8 +48,8 @@ const Reteune = () => {
       retention: "Retenue à la source (1%)",
       netAmount: "Montant Net",
       statement: "Je soussigné, certifie l'exactitude des renseignements figurant sur le présent certificat et m'expose aux sanctions prévues par la loi en cas d'inexactitude. Fait à Tunis le",
-      companyName: "Amounette Company",
-      address: "Cité Wahat",
+      companyName: "AMOUNNET COMPANY EXPORT ET IMPORT",
+      address: "RUE DU LAC TOBA BERGES DU LAC1053 TUNIS",
       phone: "+987654321",
       matricule: "Matricule Fiscal",
     },
@@ -132,7 +132,7 @@ const Reteune = () => {
           <Typography>{translations[language].companyName}</Typography>
           <Typography>{translations[language].address}</Typography>
           <Typography>{translations[language].phone}</Typography>
-          <Typography>{translations[language].matricule}: TVA123456789</Typography>
+          <Typography>{translations[language].matricule}: 1867411P/A/M/000</Typography>
         </Box>
 
         {/* Beneficiary Section */}

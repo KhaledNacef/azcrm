@@ -240,16 +240,16 @@ const Bvsinlge = () => {
         <Grid container spacing={2} sx={{ mb: 4 }}>
           <Grid item xs={6} sx={{ textAlign: isArabic ? 'right' : 'left' }}>
             <Typography variant="body2">
-              <strong>{translations[printLanguage].companyName}:</strong> Ma Société
+              <strong>{translations[printLanguage].companyName}:</strong> AMOUNNET COMPANY EXPORT ET IMPORT
             </Typography>
             <Typography variant="body2">
-              <strong>{translations[printLanguage].companyAddress}:</strong> Adresse de Ma Société
+              <strong>{translations[printLanguage].companyAddress}:</strong> RUE DU LAC TOBA BERGES DU LAC1053 TUNIS
             </Typography>
             <Typography variant="body2">
               <strong>{translations[printLanguage].companyPhone}:</strong> +987654321
             </Typography>
             <Typography variant="body2">
-              <strong>{translations[printLanguage].companyVAT}:</strong> TVA123456789
+              <strong>{translations[printLanguage].companyVAT}:</strong> 1867411P/A/M/000
             </Typography>
           </Grid>
 

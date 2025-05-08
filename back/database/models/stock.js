@@ -27,7 +27,7 @@ const Stock = {
     allowNull: true, // Allow null because it's computed dynamically
   },
   quantite: {
-    type: DataTypes.INTEGER,
+    type: DataTypes.FLOAT,
     allowNull: false,
   },
   designation: {

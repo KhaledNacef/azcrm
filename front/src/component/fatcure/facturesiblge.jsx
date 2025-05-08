@@ -171,16 +171,16 @@ const BCsingleACHAT = () => {
   textAlign: language === 'ar' ? 'right' : 'left' // Align text correctly for Arabic
 }}>
   <Typography variant="body1">
-    <strong>{language === 'fr' ? 'Nom de la société' : language === 'en' ? 'Company Name' : 'اسم الشركة'}:</strong> Amounette Company
+    <strong>{language === 'fr' ? 'Nom de la société' : language === 'en' ? 'Company Name' : 'اسم الشركة'}:</strong> AMOUNNET COMPANY EXPORT ET IMPORT
   </Typography>
   <Typography variant="body1">
-    <strong>{language === 'fr' ? 'Adresse de la société' : language === 'en' ? 'Company Address' : 'عنوان الشركة'}:</strong> cité wahat
+    <strong>{language === 'fr' ? 'Adresse de la société' : language === 'en' ? 'Company Address' : 'عنوان الشركة'}:</strong>  RUE DU LAC TOBA BERGES DU LAC1053 TUNIS
   </Typography>
   <Typography variant="body1">
     <strong>{language === 'fr' ? 'Téléphone de la société' : language === 'en' ? 'Company Phone' : 'هاتف الشركة'}:</strong> +987654321
   </Typography>
   <Typography variant="body1">
-    <strong>{language === 'fr' ? 'Matriculefisacl' : language === 'en' ? 'tax identification number' : "الرقم الجبائي" }:</strong> TVA123456789
+    <strong>{language === 'fr' ? 'Matriculefisacl' : language === 'en' ? 'tax identification number' : "الرقم الجبائي" }:</strong> 1867411P/A/M/000
   </Typography>
 </Box>
 

@@ -11,7 +11,7 @@ const FactureVP =  {
     allowNull: false,
   },
   quantite: {
-    type: DataTypes.INTEGER,
+    type: DataTypes.FLOAT,
     allowNull: false,
   },
   

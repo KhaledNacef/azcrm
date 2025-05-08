@@ -27,7 +27,7 @@ const StockP = {
     allowNull: true, // Computed field
   },
   quantite: {
-    type: DataTypes.INTEGER,
+    type: DataTypes.FLOAT,
     allowNull: false,
   },
   designation: {

@@ -234,10 +234,10 @@ const SingleDeliveryNote = () => {
             marginRight: language === 'ar' ? '1rem' : '0', // Company info margin for Arabic
             textAlign: language === 'ar' ? 'right' : 'left' // Align text correctly for Arabic
           }}>
-            <Typography variant="body1"><strong>{translations[language].companyName}:</strong> Amounette Company</Typography>
-            <Typography variant="body1"><strong>{translations[language].companyAddress}:</strong> cité wahat</Typography>
+            <Typography variant="body1"><strong>{translations[language].companyName}:</strong> AMOUNNET COMPANY EXPORT ET IMPORT</Typography>
+            <Typography variant="body1"><strong>{translations[language].companyAddress}:</strong> RUE DU LAC TOBA BERGES DU LAC1053 TUNIS</Typography>
             <Typography variant="body1"><strong>{translations[language].companyPhone}:</strong> +987654321</Typography>
-            <Typography variant="body1"><strong>{translations[language].matriculefisacl}:</strong> TVA123456789</Typography>
+            <Typography variant="body1"><strong>{translations[language].matriculefisacl}:</strong> 1867411P/A/M/000</Typography>
           </Box>
 
           <Box sx={{
