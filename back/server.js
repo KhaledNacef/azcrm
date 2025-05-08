@@ -15,21 +15,23 @@ const app = express();
 // ========================
 
 // 1. Helmet (HTTP headers)
-app.use(helmet());
-
-// 2. Rate limiting (100 requests/15min per IP)
-app.use(rateLimit({
-  windowMs: 15 * 60 * 1000,
-  max: 100,
-  message: 'Too many requests from this IP'
-}));
-
-// 3. CORS (Strict for your frontend only)
 app.use(cors({
   origin: 'https://azcrm.deviceshopleader.com',
   methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE'],
   allowedHeaders: ['Content-Type', 'Authorization'],
-  credentials: true // ✅ This is the missing part
+  credentials: true
+}));
+
+app.use(helmet());
+
+app.use(rateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: 1000,
+  standardHeaders: true, // Add this
+  legacyHeaders: false,  // Optional
+  handler: (req, res) => {
+    res.status(429).json({ error: 'Trop de requêtes. Réessaye plus tard.' });
+  }
 }));
 
 // 4. Data sanitization
