@@ -75,7 +75,7 @@ const SidebarMenu = () => {
                 transition: '0.3s',
                 '&:hover .MuiListItemIcon-root': { color: 'white' },
                 '&:hover .MuiListItemText-root': { color: 'white' },
-                '& .MuiListItemIcon-root': { color: isActive ? 'white' : '#1976d2' },
+                '& .MuiListItemIcon-root': { color: isActive ? 'white' : 'white' },
                 '& .MuiListItemText-root': { fontWeight: 'bold' },
               }}
             >
