@@ -111,66 +111,35 @@ const Bvsinlge = () => {
   }, [code, clientId]);
 
   const totalNettc = deliveryNote.reduce((acc, prod) => acc + (prod.prixU_HT || 0) * (prod.quantite || 0), 0) || 0;
-
   const handlePrint = () => {
     const printWindow = window.open('', '_blank');
     const printContents = printRef.current.innerHTML;
     
+    // Get all style tags from the current document
+    const styles = Array.from(document.querySelectorAll('style, link[rel="stylesheet"]'))
+      .map(style => style.outerHTML)
+      .join('');
+  
     printWindow.document.write(`
-      <!DOCTYPE html>
       <html>
         <head>
-          <title>Bon de Livraison</title>
+          <title>Print</title>
+          ${styles}
           <style>
-            @page {
-              size: A4;
-              margin: 10mm;
-            }
-            body {
-              font-family: Arial, sans-serif;
-              margin: 0;
-              padding: 0;
-              font-size: 12px;
-              direction: ${isArabic ? 'rtl' : 'ltr'};
-            }
-            .print-content {
-              width: 100%;
-              max-width: 210mm;
-              margin: 0 auto;
-              padding: 10mm;
-            }
-            .logo-container {
-              text-align: center;
-              margin-bottom: 15px;
-            }
-            .logo-container img {
-              max-width: 200px;
-              height: auto;
-            }
-            table {
-              width: 100%;
-              border-collapse: collapse;
-              margin: 15px 0;
-            }
-            th, td {
-              border: 1px solid #ddd;
-              padding: 8px;
-              text-align: ${isArabic ? 'right' : 'left'};
-            }
-            th {
-              background-color: #f2f2f2;
-            }
-            .signature-section {
-              display: flex;
-              justify-content: space-between;
-              margin-top: 40px;
+            @media print {
+              body {
+                margin: 0;
+                padding: 0;
+              }
+              .print-content {
+                width: 100%;
+                height: 100%;
+              }
             }
           </style>
         </head>
         <body>
-          <div class="print-content">
-            ${printContents}
-          </div>
+          <div class="print-content">${printContents}</div>
           <script>
             window.onload = function() {
               setTimeout(function() {
