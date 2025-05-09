@@ -116,15 +116,36 @@ const Bvsinlge = () => {
   const totalNettc = deliveryNote.reduce((acc, prod) => acc + (prod.prixU_HT || 0) * (prod.quantite || 0), 0) || 0;
 
   const handlePrint = () => {
-    const originalContents = document.body.innerHTML;
     const printContents = printRef.current.innerHTML;
-
-    document.body.innerHTML = printContents;
-    window.print();
-    window.onafterprint = () => {
+    const originalContents = document.body.innerHTML;
+    
+    // Create a temporary div to hold our print contents
+    const tempDiv = document.createElement('div');
+    tempDiv.innerHTML = printContents;
+    
+    // Find the logo image in our print contents
+    const logoImg = tempDiv.querySelector('.print-logo');
+    
+    // If logo is already loaded, proceed with print
+    if (logoImg?.complete) {
+      document.body.innerHTML = printContents;
+      window.print();
       document.body.innerHTML = originalContents;
-      window.location.reload();
-    };
+    } 
+    // If not loaded, wait for it to load
+    else {
+      logoImg.onload = () => {
+        document.body.innerHTML = printContents;
+        window.print();
+        document.body.innerHTML = originalContents;
+      };
+      // Fallback in case onload doesn't fire
+      setTimeout(() => {
+        document.body.innerHTML = printContents;
+        window.print();
+        document.body.innerHTML = originalContents;
+      }, 500);
+    }
   };
 
   const handleOpen = () => setOpen(true);
@@ -233,7 +254,7 @@ const Bvsinlge = () => {
 </style>
 
         <Box className="logo-conatiner"
- sx={{ 
+        sx={{ 
           width: 742,
           height: 152,
           mx: 'auto',
