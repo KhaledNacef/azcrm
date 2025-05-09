@@ -106,7 +106,7 @@ const Createbv = ({ onAddDeliveryNote }) => {
       designation: selectedProduct.designation,
       Unite: selectedProduct.Unite,
       prixU_HT: finalPrice,
-      quantite: parseInt(quantite, 10),
+      quantite: Number(quantite),
       rem:rem
     }]);
 
