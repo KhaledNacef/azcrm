@@ -116,18 +116,15 @@ const Bvsinlge = () => {
   const totalNettc = deliveryNote.reduce((acc, prod) => acc + (prod.prixU_HT || 0) * (prod.quantite || 0), 0) || 0;
 
   const handlePrint = () => {
-    const originalContents = document.body.innerHTML;
-    const printContents = printRef.current.innerHTML;
-
-    document.body.innerHTML = printContents;
-    window.print();
-
-    window.onafterprint = () => {
-      document.body.innerHTML = originalContents;
-      navigate(window.location.pathname);  // Navigate back after printing
-    };
+    const logoImg = document.querySelector('.print-logo');
+    if (logoImg?.complete) {
+      window.print();
+    } else {
+      logoImg.onload = () => window.print();
+    }
   };
- 
+  
+  
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
@@ -214,12 +211,12 @@ const Bvsinlge = () => {
         font-size: 12px !important;
         text-align: ${isArabic ? 'right' : 'left'};
       }
-      .print-logo {
-        display: block !important;
-        visibility: visible !important;
-        max-width: 100% !important;
-        height: auto !important;
-      }
+    .print-logo {
+      display: block !important;
+      visibility: visible !important;
+      max-width: 100% !important;
+      height: auto !important;
+  }
     }
   `}
 </style>
