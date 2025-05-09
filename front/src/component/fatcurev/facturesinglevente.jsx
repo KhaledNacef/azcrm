@@ -116,17 +116,20 @@ const Bvsinlge = () => {
   const totalNettc = deliveryNote.reduce((acc, prod) => acc + (prod.prixU_HT || 0) * (prod.quantite || 0), 0) || 0;
 
   const handlePrint = () => {
-    const originalContents = document.body.innerHTML;
-    const printContents = printRef.current.innerHTML;
-
-    document.body.innerHTML = printContents;
-    window.print();
-    window.onafterprint = () => {
-      document.body.innerHTML = originalContents;
-      window.location.reload();
+    const img = new Image();
+    img.src = logo;
+    img.onload = () => {
+      const originalContents = document.body.innerHTML;
+      const printContents = printRef.current.innerHTML;
+  
+      document.body.innerHTML = printContents;
+      window.print();
+      window.onafterprint = () => {
+        document.body.innerHTML = originalContents;
+        window.location.reload();
+      };
     };
   };
-
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
