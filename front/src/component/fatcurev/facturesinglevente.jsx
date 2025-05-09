@@ -26,8 +26,9 @@ const translations = {
     clientSignature: "Client Signature",
     companySignature: "Company Signature",
     date: "Date",
-    matriculefisacl: "tax identification number",
+    matriculefisacl:"tax identification number",
     remise: "Discount",
+
   },
   fr: {
     companyName: "Nom de la société",
@@ -48,8 +49,9 @@ const translations = {
     clientSignature: "Signature du Client",
     companySignature: "Signature de la Société",
     date: "Date",
-    matriculefisacl: 'Matriculefisacl',
+    matriculefisacl:'Matriculefisacl',
     remise: "Remise"
+
   },
   ar: {
     companyName: "اسم الشركة",
@@ -70,13 +72,14 @@ const translations = {
     clientSignature: "توقيع العميل",
     companySignature: "توقيع الشركة",
     date: "التاريخ",
-    matriculefisacl: "الرقم الجبائي",
+    matriculefisacl:"الرقم الجبائي",
     remise: "خصم",
+
   }
 };
 
 const Bvsinlge = () => {
-  const { code, clientId, codey, devise, id, datee } = useParams();
+  const { code, clientId, codey, devise,id,datee } = useParams();
   const printRef = useRef();
   const navigate = useNavigate();
   const [printLanguage, setPrintLanguage] = useState('fr');
@@ -111,48 +114,17 @@ const Bvsinlge = () => {
   }, [code, clientId]);
 
   const totalNettc = deliveryNote.reduce((acc, prod) => acc + (prod.prixU_HT || 0) * (prod.quantite || 0), 0) || 0;
+
   const handlePrint = () => {
-    const printWindow = window.open('', '_blank');
+    const originalContents = document.body.innerHTML;
     const printContents = printRef.current.innerHTML;
-    
-    // Get all style tags from the current document
-    const styles = Array.from(document.querySelectorAll('style, link[rel="stylesheet"]'))
-      .map(style => style.outerHTML)
-      .join('');
-  
-    printWindow.document.write(`
-      <html>
-        <head>
-          <title>Print</title>
-          ${styles}
-          <style>
-            @media print {
-              body {
-                margin: 0;
-                padding: 0;
-              }
-              .print-content {
-                width: 100%;
-                height: 100%;
-              }
-            }
-          </style>
-        </head>
-        <body>
-          <div class="print-content">${printContents}</div>
-          <script>
-            window.onload = function() {
-              setTimeout(function() {
-                window.print();
-                window.close();
-              }, 200);
-            }
-          </script>
-        </body>
-      </html>
-    `);
-    
-    printWindow.document.close();
+
+    document.body.innerHTML = printContents;
+    window.print();
+    window.onafterprint = () => {
+      document.body.innerHTML = originalContents;
+      window.location.reload();
+    };
   };
 
   const handleOpen = () => setOpen(true);
@@ -181,7 +153,6 @@ const Bvsinlge = () => {
     month: '2-digit',
     year: 'numeric',
   });
-
   return (
     <Box sx={{ p: 3 }}>
       <Button variant="outlined" onClick={() => navigate(-1)} sx={{ mb: 2, mr: 2 }}>
@@ -215,7 +186,6 @@ const Bvsinlge = () => {
         <MenuItem onClick={() => selectLanguage('ar')}>AR</MenuItem>
       </Menu>
 
-      {/* This is the content that will be printed */}
       <Box
         ref={printRef}
         sx={{
@@ -224,32 +194,54 @@ const Bvsinlge = () => {
           mt: 2,
           backgroundColor: '#fff',
           direction: isArabic ? 'rtl' : 'ltr',
-          '@media print': {
-            border: 'none',
-            p: 0,
-            mt: 0
-          }
         }}
       >
+        <style>
+          {`
+            @media print {
+              body {
+                font-size: 12px !important;
+                direction: ${isArabic ? 'rtl' : 'ltr'};
+              }
+              .MuiButton-root {
+                display: none !important;
+              }
+              .MuiTypography-root {
+                font-size: 12px !important;
+              }
+              .MuiTableCell-root {
+                font-size: 12px !important;
+                text-align: ${isArabic ? 'right' : 'left'};
+              }
+                .print-logo {
+    display: block !important;
+    visibility: visible !important;
+    max-width: 100% !important;
+    height: auto !important;
+  }
+            }
+          `}
+        </style>
         <Box sx={{ 
-          width: '100%',
+          width: 742,
+          height: 152,
+          mx: 'auto',
           mb: 3,
           display: 'flex',
           justifyContent: 'center',
-          '@media print': {
-            mb: 2
-          }
+          alignItems: 'center',
+          overflow: 'hidden'
         }}>
           <img
             src={logo}
             alt="Company Logo"
             style={{ 
-              maxWidth: '200px',
-              height: 'auto',
-              '@media print': {
-                maxWidth: '150px'
-              }
+              width: '100%',
+              height: '100%',
+              objectFit: 'cover'
+
             }}
+            className="print-logo"
           />
         </Box>
 
@@ -288,54 +280,30 @@ const Bvsinlge = () => {
           </Grid>
         </Grid>
 
-        <Typography variant="h4" mb={3} textAlign="center" sx={{ '@media print': { fontSize: '18px' } }}>
+        <Typography variant="h4" mb={3} textAlign="center">
           {translations[printLanguage].deliveryNote}- {id}/{formattedDate}
         </Typography>
 
-        <Table sx={{ '@media print': { border: '1px solid #ddd' } }}>
+        <Table>
           <TableHead>
             <TableRow>
-              <TableCell sx={{ textAlign: isArabic ? 'right' : 'left', '@media print': { padding: '8px' } }}>
-                {translations[printLanguage].designation}
-              </TableCell>
-              <TableCell sx={{ textAlign: isArabic ? 'right' : 'left', '@media print': { padding: '8px' } }}>
-                {translations[printLanguage].quantity}
-              </TableCell>
-              <TableCell sx={{ textAlign: isArabic ? 'right' : 'left', '@media print': { padding: '8px' } }}>
-                {translations[printLanguage].unit}
-              </TableCell>
-              <TableCell sx={{ textAlign: isArabic ? 'right' : 'left', '@media print': { padding: '8px' } }}>
-                {translations[printLanguage].unitPrice} ({devise})
-              </TableCell>
-              <TableCell sx={{ textAlign: isArabic ? 'right' : 'left', '@media print': { padding: '8px' } }}>
-                {translations[printLanguage].remise}%
-              </TableCell>
-              <TableCell sx={{ textAlign: isArabic ? 'right' : 'left', '@media print': { padding: '8px' } }}>
-                {translations[printLanguage].netPrice}
-              </TableCell>
+              <TableCell sx={{ textAlign: isArabic ? 'right' : 'left' }}>{translations[printLanguage].designation}</TableCell>
+              <TableCell sx={{ textAlign: isArabic ? 'right' : 'left' }}>{translations[printLanguage].quantity}</TableCell>
+              <TableCell sx={{ textAlign: isArabic ? 'right' : 'left' }}>{translations[printLanguage].unit}</TableCell>
+              <TableCell sx={{ textAlign: isArabic ? 'right' : 'left' }}>{translations[printLanguage].unitPrice} ({devise})</TableCell>
+              <TableCell sx={{ textAlign: isArabic ? 'right' : 'left' }}>{translations[printLanguage].remise}%</TableCell>
+              <TableCell sx={{ textAlign: isArabic ? 'right' : 'left' }}>{translations[printLanguage].netPrice}</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
             {deliveryNote.map((prod, index) => (
               <TableRow key={index}>
-                <TableCell sx={{ textAlign: isArabic ? 'right' : 'left', '@media print': { padding: '8px' } }}>
-                  {prod.designation}
-                </TableCell>
-                <TableCell sx={{ textAlign: isArabic ? 'right' : 'left', '@media print': { padding: '8px' } }}>
-                  {prod.quantite}
-                </TableCell>
-                <TableCell sx={{ textAlign: isArabic ? 'right' : 'left', '@media print': { padding: '8px' } }}>
-                  {prod.Unite}
-                </TableCell>
-                <TableCell sx={{ textAlign: isArabic ? 'right' : 'left', '@media print': { padding: '8px' } }}>
-                  {prod.prixU_HT} ({devise})
-                </TableCell>
-                <TableCell sx={{ textAlign: isArabic ? 'right' : 'left', '@media print': { padding: '8px' } }}>
-                  {prod.rem}%
-                </TableCell>
-                <TableCell sx={{ textAlign: isArabic ? 'right' : 'left', '@media print': { padding: '8px' } }}>
-                  {(prod.prixU_HT * prod.quantite).toFixed(2)} ({devise})
-                </TableCell>
+                <TableCell sx={{ textAlign: isArabic ? 'right' : 'left' }}>{prod.designation}</TableCell>
+                <TableCell sx={{ textAlign: isArabic ? 'right' : 'left' }}>{prod.quantite}</TableCell>
+                <TableCell sx={{ textAlign: isArabic ? 'right' : 'left' }}>{prod.Unite}</TableCell>
+                <TableCell sx={{ textAlign: isArabic ? 'right' : 'left' }}>{prod.prixU_HT} ({devise})</TableCell>
+                <TableCell sx={{ textAlign: isArabic ? 'right' : 'left' }}>{prod.rem}%</TableCell>
+                <TableCell sx={{ textAlign: isArabic ? 'right' : 'left' }}>{(prod.prixU_HT * prod.quantite).toFixed(2)} ({devise})</TableCell>
               </TableRow>
             ))}
           </TableBody>
@@ -344,7 +312,7 @@ const Bvsinlge = () => {
         <Box sx={{ display: 'flex', justifyContent: 'flex-end', mt: 3 }}>
           <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end' }}>
             <Typography variant="body1">
-              <strong>{translations[printLanguage].totalNet}:</strong> {totalNettc.toFixed(2)} {devise}
+              <strong>{translations[printLanguage].totalNet}:</strong> {totalNettc.toFixed(2)}{devise}
             </Typography>
           </Box>
         </Box>
