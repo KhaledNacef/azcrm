@@ -116,20 +116,18 @@ const Bvsinlge = () => {
   const totalNettc = deliveryNote.reduce((acc, prod) => acc + (prod.prixU_HT || 0) * (prod.quantite || 0), 0) || 0;
 
   const handlePrint = () => {
-    const img = new Image();
-    img.src = logo;
-    img.onload = () => {
-      const originalContents = document.body.innerHTML;
-      const printContents = printRef.current.innerHTML;
-  
-      document.body.innerHTML = printContents;
-      window.print();
-      window.onafterprint = () => {
-        document.body.innerHTML = originalContents;
-        window.location.reload();
-      };
+    const originalContents = document.body.innerHTML;
+    const printContents = printRef.current.innerHTML;
+
+    document.body.innerHTML = printContents;
+    window.print();
+
+    window.onafterprint = () => {
+      document.body.innerHTML = originalContents;
+      navigate(window.location.pathname);  // Navigate back after printing
     };
   };
+ 
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
@@ -199,26 +197,32 @@ const Bvsinlge = () => {
           direction: isArabic ? 'rtl' : 'ltr',
         }}
       >
-        <style>
-          {`
-            @media print {
-              body {
-                font-size: 12px !important;
-                direction: ${isArabic ? 'rtl' : 'ltr'};
-              }
-              .MuiButton-root {
-                display: none !important;
-              }
-              .MuiTypography-root {
-                font-size: 12px !important;
-              }
-              .MuiTableCell-root {
-                font-size: 12px !important;
-                text-align: ${isArabic ? 'right' : 'left'};
-              }
-            }
-          `}
-        </style>
+      <style>
+  {`
+    @media print {
+      body {
+        font-size: 12px !important;
+        direction: ${isArabic ? 'rtl' : 'ltr'};
+      }
+      .MuiButton-root {
+        display: none !important;
+      }
+      .MuiTypography-root {
+        font-size: 12px !important;
+      }
+      .MuiTableCell-root {
+        font-size: 12px !important;
+        text-align: ${isArabic ? 'right' : 'left'};
+      }
+      .print-logo {
+        display: block !important;
+        visibility: visible !important;
+        max-width: 100% !important;
+        height: auto !important;
+      }
+    }
+  `}
+</style>
         <Box sx={{ 
           width: 742,
           height: 152,
@@ -229,15 +233,16 @@ const Bvsinlge = () => {
           alignItems: 'center',
           overflow: 'hidden'
         }}>
-          <img
-            src={logo}
-            alt="Company Logo"
-            style={{ 
-              width: '100%',
-              height: '100%',
-              objectFit: 'cover'
-            }}
-          />
+         <img
+  src={logo}
+  alt="Company Logo"
+  style={{ 
+    width: '100%',
+    height: '100%',
+    objectFit: 'cover'
+  }}
+  className="print-logo"
+/>
         </Box>
 
         <Grid container spacing={2} sx={{ mb: 4 }}>
