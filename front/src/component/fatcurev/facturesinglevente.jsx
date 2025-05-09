@@ -5,6 +5,7 @@ import Grid from '@mui/material/Grid';
 import './fvdesign.css';
 import CreateDeliveryNoteModal from '../vente/cratebl.jsx';
 import logo from '../../assets/amounnet.png';
+import ReactToPrint from 'react-to-print';
 
 const translations = {
   en: {
@@ -171,9 +172,14 @@ const Bvsinlge = () => {
       <Button variant="outlined" onClick={() => navigate(-1)} sx={{ mb: 2, mr: 2 }}>
         Retour
       </Button>
-      <Button variant="contained" color="primary" onClick={handlePrint} sx={{ mb: 2, mr: 2 }}>
-        Imprimer
-      </Button>
+      <ReactToPrint
+  trigger={() => (
+    <Button variant="contained" color="primary" sx={{ mb: 2, mr: 2 }}>
+      Imprimer
+    </Button>
+  )}
+  content={() => printRef.current}
+/>
       <Button 
         variant="contained" 
         color="secondary" 
@@ -212,35 +218,20 @@ const Bvsinlge = () => {
    <style>
   {
     `
-      @media print {
-        body {
-          font-size: 12px !important;
-          direction: ${isArabic ? 'rtl' : 'ltr'};
-        }
-        .MuiButton-root {
-          display: none !important;
-        }
-        .MuiTypography-root {
-          font-size: 12px !important;
-        }
-        .MuiTableCell-root {
-          font-size: 12px !important;
-          text-align: ${isArabic ? 'right' : 'left'};
-        }
-        .print-logo {
-          display: block !important;
-          visibility: visible !important;
-          max-width: 100% !important;
-          height: auto !important;
-        }
-        .logo-conatiner {
-          display: block !important;
-          visibility: visible !important;
-          max-width: 742px !important;
-          height: 152px !important;
-          overflow: hidden;
-        }
-      }
+     @media print {
+  body {
+    font-size: 12px !important;
+  }
+  .MuiButton-root {
+    display: none !important;
+  }
+  .print-logo {
+    display: block !important;
+  }
+  .logo-conatiner {
+    display: block !important;
+  }
+}
     `
   }
 </style>
