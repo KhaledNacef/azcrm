@@ -213,16 +213,23 @@ const Bvsinlge = () => {
                 font-size: 12px !important;
                 text-align: ${isArabic ? 'right' : 'left'};
               }
-                .print-logo {
-    display: block !important;
-    visibility: visible !important;
-    max-width: 100% !important;
-    height: auto !important;
-  }
+              .print-logo {
+                 display: block !important;
+                 visibility: visible !important;
+                max-width: 100% !important;
+                height: auto !important;
+              }l
+              .logo-conatiner {
+                 display: block !important;
+                 visibility: visible !important;
+                max-width: 742px !important;
+                height: 152px !important;
+              }
             }
           `}
         </style>
-        <Box sx={{ 
+        <Box className="logo-conatiner"
+ sx={{ 
           width: 742,
           height: 152,
           mx: 'auto',
@@ -231,6 +238,7 @@ const Bvsinlge = () => {
           justifyContent: 'center',
           alignItems: 'center',
           overflow: 'hidden'
+          
         }}>
           <img
             src={logo}
