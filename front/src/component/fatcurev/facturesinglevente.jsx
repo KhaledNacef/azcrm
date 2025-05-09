@@ -218,20 +218,35 @@ const Bvsinlge = () => {
    <style>
   {
     `
-     @media print {
-  body {
-    font-size: 12px !important;
-  }
-  .MuiButton-root {
-    display: none !important;
-  }
-  .print-logo {
-    display: block !important;
-  }
-  .logo-conatiner {
-    display: block !important;
-  }
-}
+      @media print {
+        body {
+          font-size: 12px !important;
+          direction: ${isArabic ? 'rtl' : 'ltr'};
+        }
+        .MuiButton-root {
+          display: none !important;
+        }
+        .MuiTypography-root {
+          font-size: 12px !important;
+        }
+        .MuiTableCell-root {
+          font-size: 12px !important;
+          text-align: ${isArabic ? 'right' : 'left'};
+        }
+        .print-logo {
+          display: block !important;
+          visibility: visible !important;
+          max-width: 100% !important;
+          height: auto !important;
+        }
+        .logo-conatiner {
+          display: block !important;
+          visibility: visible !important;
+          max-width: 742px !important;
+          height: 152px !important;
+          overflow: hidden;
+        }
+      }
     `
   }
 </style>
