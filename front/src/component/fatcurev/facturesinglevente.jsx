@@ -5,7 +5,6 @@ import Grid from '@mui/material/Grid';
 import './fvdesign.css';
 import CreateDeliveryNoteModal from '../vente/cratebl.jsx';
 import logo from '../../assets/amounnet.png';
-import { useReactToPrint } from "react-to-print";
 
 const translations = {
   en: {
@@ -81,6 +80,7 @@ const translations = {
 
 const Bvsinlge = () => {
   const { code, clientId, codey, devise,id,datee } = useParams();
+  const printRef = useRef();
   const navigate = useNavigate();
   const [printLanguage, setPrintLanguage] = useState('fr');
   const [anchorEl, setAnchorEl] = useState(null);
@@ -114,8 +114,7 @@ const Bvsinlge = () => {
   }, [code, clientId]);
 
   const totalNettc = deliveryNote.reduce((acc, prod) => acc + (prod.prixU_HT || 0) * (prod.quantite || 0), 0) || 0;
-  const printRef = useRef<HTMLDivElement>(null);
-  const reactToPrintFn = useReactToPrint({ printRef });
+
 
   const handlePrint = () => {
     const printContents = printRef.current.innerHTML;
@@ -174,7 +173,7 @@ const Bvsinlge = () => {
         Retour
       </Button>
 
-    <Button onClick={reactToPrintFn} variant="contained" color="primary" sx={{ mb: 2, mr: 2 }}>
+    <Button onClick={handlePrint} variant="contained" color="primary" sx={{ mb: 2, mr: 2 }}>
       Imprimer
     </Button>
   
