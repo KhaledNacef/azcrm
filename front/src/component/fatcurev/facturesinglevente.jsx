@@ -118,36 +118,28 @@ const Bvsinlge = () => {
   const handlePrint = () => {
     const printContents = printRef.current.innerHTML;
     const originalContents = document.body.innerHTML;
-    
-    // Create a temporary div to hold our print contents
+  
     const tempDiv = document.createElement('div');
     tempDiv.innerHTML = printContents;
-    
-    // Find the logo image in our print contents
     const logoImg = tempDiv.querySelector('.print-logo');
-    
-    // If logo is already loaded, proceed with print
-    if (logoImg?.complete) {
+  
+    const triggerPrint = () => {
       document.body.innerHTML = printContents;
       window.print();
       document.body.innerHTML = originalContents;
-    } 
-    // If not loaded, wait for it to load
-    else {
-      logoImg.onload = () => {
-        document.body.innerHTML = printContents;
-        window.print();
-        document.body.innerHTML = originalContents;
+    };
+  
+    if (logoImg?.complete) {
+      triggerPrint();
+    } else {
+      const img = new Image();
+      img.src = logo;
+      img.onload = () => {
+        triggerPrint();
       };
-      // Fallback in case onload doesn't fire
-      setTimeout(() => {
-        document.body.innerHTML = printContents;
-        window.print();
-        document.body.innerHTML = originalContents;
-      }, 500);
     }
   };
-
+  
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
