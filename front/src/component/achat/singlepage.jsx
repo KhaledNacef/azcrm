@@ -48,7 +48,14 @@ const SingleDeliveryNote = () => {
 
   const totalTVA = totalNetHT * (deliveryNote[0]?.tva / 100 || 0);
   let totalNetTTC = totalNetHT + totalTVA;
-
+  const totalRemise = deliveryNote.reduce((acc, prod) => {
+    const basePrice = prod.prixU_HT;
+    const quantity = prod.quantite;
+    const remise = prod.rem && prod.rem > 0 ? prod.rem : 0; // percentage
+    const remiseAmount = basePrice * (remise / 100) * quantity;
+    return acc + remiseAmount;
+  }, 0);
+  
   // If timbre is true, add the timbre cost to the total
   if (timbre === 'true') {
     totalNetTTC += 1;  // Add 1 TND for timbre
@@ -82,10 +89,10 @@ const SingleDeliveryNote = () => {
   // Translations for French, Arabic, and English
   const translations = {
     fr: {
-      companyName: 'Nom de la société',
-      companyAddress: 'Adresse de la société',
-      companyPhone: 'Téléphone de la société',
-      companyTVA: 'Code TVA de la société',
+      companyName: 'Nom de la Client',
+      companyAddress: 'Adresse de la Client',
+      companyPhone: 'Téléphone de la Client',
+      companyTVA: 'Code TVA de la Client',
       supplierName: 'Nom du fournisseur',
       supplierAddress: 'Adresse du fournisseur',
       supplierPhone: 'Téléphone du fournisseur',
@@ -101,7 +108,7 @@ const SingleDeliveryNote = () => {
       prixNetTTC: 'Prix Net(TTC)',
       timbre: 'Timbre',
       signatureFournisseur: 'Signature du Fournisseur',
-      signatureSociete: 'Signature de Ma Société',
+      signatureSociete: 'Signature de Client',
       matriculefisacl:'Matriculefisacl',
       totaltva:'Total TVA'
 
@@ -133,10 +140,10 @@ const SingleDeliveryNote = () => {
 
     },
     en: {
-      companyName: 'Company Name',
-      companyAddress: 'Company Address',
-      companyPhone: 'Company Phone',
-      companyTVA: 'Company TVA Code',
+      companyName: 'Client Name',
+      companyAddress: 'Client Address',
+      companyPhone: 'Client Phone',
+      companyTVA: 'Client TVA Code',
       supplierName: 'Supplier Name',
       supplierAddress: 'Supplier Address',
       supplierPhone: 'Supplier Phone',
@@ -152,7 +159,7 @@ const SingleDeliveryNote = () => {
       prixNetTTC: 'Net Price(TTC)',
       timbre: 'Stamp',
       signatureFournisseur: 'Supplier Signature',
-      signatureSociete: 'Company Signature',
+      signatureSociete: 'Client Signature',
       matriculefisacl:"tax identification number",
       totaltva:'Total VAT'
     },
@@ -213,36 +220,36 @@ const SingleDeliveryNote = () => {
           
         {/* Company and Supplier Information with Labels */}
         <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 3, direction: language === 'ar' ? 'rtl' : 'ltr' }}>
-  
-  {/* Company info (Always on the left) */}
-  <Box sx={{
-    flex: 1,
-    display: 'flex',
-    flexDirection: 'column',
-    gap: 2,
-    marginRight: '1rem', // Space between company and supplier
-    textAlign: 'left'     // Always left-aligned
-  }}>
-    <Typography variant="body1"><strong>{translations[language].companyName}:</strong> AMOUNNET COMPANY EXPORT ET IMPORT</Typography>
-    <Typography variant="body1"><strong>{translations[language].companyAddress}:</strong> RUE DU LAC TOBA BERGES DU LAC1053 TUNIS</Typography>
-    <Typography variant="body1"><strong>{translations[language].companyPhone}:</strong> +987654321</Typography>
-    <Typography variant="body1"><strong>{translations[language].matriculefisacl}:</strong> 1867411P/A/M/000</Typography>
-  </Box>
 
-  {/* Supplier info (Always on the right) */}
-  <Box sx={{
-    flex: 1,
-    display: 'flex',
-    flexDirection: 'column',
-    gap: 2,
-    marginLeft: '1rem', // Space between supplier and company
-    textAlign: 'right'  // Always right-aligned
-  }}>
-    <Typography variant="body1"><strong>{translations[language].supplierName}:</strong> {supplier.fullname}</Typography>
-    <Typography variant="body1"><strong>{translations[language].supplierAddress}:</strong> {supplier?.address || 'Adresse inconnue'}</Typography>
-    <Typography variant="body1"><strong>{translations[language].supplierPhone}:</strong> {supplier?.tel || 'Numéro inconnu'}</Typography>
-    <Typography variant="body1"><strong>{translations[language].matriculefisacl}:</strong> {supplier?.matriculefisacl || 'Matriculefisacl inconnu'}</Typography>
-  </Box>
+{/* Supplier info (Always on the left) */}
+<Box sx={{
+  flex: 1,
+  display: 'flex',
+  flexDirection: 'column',
+  gap: 2,
+  marginRight: '1rem', // Space between supplier and company
+  textAlign: 'left'     // Always left-aligned
+}}>
+  <Typography variant="body1"><strong>{translations[language].supplierName}:</strong> {supplier.fullname}</Typography>
+  <Typography variant="body1"><strong>{translations[language].supplierAddress}:</strong> {supplier?.address || 'Adresse inconnue'}</Typography>
+  <Typography variant="body1"><strong>{translations[language].supplierPhone}:</strong> {supplier?.tel || 'Numéro inconnu'}</Typography>
+  <Typography variant="body1"><strong>{translations[language].matriculefisacl}:</strong> {supplier?.matriculefisacl || 'Matriculefisacl inconnu'}</Typography>
+</Box>
+
+{/* Company info (Always on the right) */}
+<Box sx={{
+  flex: 1,
+  display: 'flex',
+  flexDirection: 'column',
+  gap: 2,
+  marginLeft: '1rem', // Space between company and supplier
+  textAlign: 'right'  // Always right-aligned
+}}>
+  <Typography variant="body1"><strong>{translations[language].companyName}:</strong> AMOUNNET COMPANY EXPORT ET IMPORT</Typography>
+  <Typography variant="body1"><strong>{translations[language].companyAddress}:</strong> RUE DU LAC TOBA BERGES DU LAC1053 TUNIS</Typography>
+  <Typography variant="body1"><strong>{translations[language].companyPhone}:</strong> +987654321</Typography>
+  <Typography variant="body1"><strong>{translations[language].matriculefisacl}:</strong> 1867411P/A/M/000</Typography>
+</Box>
 
 </Box>
 
@@ -294,6 +301,10 @@ const SingleDeliveryNote = () => {
             <Typography variant="body1">
               <strong>{translations[language].totaltva}:</strong> {totalTVA.toFixed(2)}TND
             </Typography>
+            <Typography variant="body1" sx={{ mt: 2 }}>
+                  <strong>{language === 'fr' ? 'Remise Totale' : language === 'en' ? 'Total Discount' : 'إجمالي الخصم'}:</strong> {totalRemise.toFixed(3)} TND
+            </Typography>
+
             {timbre === 'true' && (
               <Typography variant="body1">
                 <strong>{translations[language].timbre}:</strong> 1TND

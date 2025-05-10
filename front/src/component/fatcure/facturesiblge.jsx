@@ -70,7 +70,14 @@ const BCsingleACHAT = () => {
 
   const totalTVA = totalNetHT * (deliveryNote[0]?.tva / 100 || 0);
   let totalNetTTC = totalNetHT + totalTVA;
-
+  const totalRemise = deliveryNote.reduce((acc, prod) => {
+    const basePrice = prod.prixU_HT;
+    const quantity = prod.quantite;
+    const remise = prod.rem && prod.rem > 0 ? prod.rem : 0; // percentage
+    const remiseAmount = basePrice * (remise / 100) * quantity;
+    return acc + remiseAmount;
+  }, 0);
+  
   if (timbre === 'true') {
     totalNetTTC += 1;  // Add 1 TND for timbre
   }
@@ -190,13 +197,13 @@ const BCsingleACHAT = () => {
   textAlign: language === 'ar' ? 'left' : 'right'
 }}>
   <Typography variant="body1">
-    <strong>{language === 'fr' ? 'Nom de la société' : language === 'en' ? 'Company Name' : 'اسم الشركة'}:</strong> AMOUNNET COMPANY EXPORT ET IMPORT
+    <strong>{language === 'fr' ? 'Nom de la Client' : language === 'en' ? 'Company Name' : 'اسم الشركة'}:</strong> AMOUNNET COMPANY EXPORT ET IMPORT
   </Typography>
   <Typography variant="body1">
-    <strong>{language === 'fr' ? 'Adresse de la société' : language === 'en' ? 'Company Address' : 'عنوان الشركة'}:</strong> RUE DU LAC TOBA BERGES DU LAC1053 TUNIS
+    <strong>{language === 'fr' ? 'Adresse de la Client' : language === 'en' ? 'Company Address' : 'عنوان الشركة'}:</strong> RUE DU LAC TOBA BERGES DU LAC1053 TUNIS
   </Typography>
   <Typography variant="body1">
-    <strong>{language === 'fr' ? 'Téléphone de la société' : language === 'en' ? 'Company Phone' : 'هاتف الشركة'}:</strong> +987654321
+    <strong>{language === 'fr' ? 'Téléphone de la Client' : language === 'en' ? 'Company Phone' : 'هاتف الشركة'}:</strong> +987654321
   </Typography>
   <Typography variant="body1">
     <strong>{language === 'fr' ? 'Matriculefisacl' : language === 'en' ? 'Tax Identification Number' : "الرقم الجبائي"}:</strong> 1867411P/A/M/000
@@ -250,15 +257,19 @@ const BCsingleACHAT = () => {
         {/* Totals Section */}
         <Box sx={{ display: 'flex', justifyContent: 'flex-end', marginTop: '20px', direction: language === 'ar' ? 'rtl' : 'ltr' }}>
           <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: language === 'ar' ? 'flex-end' : 'flex-start' }}>
-            <Typography variant="body1"><strong>{language === 'fr' ? 'Total HT' : language === 'en' ? 'Total HT' : 'الإجمالي قبل الضريبة'}:</strong> {totalNetHT.toFixed(3)} TND</Typography>
-            <Typography variant="body1"><strong>{language === 'fr' ? 'Total TVA' : language === 'en' ? 'Total VAT' : 'إجمالي ضريبة القيمة المضافة'}:</strong> {totalTVA.toFixed(3)} TND</Typography>
+            <Typography variant="body1"><strong>{language === 'fr' ? 'Total HT' : language === 'en' ? 'Total HT' : 'الإجمالي قبل الضريبة'}:</strong> {totalNetHT.toFixed(2)} TND</Typography>
+            <Typography variant="body1"><strong>{language === 'fr' ? 'Total TVA' : language === 'en' ? 'Total VAT' : 'إجمالي ضريبة القيمة المضافة'}:</strong> {totalTVA.toFixed(2)} TND</Typography>
+            <Typography variant="body1" sx={{ mt: 2 }}>
+                  <strong>{language === 'fr' ? 'Remise Totale' : language === 'en' ? 'Total Discount' : 'إجمالي الخصم'}:</strong> {totalRemise.toFixed(2)} TND
+           </Typography>
+
             {timbre === 'true' && (
             <Typography variant="body1">
               <strong>{language === 'fr' ? 'Timbre' : language === 'en' ? 'Stamp' : 'طابع'}:</strong> 1 TND
               </Typography>          
               )}
 
-            <Typography variant="body1"><strong>{language === 'fr' ? 'Total TTC' : language === 'en' ? 'Total TTC' : 'الإجمالي شامل'}:</strong> {totalNetTTC.toFixed(3)} TND</Typography>
+            <Typography variant="body1"><strong>{language === 'fr' ? 'Total TTC' : language === 'en' ? 'Total TTC' : 'الإجمالي شامل'}:</strong> {totalNetTTC.toFixed(2)} TND</Typography>
           </Box>
         </Box>
            <Box sx={{ display: 'flex', justifyContent: 'space-between', mt: 4 }}>
