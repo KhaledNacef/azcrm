@@ -70,13 +70,16 @@ const BCsingleACHAT = () => {
   const totalTVA = deliveryNote.reduce((acc, prod) => {
     const basePrice = prod.prixU_HT;
     const quantity = prod.quantite;
+    const remise = prod.rem && prod.rem > 0 ? prod.rem : 0; // percentage
     const tva = prod.tva || 0;
   
-    const netHT = basePrice * quantity;
+    const priceAfterRemise = basePrice * (1 - remise / 100);
+    const netHT = priceAfterRemise * quantity;
     const tvaAmount = netHT * (tva / 100);
   
     return acc + tvaAmount;
   }, 0);
+  
   
   let totalRemise = deliveryNote.reduce((acc, prod) => {
     const basePrice = prod.prixU_HT;
