@@ -44,7 +44,17 @@ const SingleDeliveryNote = () => {
   }, 0);
   
 
-  let totalTVA = totalHT * (deliveryNote[0]?.tva / 100 || 0);
+  const totalTVA = deliveryNote.reduce((acc, prod) => {
+    const basePrice = prod.prixU_HT;
+    const quantity = prod.quantite;
+    const tva = prod.tva || 0;
+  
+    const netHT = basePrice * quantity;
+    const tvaAmount = netHT * (tva / 100);
+  
+    return acc + tvaAmount;
+  }, 0);  
+  
   let totalRemise = deliveryNote.reduce((acc, prod) => {
     const basePrice = prod.prixU_HT;
     const quantity = prod.quantite;
@@ -53,7 +63,7 @@ const SingleDeliveryNote = () => {
     return acc + remiseAmount;
   }, 0);
   let totalnetht=totalHT-totalRemise
-  let totalNetTTC = totalHT + totalTVA;
+  let totalNetTTC = totalnetht + totalTVA;
 
   // If timbre is true, add the timbre cost to the total
   if (timbre === 'true') {
