@@ -301,8 +301,8 @@ const SingleDeliveryNote = () => {
             <Typography variant="body1">
               <strong>{translations[language].totaltva}:</strong> {totalTVA.toFixed(2)}TND
             </Typography>
-            <Typography variant="body1" sx={{ mt: 2 }}>
-                  <strong>{language === 'fr' ? 'Remise Totale' : language === 'en' ? 'Total Discount' : 'إجمالي الخصم'}:</strong> {totalRemise.toFixed(3)} TND
+            <Typography variant="body1" >
+                  <strong>{language === 'fr' ? 'Remise Totale' : language === 'en' ? 'Total Discount' : 'إجمالي الخصم'}:</strong> {totalRemise.toFixed(2)} TND
             </Typography>
 
             {timbre === 'true' && (
