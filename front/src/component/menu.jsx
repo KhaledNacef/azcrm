@@ -36,10 +36,10 @@ const SidebarMenu = () => {
     { label: 'Stock', path: '/stock', icon: <InventoryIcon /> },
     { label: 'Fournisseur', path: '/fournisseur', icon: <PeopleIcon /> },
     { label: 'Client', path: '/client', icon: <PersonIcon /> },
-    { label: 'Bon de Commande', path: '/bon-commande', icon: <ReceiptIcon /> },
+    { label: 'Bon de Livraison Achat', path: '/bon-commande', icon: <ReceiptIcon /> },
     { label: 'Facture d’Achat', path: '/bon-dachat', icon: <ShoppingCartIcon /> },
-    { label: 'Bon de Livraison', path: '/bon-commandefacture', icon: <LocalShippingIcon /> },
-    { label: 'Bon de Sortie', path: '/bon-livraison', icon: <ExitToAppIcon /> },
+    { label: 'Bon de Livraison Vente', path: '/bon-commandefacture', icon: <LocalShippingIcon /> },
+    { label: 'Facture Vente', path: '/bon-livraison', icon: <ExitToAppIcon /> },
     { label: 'Retenue', path: '/RET1', icon: <AttachMoneyIcon /> },
   ];
 

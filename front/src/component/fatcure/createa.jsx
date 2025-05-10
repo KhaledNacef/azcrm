@@ -144,7 +144,7 @@ const CreatebcModala = ({ onAddDeliveryNote }) => {
 
   return (
     <Box>
-      <Typography variant="h6" mb={2}>Créer un Bon De Commande</Typography>
+      <Typography variant="h6" mb={2}>Créer un Bon De Livraison</Typography>
 
      <TextField label="Numéro de bon d'achat"  type="text" value={num} onChange={(e) => setNum(e.target.value || 0)} fullWidth margin="normal" />
       

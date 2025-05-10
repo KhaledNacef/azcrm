@@ -57,7 +57,7 @@ const Boncommande = () => {
   return (
     <Box sx={{ p: 3 }}>
       <Typography variant="h4" mb={3}>
-        BON DE COMMANDE
+      Bon De Livraison
       </Typography>
 
       {/* Search Field */}
@@ -72,7 +72,7 @@ const Boncommande = () => {
 
       {/* Button to open the modal for creating a new delivery note */}
       <Button variant="contained" color="primary" onClick={handleOpen}>
-        Créer un Bon De Commande
+        Créer un Bon De Livraison
       </Button>
 
       {/* Delivery Notes Table */}

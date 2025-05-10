@@ -56,7 +56,7 @@ const Boncommandev = () => {
   return (
     <Box sx={{ p: 3 }}>
       <Typography variant="h4" mb={3}>
-        Bon De Livraison
+        Bon De Livraison Vente
       </Typography>
 
       {/* Search bar */}

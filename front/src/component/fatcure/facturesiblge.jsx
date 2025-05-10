@@ -153,40 +153,11 @@ const BCsingleACHAT = () => {
 </style>
 
         {/* Logo */}
-        <Box sx={{ width: 742, height: 152, mx: 'auto', mb: 3, display: 'flex', justifyContent: 'center', alignItems: 'center', overflow: 'hidden' }}>
-          <img
-            src={logo}
-            alt="Company Logo"
-            style={{ width: '100%', height: '100%', objectFit: 'cover' }}
-          />
-        </Box>
+     
 
         {/* Company and Supplier Information with Labels */}
         <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 3, direction: language === 'ar' ? 'rtl' : 'ltr' }}>
 
-{/* Company Information (Left Corner for Arabic, Right Corner for Others) */}
-<Box sx={{
-  flex: 1,
-  display: 'flex',
-  flexDirection: 'column',
-  gap: 2,
-  marginLeft: language === 'ar' ? '0' : '1rem',  // Company info goes to the left for Arabic, right for others
-  marginRight: language === 'ar' ? '1rem' : '0', // Company info margin for Arabic
-  textAlign: language === 'ar' ? 'right' : 'left' // Align text correctly for Arabic
-}}>
-  <Typography variant="body1">
-    <strong>{language === 'fr' ? 'Nom de la société' : language === 'en' ? 'Company Name' : 'اسم الشركة'}:</strong> AMOUNNET COMPANY EXPORT ET IMPORT
-  </Typography>
-  <Typography variant="body1">
-    <strong>{language === 'fr' ? 'Adresse de la société' : language === 'en' ? 'Company Address' : 'عنوان الشركة'}:</strong>  RUE DU LAC TOBA BERGES DU LAC1053 TUNIS
-  </Typography>
-  <Typography variant="body1">
-    <strong>{language === 'fr' ? 'Téléphone de la société' : language === 'en' ? 'Company Phone' : 'هاتف الشركة'}:</strong> +987654321
-  </Typography>
-  <Typography variant="body1">
-    <strong>{language === 'fr' ? 'Matriculefisacl' : language === 'en' ? 'tax identification number' : "الرقم الجبائي" }:</strong> 1867411P/A/M/000
-  </Typography>
-</Box>
 
 {/* Supplier Information (Right Corner for Arabic, Left Corner for Others) */}
 <Box sx={{
@@ -212,11 +183,37 @@ const BCsingleACHAT = () => {
   </Typography>
 </Box>
 
+
+
+{/* Company Information (Left Corner for Arabic, Right Corner for Others) */}
+<Box sx={{
+  flex: 1,
+  display: 'flex',
+  flexDirection: 'column',
+  gap: 2,
+  marginLeft: language === 'ar' ? '0' : '1rem',  // Company info goes to the left for Arabic, right for others
+  marginRight: language === 'ar' ? '1rem' : '0', // Company info margin for Arabic
+  textAlign: language === 'ar' ? 'right' : 'left' // Align text correctly for Arabic
+}}>
+  <Typography variant="body1">
+    <strong>{language === 'fr' ? 'Nom de la société' : language === 'en' ? 'Company Name' : 'اسم الشركة'}:</strong> AMOUNNET COMPANY EXPORT ET IMPORT
+  </Typography>
+  <Typography variant="body1">
+    <strong>{language === 'fr' ? 'Adresse de la société' : language === 'en' ? 'Company Address' : 'عنوان الشركة'}:</strong>  RUE DU LAC TOBA BERGES DU LAC1053 TUNIS
+  </Typography>
+  <Typography variant="body1">
+    <strong>{language === 'fr' ? 'Téléphone de la société' : language === 'en' ? 'Company Phone' : 'هاتف الشركة'}:</strong> +987654321
+  </Typography>
+  <Typography variant="body1">
+    <strong>{language === 'fr' ? 'Matriculefisacl' : language === 'en' ? 'tax identification number' : "الرقم الجبائي" }:</strong> 1867411P/A/M/000
+  </Typography>
+</Box>
+
 </Box>
 
 
         <Typography variant="h4" mb={3} textAlign="center">
-          {language === 'fr' ? 'Bon De Commande' : language === 'en' ? 'Order Form' : 'نموذج الطلب'} - {num}
+          {language === 'fr' ? 'Bon De Livraison' : language === 'en' ? 'Order Form' : 'نموذج الطلب'} - {num}
         </Typography>
 
         {/* Table */}
@@ -230,21 +227,30 @@ const BCsingleACHAT = () => {
               <TableCell>{language === 'fr' ? 'TVA (%)' : language === 'en' ? 'VAT(%)' : 'ضريبة القيمة المضافة(%)'}</TableCell>
               <TableCell>{language === 'fr' ? 'Rem (%)' : language === 'en' ? 'Discount(%)' : 'خصم(%)'}</TableCell>
               <TableCell>{language === 'fr' ? 'Total HT' : language === 'en' ? 'Total HT' : 'إجمالي قبل الضريبة'}</TableCell>
+              <TableCell>{language === 'fr' ? 'Total TTC' : language === 'en' ? 'Total TTC' : 'إجمالي  الضريبة'}</TableCell>
+
             </TableRow>
           </TableHead>
           <TableBody>
-            {deliveryNote.map((prod, index) => (
-              <TableRow key={index}>
-                <TableCell>{prod.designation}</TableCell>
-                <TableCell>{prod.Unite}</TableCell>
-                <TableCell>{prod.quantite}</TableCell>
-                <TableCell>{prod.prixU_HT}TND</TableCell>
-                <TableCell>{prod.tva}%</TableCell>
-                <TableCell>{prod.rem}%</TableCell>
-                <TableCell>{prod.prixU_HT * prod.quantite}TND</TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
+                      {deliveryNote.map((prod, index) => {
+                        const basePrice = prod.prixU_HT;
+                        const netHT = basePrice * prod.quantite;
+                        const netTTC = netHT * (1 + prod.tva / 100);
+          
+                        return (
+                          <TableRow key={index}>
+                            <TableCell>{prod.designation}</TableCell>
+                            <TableCell>{prod.Unite}</TableCell>
+                            <TableCell>{prod.quantite}</TableCell>
+                            <TableCell>{prod.prixU_HT}TND</TableCell>
+                            <TableCell>{prod.tva}%</TableCell>
+                            <TableCell>{prod.rem}%</TableCell>
+                            <TableCell>{netHT.toFixed(2)}TND</TableCell>
+                            <TableCell>{netTTC.toFixed(2)}TND</TableCell>
+                          </TableRow>
+                        );
+                      })}
+                    </TableBody>
         </Table>
 
         {/* Totals Section */}

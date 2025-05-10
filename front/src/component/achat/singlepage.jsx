@@ -90,7 +90,7 @@ const SingleDeliveryNote = () => {
       supplierAddress: 'Adresse du fournisseur',
       supplierPhone: 'Téléphone du fournisseur',
       supplierTVA: 'Code TVA',
-      bonDeAchat: 'Bon D\'Achat',
+      bonDeAchat: 'Facture ',
       designation: 'Désignation',
       unite: 'Unité',
       quantite: 'Quantité',
@@ -102,7 +102,9 @@ const SingleDeliveryNote = () => {
       timbre: 'Timbre',
       signatureFournisseur: 'Signature du Fournisseur',
       signatureSociete: 'Signature de Ma Société',
-      matriculefisacl:'Matriculefisacl'
+      matriculefisacl:'Matriculefisacl',
+      totaltva:'Total TVA'
+
     },
     ar: {
       companyName: 'اسم الشركة',
@@ -126,6 +128,8 @@ const SingleDeliveryNote = () => {
       signatureFournisseur: 'توقيع المورد',
       signatureSociete: 'توقيع الشركة',
       matriculefisacl:"الرقم الجبائي",
+      totaltva:'إجمالي ضريبة القيمة المضافة'
+
 
     },
     en: {
@@ -150,7 +154,7 @@ const SingleDeliveryNote = () => {
       signatureFournisseur: 'Supplier Signature',
       signatureSociete: 'Company Signature',
       matriculefisacl:"tax identification number",
-
+      totaltva:'Total VAT'
     },
   };
 
@@ -206,43 +210,11 @@ const SingleDeliveryNote = () => {
     }
   `}
 </style>
-        <Box sx={{ 
-          width: 742,
-          height: 152,
-          mx: 'auto', // Center horizontally
-          mb: 3,
-          display: 'flex',
-          justifyContent: 'center',
-          alignItems: 'center',
-          overflow: 'hidden'
-        }}>
-          <img
-            src={logo}
-            alt="Company Logo"
-            style={{ 
-              width: '100%',
-              height: '100%',
-              objectFit: 'cover' // or 'contain' based on your preference
-            }}
-          />
-        </Box>
+      
 
         {/* Company and Supplier Information with Labels */}
         <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 3, direction: language === 'ar' ? 'rtl' : 'ltr' }}>
-          <Box sx={{
-            flex: 1,
-            display: 'flex',
-            flexDirection: 'column',
-            gap: 2,
-            marginLeft: language === 'ar' ? '0' : '1rem',  // Company info goes to the left for Arabic, right for others
-            marginRight: language === 'ar' ? '1rem' : '0', // Company info margin for Arabic
-            textAlign: language === 'ar' ? 'right' : 'left' // Align text correctly for Arabic
-          }}>
-            <Typography variant="body1"><strong>{translations[language].companyName}:</strong> AMOUNNET COMPANY EXPORT ET IMPORT</Typography>
-            <Typography variant="body1"><strong>{translations[language].companyAddress}:</strong> RUE DU LAC TOBA BERGES DU LAC1053 TUNIS</Typography>
-            <Typography variant="body1"><strong>{translations[language].companyPhone}:</strong> +987654321</Typography>
-            <Typography variant="body1"><strong>{translations[language].matriculefisacl}:</strong> 1867411P/A/M/000</Typography>
-          </Box>
+       
 
           <Box sx={{
             flex: 1,
@@ -257,6 +229,21 @@ const SingleDeliveryNote = () => {
             <Typography variant="body1"><strong>{translations[language].supplierAddress}:</strong> {supplier?.address || 'Adresse inconnue'}</Typography>
             <Typography variant="body1"><strong>{translations[language].supplierPhone}:</strong> {supplier?.tel || 'Numéro inconnu'}</Typography>
             <Typography variant="body1"><strong>{translations[language].matriculefisacl}:</strong> {supplier?.matriculefisacl || 'Matriculefisacl inconnu'}</Typography>
+          </Box>
+
+          <Box sx={{
+            flex: 1,
+            display: 'flex',
+            flexDirection: 'column',
+            gap: 2,
+            marginLeft: language === 'ar' ? '0' : '1rem',  // Company info goes to the left for Arabic, right for others
+            marginRight: language === 'ar' ? '1rem' : '0', // Company info margin for Arabic
+            textAlign: language === 'ar' ? 'right' : 'left' // Align text correctly for Arabic
+          }}>
+            <Typography variant="body1"><strong>{translations[language].companyName}:</strong> AMOUNNET COMPANY EXPORT ET IMPORT</Typography>
+            <Typography variant="body1"><strong>{translations[language].companyAddress}:</strong> RUE DU LAC TOBA BERGES DU LAC1053 TUNIS</Typography>
+            <Typography variant="body1"><strong>{translations[language].companyPhone}:</strong> +987654321</Typography>
+            <Typography variant="body1"><strong>{translations[language].matriculefisacl}:</strong> 1867411P/A/M/000</Typography>
           </Box>
         </Box>
 
@@ -288,11 +275,11 @@ const SingleDeliveryNote = () => {
                   <TableCell>{prod.designation}</TableCell>
                   <TableCell>{prod.Unite}</TableCell>
                   <TableCell>{prod.quantite}</TableCell>
-                  <TableCell>{prod.prixU_HT}TND</TableCell>
+                  <TableCell>{prod.prixU_HT}</TableCell>
                   <TableCell>{prod.tva}%</TableCell>
                   <TableCell>{prod.rem}%</TableCell>
-                  <TableCell>{netHT.toFixed(3)}TND</TableCell>
-                  <TableCell>{netTTC.toFixed(3)}TND</TableCell>
+                  <TableCell>{netHT.toFixed(2)}</TableCell>
+                  <TableCell>{netTTC.toFixed(2)}</TableCell>
                 </TableRow>
               );
             })}
@@ -303,10 +290,10 @@ const SingleDeliveryNote = () => {
         <Box sx={{ display: 'flex', justifyContent: 'flex-end', mt: 3 }}>
           <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end' }}>
             <Typography variant="body1">
-              <strong>{translations[language].prixNetHT}:</strong> {totalNetHT.toFixed(3)}TND
+              <strong>{translations[language].prixNetHT}:</strong> {totalNetHT.toFixed(2)}TND
             </Typography>
             <Typography variant="body1">
-              <strong>{translations[language].prixNetHT}:</strong> {totalTVA.toFixed(3)}TND
+              <strong>{translations[language].totaltva}:</strong> {totalTVA.toFixed(2)}TND
             </Typography>
             {timbre === 'true' && (
               <Typography variant="body1">
@@ -314,7 +301,7 @@ const SingleDeliveryNote = () => {
               </Typography>
             )}
             <Typography variant="body1">
-              <strong>{translations[language].prixNetTTC}:</strong> {totalNetTTC.toFixed(3)}TND
+              <strong>{translations[language].prixNetTTC}:</strong> {totalNetTTC.toFixed(2)}TND
             </Typography>
           </Box>
         </Box>

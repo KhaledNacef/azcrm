@@ -186,7 +186,7 @@ const CreateDeliveryNoteModal = ({ onAddDeliveryNote, codey }) => {
   return (
     <Box>
       <Typography variant="h6" mb={2}>
-        Créer un Bon de Sortie
+        Créer Facture
       </Typography>
 
       <TextField

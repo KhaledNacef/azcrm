@@ -119,7 +119,7 @@ const CreateDeliveryNoteModala = ({ onAddDeliveryNote, codey }) => {
 
   return (
     <Box>
-      <Typography variant="h6" mb={2}>Créer un Bon d'Achat</Typography>
+      <Typography variant="h6" mb={2}>Créer un Facture</Typography>
       <TextField label="Numéro de bon d'achat" type="text" value={num} onChange={(e) => setNum(e.target.value || 0)} fullWidth margin="normal" />
 
       <TextField label="Fournisseur" value={supplier} onChange={handleSupplierChange} select fullWidth margin="normal">

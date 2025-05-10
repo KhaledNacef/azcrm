@@ -186,7 +186,7 @@ const Bvsinlge = () => {
         {printLanguage.toUpperCase()}
       </Button>
       <Button variant="contained" color="primary" onClick={handleOpen} sx={{ mb: 2, mr: 2 }}>
-        Créer un Bon Sortie
+        Créer un Facture Vente
       </Button>
       <Button variant="outlined" onClick={() => navigate(`/gestionv/${codey}`)} sx={{ mb: 2 }}>
         Gestion De Stock
