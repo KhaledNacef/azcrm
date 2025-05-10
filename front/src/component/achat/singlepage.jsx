@@ -37,25 +37,24 @@ const SingleDeliveryNote = () => {
   if (loading) return <CircularProgress />;
   if (error) return <Typography color="error">{error}</Typography>;
 
-  const totalNetHT = deliveryNote.reduce((acc, prod) => {
+  const totalHT = deliveryNote.reduce((acc, prod) => {
     const basePrice = prod.prixU_HT;
     const quantity = prod.quantite;
-    const remise = prod.rem && prod.rem > 0 ? prod.rem : 0; // percentage
-    const priceAfterRemise = basePrice * (1 - remise / 100);
-    return acc + priceAfterRemise * quantity;
+    return acc + basePrice * quantity;
   }, 0);
   
 
-  const totalTVA = totalNetHT * (deliveryNote[0]?.tva / 100 || 0);
-  let totalNetTTC = totalNetHT + totalTVA;
-  const totalRemise = deliveryNote.reduce((acc, prod) => {
+  let totalTVA = totalHT * (deliveryNote[0]?.tva / 100 || 0);
+  let totalRemise = deliveryNote.reduce((acc, prod) => {
     const basePrice = prod.prixU_HT;
     const quantity = prod.quantite;
     const remise = prod.rem && prod.rem > 0 ? prod.rem : 0; // percentage
     const remiseAmount = basePrice * (remise / 100) * quantity;
     return acc + remiseAmount;
   }, 0);
-  
+  let totalnetht=totalHT-totalRemise
+  let totalNetTTC = totalHT + totalTVA;
+
   // If timbre is true, add the timbre cost to the total
   if (timbre === 'true') {
     totalNetTTC += 1;  // Add 1 TND for timbre
@@ -104,7 +103,7 @@ const SingleDeliveryNote = () => {
       prixUHT: 'Prix U(HT)',
       tva: 'TVA(%)',
       rem: 'Rem(%)',
-      prixNetHT: 'Prix Net(HT)',
+      prixNetHT: 'Total Prix (HT)',
       prixNetTTC: 'Prix Net(TTC)',
       timbre: 'Timbre',
       signatureFournisseur: 'Signature du Fournisseur',
@@ -155,7 +154,7 @@ const SingleDeliveryNote = () => {
       prixUHT: 'Price U(HT)',
       tva: 'VAT(%)',
       rem: 'Discount(%)',
-      prixNetHT: 'Net Price(HT)',
+      prixNetHT: 'Total Price(HT)',
       prixNetTTC: 'Net Price(TTC)',
       timbre: 'Stamp',
       signatureFournisseur: 'Supplier Signature',
@@ -271,40 +270,52 @@ const SingleDeliveryNote = () => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {deliveryNote.map((prod, index) => {
-              const basePrice = prod.prixU_HT;
-              const netHT = basePrice * prod.quantite;
-              const netTTC = netHT * (1 + prod.tva / 100);
+  {deliveryNote.map((prod, index) => {
+    const basePrice = prod.prixU_HT;
+    const quantity = prod.quantite;
+    const remise = prod.rem && prod.rem > 0 ? prod.rem : 0;
 
-              return (
-                <TableRow key={index}>
-                  <TableCell>{prod.designation}</TableCell>
-                  <TableCell>{prod.Unite}</TableCell>
-                  <TableCell>{prod.quantite}</TableCell>
-                  <TableCell>{prod.prixU_HT}</TableCell>
-                  <TableCell>{prod.tva}%</TableCell>
-                  <TableCell>{prod.rem}%</TableCell>
-                  <TableCell>{netHT.toFixed(2)}</TableCell>
-                  <TableCell>{netTTC.toFixed(2)}</TableCell>
-                </TableRow>
-              );
-            })}
-          </TableBody>
+    // Apply remise to unit price
+    const priceAfterRemise = basePrice * (1 - remise / 100);
+
+    // Net HT with remise
+    const netHT = priceAfterRemise * quantity;
+
+    // Net TTC with TVA applied on discounted netHT
+    const netTTC = netHT * (1 + prod.tva / 100);
+
+    return (
+      <TableRow key={index}>
+        <TableCell>{prod.designation}</TableCell>
+        <TableCell>{prod.Unite}</TableCell>
+        <TableCell>{prod.quantite}</TableCell>
+        <TableCell>{prod.prixU_HT}</TableCell>
+        <TableCell>{prod.tva}%</TableCell>
+        <TableCell>{prod.rem}%</TableCell>
+        <TableCell>{netHT.toFixed(2)}</TableCell>
+        <TableCell>{netTTC.toFixed(2)}</TableCell>
+      </TableRow>
+    );
+  })}
+</TableBody>
         </Table>
 
         {/* Total Section - Moved to the Right Side */}
         <Box sx={{ display: 'flex', justifyContent: 'flex-end', mt: 3 }}>
           <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end' }}>
             <Typography variant="body1">
-              <strong>{translations[language].prixNetHT}:</strong> {totalNetHT.toFixed(2)}TND
+              <strong>{translations[language].prixNetHT}:</strong> {totalHT.toFixed(2)}TND
+            </Typography>
+            
+            <Typography variant="body1" >
+                  <strong>{language === 'fr' ? 'Remise Totale' : language === 'en' ? 'Total Discount' : 'إجمالي الخصم'}:</strong> {totalRemise.toFixed(2)} TND
+            </Typography>
+            <Typography variant="body1" >
+                  <strong>{language === 'fr' ? ' Totale Net HT ' : language === 'en' ? 'Total Net HT' : 'إجمالي الخصم'}:</strong> {totalnetht.toFixed(2)} TND
             </Typography>
             <Typography variant="body1">
               <strong>{translations[language].totaltva}:</strong> {totalTVA.toFixed(2)}TND
             </Typography>
-            <Typography variant="body1" >
-                  <strong>{language === 'fr' ? 'Remise Totale' : language === 'en' ? 'Total Discount' : 'إجمالي الخصم'}:</strong> {totalRemise.toFixed(2)} TND
-            </Typography>
-
             {timbre === 'true' && (
               <Typography variant="body1">
                 <strong>{translations[language].timbre}:</strong> 1TND
