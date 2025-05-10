@@ -152,35 +152,19 @@ const BCsingleACHAT = () => {
   `}
 </style>
 
-        {/* Logo */}
-          <Box className="logo-conatiner"
-             sx={{ 
-               width: 742,
-               height: 152,
-               mx: 'auto',
-               mb: 3,
-               display: 'flex',
-               justifyContent: 'center',
-               alignItems: 'center',
-               overflow: 'hidden'
-               
-             }}>
-          
-             </Box>
+   
 
-        {/* Company and Supplier Information with Labels */}
-        <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 3, direction: language === 'ar' ? 'rtl' : 'ltr' }}>
+ {/* Company and Supplier Information with Labels */}
+<Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 3 }}>
 
-
-{/* Supplier Information (Right Corner for Arabic, Left Corner for Others) */}
+{/* Supplier Information (Always on the Left) */}
 <Box sx={{
   flex: 1,
   display: 'flex',
   flexDirection: 'column',
   gap: 2,
-  marginLeft: language === 'ar' ? '0' : '1rem',  // Supplier info margin for Arabic
-  marginRight: language === 'ar' ? '1rem' : '0', // Supplier info margin for other languages
-  textAlign: language === 'ar' ? 'left' : 'right' // Align text correctly for Arabic
+  marginRight: '1rem',
+  textAlign: language === 'ar' ? 'right' : 'left'
 }}>
   <Typography variant="body1">
     <strong>{language === 'fr' ? 'Nom du fournisseur' : language === 'en' ? 'Supplier Name' : 'اسم المورد'}:</strong> {supplier.fullname}
@@ -192,33 +176,30 @@ const BCsingleACHAT = () => {
     <strong>{language === 'fr' ? 'Téléphone du fournisseur' : language === 'en' ? 'Supplier Phone' : 'هاتف المورد'}:</strong> {supplier?.tel || 'Numéro inconnu'}
   </Typography>
   <Typography variant="body1">
-    <strong>{language === 'fr' ? 'matriculefisacl' : language === 'en' ? 'tax identification number' :"الرقم الجبائي"}:</strong> {supplier?.matriculefisacl || 'codeTVA inconnu'}
+    <strong>{language === 'fr' ? 'matriculefisacl' : language === 'en' ? 'Tax Identification Number' : "الرقم الجبائي"}:</strong> {supplier?.matriculefisacl || 'Code TVA inconnu'}
   </Typography>
 </Box>
 
-
-
-{/* Company Information (Left Corner for Arabic, Right Corner for Others) */}
+{/* Company Information (Always on the Right) */}
 <Box sx={{
   flex: 1,
   display: 'flex',
   flexDirection: 'column',
   gap: 2,
-  marginLeft: language === 'ar' ? '0' : '1rem',  // Company info goes to the left for Arabic, right for others
-  marginRight: language === 'ar' ? '1rem' : '0', // Company info margin for Arabic
-  textAlign: language === 'ar' ? 'right' : 'left' // Align text correctly for Arabic
+  marginLeft: '1rem',
+  textAlign: language === 'ar' ? 'left' : 'right'
 }}>
   <Typography variant="body1">
     <strong>{language === 'fr' ? 'Nom de la société' : language === 'en' ? 'Company Name' : 'اسم الشركة'}:</strong> AMOUNNET COMPANY EXPORT ET IMPORT
   </Typography>
   <Typography variant="body1">
-    <strong>{language === 'fr' ? 'Adresse de la société' : language === 'en' ? 'Company Address' : 'عنوان الشركة'}:</strong>  RUE DU LAC TOBA BERGES DU LAC1053 TUNIS
+    <strong>{language === 'fr' ? 'Adresse de la société' : language === 'en' ? 'Company Address' : 'عنوان الشركة'}:</strong> RUE DU LAC TOBA BERGES DU LAC1053 TUNIS
   </Typography>
   <Typography variant="body1">
     <strong>{language === 'fr' ? 'Téléphone de la société' : language === 'en' ? 'Company Phone' : 'هاتف الشركة'}:</strong> +987654321
   </Typography>
   <Typography variant="body1">
-    <strong>{language === 'fr' ? 'Matriculefisacl' : language === 'en' ? 'tax identification number' : "الرقم الجبائي" }:</strong> 1867411P/A/M/000
+    <strong>{language === 'fr' ? 'Matriculefisacl' : language === 'en' ? 'Tax Identification Number' : "الرقم الجبائي"}:</strong> 1867411P/A/M/000
   </Typography>
 </Box>
 

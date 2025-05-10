@@ -210,55 +210,41 @@ const SingleDeliveryNote = () => {
     }
   `}
 </style>
-           <Box className="logo-conatiner"
-              sx={{ 
-                width: 742,
-                height: 152,
-                mx: 'auto',
-                mb: 3,
-                display: 'flex',
-                justifyContent: 'center',
-                alignItems: 'center',
-                overflow: 'hidden'
-                
-              }}>
-               
-              </Box>
-
+          
         {/* Company and Supplier Information with Labels */}
         <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 3, direction: language === 'ar' ? 'rtl' : 'ltr' }}>
-       
+  
+  {/* Company info (Always on the left) */}
+  <Box sx={{
+    flex: 1,
+    display: 'flex',
+    flexDirection: 'column',
+    gap: 2,
+    marginRight: '1rem', // Space between company and supplier
+    textAlign: 'left'     // Always left-aligned
+  }}>
+    <Typography variant="body1"><strong>{translations[language].companyName}:</strong> AMOUNNET COMPANY EXPORT ET IMPORT</Typography>
+    <Typography variant="body1"><strong>{translations[language].companyAddress}:</strong> RUE DU LAC TOBA BERGES DU LAC1053 TUNIS</Typography>
+    <Typography variant="body1"><strong>{translations[language].companyPhone}:</strong> +987654321</Typography>
+    <Typography variant="body1"><strong>{translations[language].matriculefisacl}:</strong> 1867411P/A/M/000</Typography>
+  </Box>
 
-          <Box sx={{
-            flex: 1,
-            display: 'flex',
-            flexDirection: 'column',
-            gap: 2,
-            marginLeft: language === 'ar' ? '0' : '1rem',  // Supplier info margin for Arabic
-            marginRight: language === 'ar' ? '1rem' : '0', // Supplier info margin for other languages
-            textAlign: language === 'ar' ? 'left' : 'right' // Align text correctly for Arabic
-          }}>
-            <Typography variant="body1"><strong>{translations[language].supplierName}:</strong> {supplier.fullname}</Typography>
-            <Typography variant="body1"><strong>{translations[language].supplierAddress}:</strong> {supplier?.address || 'Adresse inconnue'}</Typography>
-            <Typography variant="body1"><strong>{translations[language].supplierPhone}:</strong> {supplier?.tel || 'Numéro inconnu'}</Typography>
-            <Typography variant="body1"><strong>{translations[language].matriculefisacl}:</strong> {supplier?.matriculefisacl || 'Matriculefisacl inconnu'}</Typography>
-          </Box>
+  {/* Supplier info (Always on the right) */}
+  <Box sx={{
+    flex: 1,
+    display: 'flex',
+    flexDirection: 'column',
+    gap: 2,
+    marginLeft: '1rem', // Space between supplier and company
+    textAlign: 'right'  // Always right-aligned
+  }}>
+    <Typography variant="body1"><strong>{translations[language].supplierName}:</strong> {supplier.fullname}</Typography>
+    <Typography variant="body1"><strong>{translations[language].supplierAddress}:</strong> {supplier?.address || 'Adresse inconnue'}</Typography>
+    <Typography variant="body1"><strong>{translations[language].supplierPhone}:</strong> {supplier?.tel || 'Numéro inconnu'}</Typography>
+    <Typography variant="body1"><strong>{translations[language].matriculefisacl}:</strong> {supplier?.matriculefisacl || 'Matriculefisacl inconnu'}</Typography>
+  </Box>
 
-          <Box sx={{
-            flex: 1,
-            display: 'flex',
-            flexDirection: 'column',
-            gap: 2,
-            marginLeft: language === 'ar' ? '0' : '1rem',  // Company info goes to the left for Arabic, right for others
-            marginRight: language === 'ar' ? '1rem' : '0', // Company info margin for Arabic
-            textAlign: language === 'ar' ? 'right' : 'left' // Align text correctly for Arabic
-          }}>
-            <Typography variant="body1"><strong>{translations[language].companyName}:</strong> AMOUNNET COMPANY EXPORT ET IMPORT</Typography>
-            <Typography variant="body1"><strong>{translations[language].companyAddress}:</strong> RUE DU LAC TOBA BERGES DU LAC1053 TUNIS</Typography>
-            <Typography variant="body1"><strong>{translations[language].companyPhone}:</strong> +987654321</Typography>
-            <Typography variant="body1"><strong>{translations[language].matriculefisacl}:</strong> 1867411P/A/M/000</Typography>
-          </Box>
-        </Box>
+</Box>
 
         <Typography variant="h4" mb={3} textAlign="center">
           {translations[language].bonDeAchat} - {num}
