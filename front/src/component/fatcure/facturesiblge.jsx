@@ -153,7 +153,20 @@ const BCsingleACHAT = () => {
 </style>
 
         {/* Logo */}
-     
+          <Box className="logo-conatiner"
+             sx={{ 
+               width: 742,
+               height: 152,
+               mx: 'auto',
+               mb: 3,
+               display: 'flex',
+               justifyContent: 'center',
+               alignItems: 'center',
+               overflow: 'hidden'
+               
+             }}>
+          
+             </Box>
 
         {/* Company and Supplier Information with Labels */}
         <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 3, direction: language === 'ar' ? 'rtl' : 'ltr' }}>
@@ -242,11 +255,11 @@ const BCsingleACHAT = () => {
                             <TableCell>{prod.designation}</TableCell>
                             <TableCell>{prod.Unite}</TableCell>
                             <TableCell>{prod.quantite}</TableCell>
-                            <TableCell>{prod.prixU_HT}TND</TableCell>
+                            <TableCell>{prod.prixU_HT}</TableCell>
                             <TableCell>{prod.tva}%</TableCell>
                             <TableCell>{prod.rem}%</TableCell>
-                            <TableCell>{netHT.toFixed(2)}TND</TableCell>
-                            <TableCell>{netTTC.toFixed(2)}TND</TableCell>
+                            <TableCell>{netHT.toFixed(2)}</TableCell>
+                            <TableCell>{netTTC.toFixed(2)}</TableCell>
                           </TableRow>
                         );
                       })}

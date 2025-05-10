@@ -210,7 +210,20 @@ const SingleDeliveryNote = () => {
     }
   `}
 </style>
-      
+           <Box className="logo-conatiner"
+              sx={{ 
+                width: 742,
+                height: 152,
+                mx: 'auto',
+                mb: 3,
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
+                overflow: 'hidden'
+                
+              }}>
+               
+              </Box>
 
         {/* Company and Supplier Information with Labels */}
         <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 3, direction: language === 'ar' ? 'rtl' : 'ltr' }}>
