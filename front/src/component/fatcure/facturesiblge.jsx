@@ -5,6 +5,7 @@ import { Box, Typography, Button, Table, TableHead, TableRow, TableCell, TableBo
 import './fdesign.css';
 import CreateDeliveryNoteModala from '../achat/crate.jsx'; // Ensure correct file name
 import logo from '../../assets/amounnet.png';  // Relative path
+import n2words from 'n2words';
 
 const BCsingleACHAT = () => {
   const { code, supplierId, codey, timbre,num} = useParams();
@@ -95,6 +96,7 @@ const BCsingleACHAT = () => {
   if (timbre === 'true') {
     totalNetTTC += 1;  // Add 1 TND for timbre
   }
+  const totalNetTTCInWords = n2words(totalNetTTC.toFixed(3), { lang: language === 'ar' ? 'ar' : language }); // Arabic or French/English
 
   function displayDate() {
     const today = new Date();
@@ -268,8 +270,8 @@ const BCsingleACHAT = () => {
         <TableCell>{prod.prixU_HT}</TableCell>
         <TableCell>{prod.tva}%</TableCell>
         <TableCell>{prod.rem}%</TableCell>
-        <TableCell>{netHT.toFixed(2)}</TableCell>
-        <TableCell>{netTTC.toFixed(2)}</TableCell>
+        <TableCell>{netHT.toFixed(3)}</TableCell>
+        <TableCell>{netTTC.toFixed(3)}</TableCell>
       </TableRow>
     );
   })}
@@ -279,16 +281,16 @@ const BCsingleACHAT = () => {
         {/* Totals Section */}
         <Box sx={{ display: 'flex', justifyContent: 'flex-end', marginTop: '20px', direction: language === 'ar' ? 'rtl' : 'ltr' }}>
           <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: language === 'ar' ? 'flex-end' : 'flex-start' }}>
-            <Typography variant="body1"><strong>{language === 'fr' ? 'Total HT' : language === 'en' ? 'Total HT' : 'الإجمالي قبل الضريبة'}:</strong> {totalHT.toFixed(2)} TND</Typography>
+            <Typography variant="body1"><strong>{language === 'fr' ? 'Total HT' : language === 'en' ? 'Total HT' : 'الإجمالي قبل الضريبة'}:</strong> {totalHT.toFixed(3)} TND</Typography>
             <Typography variant="body1" >
-                  <strong>{language === 'fr' ? 'Remise Totale' : language === 'en' ? 'Total Discount' : 'إجمالي الخصم'}:</strong> {totalRemise.toFixed(2)} TND
+                  <strong>{language === 'fr' ? 'Remise Totale' : language === 'en' ? 'Total Discount' : 'إجمالي الخصم'}:</strong> {totalRemise.toFixed(3)} TND
            </Typography>
 
               <Typography variant="body1" >
-                  <strong>{language === 'fr' ? ' Totale Net HT ' : language === 'en' ? 'Total Net HT' : 'إجمالي الخصم'}:</strong> {totalnetht.toFixed(2)} TND
+                  <strong>{language === 'fr' ? ' Totale Net HT ' : language === 'en' ? 'Total Net HT' : 'إجمالي الخصم'}:</strong> {totalnetht.toFixed(3)} TND
             </Typography>
 
-            <Typography variant="body1"><strong>{language === 'fr' ? 'Total TVA' : language === 'en' ? 'Total VAT' : 'إجمالي ضريبة القيمة المضافة'}:</strong> {totalTVA.toFixed(2)} TND</Typography>
+            <Typography variant="body1"><strong>{language === 'fr' ? 'Total TVA' : language === 'en' ? 'Total VAT' : 'إجمالي ضريبة القيمة المضافة'}:</strong> {totalTVA.toFixed(3)} TND</Typography>
             
 
             {timbre === 'true' && (
@@ -297,9 +299,16 @@ const BCsingleACHAT = () => {
               </Typography>          
               )}
 
-            <Typography variant="body1"><strong>{language === 'fr' ? 'Total TTC' : language === 'en' ? 'Total TTC' : 'الإجمالي شامل'}:</strong> {totalNetTTC.toFixed(2)} TND</Typography>
+            <Typography variant="body1"><strong>{language === 'fr' ? 'Total TTC' : language === 'en' ? 'Total TTC' : 'الإجمالي شامل'}:</strong> {totalNetTTC.toFixed(3)} TND</Typography>
           </Box>
         </Box>
+        <Box sx={{ mt: 5, textAlign: 'center' }}>
+  <Typography variant="body1" sx={{ fontStyle: 'italic' }}>
+    {language === 'fr' && `Montant en lettres : ${totalNetTTCInWords.toUpperCase()} DINARS`}
+    {language === 'en' && `Amount in words: ${totalNetTTCInWords.toUpperCase()} DINARS`}
+    {language === 'ar' && `المبلغ بالحروف: ${totalNetTTCInWords.toUpperCase()} دينار`}
+  </Typography>
+</Box>
            <Box sx={{ display: 'flex', justifyContent: 'space-between', mt: 4 }}>
                   <Box sx={{ textAlign: 'center' }}>
                     <Typography variant="body2">{translations[language].signatureFournisseur}</Typography>

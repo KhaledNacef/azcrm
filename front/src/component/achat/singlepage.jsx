@@ -4,6 +4,7 @@ import axios from 'axios';
 import { Box, Typography, Button, Table, TableHead, TableRow, TableCell, TableBody, CircularProgress, Select, MenuItem } from '@mui/material';
 import './cssba.css';
 import logo from '../../assets/amounnet.png';  // Relative path
+import n2words from 'n2words';
 
 const SingleDeliveryNote = () => {
   const { code, supplierId, codey, timbre,num } = useParams();
@@ -71,6 +72,7 @@ const SingleDeliveryNote = () => {
   if (timbre === 'true') {
     totalNetTTC += 1;  // Add 1 TND for timbre
   }
+  const totalNetTTCInWords = n2words(totalNetTTC.toFixed(3), { lang: language === 'ar' ? 'ar' : language }); // Arabic or French/English
 
   function displayDate() {
     const today = new Date();
@@ -301,11 +303,11 @@ const SingleDeliveryNote = () => {
         <TableCell>{prod.designation}</TableCell>
         <TableCell>{prod.Unite}</TableCell>
         <TableCell>{prod.quantite}</TableCell>
-        <TableCell>{prod.prixU_HT}</TableCell>
+        <TableCell>{prod.prixU_HT.toFixed(3)}</TableCell>
         <TableCell>{prod.tva}%</TableCell>
         <TableCell>{prod.rem}%</TableCell>
-        <TableCell>{netHT.toFixed(2)}</TableCell>
-        <TableCell>{netTTC.toFixed(2)}</TableCell>
+        <TableCell>{netHT.toFixed(3)}</TableCell>
+        <TableCell>{netTTC.toFixed(3)}</TableCell>
       </TableRow>
     );
   })}
@@ -316,17 +318,17 @@ const SingleDeliveryNote = () => {
         <Box sx={{ display: 'flex', justifyContent: 'flex-end', mt: 3 }}>
           <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end' }}>
             <Typography variant="body1">
-              <strong>{translations[language].prixNetHT}:</strong> {totalHT.toFixed(2)}TND
+              <strong>{translations[language].prixNetHT}:</strong> {totalHT.toFixed(3)}TND
             </Typography>
             
             <Typography variant="body1" >
-                  <strong>{language === 'fr' ? 'Remise Totale' : language === 'en' ? 'Total Discount' : 'إجمالي الخصم'}:</strong> {totalRemise.toFixed(2)} TND
+                  <strong>{language === 'fr' ? 'Remise Totale' : language === 'en' ? 'Total Discount' : 'إجمالي الخصم'}:</strong> {totalRemise.toFixed(3)} TND
             </Typography>
             <Typography variant="body1" >
-                  <strong>{language === 'fr' ? ' Totale Net HT ' : language === 'en' ? 'Total Net HT' : 'إجمالي الخصم'}:</strong> {totalnetht.toFixed(2)} TND
+                  <strong>{language === 'fr' ? ' Totale Net HT ' : language === 'en' ? 'Total Net HT' : 'إجمالي الخصم'}:</strong> {totalnetht.toFixed(3)} TND
             </Typography>
             <Typography variant="body1">
-              <strong>{translations[language].totaltva}:</strong> {totalTVA.toFixed(2)}TND
+              <strong>{translations[language].totaltva}:</strong> {totalTVA.toFixed(3)}TND
             </Typography>
             {timbre === 'true' && (
               <Typography variant="body1">
@@ -334,11 +336,17 @@ const SingleDeliveryNote = () => {
               </Typography>
             )}
             <Typography variant="body1">
-              <strong>{translations[language].prixNetTTC}:</strong> {totalNetTTC.toFixed(2)}TND
+              <strong>{translations[language].prixNetTTC}:</strong> {totalNetTTC.toFixed(3)}TND
             </Typography>
           </Box>
         </Box>
-
+        <Box sx={{ mt: 5, textAlign: 'center' }}>
+  <Typography variant="body1" sx={{ fontStyle: 'italic' }}>
+    {language === 'fr' && `Montant en lettres : ${totalNetTTCInWords.toUpperCase()} DINARS`}
+    {language === 'en' && `Amount in words: ${totalNetTTCInWords.toUpperCase()} DINARS`}
+    {language === 'ar' && `المبلغ بالحروف: ${totalNetTTCInWords.toUpperCase()} دينار`}
+  </Typography>
+</Box>
         <Box sx={{ display: 'flex', justifyContent: 'space-between', mt: 4 }}>
           <Box sx={{ textAlign: 'center' }}>
             <Typography variant="body2">{translations[language].signatureFournisseur}</Typography>
