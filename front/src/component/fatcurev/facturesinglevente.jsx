@@ -180,7 +180,7 @@ const totalHT = deliveryNote.reduce((acc, prod) => {
   if (timbre === 'true') {
     totalNetTTC += 1;  // Add 1 TND for timbre
   }
-  const totalNetTTCInWords = n2words(totalNetTTC.toFixed(3), { lang: language === 'ar' ? 'ar' : language }); // Arabic or French/English
+  const totalNetTTCInWords = n2words(totalNetTTC.toFixed(3), { lang: printLanguage === 'ar' ? 'ar' : printLanguage }); // Arabic or French/English
 
 
   const handlePrint = () => {
