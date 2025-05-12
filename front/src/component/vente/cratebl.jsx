@@ -111,11 +111,10 @@ const CreateDeliveryNoteModal = ({ onAddDeliveryNote, codey }) => {
   const handleAddProduct = () => {
     if (!newProduct) return;
   
-    const selectedProduct = availableProducts.find((p) => p.designation === newProduct);
-    if (!selectedProduct) return;
+ 
   
-    const basePrice = selectedProduct.moyenneprix > 0 ? selectedProduct.moyenneprix : selectedProduct.prixU_HT;
-    const tva = basePrice * (selectedProduct.tva / 100);
+    const basePrice = newProduct.moyenneprix > 0 ? newProduct.moyenneprix : newProduct.prixU_HT;
+    const tva = basePrice * (newProduct.tva / 100);
     const priceWithTva = basePrice + tva;
     const finalPrice = parseFloat(price) || priceWithTva;
   
@@ -126,8 +125,8 @@ const CreateDeliveryNoteModal = ({ onAddDeliveryNote, codey }) => {
       setProducts((prev) => [
         ...prev,
         {
-          designation: selectedProduct.designation,
-          Unite: selectedProduct.Unite,
+          designation: newProduct.designation,
+          Unite: newProduct.Unite,
           prixU_HT: convertedPrice,
           quantite: Number(quantite),
           tva: Number(tvaa),

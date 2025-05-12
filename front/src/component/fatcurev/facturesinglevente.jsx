@@ -37,7 +37,7 @@ const translations = {
     back: "Back",
     remise: "Discount",
     totaltva:'Total VAT',
-    prixNetHT: 'Total NET Price(HT)',
+    prixNetHT: 'Total Price(HT)',
     prixNetTTC: 'Net Price(TTC)',
 
   },
@@ -70,7 +70,7 @@ const translations = {
     matriculefisacl:'Matriculefisacl',
     remise: "Remise",
     totaltva:'Total TVA',
-    prixNetHT: 'Total NET Prix (HT)',
+    prixNetHT: 'Total Prix (HT)',
     prixNetTTC: 'Prix Net(TTC)',
 
 
@@ -105,7 +105,7 @@ const translations = {
     totalNetHT: "المجموع الصافي دون ضريبة",
     totalNetTTC: "المجموع الصافي مع الضريبة",
     totaltva:'إجمالي ضريبة القيمة المضافة',
-    prixNetHT: 'السعر الصافي(بدون ضريبة)',
+    prixNetHT: 'السعر(بدون ضريبة)',
     prixNetTTC: 'السعر الصافي(شاملة الضريبة)',
 
   }
@@ -416,10 +416,10 @@ const totalHT = deliveryNote.reduce((acc, prod) => {
                 <TableCell sx={{ textAlign: isArabic ? 'right' : 'left' }}>{prod.designation}</TableCell>
                 <TableCell sx={{ textAlign: isArabic ? 'right' : 'left' }}>{prod.quantite}</TableCell>
                 <TableCell sx={{ textAlign: isArabic ? 'right' : 'left' }}>{prod.Unite}</TableCell>
-                <TableCell sx={{ textAlign: isArabic ? 'right' : 'left' }}>{prod.prixU_HT} </TableCell>
+                <TableCell sx={{ textAlign: isArabic ? 'right' : 'left' }}>{prod.prixU_HT.toFixed(3)} </TableCell>
                 <TableCell sx={{ textAlign: isArabic ? 'right' : 'left' }}>{prod.tva}%</TableCell>
                 <TableCell sx={{ textAlign: isArabic ? 'right' : 'left' }}>{prod.rem}%</TableCell>
-                <TableCell sx={{ textAlign: isArabic ? 'right' : 'left' }}>{priceAfterRemise.toFixed(3)}%</TableCell>
+                <TableCell sx={{ textAlign: isArabic ? 'right' : 'left' }}>{priceAfterRemise.toFixed(3)}</TableCell>
                 <TableCell sx={{ textAlign: isArabic ? 'right' : 'left' }}>{netHT.toFixed(3)} </TableCell>
                 <TableCell sx={{ textAlign: isArabic ? 'right' : 'left' }}>{netTTC.toFixed(3)} </TableCell>
               </TableRow>
