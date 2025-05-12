@@ -101,7 +101,7 @@ const CreateDeliveryNoteModal = ({ onAddDeliveryNote, codey }) => {
       const tvaMultiplier = 1 + (newProduct.tva || 0) / 100;
       const priceWithTva = basePrice * tvaMultiplier;
   
-      const discount = rem > 0 ? (priceWithTva * rem) / 100 : 0;
+      const discount = newProduct.rem > 0 ? (priceWithTva * newProduct.rem) / 100 : 0;
       const discountedPrice = priceWithTva - discount;
   
       const newPrice = discountedPrice * (1 + newPercentage / 100);
