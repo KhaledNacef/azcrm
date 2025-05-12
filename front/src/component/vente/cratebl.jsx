@@ -62,16 +62,17 @@ const CreateDeliveryNoteModal = ({ onAddDeliveryNote, codey }) => {
   // New effect to update price when product is selected
   useEffect(() => {
     if (newProduct) {
-      const selectedProduct = availableProducts.find(p => p.designation === newProduct);
-      if (selectedProduct) {
-        const basePrice = selectedProduct.moyenneprix > 0 ? selectedProduct.moyenneprix : selectedProduct.prixU_HT;
-        const tva = basePrice * (selectedProduct.tva / 100);
+        const basePrice = newProduct.moyenneprix > 0 ? newProduct.moyenneprix : newProduct.prixU_HT;
+        const tva = basePrice * (newProduct.tva / 100);
         const priceWithTva = basePrice + tva;
-        setPrice(priceWithTva.toFixed(2));
+        const discount = newProduct.rem > 0 ? (priceWithTva * newProduct.rem) / 100 : 0;
+        const finalPrice = priceWithTva - discount;
+        setPrice(finalPrice.toFixed(3));
         setPercentage(0); // Reset percentage when product changes
-      }
+      
     }
   }, [newProduct, availableProducts]);
+  
 
   const generateUniqueCode = () => {
     const timestamp = new Date().getTime();
@@ -88,7 +89,7 @@ const CreateDeliveryNoteModal = ({ onAddDeliveryNote, codey }) => {
       const tva = basePrice * (selectedProduct.tva / 100);
       const priceWithTva = basePrice + tva;
       const gain = ((newPrice - priceWithTva) / priceWithTva) * 100;
-      setPercentage(gain.toFixed(2));
+      setPercentage(gain.toFixed(3));
     }
   };
 
@@ -101,7 +102,7 @@ const CreateDeliveryNoteModal = ({ onAddDeliveryNote, codey }) => {
       const tva = basePrice * (selectedProduct.tva / 100);
       const priceWithTva = basePrice + tva;
       const newPrice = priceWithTva * (1 + newPercentage / 100);
-      setPrice(newPrice.toFixed(2));
+      setPrice(newPrice.toFixed(3));
     }
   };
 
@@ -148,7 +149,7 @@ const CreateDeliveryNoteModal = ({ onAddDeliveryNote, codey }) => {
       if (!exchangeRate) {
         throw new Error(`Rate for ${selectedCurrency} not found.`);
       }
-      return (amount * exchangeRate).toFixed(2);
+      return (amount * exchangeRate).toFixed(3);
     } catch (error) {
       console.error("Erreur lors de la conversion de la devise:", error);
       return amount;

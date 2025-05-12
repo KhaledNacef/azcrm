@@ -67,28 +67,21 @@ const Createbv = ({ onAddDeliveryNote }) => {
   // Automatically update price when product is selected
   useEffect(() => {
     if (newProduct) {
-      const selectedProduct = availableProducts.find(p => p.designation === newProduct);
-      if (selectedProduct) {
-        const basePrice = selectedProduct.moyenneprix > 0 ? selectedProduct.moyenneprix : selectedProduct.prixU_HT;
-        const tvaMultiplier = 1 + (selectedProduct.tva || 0) / 100;
-        const priceWithTva = basePrice * tvaMultiplier;
+      const basePrice = newProduct.moyenneprix > 0 ? newProduct.moyenneprix : newProduct.prixU_HT;
+      const tvaMultiplier = 1 + (newProduct.tva || 0) / 100;
+      const priceWithTva = basePrice * tvaMultiplier;
   
-        // Calculate discount (rem) if it's set
-        const discount = rem > 0 ? (priceWithTva * rem) / 100 : 0;  // rem is in percentage, so divide by 100
+      const discount = newProduct.rem > 0 ? (priceWithTva * newProduct.rem) / 100 : 0;
+      const finalPrice = priceWithTva - discount;
   
-        // Apply discount
-        const finalPrice = priceWithTva - discount;
-  
-        // Convert to selected currency if not TND
-        if (selectedCurrency !== 'TND' && exchangeRates[selectedCurrency]) {
-          const convertedPrice = finalPrice * exchangeRates[selectedCurrency];
-          setPrice(convertedPrice.toFixed(3));  // Store the final price
-        } else {
-          setPrice(finalPrice.toFixed(3));  // Store the final price in TND
-        }
-  
-        setPercentage('');  // Reset percentage if needed
+      if (selectedCurrency !== 'TND' && exchangeRates[selectedCurrency]) {
+        const convertedPrice = finalPrice * exchangeRates[selectedCurrency];
+        setPrice(convertedPrice.toFixed(3));
+      } else {
+        setPrice(finalPrice.toFixed(3));
       }
+  
+      setPercentage('');
     }
   }, [newProduct, selectedCurrency, exchangeRates, rem]);
   
@@ -138,7 +131,7 @@ const Createbv = ({ onAddDeliveryNote }) => {
       const priceWithTva = basePrice * tvaMultiplier;
       
       const gain = ((newPrice - priceWithTva) / priceWithTva) * 100;
-      setPercentage(gain.toFixed(2));
+      setPercentage(gain.toFixed(3));
     }
   };
 
@@ -152,7 +145,7 @@ const Createbv = ({ onAddDeliveryNote }) => {
       const priceWithTva = basePrice * tvaMultiplier;
 
       const newPrice = priceWithTva * (1 + newPercentage / 100);
-      setPrice(newPrice.toFixed(2));
+      setPrice(newPrice.toFixed(3));
     }
   };
 
@@ -163,7 +156,7 @@ const Createbv = ({ onAddDeliveryNote }) => {
     // Convert existing price to new currency
     if (price && exchangeRates[newCurrency] && exchangeRates[selectedCurrency]) {
       const conversionRate = exchangeRates[newCurrency] / exchangeRates[selectedCurrency];
-      setPrice((parseFloat(price) * conversionRate).toFixed(2));
+      setPrice((parseFloat(price) * conversionRate).toFixed(3));
     }
   };
 
