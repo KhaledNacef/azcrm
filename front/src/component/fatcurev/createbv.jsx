@@ -21,7 +21,7 @@ const Createbv = ({ onAddDeliveryNote }) => {
   const [client, setClient] = useState(0);
   const [codey, setCodey] = useState('');
   const [products, setProducts] = useState([]);
-  const [newProduct, setNewProduct] = useState(null);
+  const [newProduct, setNewProduct] = useState({});
   const [quantite, setQuantite] = useState(1);
   const [availableProducts, setAvailableProducts] = useState([]);
   const [clients, setClients] = useState([]);
@@ -82,7 +82,7 @@ const Createbv = ({ onAddDeliveryNote }) => {
       }
   
     }
-  }, [newProduct, selectedCurrency, exchangeRates, rem]);
+  }, [newProduct, selectedCurrency, exchangeRates]);
   
   const handleAddProduct = () => {
     const selectedProduct = availableProducts.find(p => p.designation === newProduct);
@@ -123,13 +123,13 @@ const Createbv = ({ onAddDeliveryNote }) => {
   const handlePriceChange = (e) => {
     const newPrice = parseFloat(e.target.value);
     setPrice(e.target.value);
-    const selectedProduct = availableProducts.find(p => p.designation === newProduct);
-    if (selectedProduct) {
-      const basePrice = selectedProduct.moyenneprix > 0 ? selectedProduct.moyenneprix : selectedProduct.prixU_HT;
-      const tvaMultiplier = 1 + (selectedProduct.tva || 0) / 100;
+    if (newProduct) {
+      const basePrice = newProduct.moyenneprix > 0 ? newProduct.moyenneprix : newProduct.prixU_HT;
+      const tvaMultiplier = 1 + (newProduct.tva || 0) / 100;
       const priceWithTva = basePrice * tvaMultiplier;
-      
-      const gain = ((newPrice - priceWithTva) / priceWithTva) * 100;
+      const discount = newProduct.rem > 0 ? (priceWithTva * newProduct.rem) / 100 : 0;
+      const discountedPrice = priceWithTva - discount;
+      const gain = ((newPrice - discountedPrice) / discountedPrice) * 100;
       setPercentage(gain.toFixed(3));
     }
   };
