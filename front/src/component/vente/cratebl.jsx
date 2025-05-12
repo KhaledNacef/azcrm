@@ -68,7 +68,6 @@ const CreateDeliveryNoteModal = ({ onAddDeliveryNote, codey }) => {
         const discount = newProduct.rem > 0 ? (priceWithTva * newProduct.rem) / 100 : 0;
         const finalPrice = priceWithTva - discount;
         setPrice(finalPrice.toFixed(3));
-        setPercentage(0); // Reset percentage when product changes
       
     }
   }, [newProduct, availableProducts]);
@@ -96,12 +95,16 @@ const CreateDeliveryNoteModal = ({ onAddDeliveryNote, codey }) => {
   const handlePercentageChange = (e) => {
     const newPercentage = parseFloat(e.target.value);
     setPercentage(e.target.value);
-    const selectedProduct = availableProducts.find(p => p.designation === newProduct);
-    if (selectedProduct) {
-      const basePrice = selectedProduct.moyenneprix > 0 ? selectedProduct.moyenneprix : selectedProduct.prixU_HT;
-      const tva = basePrice * (selectedProduct.tva / 100);
-      const priceWithTva = basePrice + tva;
-      const newPrice = priceWithTva * (1 + newPercentage / 100);
+  
+    if (newProduct) {
+      const basePrice = newProduct.moyenneprix > 0 ? newProduct.moyenneprix : newProduct.prixU_HT;
+      const tvaMultiplier = 1 + (newProduct.tva || 0) / 100;
+      const priceWithTva = basePrice * tvaMultiplier;
+  
+      const discount = rem > 0 ? (priceWithTva * rem) / 100 : 0;
+      const discountedPrice = priceWithTva - discount;
+  
+      const newPrice = discountedPrice * (1 + newPercentage / 100);
       setPrice(newPrice.toFixed(3));
     }
   };

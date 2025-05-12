@@ -81,7 +81,6 @@ const Createbv = ({ onAddDeliveryNote }) => {
         setPrice(finalPrice.toFixed(3));
       }
   
-      setPercentage('');
     }
   }, [newProduct, selectedCurrency, exchangeRates, rem]);
   
@@ -138,17 +137,19 @@ const Createbv = ({ onAddDeliveryNote }) => {
   const handlePercentageChange = (e) => {
     const newPercentage = parseFloat(e.target.value);
     setPercentage(e.target.value);
-    const selectedProduct = availableProducts.find(p => p.designation === newProduct);
-    if (selectedProduct) {
-      const basePrice = selectedProduct.moyenneprix > 0 ? selectedProduct.moyenneprix : selectedProduct.prixU_HT;
-      const tvaMultiplier = 1 + (selectedProduct.tva || 0) / 100;
+  
+    if (newProduct) {
+      const basePrice = newProduct.moyenneprix > 0 ? newProduct.moyenneprix : newProduct.prixU_HT;
+      const tvaMultiplier = 1 + (newProduct.tva || 0) / 100;
       const priceWithTva = basePrice * tvaMultiplier;
-
-      const newPrice = priceWithTva * (1 + newPercentage / 100);
+  
+      const discount = rem > 0 ? (priceWithTva * rem) / 100 : 0;
+      const discountedPrice = priceWithTva - discount;
+  
+      const newPrice = discountedPrice * (1 + newPercentage / 100);
       setPrice(newPrice.toFixed(3));
     }
   };
-
   const handleCurrencyChange = (e) => {
     const newCurrency = e.target.value;
     setSelectedCurrency(newCurrency);
