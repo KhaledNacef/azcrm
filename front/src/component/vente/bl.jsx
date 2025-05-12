@@ -73,13 +73,15 @@ const BonsortiePage = () => {
                 <TableCell>{note.id}/{new Date(note.createdAt).toLocaleDateString()}</TableCell>
                 <TableCell>{note.clientName || "N/A"}</TableCell>
                 <TableCell>{note.devise}</TableCell>
+                <TableCell>{note.timbre}</TableCell>
+
                 <TableCell>
                   {note.createdAt ? new Date(note.createdAt).toLocaleDateString() : "N/A"}
                 </TableCell>
                 <TableCell>
                   <Button
                     variant="outlined"
-                    onClick={() => navigate(`/bon-livraison/${note.code}/${note.clientId}/${note.codey}/${note.devise}/${note.id}/${note.createdAt}`)}
+                    onClick={() => navigate(`/bon-livraison/${note.code}/${note.clientId}/${note.codey}/${note.devise}/${note.id}/${note.createdAt}/${note.timbre}`)}
                   >
                     Voir
                   </Button>

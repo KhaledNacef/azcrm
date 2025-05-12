@@ -8,10 +8,11 @@ const FactureVP=db.models.facturevp
 
 async function createbv(req, res) {
   try {
-    const {code, clientId, products,clientName,codey,devise } = req.body;
+    const {code, clientId, products,clientName,codey,devise,timbre } = req.body;
 
     // Step 1: Create the Bs (Bon de Sortie)
     const Bss = await FactureV.create({
+      timbre:timbre,
       clientId: clientId,
       code:code,
       clientName:clientName,
@@ -22,7 +23,7 @@ async function createbv(req, res) {
 
     // Step 2: Handle the products
     const stockPromises = products.map(async (product) => {
-      const { prixU_HT, quantite, designation, Unite,rem } = product;
+      const { prixU_HT, quantite, designation, Unite,rem,tva } = product;
 
       // Create a new Vente entry (always linked to the Bs)
       await FactureVP.create({
@@ -32,7 +33,8 @@ async function createbv(req, res) {
         Unite: Unite,
         code:code,
         codey:codey,
-        rem:rem
+        rem:rem,
+        tva:tva
       });
 
 

@@ -14,6 +14,7 @@ import {
   Snackbar,
   Alert,
 } from "@mui/material";
+import Autocomplete from "@mui/material/Autocomplete";
 
 const CreateDeliveryNoteModal = ({ onAddDeliveryNote, codey }) => {
   const [client, setClient] = useState("");
@@ -31,6 +32,8 @@ const CreateDeliveryNoteModal = ({ onAddDeliveryNote, codey }) => {
   const [price, setPrice] = useState("");
   const [exchangeRates, setExchangeRates] = useState({});
   const [rem, setRem] = useState(0);
+  const [tvaa, setTvaa] = useState(0);
+  const [timbre, setTimbre] = useState(false);
 
   const API_BASE_URL = "https://api.azcrm.deviceshopleader.com/api/v1";
   const CURRENCY_API_URL = "https://v6.exchangerate-api.com/v6/9179a4fac368332ee3e66b7b/latest/TND";
@@ -114,6 +117,9 @@ const CreateDeliveryNoteModal = ({ onAddDeliveryNote, codey }) => {
     const finalPrice = parseFloat(price) || priceWithTva;
   
     convertToCurrency(finalPrice).then((convertedPrice) => {
+      const tvaValue = convertedPrice * (tvaa / 100);
+      const priceWithTVA = convertedPrice + tvaValue;
+      const discountedPrice = priceWithTVA * (1 - rem / 100);
       setProducts((prev) => [
         ...prev,
         {
@@ -121,10 +127,11 @@ const CreateDeliveryNoteModal = ({ onAddDeliveryNote, codey }) => {
           Unite: selectedProduct.Unite,
           prixU_HT: convertedPrice,
           quantite: Number(quantite),
-          tva: selectedProduct.tva,
-          rem:rem
-
+          tva: Number(tvaa),
+          rem:rem,
+          sellprice:discountedPrice
         },
+
       ]);
     });
   
@@ -163,6 +170,7 @@ const CreateDeliveryNoteModal = ({ onAddDeliveryNote, codey }) => {
       clientName: clients.find((cl) => cl.id === client)?.fullname || "",
       codey,
       devise: selectedCurrency,
+      timbre:timbre
     };
 
     try {
@@ -203,23 +211,34 @@ const CreateDeliveryNoteModal = ({ onAddDeliveryNote, codey }) => {
           </MenuItem>
         ))}
       </TextField>
+      <TextField label="Timbre" select value={timbre.toString()} onChange={(e) => setTimbre(e.target.value === "true")} fullWidth margin="normal">
+              <MenuItem value="true">Oui</MenuItem>
+              <MenuItem value="false">Non</MenuItem>
+            </TextField>
 
-      <TextField 
-        label="Produit"
-        value={newProduct}
-        onChange={(e) => setNewProduct(e.target.value)}
-        select
-        fullWidth
-        margin="normal"
-      >
-        {availableProducts
-          .filter(prod => prod.quantite > 0)
-          .map(prod => (
-            <MenuItem key={prod.id} value={prod.designation}>
-              {`${prod.designation} - Quantité restante: ${prod.quantite}`}
-            </MenuItem>
-        ))}
-      </TextField>
+      <Autocomplete
+  value={newProduct}
+  onChange={(event, newValue) => {
+    setNewProduct(newValue || "");
+  }}
+  options={availableProducts.filter((prod) => prod.quantite > 0)}
+  getOptionLabel={(option) => `${option.designation} (${option.quantite} en stock)`}
+  openOnFocus
+  renderInput={(params) => (
+    <TextField
+      {...params}
+      label="Produit"
+      fullWidth
+      margin="normal"
+    />
+  )}
+  ListboxProps={{
+    style: {
+      maxHeight: "200px",
+    },
+  }}
+/>
+
 
       <TextField
         label="Prix Unitaire (avec TVA)"
@@ -232,6 +251,15 @@ const CreateDeliveryNoteModal = ({ onAddDeliveryNote, codey }) => {
           endAdornment: selectedCurrency,
         }}
       />
+
+        <TextField
+              label="TVA (%)"
+              type="number"
+              value={tvaa}
+              onChange={(e) => setTvaa(Number(e.target.value))}
+              fullWidth
+              margin="normal"
+            />
 
       <TextField
         label="Quantité"
@@ -290,6 +318,8 @@ const CreateDeliveryNoteModal = ({ onAddDeliveryNote, codey }) => {
                 <TableCell>Prix U ({selectedCurrency})</TableCell>
                 <TableCell>Quantité</TableCell>
                 <TableCell>Rem</TableCell>
+                <TableCell>TVA</TableCell>
+
 
               </TableRow>
             </TableHead>
@@ -301,6 +331,8 @@ const CreateDeliveryNoteModal = ({ onAddDeliveryNote, codey }) => {
                   <TableCell>{prod.prixU_HT}</TableCell>
                   <TableCell>{prod.quantite}</TableCell>
                   <TableCell>{prod.rem}</TableCell>
+                  <TableCell>{prod.tva}</TableCell>
+
 
                 </TableRow>
               ))}

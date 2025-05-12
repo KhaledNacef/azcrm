@@ -99,7 +99,6 @@ const CreatebcModala = ({ onAddDeliveryNote }) => {
     ]);
 
     setNewProduct("");
-    setTva(0);
     setPrixU_HT(0);
     setQuantite(1);
     setRem(0);

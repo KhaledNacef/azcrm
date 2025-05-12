@@ -49,9 +49,9 @@ const App = () => {
       <Route path="REt0/:code/:supplierId/:codey/:timbre/:num" element={<Reteune />} />
       <Route path="RET1" element={<AllReteune />} />
       <Route path="bon-livraison" element={<BonsortiePage />} />
-      <Route path="bon-livraison/:code/:clientId/:codey/:devise/:id/:datee" element={<SingleDeliverysortie />} />
+      <Route path="bon-livraison/:code/:clientId/:codey/:devise/:id/:datee/:timbre" element={<SingleDeliverysortie />} />
       <Route path="bon-commandefacture" element={<Boncommandev />} />
-      <Route path="bon-commandefacturee/:code/:clientId/:codey/:devise/:id/:datee" element={<Bvsinlge />} />
+      <Route path="bon-commandefacturee/:code/:clientId/:codey/:devise/:id/:datee/:timbre" element={<Bvsinlge />} />
       <Route path="bon-commande" element={<Boncommande />} />
       <Route path="bon-commandea/:code/:supplierId/:codey/:timbre/:num" element={<BCsingleACHAT />} />
       <Route path="gestion/:codey" element={<CompareProducts />} />

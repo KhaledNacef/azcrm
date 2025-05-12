@@ -1,6 +1,6 @@
 const {  DataTypes } = require('sequelize');
 
-const Vente =  {
+const stockT =  {
   id: {
     type: DataTypes.INTEGER,
     autoIncrement: true,
@@ -9,10 +9,6 @@ const Vente =  {
   prixU_HT: {
     type: DataTypes.FLOAT,
     allowNull: false,
-  },
-  net: {
-    type: DataTypes.FLOAT,
-    allowNull: true,
   },
  
   quantite: {
@@ -28,26 +24,17 @@ const Vente =  {
     type: DataTypes.STRING,
     allowNull: true,
   },
-  code: {
+  codeClient: {
     type: DataTypes.STRING,
     allowNull: false,
   },
-  codey: {
-    type: DataTypes.STRING,
-    allowNull: true,
-  },
   tva: {
     type: DataTypes.FLOAT,
-    allowNull: true,
+    allowNull: false,
   },
   rem: {
     type: DataTypes.FLOAT,
     allowNull: true, // Allow null because it's computed dynamically
-  }
-  ,
-  num: {
-    type: DataTypes.STRING,
-    allowNull: false,
   }
   ,
   sellprice: {
@@ -57,4 +44,4 @@ const Vente =  {
   
 };
 
-module.exports = Vente;
+module.exports = stockT;

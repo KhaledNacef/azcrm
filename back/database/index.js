@@ -15,6 +15,8 @@ const FactureV=require('./models/factureV.js')
 const FactureAP=require('../database/models/factureachatproduit.js')
 const FactureVP=require('./models/factureventeproduit.js')
 const Reteune=require('./models/reteune.js')
+const StockH=require('./models/stockhistorique.js')
+const StockT=require('./models/stocktrace.js')
 const db = new Sequelize({
   dialect: 'mysql',     
   host: '195.200.15.61',    
@@ -37,6 +39,8 @@ const factureV=db.define('factureV',FactureV)
 const factureap=db.define('factureap',FactureAP)
 const facturevp=db.define('facturevp',FactureVP)
 const reteune=db.define('reteune',Reteune)
+const stockH=db.define('stockH',StockH)
+const stockT=db.define('stockT',StockT)
 
 
 

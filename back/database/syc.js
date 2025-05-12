@@ -10,7 +10,8 @@ const Vente=db.models.vente
 const StockP=db.models.stockP
 const DeliveryNote =db.models.deliveryNote
 const Reteune =db.models.reteune
-
+const StockH=db.models.stockH
+const StockT=db.models.stockT
 async function syncDatabase() {
   try {
     await db.sync({ alter: true }); // This will update the schema without deleting data

@@ -35,7 +35,10 @@ const FactureVP =  {
     type: DataTypes.FLOAT,
     allowNull: true, 
   },
-  
+  tva: {
+    type: DataTypes.FLOAT,
+    allowNull: true,
+  }
   
 };
 

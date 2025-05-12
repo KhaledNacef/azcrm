@@ -1,6 +1,6 @@
-const {  DataTypes } = require('sequelize');
+const { DataTypes } = require('sequelize');
 
-const Vente =  {
+const StockH = {
   id: {
     type: DataTypes.INTEGER,
     autoIncrement: true,
@@ -10,16 +10,26 @@ const Vente =  {
     type: DataTypes.FLOAT,
     allowNull: false,
   },
-  net: {
+  prixU_TTC: {
     type: DataTypes.FLOAT,
-    allowNull: true,
+    allowNull: true, // Computed field
   },
- 
+  tva: {
+    type: DataTypes.FLOAT,
+    allowNull: false,
+  },
+  netTTC: {
+    type: DataTypes.FLOAT,
+    allowNull: true, // Computed field
+  },
+  netHT: {
+    type: DataTypes.FLOAT,
+    allowNull: true, // Computed field
+  },
   quantite: {
     type: DataTypes.FLOAT,
     allowNull: false,
   },
-  
   designation: {
     type: DataTypes.STRING,
     allowNull: false,
@@ -28,33 +38,24 @@ const Vente =  {
     type: DataTypes.STRING,
     allowNull: true,
   },
-  code: {
-    type: DataTypes.STRING,
-    allowNull: false,
-  },
-  codey: {
-    type: DataTypes.STRING,
-    allowNull: true,
-  },
-  tva: {
+  
+  dernierprixU_HT: {
     type: DataTypes.FLOAT,
     allowNull: true,
   },
   rem: {
     type: DataTypes.FLOAT,
     allowNull: true, // Allow null because it's computed dynamically
-  }
-  ,
-  num: {
-    type: DataTypes.STRING,
-    allowNull: false,
-  }
-  ,
-  sellprice: {
+  },
+  moyenneprix: {
     type: DataTypes.FLOAT,
-    allowNull: true, // Allow null because it's computed dynamically
+    allowNull: true,
+  },
+  codesuplier: {
+    type: DataTypes.FLOAT,
+    allowNull: true,
   }
-  
 };
 
-module.exports = Vente;
+
+module.exports =  StockH;

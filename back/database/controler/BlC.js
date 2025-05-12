@@ -3,10 +3,25 @@ const db  = require('../index');
 const DeliveryNote =db.models.deliveryNote
 const Stock =db.models.stock
 const StockP =db.models.stockP
+const StockH=db.models.stockH
 
 
 
+const getAllStockhistory = async (req, res) => {
+  try {
+    const { code } = req.params; // Assuming `code` is passed in the request body
 
+
+
+    // Fetch all Stock items where BaId matches the DeliveryNote's id
+    const stocks = await StockH.findAll();
+
+    res.status(200).json(stocks);
+  } catch (error) {
+    console.error('Error fetching stock items by delivery note code:', error);
+    res.status(500).json({ error: 'Failed to fetch stock items' });
+  }
+};
 
 
 
@@ -99,6 +114,17 @@ async function createDeliveryNote(req, res) {
         rem: rem,
         moyenneprix: 0,
         dernierprixU_HT: 0
+      });
+
+
+      await StockH.create({
+        prixU_HT: prixU_HT,
+        tva: tva,
+        quantite: quantite,
+        designation: designation,
+        Unite: Unite,
+        rem: rem,
+        codesuplier:num
       });
 
       // Handle StockP
@@ -209,5 +235,5 @@ async function deleteDeliveryNote(req, res) {
 
 module.exports = {
   createDeliveryNote,
-  deleteDeliveryNote,getAllDeliveryNotes,getAllStockItemsByDeliveryNote,getAllStockItemsByDeliveryNotey
+  deleteDeliveryNote,getAllDeliveryNotes,getAllStockItemsByDeliveryNote,getAllStockItemsByDeliveryNotey,getAllStockhistory
 };

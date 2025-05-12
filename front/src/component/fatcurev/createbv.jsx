@@ -14,6 +14,7 @@ import {
   Snackbar,
   Alert
 } from '@mui/material';
+import Autocomplete from "@mui/material/Autocomplete";
 
 const Createbv = ({ onAddDeliveryNote }) => {
   const [code, setCode] = useState('');
@@ -32,6 +33,8 @@ const Createbv = ({ onAddDeliveryNote }) => {
   const [snackbarSeverity, setSnackbarSeverity] = useState('success');
   const [exchangeRates, setExchangeRates] = useState({});
   const [rem, setRem] = useState(0);
+  const [tvaa, setTvaa] = useState(0);
+  const [timbre, setTimbre] = useState(false);
 
   const API_BASE_URL = 'https://api.azcrm.deviceshopleader.com/api/v1';
   const EXCHANGE_RATE_API_URL = 'https://api.exchangerate-api.com/v4/latest/TND';
@@ -69,20 +72,26 @@ const Createbv = ({ onAddDeliveryNote }) => {
         const basePrice = selectedProduct.moyenneprix > 0 ? selectedProduct.moyenneprix : selectedProduct.prixU_HT;
         const tvaMultiplier = 1 + (selectedProduct.tva || 0) / 100;
         const priceWithTva = basePrice * tvaMultiplier;
-        
+  
+        // Calculate discount (rem) if it's set
+        const discount = rem > 0 ? (priceWithTva * rem) / 100 : 0;  // rem is in percentage, so divide by 100
+  
+        // Apply discount
+        const finalPrice = priceWithTva - discount;
+  
         // Convert to selected currency if not TND
         if (selectedCurrency !== 'TND' && exchangeRates[selectedCurrency]) {
-          const convertedPrice = priceWithTva * exchangeRates[selectedCurrency];
-          setPrice(convertedPrice.toFixed(2));
+          const convertedPrice = finalPrice * exchangeRates[selectedCurrency];
+          setPrice(convertedPrice.toFixed(2));  // Store the final price
         } else {
-          setPrice(priceWithTva.toFixed(2));
+          setPrice(finalPrice.toFixed(2));  // Store the final price in TND
         }
-        
-        setPercentage('');
+  
+        setPercentage('');  // Reset percentage if needed
       }
     }
-  }, [newProduct, selectedCurrency, exchangeRates]);
-
+  }, [newProduct, selectedCurrency, exchangeRates, rem]);
+  
   const handleAddProduct = () => {
     const selectedProduct = availableProducts.find(p => p.designation === newProduct);
     if (!selectedProduct) return;
@@ -107,7 +116,8 @@ const Createbv = ({ onAddDeliveryNote }) => {
       Unite: selectedProduct.Unite,
       prixU_HT: finalPrice,
       quantite: Number(quantite),
-      rem:rem
+      rem:rem,
+      tva:tvaa
     }]);
 
     setNewProduct('');
@@ -171,7 +181,8 @@ const Createbv = ({ onAddDeliveryNote }) => {
         products,
         clientName: clients.find((cl) => cl.id === client)?.fullname || "",
         codey,
-        devise: selectedCurrency
+        devise: selectedCurrency,
+        timbre:timbre
       });
 
       setSnackbarMessage('Delivery note created successfully');
@@ -188,7 +199,7 @@ const Createbv = ({ onAddDeliveryNote }) => {
 
   return (
     <Box>
-      <Typography variant="h6">Create Bon de Livraison</Typography>
+      <Typography variant="h6">Créer Bon de Livraison</Typography>
       
       <TextField
         label="Code"
@@ -212,33 +223,33 @@ const Createbv = ({ onAddDeliveryNote }) => {
           </MenuItem>
         ))}
       </TextField>
+         <TextField label="Timbre" select value={timbre.toString()} onChange={(e) => setTimbre(e.target.value === "true")} fullWidth margin="normal">
+                    <MenuItem value="true">Oui</MenuItem>
+                    <MenuItem value="false">Non</MenuItem>
+                  </TextField>
+      <Autocomplete
+  value={newProduct}
+  onChange={(event, newValue) => {
+    setNewProduct(newValue || "");
+  }}
+  options={availableProducts.filter((prod) => prod.quantite > 0)}
+  getOptionLabel={(option) => `${option.designation} (${option.quantite} en stock)`}
+  openOnFocus
+  renderInput={(params) => (
+    <TextField
+      {...params}
+      label="Produit"
+      fullWidth
+      margin="normal"
+    />
+  )}
+  ListboxProps={{
+    style: {
+      maxHeight: "200px",
+    },
+  }}
+/>
 
-      <TextField
-        select
-        label="Select Product"
-        value={newProduct}
-        onChange={(e) => setNewProduct(e.target.value)}
-        fullWidth
-        margin="normal"
-      >
-        {availableProducts
-          .filter(product => product.quantite > 0)
-          .map(product => (
-            <MenuItem key={product.id} value={product.designation}>
-              {`${product.designation} (Stock: ${product.quantite})`}
-            </MenuItem>
-          ))}
-      </TextField>
-
-      <TextField
-        label="Quantity"
-        type="number"
-        value={quantite}
-        onChange={(e) => setQuantite(e.target.value)}
-        fullWidth
-        margin="normal"
-        inputProps={{ min: 1 }}
-      />
 
       <TextField
         label={`Price (${selectedCurrency})`}
@@ -251,7 +262,25 @@ const Createbv = ({ onAddDeliveryNote }) => {
           endAdornment: selectedCurrency,
         }}
       />
+<TextField
+              label="TVA (%)"
+              type="number"
+              value={tvaa}
+              onChange={(e) => setTvaa(Number(e.target.value))}
+              fullWidth
+              margin="normal"
+            />
+      <TextField
+        label="Quantity"
+        type="number"
+        value={quantite}
+        onChange={(e) => setQuantite(e.target.value)}
+        fullWidth
+        margin="normal"
+        inputProps={{ min: 1 }}
+      />
 
+      
       <TextField
         label="Percentage Gain"
         type="number"
@@ -304,6 +333,8 @@ const Createbv = ({ onAddDeliveryNote }) => {
                 <TableCell>Unit</TableCell>
                 <TableCell>Price ({selectedCurrency})</TableCell>
                 <TableCell>Quantity</TableCell>
+                <TableCell>tva</TableCell>
+
               </TableRow>
             </TableHead>
             <TableBody>
@@ -313,6 +344,8 @@ const Createbv = ({ onAddDeliveryNote }) => {
                   <TableCell>{product.Unite}</TableCell>
                   <TableCell>{product.prixU_HT}</TableCell>
                   <TableCell>{product.quantite}</TableCell>
+                  <TableCell>{product.tva}</TableCell>
+
                 </TableRow>
               ))}
             </TableBody>

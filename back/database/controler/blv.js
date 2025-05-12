@@ -2,7 +2,21 @@ const db  = require('../index'); // Adjust the path to your model as needed
 const Bs =db.models.bs
 const Vente=db.models.vente
 const StockP=db.models.stockP
+const StockT=db.models.stockT
 
+async function getAllStockT(req, res) {
+  try {
+    // Fetch all delivery notes with their associated stock entries
+    const ST = await StockT.findAll();
+
+    return res.status(200).json(ST);
+  } catch (error) {
+    console.error('Error fetching delivery notes:', error);
+    return res.status(500).json({
+      error: 'Failed to fetch delivery notess',
+    });
+  }
+}
 
 
 
@@ -61,20 +75,23 @@ async function getAllBss(req, res) {
 
 async function createBs(req, res) {
   try {
-    const {code,clientId, products,clientName,codey,devise} = req.body;
+    const {code,clientId, products,clientName,codey,devise,timbre} = req.body;
 
     // Step 1: Create the Bs (Bon de Sortie)
     const Bss = await Bs.create({
+      timbre:timbre,
       clientId: clientId,
       code:code,
       clientName:clientName,
       codey:codey,
-      devise:devise
+      devise:devise,
+      
     });
-
+    const createdAt = new Date(Bss.createdAt);
+    const formattedCodeClient = `${Bss.id}/${String(createdAt.getDate()).padStart(2, '0')}/${String(createdAt.getMonth() + 1).padStart(2, '0')}/${createdAt.getFullYear()}`;
     // Step 2: Handle the products
     const stockPromises = products.map(async (product) => {
-      const { prixU_HT, quantite, designation, Unite,rem } = product;
+      const { prixU_HT, quantite, designation, Unite,rem,tva,sellprice } = product;
 
       // Create a new Vente entry (always linked to the Bs)
       await Vente.create({
@@ -85,9 +102,21 @@ async function createBs(req, res) {
         Unite: Unite,
         code:code,
         codey:codey,
-        rem:rem
+        rem:rem,
+        tva:tva
       });
 
+      await StockT.create({
+        prixU_HT: prixU_HT,
+        quantite: quantite,
+        designation: designation,
+        Unite: Unite,
+        rem:rem,
+        tva:tva,
+        sellprice:sellprice,
+        codeClient:formattedCodeClient,
+
+      });
       // Handle StockP (general stock)
       const stockP = await StockP.findOne({
         where: {
@@ -164,5 +193,5 @@ async function deleteBs(req, res) {
 
 module.exports = {
   createBs,
-  deleteBs,getAllBss,getAllStockItemsByBs,getAllStockItemsByBscodey
+  deleteBs,getAllBss,getAllStockItemsByBs,getAllStockItemsByBscodey,getAllStockT
 };

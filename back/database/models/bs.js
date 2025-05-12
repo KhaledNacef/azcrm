@@ -7,6 +7,10 @@ const Bs = {
     autoIncrement: true,
     primaryKey: true,
   },
+     timbre: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
   clientId: {
     type: DataTypes.INTEGER,
     allowNull: false,
