@@ -44,12 +44,7 @@ const Vente =  {
     type: DataTypes.FLOAT,
     allowNull: true, // Allow null because it's computed dynamically
   }
-  ,
-  sellprice: {
-    type: DataTypes.FLOAT,
-    allowNull: true, // Allow null because it's computed dynamically
-  }
-  
+ 
 };
 
 module.exports = Vente;
