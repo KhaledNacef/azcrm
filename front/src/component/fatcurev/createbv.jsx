@@ -85,10 +85,10 @@ const Createbv = ({ onAddDeliveryNote }) => {
   }, [newProduct, selectedCurrency, exchangeRates]);
   
   const handleAddProduct = () => {
-    const selectedProduct = availableProducts.find(p => p.designation === newProduct);
-    if (!selectedProduct) return;
+   
+    if (!newProduct) return;
 
-    if (parseInt(quantite, 10) > selectedProduct.quantite) {
+    if (parseFloat(quantite, 10) > newProduct.quantite) {
       setSnackbarMessage('Insufficient stock quantity');
       setSnackbarSeverity('error');
       setOpenSnackbar(true);
@@ -104,8 +104,8 @@ const Createbv = ({ onAddDeliveryNote }) => {
     }
 
     setProducts([...products, {
-      designation: selectedProduct.designation,
-      Unite: selectedProduct.Unite,
+      designation: newProduct.designation,
+      Unite: newProduct.Unite,
       prixU_HT: finalPrice,
       quantite: Number(quantite),
       rem:rem,
