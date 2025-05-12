@@ -21,7 +21,7 @@ const Createbv = ({ onAddDeliveryNote }) => {
   const [client, setClient] = useState(0);
   const [codey, setCodey] = useState('');
   const [products, setProducts] = useState([]);
-  const [newProduct, setNewProduct] = useState({});
+  const [newProduct, setNewProduct] = useState(null);
   const [quantite, setQuantite] = useState(1);
   const [availableProducts, setAvailableProducts] = useState([]);
   const [clients, setClients] = useState([]);
@@ -289,7 +289,7 @@ const Createbv = ({ onAddDeliveryNote }) => {
       <TextField 
       label="Rem (%)"
        type="number"
-        value={rem} onChange={(e) => setRem(parseFloat(e.target.value) || 0)} 
+        value={rem} onChange={(e) => setRem(e.target.value || 0)} 
         fullWidth 
         margin="normal" 
         />

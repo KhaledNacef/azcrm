@@ -20,7 +20,7 @@ const CreateDeliveryNoteModal = ({ onAddDeliveryNote, codey }) => {
   const [client, setClient] = useState("");
   const [code, setCode] = useState("");
   const [products, setProducts] = useState([]);
-  const [newProduct, setNewProduct] = useState({});
+  const [newProduct, setNewProduct] = useState(null);
   const [quantite, setQuantite] = useState(1);
   const [availableProducts, setAvailableProducts] = useState([]);
   const [clients, setClients] = useState([]);
