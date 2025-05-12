@@ -110,13 +110,22 @@ const CreateDeliveryNoteModal = ({ onAddDeliveryNote, codey }) => {
 
   const handleAddProduct = () => {
     if (!newProduct) return;
-  
- 
-  
-    const basePrice = newProduct.moyenneprix > 0 ? newProduct.moyenneprix : newProduct.prixU_HT;
-    const tva = basePrice * (newProduct.tva / 100);
-    const priceWithTva = basePrice + tva;
-    const finalPrice = parseFloat(price) || priceWithTva;
+
+    
+    if (parseFloat(quantite, 10) > newProduct.quantite) {
+      setSnackbarMessage('Insufficient stock quantity');
+      setSnackbarSeverity('error');
+      setOpenSnackbar(true);
+      return;
+    }
+
+    const finalPrice = parseFloat(price);
+    if (isNaN(finalPrice)) {
+      setSnackbarMessage('Please enter a valid price');
+      setSnackbarSeverity('error');
+      setOpenSnackbar(true);
+      return;
+    }
   
     convertToCurrency(finalPrice).then((convertedPrice) => {
       const tvaValue = convertedPrice * (tvaa / 100);
@@ -137,7 +146,7 @@ const CreateDeliveryNoteModal = ({ onAddDeliveryNote, codey }) => {
       ]);
     });
   
-    setNewProduct("");
+    setNewProduct(null);
     setQuantite(1);
     setPercentage(0);
     setRem(0);
@@ -271,15 +280,7 @@ const CreateDeliveryNoteModal = ({ onAddDeliveryNote, codey }) => {
         fullWidth
         margin="normal"
       />
-      <TextField 
-      label="Rem (%)" 
-      type="number" 
-      value={rem} onChange={(e) => setRem(parseFloat(e.target.value) || 0)} 
-      fullWidth 
-      margin="normal" 
-      />
-
-      <TextField
+        <TextField
         label="Pourcentage de gain"
         type="number"
         value={percentage}
@@ -290,6 +291,15 @@ const CreateDeliveryNoteModal = ({ onAddDeliveryNote, codey }) => {
           endAdornment: "%",
         }}
       />
+      <TextField 
+      label="Rem (%)" 
+      type="number" 
+      value={rem} onChange={(e) => setRem(e.target.value || 0)} 
+      fullWidth 
+      margin="normal" 
+      />
+
+    
 
       <TextField
         label="Devise"

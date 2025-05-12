@@ -112,7 +112,7 @@ const Createbv = ({ onAddDeliveryNote }) => {
       tva:tvaa
     }]);
 
-    setNewProduct('');
+    setNewProduct(null);
     setQuantite(1);
     setPrice('');
     setPercentage('');
