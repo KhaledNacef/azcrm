@@ -20,7 +20,7 @@ const CreateDeliveryNoteModal = ({ onAddDeliveryNote, codey }) => {
   const [client, setClient] = useState("");
   const [code, setCode] = useState("");
   const [products, setProducts] = useState([]);
-  const [newProduct, setNewProduct] = useState("");
+  const [newProduct, setNewProduct] = useState(null);
   const [quantite, setQuantite] = useState(1);
   const [availableProducts, setAvailableProducts] = useState([]);
   const [clients, setClients] = useState([]);
@@ -219,7 +219,7 @@ const CreateDeliveryNoteModal = ({ onAddDeliveryNote, codey }) => {
       <Autocomplete
   value={newProduct}
   onChange={(event, newValue) => {
-    setNewProduct(newValue || "");
+    setNewProduct(newValue);
   }}
   options={availableProducts.filter((prod) => prod.quantite > 0)}
   getOptionLabel={(option) => `${option.designation} (${option.quantite} en stock)`}

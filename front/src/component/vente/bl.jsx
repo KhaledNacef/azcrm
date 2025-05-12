@@ -72,7 +72,7 @@ const BonsortiePage = () => {
               <TableRow key={note.code}>
                 <TableCell>{note.id}/{new Date(note.createdAt).toLocaleDateString()}</TableCell>
                 <TableCell>{note.clientName || "N/A"}</TableCell>
-                <TableCell>{note.devise}</TableCell>
+                <TableCell>{note.timbre}</TableCell>
                 <TableCell>{note.timbre}</TableCell>
 
                 <TableCell>

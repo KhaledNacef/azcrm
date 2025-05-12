@@ -21,7 +21,7 @@ const Createbv = ({ onAddDeliveryNote }) => {
   const [client, setClient] = useState(0);
   const [codey, setCodey] = useState('');
   const [products, setProducts] = useState([]);
-  const [newProduct, setNewProduct] = useState('');
+  const [newProduct, setNewProduct] = useState(null);
   const [quantite, setQuantite] = useState(1);
   const [availableProducts, setAvailableProducts] = useState([]);
   const [clients, setClients] = useState([]);
@@ -82,9 +82,9 @@ const Createbv = ({ onAddDeliveryNote }) => {
         // Convert to selected currency if not TND
         if (selectedCurrency !== 'TND' && exchangeRates[selectedCurrency]) {
           const convertedPrice = finalPrice * exchangeRates[selectedCurrency];
-          setPrice(convertedPrice.toFixed(2));  // Store the final price
+          setPrice(convertedPrice.toFixed(3));  // Store the final price
         } else {
-          setPrice(finalPrice.toFixed(2));  // Store the final price in TND
+          setPrice(finalPrice.toFixed(3));  // Store the final price in TND
         }
   
         setPercentage('');  // Reset percentage if needed
@@ -230,7 +230,7 @@ const Createbv = ({ onAddDeliveryNote }) => {
       <Autocomplete
   value={newProduct}
   onChange={(event, newValue) => {
-    setNewProduct(newValue || "");
+    setNewProduct(newValue);
   }}
   options={availableProducts.filter((prod) => prod.quantite > 0)}
   getOptionLabel={(option) => `${option.designation} (${option.quantite} en stock)`}
