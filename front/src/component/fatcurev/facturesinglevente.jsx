@@ -430,33 +430,33 @@ const totalHT = deliveryNote.reduce((acc, prod) => {
        <Box sx={{ display: 'flex', justifyContent: 'flex-end', mt: 3 }}>
                       <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end' }}>
                         <Typography variant="body1">
-                          <strong>{translations[language].prixNetHT}:</strong> {totalHT.toFixed(3)}TND
+                          <strong>{translations[printLanguage].prixNetHT}:</strong> {totalHT.toFixed(3)}TND
                         </Typography>
                         
                         <Typography variant="body1" >
-                              <strong>{language === 'fr' ? 'Remise Totale' : language === 'en' ? 'Total Discount' : 'إجمالي الخصم'}:</strong> {totalRemise.toFixed(3)} TND
+                              <strong>{printLanguage === 'fr' ? 'Remise Totale' : printLanguage === 'en' ? 'Total Discount' : 'إجمالي الخصم'}:</strong> {totalRemise.toFixed(3)} TND
                         </Typography>
                         <Typography variant="body1" >
-                              <strong>{language === 'fr' ? ' Totale Net HT ' : language === 'en' ? 'Total Net HT' : 'إجمالي الخصم'}:</strong> {totalnetht.toFixed(3)} TND
+                              <strong>{printLanguage === 'fr' ? ' Totale Net HT ' : printLanguage === 'en' ? 'Total Net HT' : 'إجمالي الخصم'}:</strong> {totalnetht.toFixed(3)} TND
                         </Typography>
                         <Typography variant="body1">
-                          <strong>{translations[language].totaltva}:</strong> {totalTVA.toFixed(3)}TND
+                          <strong>{translations[printLanguage].totaltva}:</strong> {totalTVA.toFixed(3)}TND
                         </Typography>
                         {timbre === 'true' && (
                           <Typography variant="body1">
-                            <strong>{translations[language].timbre}:</strong> 1TND
+                            <strong>{translations[printLanguage].timbre}:</strong> 1TND
                           </Typography>
                         )}
                         <Typography variant="body1">
-                          <strong>{translations[language].prixNetTTC}:</strong> {totalNetTTC.toFixed(3)}TND
+                          <strong>{translations[printLanguage].prixNetTTC}:</strong> {totalNetTTC.toFixed(3)}TND
                         </Typography>
                       </Box>
                     </Box>
                      <Box sx={{ mt: 5, textAlign: 'center' }}>
                       <Typography variant="body1" sx={{ fontStyle: 'italic' }}>
-                        {language === 'fr' && `Montant en lettres : ${totalNetTTCInWords.toUpperCase()} DINARS`}
-                        {language === 'en' && `Amount in words: ${totalNetTTCInWords.toUpperCase()} DINARS`}
-                        {language === 'ar' && `المبلغ بالحروف: ${totalNetTTCInWords.toUpperCase()} دينار`}
+                        {printLanguage === 'fr' && `Montant en lettres : ${totalNetTTCInWords.toUpperCase()} DINARS`}
+                        {printLanguage === 'en' && `Amount in words: ${totalNetTTCInWords.toUpperCase()} DINARS`}
+                        {printLanguage === 'ar' && `المبلغ بالحروف: ${totalNetTTCInWords.toUpperCase()} دينار`}
                       </Typography>
                     </Box>
 
