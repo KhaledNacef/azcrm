@@ -45,11 +45,6 @@ const Vente =  {
     allowNull: true, // Allow null because it's computed dynamically
   }
   ,
-  num: {
-    type: DataTypes.STRING,
-    allowNull: false,
-  }
-  ,
   sellprice: {
     type: DataTypes.FLOAT,
     allowNull: true, // Allow null because it's computed dynamically
