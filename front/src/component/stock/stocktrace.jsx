@@ -22,32 +22,15 @@ const StockTPage = () => {
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState('');
   const [snackbarSeverity, setSnackbarSeverity] = useState('success');
-  
-  const [exchangeRates, setExchangeRates] = useState({}); // Add state for exchange rates
-  
-  const CURRENCY_API_URL = "https://v6.exchangerate-api.com/v6/9179a4fac368332ee3e66b7b/latest/TND"; // Your API URL
 
   useEffect(() => {
-    // Fetch exchange rates
-    const fetchExchangeRates = async () => {
-      try {
-        const res = await axios.get(CURRENCY_API_URL);
-        setExchangeRates(res.data.conversion_rates); // Store rates in state
-      } catch (error) {
-        console.error("Failed to fetch exchange rates", error);
-      }
-    };
-
-    fetchExchangeRates();
-
-    // Fetch stock data
     const fetchStock = async () => {
       try {
         const response = await axios.get('https://api.azcrm.deviceshopleader.com/api/v1/bs/bs/getST');
         setProducts(response.data);
         setFilteredProducts(response.data);
       } catch (error) {
-        console.error("Error fetching products:", error);
+        console.error("Erreur lors de la récupération des produits :", error);
         showSnackbar('Error fetching products.', 'error');
       }
     };
@@ -96,12 +79,13 @@ const StockTPage = () => {
     const prixUNetHT = unitPrice - remise;
     const netHT = prixUNetHT * product.quantite;
     const netTTC = netHT + (netHT * product.tva) / 100;
-
+  
     const totalSellPrice = (product.sellprice || 0) * product.quantite;
     const profit = totalSellPrice - netTTC;
-
+  
     return acc + profit;
   }, 0);
+  
 
   return (
     <Box sx={{ p: 3 }}>
@@ -135,56 +119,52 @@ const StockTPage = () => {
               <TableCell><strong>Total Net (TTC)</strong></TableCell>
               <TableCell><strong>Prix De Vente TTC</strong></TableCell>
               <TableCell><strong>Gain Unitaire</strong></TableCell> 
-              <TableCell><strong>Gain Total (TND)</strong></TableCell> {/* New Cell */}
+              <TableCell><strong>Gain Total</strong></TableCell> 
           </TableRow>
           </TableHead>
 
           <TableBody>
-            {filteredProducts.length > 0 ? (
-              filteredProducts.map((product) => {
-                const unitPrice = product.prixU_HT;
-                const remise = product.rem > 0 ? (unitPrice * product.rem) / 100 : 0;
-                const prixUNetHT = unitPrice - remise;
-                const netHT = prixUNetHT * product.quantite;
-                const netTTC = netHT + (netHT * product.tva) / 100;
+  {filteredProducts.length > 0 ? (
+    filteredProducts.map((product) => {
+      const unitPrice = product.prixU_HT;
+      const hasRemise = product.rem > 0;
+      const remise = hasRemise ? (unitPrice * product.rem) / 100 : 0;
+      const prixUNetHT = unitPrice - remise;
+      const netHT = prixUNetHT * product.quantite;
+      const netTTC = netHT + (netHT * product.tva) / 100;
 
-                const netTTCPerUnit = prixUNetHT + (prixUNetHT * product.tva) / 100;
-                const sellPrice = product.sellprice || 0;
-                const gainPerUnit = sellPrice - netTTCPerUnit;
-                const totalGain = gainPerUnit * product.quantite;
+      const netTTCPerUnit = prixUNetHT + (prixUNetHT * product.tva) / 100;
+      const sellPrice = product.sellprice || 0;
+      const gainPerUnit = sellPrice - netTTCPerUnit;
+      const totalGain = gainPerUnit * product.quantite;
 
-                // Convert the product's price to TND if not already in TND
-                const devise = product.devise || 'TND';
-                const rateToTND = devise === 'TND' ? 1 : (exchangeRates['TND'] / exchangeRates[devise]) || 1;
-                const totalGainInTND = totalGain * rateToTND;
-
-                return (
-                  <TableRow key={product.id}>
-                    <TableCell>{product.id}</TableCell>
-                    <TableCell>{product.codeClient}</TableCell>
-                    <TableCell>{product.designation}</TableCell>
-                    <TableCell>{product.Unite}</TableCell>
-                    <TableCell>{product.quantite}</TableCell>
-                    <TableCell>{unitPrice.toFixed(3)} {product.devise || ' TND'}</TableCell>
-                    <TableCell>{product.tva} %</TableCell>
-                    <TableCell>{remise > 0 ? `${product.rem} %` : '-'}</TableCell>
-                    <TableCell>{prixUNetHT.toFixed(3)} {product.devise || ' TND'}</TableCell>
-                    <TableCell>{netHT.toFixed(3)} {product.devise || ' TND'}</TableCell>
-                    <TableCell>{netTTC.toFixed(3)} {product.devise || ' TND'}</TableCell>
-                    <TableCell>{(sellPrice || 0).toFixed(3)} {product.devise || ' TND'}</TableCell>
-                    <TableCell>{gainPerUnit.toFixed(3)} {product.devise || ' TND'}</TableCell>
-                    <TableCell>{totalGainInTND.toFixed(3)} TND</TableCell> {/* Display Gain in TND */}
-                  </TableRow>
-                );
-              })
-            ) : (
-              <TableRow>
-                <TableCell colSpan={13} align="center">
-                  No products found.
-                </TableCell>
-              </TableRow>
-            )}
-          </TableBody>
+      return (
+        <TableRow key={product.id}>
+          <TableCell>{product.id}</TableCell>
+          <TableCell>{product.codeClient}</TableCell>
+          <TableCell>{product.designation}</TableCell>
+          <TableCell>{product.Unite}</TableCell>
+          <TableCell>{product.quantite}</TableCell>
+          <TableCell>{unitPrice.toFixed(3)}{product.devise}</TableCell>
+          <TableCell>{product.tva} %</TableCell>
+          <TableCell>{hasRemise ? `${product.rem} %` : '-'}</TableCell>
+          <TableCell>{hasRemise ? prixUNetHT.toFixed(3) : '-'}{product.devise}</TableCell>
+          <TableCell>{netHT.toFixed(3)}{product.devise}</TableCell>
+          <TableCell>{netTTC.toFixed(3)}{product.devise}</TableCell>
+          <TableCell>{(sellPrice|| 0).toFixed(3)}{product.devise}</TableCell>
+          <TableCell>{gainPerUnit.toFixed(3)}{product.devise}</TableCell> 
+          <TableCell>{totalGain.toFixed(3)}{product.devise}</TableCell> 
+        </TableRow>
+      );
+    })
+  ) : (
+    <TableRow>
+      <TableCell colSpan={13} align="center">
+        No products found.
+      </TableCell>
+    </TableRow>
+  )}
+</TableBody>
         </Table>
       </TableContainer>
 
