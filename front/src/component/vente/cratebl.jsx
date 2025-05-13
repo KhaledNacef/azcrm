@@ -35,6 +35,7 @@ const CreateDeliveryNoteModal = ({ onAddDeliveryNote, codey }) => {
   const [tvaa, setTvaa] = useState(0);
   const [timbre, setTimbre] = useState(false);
   const [bprice, setBprice] = useState("");
+  const [sprice, setSprice] = useState(0);
 
   const API_BASE_URL = "https://api.azcrm.deviceshopleader.com/api/v1";
   const CURRENCY_API_URL = "https://v6.exchangerate-api.com/v6/9179a4fac368332ee3e66b7b/latest/TND";
@@ -133,6 +134,7 @@ const CreateDeliveryNoteModal = ({ onAddDeliveryNote, codey }) => {
       const tvaValue = convertedPrice * (tvaa / 100);
       const priceWithTVA = convertedPrice + tvaValue;
       const discountedPrice = priceWithTVA * (1 - rem / 100);
+      setSprice(discountedPrice)
       setProducts((prev) => [
         ...prev,
         {
@@ -142,7 +144,7 @@ const CreateDeliveryNoteModal = ({ onAddDeliveryNote, codey }) => {
           quantite: Number(quantite),
           tva: Number(tvaa),
           rem:rem,
-          sellprice:discountedPrice,
+          sellprice:sprice,
           buyprice:bprice
         },
 
