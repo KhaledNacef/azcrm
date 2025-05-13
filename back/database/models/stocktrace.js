@@ -40,6 +40,10 @@ const stockT =  {
   sellprice: {
     type: DataTypes.FLOAT,
     allowNull: true, // Allow null because it's computed dynamically
+  },
+  devise: {
+    type: DataTypes.STRING,
+    allowNull: true,
   }
 };
 

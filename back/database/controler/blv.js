@@ -115,6 +115,7 @@ async function createBs(req, res) {
         tva:tva,
         sellprice:sellprice,
         codeClient:formattedCodeClient,
+        devise:devise
 
       });
       // Handle StockP (general stock)
