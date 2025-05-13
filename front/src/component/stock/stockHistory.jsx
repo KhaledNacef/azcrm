@@ -26,7 +26,7 @@ const StockHPage = () => {
   useEffect(() => {
     const fetchStock = async () => {
       try {
-        const response = await axios.get('https://api.azcrm.deviceshopleader.com/api/v1/stock/getallSH');
+        const response = await axios.get('https://api.azcrm.deviceshopleader.com/api/v1/bonachat/stock/getallSH');
         setProducts(response.data);
         setFilteredProducts(response.data);
       } catch (error) {

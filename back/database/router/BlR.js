@@ -18,5 +18,5 @@ router.get('/stock/getallSH', getAllStockhistory);
 router.get('/stock/getall', getAllDeliveryNotes);
 router.post('/add', createDeliveryNote);
 router.delete('/stock/delete/:id', deleteDeliveryNote);
-getAllStockhistory
+
 module.exports = router;
