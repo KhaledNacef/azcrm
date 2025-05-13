@@ -111,13 +111,13 @@ const StockTPage = () => {
               <TableCell><strong>Produit</strong></TableCell>
               <TableCell><strong>Unité</strong></TableCell>
               <TableCell><strong>Quantité</strong></TableCell>
-              <TableCell><strong>Prix U (HT)</strong></TableCell>
+              <TableCell><strong>Prix d'achat TTC</strong></TableCell>
               <TableCell><strong>TVA (%)</strong></TableCell>
               <TableCell><strong>Rem (%)</strong></TableCell>
               <TableCell><strong>Prix Net U (HT)</strong></TableCell>
               <TableCell><strong>Total Net (HT)</strong></TableCell>
               <TableCell><strong>Total Net (TTC)</strong></TableCell>
-              <TableCell><strong>Prix De Vente</strong></TableCell>
+              <TableCell><strong>Prix De Vente TTC</strong></TableCell>
               <TableCell><strong>Gain Unitaire</strong></TableCell> 
               <TableCell><strong>Gain Total</strong></TableCell> 
           </TableRow>
@@ -151,7 +151,7 @@ const StockTPage = () => {
           <TableCell>{hasRemise ? prixUNetHT.toFixed(3) : '-'}</TableCell>
           <TableCell>{netHT.toFixed(3)}</TableCell>
           <TableCell>{netTTC.toFixed(3)}</TableCell>
-          <TableCell>{(product.sellprice || 0).toFixed(3)}</TableCell>
+          <TableCell>{(sellPrice|| 0).toFixed(3)}</TableCell>
           <TableCell>{gainPerUnit.toFixed(3)}</TableCell> {/* NEW */}
           <TableCell>{totalGain.toFixed(3)}</TableCell> {/* NEW */}
         </TableRow>

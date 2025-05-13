@@ -87,7 +87,7 @@ const StockHPage = () => {
               <TableCell><strong>Prix U (HT)</strong></TableCell>
               <TableCell><strong>TVA (%)</strong></TableCell>
               <TableCell><strong>Rem (%)</strong></TableCell>
-              <TableCell><strong>Prix Net (HT)</strong></TableCell>
+              <TableCell><strong>Prix Net U (HT)</strong></TableCell>
               <TableCell><strong>Prix Net (TTC)</strong></TableCell>
             </TableRow>
           </TableHead>
