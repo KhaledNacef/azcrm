@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react'; 
 import {
   Box,
   TextField,
@@ -22,34 +22,37 @@ const StockTPage = () => {
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState('');
   const [snackbarSeverity, setSnackbarSeverity] = useState('success');
-  const [exchangeRates, setExchangeRates] = useState({});
-
-  const CURRENCY_API_URL = "https://v6.exchangerate-api.com/v6/9179a4fac368332ee3e66b7b/latest/TND";
+  
+  const [exchangeRates, setExchangeRates] = useState({}); // Add state for exchange rates
+  
+  const CURRENCY_API_URL = "https://v6.exchangerate-api.com/v6/9179a4fac368332ee3e66b7b/latest/TND"; // Your API URL
 
   useEffect(() => {
+    // Fetch exchange rates
+    const fetchExchangeRates = async () => {
+      try {
+        const res = await axios.get(CURRENCY_API_URL);
+        setExchangeRates(res.data.conversion_rates); // Store rates in state
+      } catch (error) {
+        console.error("Failed to fetch exchange rates", error);
+      }
+    };
+
+    fetchExchangeRates();
+
+    // Fetch stock data
     const fetchStock = async () => {
       try {
         const response = await axios.get('https://api.azcrm.deviceshopleader.com/api/v1/bs/bs/getST');
         setProducts(response.data);
         setFilteredProducts(response.data);
       } catch (error) {
-        console.error("Erreur lors de la récupération des produits :", error);
+        console.error("Error fetching products:", error);
         showSnackbar('Error fetching products.', 'error');
       }
     };
 
-    const fetchExchangeRates = async () => {
-      try {
-        const response = await axios.get(CURRENCY_API_URL);
-        setExchangeRates(response.data.conversion_rates);
-      } catch (error) {
-        console.error("Erreur lors de la récupération des taux de change :", error);
-        showSnackbar('Error fetching exchange rates.', 'error');
-      }
-    };
-
     fetchStock();
-    fetchExchangeRates();
   }, []);
 
   const handleSearch = (event) => {
@@ -74,14 +77,8 @@ const StockTPage = () => {
     setSnackbarOpen(false);
   };
 
-  // Convert currency to TND
-  const convertToTND = (price, devise) => {
-    const rateToTND = devise === 'TND' ? 1 : (exchangeRates['TND'] / exchangeRates[devise]) || 1;
-    return price * rateToTND;
-  };
-
   const totalTTC = filteredProducts.reduce((acc, product) => {
-    const unitPrice = convertToTND(product.prixU_HT, product.devise);
+    const unitPrice = product.prixU_HT;
     const remise = product.rem > 0 ? (unitPrice * product.rem) / 100 : 0;
     const prixUNetHT = unitPrice - remise;
     const netHT = prixUNetHT * product.quantite;
@@ -90,18 +87,17 @@ const StockTPage = () => {
   }, 0);
 
   const totalSellPrice = filteredProducts.reduce((acc, product) => {
-    const sellPriceInTND = convertToTND(product.sellprice || 0, product.devise);
-    return acc + sellPriceInTND;
+    return acc + (product.sellprice || 0);
   }, 0);
 
   const totalProfit = filteredProducts.reduce((acc, product) => {
-    const unitPrice = convertToTND(product.prixU_HT, product.devise);
+    const unitPrice = product.prixU_HT;
     const remise = product.rem > 0 ? (unitPrice * product.rem) / 100 : 0;
     const prixUNetHT = unitPrice - remise;
     const netHT = prixUNetHT * product.quantite;
     const netTTC = netHT + (netHT * product.tva) / 100;
 
-    const totalSellPrice = convertToTND(product.sellprice || 0, product.devise) * product.quantite;
+    const totalSellPrice = (product.sellprice || 0) * product.quantite;
     const profit = totalSellPrice - netTTC;
 
     return acc + profit;
@@ -139,23 +135,28 @@ const StockTPage = () => {
               <TableCell><strong>Total Net (TTC)</strong></TableCell>
               <TableCell><strong>Prix De Vente TTC</strong></TableCell>
               <TableCell><strong>Gain Unitaire</strong></TableCell> 
-              <TableCell><strong>Gain Total</strong></TableCell> 
-            </TableRow>
+              <TableCell><strong>Gain Total (TND)</strong></TableCell> {/* New Cell */}
+          </TableRow>
           </TableHead>
 
           <TableBody>
             {filteredProducts.length > 0 ? (
               filteredProducts.map((product) => {
-                const unitPriceInTND = convertToTND(product.prixU_HT, product.devise);
-                const hasRemise = product.rem > 0;
-                const remise = hasRemise ? (unitPriceInTND * product.rem) / 100 : 0;
-                const prixUNetHT = unitPriceInTND - remise;
+                const unitPrice = product.prixU_HT;
+                const remise = product.rem > 0 ? (unitPrice * product.rem) / 100 : 0;
+                const prixUNetHT = unitPrice - remise;
                 const netHT = prixUNetHT * product.quantite;
                 const netTTC = netHT + (netHT * product.tva) / 100;
 
-                const sellPriceInTND = convertToTND(product.sellprice || 0, product.devise);
-                const gainPerUnit = sellPriceInTND - netTTC;
+                const netTTCPerUnit = prixUNetHT + (prixUNetHT * product.tva) / 100;
+                const sellPrice = product.sellprice || 0;
+                const gainPerUnit = sellPrice - netTTCPerUnit;
                 const totalGain = gainPerUnit * product.quantite;
+
+                // Convert the product's price to TND if not already in TND
+                const devise = product.devise || 'TND';
+                const rateToTND = devise === 'TND' ? 1 : (exchangeRates['TND'] / exchangeRates[devise]) || 1;
+                const totalGainInTND = totalGain * rateToTND;
 
                 return (
                   <TableRow key={product.id}>
@@ -164,15 +165,15 @@ const StockTPage = () => {
                     <TableCell>{product.designation}</TableCell>
                     <TableCell>{product.Unite}</TableCell>
                     <TableCell>{product.quantite}</TableCell>
-                    <TableCell>{unitPriceInTND.toFixed(3)} TND</TableCell>
+                    <TableCell>{unitPrice.toFixed(3)} {product.devise || ' TND'}</TableCell>
                     <TableCell>{product.tva} %</TableCell>
-                    <TableCell>{hasRemise ? `${product.rem} %` : '-'}</TableCell>
-                    <TableCell>{hasRemise ? prixUNetHT.toFixed(3) : '-'} TND</TableCell>
-                    <TableCell>{netHT.toFixed(3)} TND</TableCell>
-                    <TableCell>{netTTC.toFixed(3)} TND</TableCell>
-                    <TableCell>{sellPriceInTND.toFixed(3)} TND</TableCell>
-                    <TableCell>{gainPerUnit.toFixed(3)} TND</TableCell> 
-                    <TableCell>{totalGain.toFixed(3)} TND</TableCell> 
+                    <TableCell>{remise > 0 ? `${product.rem} %` : '-'}</TableCell>
+                    <TableCell>{prixUNetHT.toFixed(3)} {product.devise || ' TND'}</TableCell>
+                    <TableCell>{netHT.toFixed(3)} {product.devise || ' TND'}</TableCell>
+                    <TableCell>{netTTC.toFixed(3)} {product.devise || ' TND'}</TableCell>
+                    <TableCell>{(sellPrice || 0).toFixed(3)} {product.devise || ' TND'}</TableCell>
+                    <TableCell>{gainPerUnit.toFixed(3)} {product.devise || ' TND'}</TableCell>
+                    <TableCell>{totalGainInTND.toFixed(3)} TND</TableCell> {/* Display Gain in TND */}
                   </TableRow>
                 );
               })
