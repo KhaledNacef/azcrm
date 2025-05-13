@@ -150,6 +150,7 @@ const StockTPage = () => {
           <TableCell>{hasRemise ? `${product.rem} %` : '-'}</TableCell>
           <TableCell>{hasRemise ? prixUNetHT.toFixed(3) : '-'}</TableCell>
           <TableCell>{netHT.toFixed(3)}</TableCell>
+          <TableCell>{netTTC.toFixed(3)}</TableCell>
           <TableCell>{(product.sellprice || 0).toFixed(3)}</TableCell>
           <TableCell>{gainPerUnit.toFixed(3)}</TableCell> {/* NEW */}
           <TableCell>{totalGain.toFixed(3)}</TableCell> {/* NEW */}
