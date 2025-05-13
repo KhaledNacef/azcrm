@@ -35,7 +35,6 @@ const CreateDeliveryNoteModal = ({ onAddDeliveryNote, codey }) => {
   const [tvaa, setTvaa] = useState(0);
   const [timbre, setTimbre] = useState(false);
   const [bprice, setBprice] = useState("");
-  const [sprice, setSprice] = useState(0);
 
   const API_BASE_URL = "https://api.azcrm.deviceshopleader.com/api/v1";
   const CURRENCY_API_URL = "https://v6.exchangerate-api.com/v6/9179a4fac368332ee3e66b7b/latest/TND";
@@ -111,51 +110,54 @@ const CreateDeliveryNoteModal = ({ onAddDeliveryNote, codey }) => {
     }
   };
 
-  const handleAddProduct = () => {
+  const handleAddProduct = async () => {
     if (!newProduct) return;
-
-    
+  
     if (parseFloat(quantite, 10) > newProduct.quantite) {
-      setSnackbarMessage('Insufficient stock quantity');
+      setSnackbarMessage('Quantité en stock insuffisante');
       setSnackbarSeverity('error');
-      setOpenSnackbar(true);
-      return;
-    }
-
-    const finalPrice = parseFloat(price);
-    if (isNaN(finalPrice)) {
-      setSnackbarMessage('Please enter a valid price');
-      setSnackbarSeverity('error');
-      setOpenSnackbar(true);
+      setSnackbarOpen(true);
       return;
     }
   
-    convertToCurrency(finalPrice).then((convertedPrice) => {
-      const tvaValue = convertedPrice * (tvaa / 100);
-      const priceWithTVA = convertedPrice + tvaValue;
+    const finalPrice = parseFloat(price);
+    if (isNaN(finalPrice)) {
+      setSnackbarMessage('Veuillez entrer un prix valide');
+      setSnackbarSeverity('error');
+      setSnackbarOpen(true);
+      return;
+    }
+  
+    try {
+      const convertedPrice = await convertToCurrency(finalPrice);
+      const converted = parseFloat(convertedPrice);
+      const tvaValue = converted * (tvaa / 100);
+      const priceWithTVA = converted + tvaValue;
       const discountedPrice = priceWithTVA * (1 - rem / 100);
-      setSprice(discountedPrice)
+  
       setProducts((prev) => [
         ...prev,
         {
           designation: newProduct.designation,
           Unite: newProduct.Unite,
-          prixU_HT: convertedPrice,
+          prixU_HT: converted,
           quantite: Number(quantite),
           tva: Number(tvaa),
-          rem:rem,
-          sellprice:sprice,
-          buyprice:bprice
+          rem: rem,
+          sellprice: discountedPrice,
+          buyprice: bprice,
         },
-
       ]);
-    });
   
-    setNewProduct(null);
-    setQuantite(1);
-    setPercentage(0);
-    setRem(0);
-
+      // Réinitialisation
+      setNewProduct(null);
+      setQuantite(1);
+      setPercentage(0);
+      setRem(0);
+      setPrice("");
+    } catch (err) {
+      console.error("Erreur lors de la conversion de la devise :", err);
+    }
   };
   
   const convertToCurrency = async (amount) => {
