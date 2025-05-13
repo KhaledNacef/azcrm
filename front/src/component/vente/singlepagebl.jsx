@@ -111,7 +111,7 @@ const translations = {
 };
 
 const SingleDeliverysortie = () => {
-  const { code, clientId, codey, devise,id,datee,timbre } = useParams();
+  const { code, clientId, num, devise,id,datee,timbre } = useParams();
   const printRef = useRef();
   const navigate = useNavigate();
   const [printLanguage, setPrintLanguage] = useState('fr');
