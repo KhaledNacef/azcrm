@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react'; 
 import {
   Box,
   TextField,
@@ -60,6 +60,33 @@ const StockTPage = () => {
     setSnackbarOpen(false);
   };
 
+  const totalTTC = filteredProducts.reduce((acc, product) => {
+    const unitPrice = product.prixU_HT;
+    const remise = product.rem > 0 ? (unitPrice * product.rem) / 100 : 0;
+    const prixUNetHT = unitPrice - remise;
+    const netHT = prixUNetHT * product.quantite;
+    const netTTC = netHT + (netHT * product.tva) / 100;
+    return acc + netTTC;
+  }, 0);
+
+  const totalSellPrice = filteredProducts.reduce((acc, product) => {
+    return acc + (product.sellprice || 0);
+  }, 0);
+
+  const totalProfit = filteredProducts.reduce((acc, product) => {
+    const unitPrice = product.prixU_HT;
+    const remise = product.rem > 0 ? (unitPrice * product.rem) / 100 : 0;
+    const prixUNetHT = unitPrice - remise;
+    const netHT = prixUNetHT * product.quantite;
+    const netTTC = netHT + (netHT * product.tva) / 100;
+  
+    const totalSellPrice = (product.sellprice || 0) * product.quantite;
+    const profit = totalSellPrice - netTTC;
+  
+    return acc + profit;
+  }, 0);
+  
+
   return (
     <Box sx={{ p: 3 }}>
       <Typography variant="h4" gutterBottom>
@@ -84,67 +111,66 @@ const StockTPage = () => {
               <TableCell><strong>Produit</strong></TableCell>
               <TableCell><strong>Unité</strong></TableCell>
               <TableCell><strong>Quantité</strong></TableCell>
-              <TableCell><strong>Prix d'achat TTC</strong></TableCell>
+              <TableCell><strong>Prix U (HT)</strong></TableCell>
               <TableCell><strong>TVA (%)</strong></TableCell>
               <TableCell><strong>Rem (%)</strong></TableCell>
-              <TableCell><strong>Prix Net (HT)</strong></TableCell>
-              <TableCell><strong>Prix Net (TTC)</strong></TableCell>
-              <TableCell><strong>Prix De Vente TTC</strong></TableCell>
-            </TableRow>
+              <TableCell><strong>Prix Net U (HT)</strong></TableCell>
+              <TableCell><strong>Total Net (HT)</strong></TableCell>
+              <TableCell><strong>Total Net (TTC)</strong></TableCell>
+              <TableCell><strong>Prix De Vente</strong></TableCell>
+              <TableCell><strong>Gain Unitaire</strong></TableCell> 
+              <TableCell><strong>Gain Total</strong></TableCell> 
+          </TableRow>
           </TableHead>
 
           <TableBody>
-            {filteredProducts.length > 0 ? (
-              filteredProducts.map((product) => {
-                const unitPrice = product.prixU_HT;
-                const hasRemise = product.rem > 0;
-                const remise = hasRemise ? (unitPrice * product.rem) / 100 : 0;
-                const prixUNetHT = unitPrice - remise;
-                const netHT = prixUNetHT * product.quantite;
-                const netTTC = netHT + (netHT * product.tva) / 100;
+  {filteredProducts.length > 0 ? (
+    filteredProducts.map((product) => {
+      const unitPrice = product.prixU_HT;
+      const hasRemise = product.rem > 0;
+      const remise = hasRemise ? (unitPrice * product.rem) / 100 : 0;
+      const prixUNetHT = unitPrice - remise;
+      const netHT = prixUNetHT * product.quantite;
+      const netTTC = netHT + (netHT * product.tva) / 100;
 
-                return (
-                  <TableRow key={product.id}>
-                    <TableCell>{product.id}</TableCell>
-                    <TableCell>{product.codeClient}</TableCell>
-                    <TableCell>{product.designation}</TableCell>
-                    <TableCell>{product.Unite}</TableCell>
-                    <TableCell>{product.quantite}</TableCell>
-                    <TableCell>{unitPrice.toFixed(3)}</TableCell>
-                    <TableCell>{product.tva} %</TableCell>
-                    <TableCell>{hasRemise ? `${product.rem} %` : '-'}</TableCell>
-                    <TableCell>{hasRemise ? prixUNetHT.toFixed(3) : '-'}</TableCell>
-                    <TableCell>{netTTC.toFixed(3)}</TableCell>
-                    <TableCell>{sellprice.toFixed(3)}</TableCell>
+      const netTTCPerUnit = prixUNetHT + (prixUNetHT * product.tva) / 100;
+      const sellPrice = product.sellprice || 0;
+      const gainPerUnit = sellPrice - netTTCPerUnit;
+      const totalGain = gainPerUnit * product.quantite;
 
-                  </TableRow>
-                );
-              })
-            ) : (
-              <TableRow>
-                <TableCell colSpan={9} align="center">
-                  No products found.
-                </TableCell>
-              </TableRow>
-            )}
-          </TableBody>
+      return (
+        <TableRow key={product.id}>
+          <TableCell>{product.id}</TableCell>
+          <TableCell>{product.codeClient}</TableCell>
+          <TableCell>{product.designation}</TableCell>
+          <TableCell>{product.Unite}</TableCell>
+          <TableCell>{product.quantite}</TableCell>
+          <TableCell>{unitPrice.toFixed(3)}</TableCell>
+          <TableCell>{product.tva} %</TableCell>
+          <TableCell>{hasRemise ? `${product.rem} %` : '-'}</TableCell>
+          <TableCell>{hasRemise ? prixUNetHT.toFixed(3) : '-'}</TableCell>
+          <TableCell>{netHT.toFixed(3)}</TableCell>
+          <TableCell>{(product.sellprice || 0).toFixed(3)}</TableCell>
+          <TableCell>{gainPerUnit.toFixed(3)}</TableCell> {/* NEW */}
+          <TableCell>{totalGain.toFixed(3)}</TableCell> {/* NEW */}
+        </TableRow>
+      );
+    })
+  ) : (
+    <TableRow>
+      <TableCell colSpan={13} align="center">
+        No products found.
+      </TableCell>
+    </TableRow>
+  )}
+</TableBody>
         </Table>
       </TableContainer>
 
-      <Box sx={{ mt: 2, display: 'flex', justifyContent: 'flex-end' }}>
-        <Typography variant="h6">
-          Total TTC:{' '}
-          {filteredProducts
-            .reduce((acc, product) => {
-              const unitPrice = product.prixU_HT;
-              const remise = product.rem > 0 ? (unitPrice * product.rem) / 100 : 0;
-              const prixUNetHT = unitPrice - remise;
-              const netHT = prixUNetHT * product.quantite;
-              const netTTC = netHT + (netHT * product.tva) / 100;
-              return acc + netTTC;
-            }, 0)
-            .toFixed(3)}
-        </Typography>
+      <Box sx={{ mt: 3 }}>
+        <Typography variant="h6">Total TTC : {totalTTC.toFixed(3)} TND</Typography>
+        <Typography variant="h6">Total Prix De Vente : {totalSellPrice.toFixed(3)} TND</Typography>
+        <Typography variant="h6">Total Gain : {totalProfit.toFixed(3)} TND</Typography>
       </Box>
 
       <Snackbar
