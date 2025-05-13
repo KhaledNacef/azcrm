@@ -107,8 +107,8 @@ const SidebarMenu = () => {
             <ListItem
               button
               component={Link}
-              to="/stock/historique"
-              sx={getSubItemStyles(isActive('/stock/historique'))}
+              to="/stock/achat-history"
+              sx={getSubItemStyles(isActive('/stock/achat-history'))}
             >
               <ListItemText inset primary="Produit Achat History" />
             </ListItem>
