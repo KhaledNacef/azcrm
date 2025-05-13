@@ -145,15 +145,15 @@ const StockTPage = () => {
           <TableCell>{product.designation}</TableCell>
           <TableCell>{product.Unite}</TableCell>
           <TableCell>{product.quantite}</TableCell>
-          <TableCell>{unitPrice.toFixed(3)}{product.devise}</TableCell>
+          <TableCell>{unitPrice.toFixed(3)}{product.devise || ' TND'}</TableCell>
           <TableCell>{product.tva} %</TableCell>
           <TableCell>{hasRemise ? `${product.rem} %` : '-'}</TableCell>
-          <TableCell>{hasRemise ? prixUNetHT.toFixed(3) : '-'}{product.devise}</TableCell>
-          <TableCell>{netHT.toFixed(3)}{product.devise}</TableCell>
-          <TableCell>{netTTC.toFixed(3)}{product.devise}</TableCell>
-          <TableCell>{(sellPrice|| 0).toFixed(3)}{product.devise}</TableCell>
-          <TableCell>{gainPerUnit.toFixed(3)}{product.devise}</TableCell> {/* NEW */}
-          <TableCell>{totalGain.toFixed(3)}{product.devise}</TableCell> {/* NEW */}
+          <TableCell>{hasRemise ? prixUNetHT.toFixed(3) : '-'}{product.devise || ' TND'}</TableCell>
+          <TableCell>{netHT.toFixed(3)}{product.devise || ' TND'}</TableCell>
+          <TableCell>{netTTC.toFixed(3)}{product.devise || ' TND'}</TableCell>
+          <TableCell>{(sellPrice|| 0).toFixed(3)}{product.devise || ' TND'}</TableCell>
+          <TableCell>{gainPerUnit.toFixed(3)}{product.devise || ' TND'}</TableCell> 
+          <TableCell>{totalGain.toFixed(3)}{product.devise || ' TND'}</TableCell> 
         </TableRow>
       );
     })
