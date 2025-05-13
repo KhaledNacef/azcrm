@@ -1,5 +1,14 @@
 import React, { useState } from 'react';
-import { List, ListItem, ListItemIcon, ListItemText, Box, Avatar, Typography, Collapse } from '@mui/material';
+import {
+  List,
+  ListItem,
+  ListItemIcon,
+  ListItemText,
+  Collapse,
+  Box,
+  Avatar,
+  Typography
+} from '@mui/material';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import HomeIcon from '@mui/icons-material/Home';
 import InventoryIcon from '@mui/icons-material/Inventory';
@@ -26,34 +35,19 @@ const getCurrentDate = () => {
 const SidebarMenu = () => {
   const location = useLocation();
   const navigate = useNavigate();
-  const [openStock, setOpenStock] = useState(false); // State to handle stock submenu
+  const [openStockSubmenu, setOpenStockSubmenu] = useState(false);
 
   const handleLogout = () => {
     localStorage.removeItem('token');
     navigate('/login');
   };
 
-  const menuItems = [
-    { label: 'Dashboard', path: '/dashboard', icon: <HomeIcon /> },
-    { label: 'Produit', path: '/produit', icon: <InventoryIcon /> },
-    { label: 'Fournisseur', path: '/fournisseur', icon: <PeopleIcon /> },
-    { label: 'Client', path: '/client', icon: <PersonIcon /> },
-    { label: 'Bon de Livraison Achat', path: '/bon-commande', icon: <ReceiptIcon /> },
-    { label: 'Facture d’Achat', path: '/bon-dachat', icon: <ShoppingCartIcon /> },
-    { label: 'Bon de Livraison Vente', path: '/bon-commandefacture', icon: <LocalShippingIcon /> },
-    { label: 'Facture Vente', path: '/bon-livraison', icon: <ExitToAppIcon /> },
-    { label: 'Retenue', path: '/RET1', icon: <AttachMoneyIcon /> },
-  ];
-
-  const stockSubMenuItems = [
-    { label: 'Mouvement de produit', path: '/stock/mouvement', icon: <InventoryIcon /> },
-    { label: 'Produit Achat History', path: '/stock/achat-history', icon: <InventoryIcon /> },
-  ];
+  const isActive = (path) => location.pathname === path;
 
   return (
     <Box sx={{ width: 270, height: '100vh', bgcolor: '#242c44', boxShadow: 3, display: 'flex', flexDirection: 'column' }}>
-      {/* Header Section */}
-      <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', p: 3, bgcolor: '#242c44', color: 'white' }}>
+      {/* Header */}
+      <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', p: 3, color: 'white' }}>
         <Avatar
           src="https://cdn-icons-png.flaticon.com/512/3237/3237447.png"
           alt="User Profile"
@@ -63,85 +57,87 @@ const SidebarMenu = () => {
         <Typography variant="body2" sx={{ opacity: 0.8 }}>{getCurrentDate()}</Typography>
       </Box>
 
-      {/* Menu List */}
       <List sx={{ flexGrow: 1, p: 2 }}>
-        {menuItems.map((item) => {
-          const isActive = location.pathname === item.path;
-          return (
-            <ListItem
-              key={item.label}
-              button
-              component={Link}
-              to={item.path}
-              sx={{
-                borderRadius: '8px',
-                mb: 1,
-                bgcolor: isActive ? '#1976d2' : 'transparent',
-                color: isActive ? 'white' : 'white',
-                '&:hover': { bgcolor: '#1976d2', color: 'white' },
-                transition: '0.3s',
-                '&:hover .MuiListItemIcon-root': { color: 'white' },
-                '&:hover .MuiListItemText-root': { color: 'white' },
-                '& .MuiListItemIcon-root': { color: isActive ? 'white' : 'white' },
-                '& .MuiListItemText-root': { fontWeight: 'bold' },
-              }}
-            >
-              <ListItemIcon>{item.icon}</ListItemIcon>
-              <ListItemText primary={item.label} />
-            </ListItem>
-          );
-        })}
-
-        {/* Stock Menu with Submenu */}
+        {/* Dashboard */}
         <ListItem
           button
-          onClick={() => setOpenStock(!openStock)} // Toggle submenu visibility
-          sx={{
-            borderRadius: '8px',
-            mb: 1,
-            bgcolor: location.pathname.includes('/stock') ? '#1976d2' : 'transparent',
-            color: location.pathname.includes('/stock') ? 'white' : 'white',
-            '&:hover': { bgcolor: '#1976d2', color: 'white' },
-            transition: '0.3s',
-            '& .MuiListItemIcon-root': { color: location.pathname.includes('/stock') ? 'white' : 'white' },
-            '& .MuiListItemText-root': { fontWeight: 'bold' },
-          }}
+          component={Link}
+          to="/dashboard"
+          sx={getItemStyles(isActive('/dashboard'))}
+        >
+          <ListItemIcon><HomeIcon /></ListItemIcon>
+          <ListItemText primary="Dashboard" />
+        </ListItem>
+
+        {/* Produit */}
+        <ListItem
+          button
+          component={Link}
+          to="/produit"
+          sx={getItemStyles(isActive('/produit'))}
+        >
+          <ListItemIcon><InventoryIcon /></ListItemIcon>
+          <ListItemText primary="Produit" />
+        </ListItem>
+
+        {/* Stock Parent */}
+        <ListItem
+          button
+          component={Link}
+          to="/stock"
+          onClick={() => setOpenStockSubmenu(!openStockSubmenu)}
+          sx={getItemStyles(isActive('/stock'))}
         >
           <ListItemIcon><InventoryIcon /></ListItemIcon>
           <ListItemText primary="Stock" />
-          {openStock ? <ExpandLess /> : <ExpandMore />}
+          {openStockSubmenu ? <ExpandLess /> : <ExpandMore />}
         </ListItem>
 
-        {/* Stock Submenu */}
-        <Collapse in={openStock} timeout="auto" unmountOnExit>
-          {stockSubMenuItems.map((subItem) => {
-            const isActive = location.pathname === subItem.path;
-            return (
-              <ListItem
-                key={subItem.label}
-                button
-                component={Link}
-                to={subItem.path}
-                sx={{
-                  pl: 4, // Indentation for submenu
-                  borderRadius: '8px',
-                  mb: 1,
-                  bgcolor: isActive ? '#1976d2' : 'transparent',
-                  color: isActive ? 'white' : 'white',
-                  '&:hover': { bgcolor: '#1976d2', color: 'white' },
-                  transition: '0.3s',
-                  '& .MuiListItemIcon-root': { color: isActive ? 'white' : 'white' },
-                  '& .MuiListItemText-root': { fontWeight: 'bold' },
-                }}
-              >
-                <ListItemIcon>{subItem.icon}</ListItemIcon>
-                <ListItemText primary={subItem.label} />
-              </ListItem>
-            );
-          })}
+        {/* Stock Submenus */}
+        <Collapse in={openStockSubmenu} timeout="auto" unmountOnExit>
+          <List component="div" disablePadding>
+            <ListItem
+              button
+              component={Link}
+              to="/stock/mouvement"
+              sx={getSubItemStyles(isActive('/stock/mouvement'))}
+            >
+              <ListItemText inset primary="Mouvement de Produit" />
+            </ListItem>
+            <ListItem
+              button
+              component={Link}
+              to="/stock/historique"
+              sx={getSubItemStyles(isActive('/stock/historique'))}
+            >
+              <ListItemText inset primary="Produit Achat History" />
+            </ListItem>
+          </List>
         </Collapse>
 
-        {/* Logout Button */}
+        {/* Other Menu Items */}
+        {[
+          { label: 'Fournisseur', path: '/fournisseur', icon: <PeopleIcon /> },
+          { label: 'Client', path: '/client', icon: <PersonIcon /> },
+          { label: 'Bon de Livraison Achat', path: '/bon-commande', icon: <ReceiptIcon /> },
+          { label: 'Facture d’Achat', path: '/bon-dachat', icon: <ShoppingCartIcon /> },
+          { label: 'Bon de Livraison Vente', path: '/bon-commandefacture', icon: <LocalShippingIcon /> },
+          { label: 'Facture Vente', path: '/bon-livraison', icon: <ExitToAppIcon /> },
+          { label: 'Retenue', path: '/RET1', icon: <AttachMoneyIcon /> },
+        ].map((item) => (
+          <ListItem
+            key={item.label}
+            button
+            component={Link}
+            to={item.path}
+            sx={getItemStyles(isActive(item.path))}
+          >
+            <ListItemIcon>{item.icon}</ListItemIcon>
+            <ListItemText primary={item.label} />
+          </ListItem>
+        ))}
+
+        {/* Logout */}
         <ListItem
           button
           onClick={handleLogout}
@@ -163,5 +159,27 @@ const SidebarMenu = () => {
     </Box>
   );
 };
+
+const getItemStyles = (isActive) => ({
+  borderRadius: '8px',
+  mb: 1,
+  bgcolor: isActive ? '#1976d2' : 'transparent',
+  color: 'white',
+  '&:hover': { bgcolor: '#1976d2', color: 'white' },
+  transition: '0.3s',
+  '& .MuiListItemIcon-root': { color: 'white' },
+  '& .MuiListItemText-root': { fontWeight: 'bold' },
+});
+
+const getSubItemStyles = (isActive) => ({
+  pl: 4,
+  borderRadius: '8px',
+  mb: 1,
+  bgcolor: isActive ? '#1565c0' : 'transparent',
+  color: 'white',
+  '&:hover': { bgcolor: '#1565c0', color: 'white' },
+  transition: '0.3s',
+  '& .MuiListItemText-root': { fontWeight: 'bold' },
+});
 
 export default SidebarMenu;
