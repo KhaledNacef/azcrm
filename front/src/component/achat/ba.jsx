@@ -56,7 +56,7 @@ const BonAchatPage = () => {
 
   // Filter notes based on search
   const filteredNotes = deliveryNotes.filter(note =>
-    note.codey?.toLowerCase().includes(searchQuery.toLowerCase())
+    note.num?.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
   // Handle reteune creation

@@ -47,7 +47,7 @@ const Boncommande = () => {
 
   // Filtered delivery notes based on search query
   const filteredDeliveryNotes = deliveryNotes.filter((note) =>
-    note.codey.toLowerCase().includes(searchQuery.toLowerCase())
+    note.num.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
   useEffect(() => {

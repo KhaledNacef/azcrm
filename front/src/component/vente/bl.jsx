@@ -15,29 +15,37 @@ import axios from 'axios';
 
 const BonsortiePage = () => {
   const navigate = useNavigate();
-  const [deliveryNotes, setDeliveryNotes] = useState([]); // State for storing delivery notes
-  const [searchQuery, setSearchQuery] = useState(''); // Search query state
+  const [deliveryNotes, setDeliveryNotes] = useState([]);
+  const [searchQuery, setSearchQuery] = useState('');
 
-  // Function to fetch delivery notes
   const fetchDeliveryNotes = async () => {
     try {
       const response = await axios.get('https://api.azcrm.deviceshopleader.com/api/v1/bs/bs/get');
-      console.log("API Response:", response.data); // ✅ Debugging log
-      setDeliveryNotes(response.data); // ✅ Ensure it's always an array
+      setDeliveryNotes(response.data);
     } catch (error) {
       console.error('Error fetching delivery notes:', error);
     }
   };
 
-  // Fetch delivery notes on component mount
   useEffect(() => {
     fetchDeliveryNotes();
-  }, []); // ✅ Runs only once
+  }, []);
 
-  // Filtered delivery notes based on search query
-  const filteredNotes = deliveryNotes.filter(note =>
-    note.codey.toLowerCase().includes(searchQuery.toLowerCase())
-  );
+  // Format date to dd/mm/yyyy
+  const formatDate = (dateString) => {
+    const date = new Date(dateString);
+    const day = String(date.getDate()).padStart(2, '0');
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const year = date.getFullYear();
+    return `${day}/${month}/${year}`;
+  };
+
+  // Filter notes by checking if searchQuery matches id or id/date format
+  const filteredNotes = deliveryNotes.filter((note) => {
+    const formattedDate = formatDate(note.createdAt);
+    const idDateCombo = `${note.id}/${formattedDate}`;
+    return idDateCombo.toLowerCase().includes(searchQuery.toLowerCase());
+  });
 
   return (
     <Box sx={{ p: 3 }}>
@@ -45,9 +53,8 @@ const BonsortiePage = () => {
         Facture
       </Typography>
 
-      {/* Search bar */}
       <TextField
-        label="Rechercher par Code"
+        label="Rechercher par ID/Date (ex: 1/01/01/2025)"
         variant="outlined"
         fullWidth
         value={searchQuery}
@@ -55,7 +62,6 @@ const BonsortiePage = () => {
         sx={{ mb: 3 }}
       />
 
-      {/* Delivery Notes Table */}
       <Table sx={{ mt: 3 }}>
         <TableHead>
           <TableRow>
@@ -69,19 +75,19 @@ const BonsortiePage = () => {
         <TableBody>
           {filteredNotes.length > 0 ? (
             filteredNotes.map((note) => (
-              <TableRow key={note.code}>
-                <TableCell>{note.id}/{new Date(note.createdAt).toLocaleDateString()}</TableCell>
-                <TableCell>{note.clientName || "N/A"}</TableCell>
+              <TableRow key={note.id}>
+                <TableCell>{note.id}/{formatDate(note.createdAt)}</TableCell>
+                <TableCell>{note.clientName || 'N/A'}</TableCell>
                 <TableCell>{note.timbre}</TableCell>
-                <TableCell>{note.timbre}</TableCell>
-
-                <TableCell>
-                  {note.createdAt ? new Date(note.createdAt).toLocaleDateString() : "N/A"}
-                </TableCell>
+                <TableCell>{formatDate(note.createdAt)}</TableCell>
                 <TableCell>
                   <Button
                     variant="outlined"
-                    onClick={() => navigate(`/bon-livraison/${note.code}/${note.clientId}/${note.codey}/${note.devise}/${note.id}/${note.createdAt}/${note.timbre}`)}
+                    onClick={() =>
+                      navigate(
+                        `/bon-livraison/${note.code}/${note.clientId}/${note.codey}/${note.devise}/${note.id}/${note.createdAt}/${note.timbre}`
+                      )
+                    }
                   >
                     Voir
                   </Button>
