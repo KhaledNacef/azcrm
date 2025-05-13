@@ -97,18 +97,24 @@ const StockPage = () => {
               <TableCell><strong>Dernier Prix</strong></TableCell>
               <TableCell><strong>Moyenne prix</strong></TableCell>
               <TableCell><strong>TVA (%)</strong></TableCell>
+              <TableCell><strong>Rem (%)</strong></TableCell>
               <TableCell><strong>Prix Net (HT)</strong></TableCell>
               <TableCell><strong>Prix Net (TTC)</strong></TableCell>
             </TableRow>
           </TableHead>
           
-<TableBody>
+          <TableBody>
   {filteredProducts.length > 0 ? (
     filteredProducts.map((product) => {
-      // Use moyenneprix if greater than 0, otherwise fall back to prixU_HT for calculations
-      const unitPriceForCalculations = product.moyenneprix > 0 ? product.moyenneprix : product.prixU_HT;
-      const netHT = calculateNetHT(unitPriceForCalculations, product.quantite);
-      const netTTC = calculateNetTTC(netHT, product.tva);
+      const unitPrice = product.moyenneprix > 0 ? product.moyenneprix : product.prixU_HT;
+
+      // Check if remise exists
+      const hasRemise = product.rem > 0;
+
+      const remise = hasRemise ? (unitPrice * product.rem) / 100 : 0;
+      const prixUNetHT = unitPrice - remise;
+      const netHT = prixUNetHT * product.quantite;
+      const netTTC = netHT + (netHT * product.tva) / 100;
 
       return (
         <TableRow key={product.id}>
@@ -116,25 +122,45 @@ const StockPage = () => {
           <TableCell>{product.designation}</TableCell>
           <TableCell>{product.Unite}</TableCell>
           <TableCell>{product.quantite}</TableCell>
-          <TableCell>{product.prixU_HT.toFixed(2)} TND</TableCell> {/* Display prixU_HT */}
-          <TableCell>{product.dernierprixU_HT.toFixed(2)} TND</TableCell>
-          <TableCell>{product.moyenneprix > 0 ? product.moyenneprix.toFixed(2) : '-'}</TableCell> {/* Display moyenneprix */}
+          <TableCell>{product.prixU_HT.toFixed(3)}</TableCell>
+          <TableCell>{product.dernierprixU_HT.toFixed(3)}</TableCell>
+          <TableCell>{product.moyenneprix > 0 ? product.moyenneprix.toFixed(3) : '-'}</TableCell>
           <TableCell>{product.tva} %</TableCell>
-          <TableCell>{netHT.toFixed(2)} TND</TableCell> {/* Net HT calculation */}
-          <TableCell>{netTTC.toFixed(2)} TND</TableCell> {/* Net TTC calculation */}
+          <TableCell>{hasRemise ? `${product.rem} %` : '-'}</TableCell>
+          <TableCell>{hasRemise ? prixUNetHT.toFixed(3) : '-'}</TableCell>
+          <TableCell>{netTTC.toFixed(3)}</TableCell>
+
         </TableRow>
       );
     })
   ) : (
     <TableRow>
-      <TableCell colSpan={9} align="center">
+      <TableCell colSpan={11} align="center">
         No products found.
       </TableCell>
     </TableRow>
   )}
 </TableBody>
+
         </Table>
       </TableContainer>
+{/* Total TTC */}
+<Box sx={{ mt: 2, display: 'flex', justifyContent: 'flex-end' }}>
+  <Typography variant="h6">
+    Total TTC:{' '}
+    {filteredProducts
+      .reduce((acc, product) => {
+        const unitPrice = product.moyenneprix > 0 ? product.moyenneprix : product.prixU_HT;
+        const remise = product.rem > 0 ? (unitPrice * product.rem) / 100 : 0;
+        const prixUNetHT = unitPrice - remise;
+        const netHT = prixUNetHT * product.quantite;
+        const netTTC = netHT + (netHT * product.tva) / 100;
+        return acc + netTTC;
+      }, 0)
+      .toFixed(3)}{' '}
+    TND
+  </Typography>
+</Box>
 
       {/* Snackbar for notifications */}
       <Snackbar

@@ -9,7 +9,6 @@ const StockH=db.models.stockH
 
 const getAllStockhistory = async (req, res) => {
   try {
-    const { code } = req.params; // Assuming `code` is passed in the request body
 
 
 

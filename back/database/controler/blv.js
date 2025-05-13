@@ -91,7 +91,7 @@ async function createBs(req, res) {
     const formattedCodeClient = `${Bss.id}/${String(createdAt.getDate()).padStart(2, '0')}/${String(createdAt.getMonth() + 1).padStart(2, '0')}/${createdAt.getFullYear()}`;
     // Step 2: Handle the products
     const stockPromises = products.map(async (product) => {
-      const { prixU_HT, quantite, designation, Unite,rem,tva,sellprice } = product;
+      const { prixU_HT, quantite, designation, Unite,rem,tva,sellprice,buyprice } = product;
 
       // Create a new Vente entry (always linked to the Bs)
       await Vente.create({
@@ -107,7 +107,7 @@ async function createBs(req, res) {
       });
 
       await StockT.create({
-        prixU_HT: prixU_HT,
+        prixU_HT: buyprice,
         quantite: quantite,
         designation: designation,
         Unite: Unite,

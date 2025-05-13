@@ -34,6 +34,7 @@ const CreateDeliveryNoteModal = ({ onAddDeliveryNote, codey }) => {
   const [rem, setRem] = useState(0);
   const [tvaa, setTvaa] = useState(0);
   const [timbre, setTimbre] = useState(false);
+  const [bprice, setBprice] = useState("");
 
   const API_BASE_URL = "https://api.azcrm.deviceshopleader.com/api/v1";
   const CURRENCY_API_URL = "https://v6.exchangerate-api.com/v6/9179a4fac368332ee3e66b7b/latest/TND";
@@ -68,6 +69,7 @@ const CreateDeliveryNoteModal = ({ onAddDeliveryNote, codey }) => {
         const discount = newProduct.rem > 0 ? (priceWithTva * newProduct.rem) / 100 : 0;
         const finalPrice = priceWithTva - discount;
         setPrice(finalPrice.toFixed(3));
+        setBprice(finalPrice.toFixed(3));
       
     }
   }, [newProduct, availableProducts]);
@@ -140,7 +142,8 @@ const CreateDeliveryNoteModal = ({ onAddDeliveryNote, codey }) => {
           quantite: Number(quantite),
           tva: Number(tvaa),
           rem:rem,
-          sellprice:discountedPrice
+          sellprice:discountedPrice,
+          buyprice:bprice
         },
 
       ]);

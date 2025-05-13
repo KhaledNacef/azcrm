@@ -1,5 +1,5 @@
-import React from 'react';
-import { List, ListItem, ListItemIcon, ListItemText, Box, Avatar, Typography } from '@mui/material';
+import React, { useState } from 'react';
+import { List, ListItem, ListItemIcon, ListItemText, Box, Avatar, Typography, Collapse } from '@mui/material';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import HomeIcon from '@mui/icons-material/Home';
 import InventoryIcon from '@mui/icons-material/Inventory';
@@ -10,6 +10,8 @@ import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import ReceiptIcon from '@mui/icons-material/Receipt';
 import LocalShippingIcon from '@mui/icons-material/LocalShipping';
 import AttachMoneyIcon from '@mui/icons-material/AttachMoney';
+import ExpandLess from '@mui/icons-material/ExpandLess';
+import ExpandMore from '@mui/icons-material/ExpandMore';
 
 const getCurrentDate = () => {
   const date = new Date();
@@ -24,6 +26,7 @@ const getCurrentDate = () => {
 const SidebarMenu = () => {
   const location = useLocation();
   const navigate = useNavigate();
+  const [openStock, setOpenStock] = useState(false); // State to handle stock submenu
 
   const handleLogout = () => {
     localStorage.removeItem('token');
@@ -33,7 +36,6 @@ const SidebarMenu = () => {
   const menuItems = [
     { label: 'Dashboard', path: '/dashboard', icon: <HomeIcon /> },
     { label: 'Produit', path: '/produit', icon: <InventoryIcon /> },
-    { label: 'Stock', path: '/stock', icon: <InventoryIcon /> },
     { label: 'Fournisseur', path: '/fournisseur', icon: <PeopleIcon /> },
     { label: 'Client', path: '/client', icon: <PersonIcon /> },
     { label: 'Bon de Livraison Achat', path: '/bon-commande', icon: <ReceiptIcon /> },
@@ -41,6 +43,11 @@ const SidebarMenu = () => {
     { label: 'Bon de Livraison Vente', path: '/bon-commandefacture', icon: <LocalShippingIcon /> },
     { label: 'Facture Vente', path: '/bon-livraison', icon: <ExitToAppIcon /> },
     { label: 'Retenue', path: '/RET1', icon: <AttachMoneyIcon /> },
+  ];
+
+  const stockSubMenuItems = [
+    { label: 'Mouvement de produit', path: '/stock/mouvement', icon: <InventoryIcon /> },
+    { label: 'Produit Achat History', path: '/stock/achat-history', icon: <InventoryIcon /> },
   ];
 
   return (
@@ -84,6 +91,55 @@ const SidebarMenu = () => {
             </ListItem>
           );
         })}
+
+        {/* Stock Menu with Submenu */}
+        <ListItem
+          button
+          onClick={() => setOpenStock(!openStock)} // Toggle submenu visibility
+          sx={{
+            borderRadius: '8px',
+            mb: 1,
+            bgcolor: location.pathname.includes('/stock') ? '#1976d2' : 'transparent',
+            color: location.pathname.includes('/stock') ? 'white' : 'white',
+            '&:hover': { bgcolor: '#1976d2', color: 'white' },
+            transition: '0.3s',
+            '& .MuiListItemIcon-root': { color: location.pathname.includes('/stock') ? 'white' : 'white' },
+            '& .MuiListItemText-root': { fontWeight: 'bold' },
+          }}
+        >
+          <ListItemIcon><InventoryIcon /></ListItemIcon>
+          <ListItemText primary="Stock" />
+          {openStock ? <ExpandLess /> : <ExpandMore />}
+        </ListItem>
+
+        {/* Stock Submenu */}
+        <Collapse in={openStock} timeout="auto" unmountOnExit>
+          {stockSubMenuItems.map((subItem) => {
+            const isActive = location.pathname === subItem.path;
+            return (
+              <ListItem
+                key={subItem.label}
+                button
+                component={Link}
+                to={subItem.path}
+                sx={{
+                  pl: 4, // Indentation for submenu
+                  borderRadius: '8px',
+                  mb: 1,
+                  bgcolor: isActive ? '#1976d2' : 'transparent',
+                  color: isActive ? 'white' : 'white',
+                  '&:hover': { bgcolor: '#1976d2', color: 'white' },
+                  transition: '0.3s',
+                  '& .MuiListItemIcon-root': { color: isActive ? 'white' : 'white' },
+                  '& .MuiListItemText-root': { fontWeight: 'bold' },
+                }}
+              >
+                <ListItemIcon>{subItem.icon}</ListItemIcon>
+                <ListItemText primary={subItem.label} />
+              </ListItem>
+            );
+          })}
+        </Collapse>
 
         {/* Logout Button */}
         <ListItem

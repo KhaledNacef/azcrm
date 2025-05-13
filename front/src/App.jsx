@@ -20,6 +20,8 @@ import Reteune from './component/ReteuneFolder/retenue.jsx';
 import AllReteune from './component/ReteuneFolder/allReteune.jsx';
 import Login from './component/loginandRegistration/login.jsx';
 import Registration from './component/loginandRegistration/registration.jsx';
+import StockHPage from './component/stock/stockHistory.jsx';
+import StockTPage from './component/stock/stocktrace.jsx';
 
 // Protect Route Component
 const RequireAuth = () => {
@@ -56,6 +58,9 @@ const App = () => {
       <Route path="bon-commandea/:code/:supplierId/:codey/:timbre/:num" element={<BCsingleACHAT />} />
       <Route path="gestion/:codey" element={<CompareProducts />} />
       <Route path="gestionv/:codey" element={<CompareProductsv />} />
+      <Route path="/stock/mouvement" element={<StockTPage />} />
+      <Route path="/stock/achat-history" element={<StockHPage />} />
+
     </Route>
   </Route>
 
