@@ -5,6 +5,8 @@ import Grid from '@mui/material/Grid2';
 import './cssbl.css';
 import logo from '../../assets/amounnet.png';
 import n2words from 'n2words';
+import { ReactToPrint } from "react-to-print";
+
 const translations = {
   en: {
     timbre: 'Stamp',
@@ -210,27 +212,20 @@ const SingleDeliverysortie = () => {
     month: '2-digit',
     year: 'numeric',
   });
-  const handlePrint = () => {
-    const printContent = printRef.current;  // Get the referenced content
-
-    const printWindow = window.open('', '_blank');
-    printWindow.document.write('<html><head><title>Print</title>');
-    printWindow.document.write('<style>@media print { body { margin: 0; } }</style>');
-    printWindow.document.write('<body>');
-    printWindow.document.write(printContent.innerHTML);  // Inject only the content inside the ref
-    printWindow.document.write('</body></html>');
-    printWindow.document.close();
-    printWindow.print();
-  };
-
+ 
   return (
     <Box sx={{ p: 3 }}>
       <Button variant="outlined" onClick={() => navigate(-1)} sx={{ mb: 2, mr: 2 }}>
         {translations[printLanguage].back}
       </Button>
-      <Button variant="contained" color="primary" onClick={handlePrint} sx={{ mb: 2, mr: 2 }}>
+      <ReactToPrint 
+      trigger={()=> 
+      <Button variant="contained" color="primary"  sx={{ mb: 2, mr: 2 }}>
         {translations[printLanguage].print}
-      </Button>
+      </Button>}
+       content={printRef.current}
+        />
+      
       <Button 
         variant="contained" 
         color="secondary" 
