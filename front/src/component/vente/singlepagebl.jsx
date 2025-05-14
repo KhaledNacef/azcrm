@@ -181,19 +181,17 @@ const SingleDeliverysortie = () => {
   const totalNetTTCInWords = n2words(totalNetTTC.toFixed(3), { lang: printLanguage === 'ar' ? 'ar' : printLanguage }); // Arabic or French/English
 
   const handlePrint = () => {
-    // Add a class to body to trigger print styles
-    document.body.classList.add("print-mode");
-  
-    // Trigger print
+    const originalContents = document.body.innerHTML;
+    const printContents = printRef.current.innerHTML;
+
+    document.body.innerHTML = printContents;
     window.print();
-  
-    // Remove the class after printing
     window.onafterprint = () => {
-      document.body.classList.remove("print-mode");
+      document.body.innerHTML = originalContents;
+      window.location.reload();
     };
   };
-  
-  
+
   function displayDate() {
     const today = new Date();
     const day = String(today.getDate()).padStart(2, '0');
@@ -253,7 +251,6 @@ const SingleDeliverysortie = () => {
 
       {/* Printable content */}
       <Box
-        className="print-content"
         ref={printRef}
         sx={{
           border: '1px solid #ccc',
