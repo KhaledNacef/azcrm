@@ -5,7 +5,7 @@ import Grid from '@mui/material/Grid2';
 import './cssbl.css';
 import logo from '../../assets/amounnet.png';
 import n2words from 'n2words';
-import { ReactToPrint } from "react-to-print";
+import { useReactToPrint } from "react-to-print";
 
 const translations = {
   en: {
@@ -118,7 +118,7 @@ const SingleDeliverysortie = () => {
   const [anchorEl, setAnchorEl] = useState(null);
   const [client, setClient] = useState({});
   const [deliveryNote, setDeliveryNote] = useState([]);
-  const printRef = useRef(null);
+  const printRef = useRef(); // Reference for printable content
 
   useEffect(() => {
     const fetchClientData = async () => {
@@ -212,20 +212,24 @@ const SingleDeliverysortie = () => {
     month: '2-digit',
     year: 'numeric',
   });
- 
+  const handlePrint = () => {
+    const printContent = document.getElementById('printable-content');
+    const originalContents = document.body.innerHTML;
+    
+    document.body.innerHTML = printContent.innerHTML;
+    window.print();
+    document.body.innerHTML = originalContents;
+    window.location.reload(); // To restore functionality
+  };
+  
   return (
     <Box sx={{ p: 3 }}>
       <Button variant="outlined" onClick={() => navigate(-1)} sx={{ mb: 2, mr: 2 }}>
         {translations[printLanguage].back}
       </Button>
-      <ReactToPrint 
-      trigger={()=> 
-      <Button variant="contained" color="primary"  sx={{ mb: 2, mr: 2 }}>
+      <Button variant="contained" color="primary" onClick={handlePrint} sx={{ mb: 2, mr: 2 }}>
         {translations[printLanguage].print}
-      </Button>}
-       content={printRef.current}
-        />
-      
+      </Button>
       <Button 
         variant="contained" 
         color="secondary" 
@@ -247,8 +251,8 @@ const SingleDeliverysortie = () => {
 
       {/* Printable content */}
       <div
-      ref={printRef} 
-  sx={{
+      id="printable-content"
+     sx={{
     p: 3,
     backgroundColor: '#fff',
     direction: isArabic ? 'rtl' : 'ltr',
