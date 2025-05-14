@@ -181,75 +181,17 @@ const SingleDeliverysortie = () => {
   const totalNetTTCInWords = n2words(totalNetTTC.toFixed(3), { lang: printLanguage === 'ar' ? 'ar' : printLanguage }); // Arabic or French/English
 
   const handlePrint = () => {
-    const printWindow = window.open('', '_blank');
-    const printContent = printRef.current.innerHTML;
-    
-    printWindow.document.write(`
-      <!DOCTYPE html>
-      <html>
-        <head>
-          <title>Facture ${id}</title>
-          <style>
-            @page {
-              size: A4;
-              margin: 10mm;
-            }
-            body {
-              font-family: Arial, sans-serif;
-              margin: 0;
-              padding: 10mm;
-              direction: ${isArabic ? 'rtl' : 'ltr'};
-              font-size: 12px;
-            }
-            .print-content {
-              width: 100%;
-              max-width: 210mm;
-              margin: 0 auto;
-            }
-            table {
-              width: 100%;
-              border-collapse: collapse;
-            }
-            th, td {
-              border: 1px solid #ddd !important;
-              padding: 8px;
-              text-align: ${isArabic ? 'right' : 'left'};
-            }
-            th {
-              background-color: #f5f5f5 !important;
-              -webkit-print-color-adjust: exact;
-              print-color-adjust: exact;
-            }
-            /* Remove all shadows */
-            * {
-              box-shadow: none !important;
-            }
-            /* Ensure logo prints correctly */
-            img {
-              max-width: 100%;
-              height: auto;
-            }
-          </style>
-        </head>
-        <body>
-          <div class="print-content">
-            ${printContent}
-          </div>
-          <script>
-            window.onload = function() {
-              setTimeout(function() {
-                window.print();
-                window.onafterprint = function() {
-                  window.close();
-                };
-              }, 200);
-            };
-          </script>
-        </body>
-      </html>
-    `);
-    printWindow.document.close();
+    const originalContents = document.body.innerHTML;
+    const printContents = printRef.current.innerHTML;
+
+    document.body.innerHTML = printContents;
+    window.print();
+    window.onafterprint = () => {
+      document.body.innerHTML = originalContents;
+      window.location.reload();
+    };
   };
+
   function displayDate() {
     const today = new Date();
     const day = String(today.getDate()).padStart(2, '0');
@@ -310,14 +252,15 @@ const SingleDeliverysortie = () => {
       {/* Printable content */}
       <Box
         ref={printRef}
+        className="print-container"
         sx={{
           border: '1px solid #ccc',
-          p: 3,
+          p: 1, // less padding on screen
           mt: 2,
           backgroundColor: '#fff',
-          direction: isArabic ? 'rtl' : 'ltr',
-        }}
-      >
+          direction: isArabic ? 'rtl' : 'ltr'
+  }}
+>
         <style>
           {`
             @media print {
@@ -427,20 +370,21 @@ const SingleDeliverysortie = () => {
     border: '1px solid #ccc',
     borderRadius: 2,
     mt: 2,
+    overflowX: 'auto'
   }}
 >
   <Table>
     <TableHead>
       <TableRow sx={{ backgroundColor: '#f5f5f5' }}>
-        <TableCell sx={{ textAlign: isArabic ? 'right' : 'left', borderRight: '1px solid #ccc' }}>{translations[printLanguage].designation}</TableCell>
-        <TableCell sx={{ textAlign: isArabic ? 'right' : 'left', borderRight: '1px solid #ccc' }}>{translations[printLanguage].quantity}</TableCell>
-        <TableCell sx={{ textAlign: isArabic ? 'right' : 'left', borderRight: '1px solid #ccc' }}>{translations[printLanguage].unit}</TableCell>
-        <TableCell sx={{ textAlign: isArabic ? 'right' : 'left', borderRight: '1px solid #ccc' }}>{translations[printLanguage].unitPrice}</TableCell>
-        <TableCell sx={{ textAlign: isArabic ? 'right' : 'left', borderRight: '1px solid #ccc' }}>{translations[printLanguage].tva}%</TableCell>
-        <TableCell sx={{ textAlign: isArabic ? 'right' : 'left', borderRight: '1px solid #ccc' }}>{translations[printLanguage].remise}%</TableCell>
-        <TableCell sx={{ textAlign: isArabic ? 'right' : 'left', borderRight: '1px solid #ccc' }}>{translations[printLanguage].prixNetU}</TableCell>
-        <TableCell sx={{ textAlign: isArabic ? 'right' : 'left', borderRight: '1px solid #ccc' }}>{translations[printLanguage].totalNetHT}</TableCell>
-        <TableCell sx={{ textAlign: isArabic ? 'right' : 'left', borderRight: '1px solid #ccc' }}>{translations[printLanguage].totalNetTTC}</TableCell>
+        <TableCell sx={{ textAlign: isArabic ? 'right' : 'left', borderRight: '1px solid #ccc',whiteSpace: 'nowrap', fontWeight: 'bold', fontSize: '13px' }}>{translations[printLanguage].designation}</TableCell>
+        <TableCell sx={{ textAlign: isArabic ? 'right' : 'left', borderRight: '1px solid #ccc',whiteSpace: 'nowrap', fontWeight: 'bold', fontSize: '13px' }}>{translations[printLanguage].quantity}</TableCell>
+        <TableCell sx={{ textAlign: isArabic ? 'right' : 'left', borderRight: '1px solid #ccc',whiteSpace: 'nowrap', fontWeight: 'bold', fontSize: '13px' }}>{translations[printLanguage].unit}</TableCell>
+        <TableCell sx={{ textAlign: isArabic ? 'right' : 'left', borderRight: '1px solid #ccc',whiteSpace: 'nowrap', fontWeight: 'bold', fontSize: '13px' }}>{translations[printLanguage].unitPrice}</TableCell>
+        <TableCell sx={{ textAlign: isArabic ? 'right' : 'left', borderRight: '1px solid #ccc',whiteSpace: 'nowrap', fontWeight: 'bold', fontSize: '13px' }}>{translations[printLanguage].tva}%</TableCell>
+        <TableCell sx={{ textAlign: isArabic ? 'right' : 'left', borderRight: '1px solid #ccc',whiteSpace: 'nowrap', fontWeight: 'bold', fontSize: '13px' }}>{translations[printLanguage].remise}%</TableCell>
+        <TableCell sx={{ textAlign: isArabic ? 'right' : 'left', borderRight: '1px solid #ccc',whiteSpace: 'nowrap', fontWeight: 'bold', fontSize: '13px' }}>{translations[printLanguage].prixNetU}</TableCell>
+        <TableCell sx={{ textAlign: isArabic ? 'right' : 'left', borderRight: '1px solid #ccc',whiteSpace: 'nowrap', fontWeight: 'bold', fontSize: '13px' }}>{translations[printLanguage].totalNetHT}</TableCell>
+        <TableCell sx={{ textAlign: isArabic ? 'right' : 'left', borderRight: '1px solid #ccc',whiteSpace: 'nowrap', fontWeight: 'bold', fontSize: '13px' }}>{translations[printLanguage].totalNetTTC}</TableCell>
       </TableRow>
     </TableHead>
 
