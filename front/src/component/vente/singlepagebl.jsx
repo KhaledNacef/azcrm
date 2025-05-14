@@ -211,7 +211,7 @@ const SingleDeliverysortie = () => {
     year: 'numeric',
   });
   const handlePrint = () => {
-    const printContent = document.getElementById('printable'); // Get the printable content
+    const printContent = printRef
     const printWindow = window.open('', '_blank', 'width=800,height=600'); // Open a new window for printing
   
     // Write content to the new window
@@ -282,11 +282,7 @@ const SingleDeliverysortie = () => {
     p: 3,
     backgroundColor: '#fff',
     direction: isArabic ? 'rtl' : 'ltr',
-    '@media print': {
-      width: '100%',
-      margin: 0,
-      padding: 0,
-    }
+  
   }}
 >
         <Box sx={{ 
