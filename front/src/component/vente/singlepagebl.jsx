@@ -181,85 +181,15 @@ const SingleDeliverysortie = () => {
   const totalNetTTCInWords = n2words(totalNetTTC.toFixed(3), { lang: printLanguage === 'ar' ? 'ar' : printLanguage }); // Arabic or French/English
 
   const handlePrint = () => {
-    const printWindow = window.open('', '_blank');
-    const printContent = printRef.current.innerHTML;
-    
-    printWindow.document.write(`
-      <!DOCTYPE html>
-      <html>
-        <head>
-          <title>Facture ${id}</title>
-          <style>
-            @page {
-              size: A4;
-              margin: 10mm;
-            }
-            body {
-              font-family: Arial, sans-serif;
-              margin: 0;
-              padding: 0;
-              direction: ${isArabic ? 'rtl' : 'ltr'};
-            }
-            .print-container {
-              width: 100%;
-              max-width: 210mm;
-              margin: 0 auto;
-              padding: 10mm;
-              box-sizing: border-box;
-            }
-            table {
-              width: 100%;
-              border-collapse: collapse;
-            }
-            th {
-              background-color: #f5f5f5 !important;
-              -webkit-print-color-adjust: exact;
-              print-color-adjust: exact;
-              color: #000 !important;
-            }
-            th, td {
-              border: 1px solid #ddd;
-              padding: 8px;
-              text-align: ${isArabic ? 'right' : 'left'};
-            }
-            .invoice-title {
-              font-size: 24px !important;
-              font-weight: bold !important;
-              text-align: center !important;
-              margin-bottom: 20px !important;
-            }
-            img {
-              max-width: 100%;
-              height: auto;
-            }
-            @media print {
-              body {
-                font-size: 12px;
-              }
-              .no-print {
-                display: none !important;
-              }
-            }
-          </style>
-        </head>
-        <body>
-          <div class="print-container">
-            ${printContent}
-          </div>
-          <script>
-            window.onload = function() {
-              setTimeout(function() {
-                window.print();
-                window.onafterprint = function() {
-                  window.close();
-                };
-              }, 200);
-            };
-          </script>
-        </body>
-      </html>
-    `);
-    printWindow.document.close();
+    const originalContents = document.body.innerHTML;
+    const printContents = printRef.current.innerHTML;
+
+    document.body.innerHTML = printContents;
+    window.print();
+    window.onafterprint = () => {
+      document.body.innerHTML = originalContents;
+      window.location.reload();
+    };
   };
 
   function displayDate() {
