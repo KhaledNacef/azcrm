@@ -5,7 +5,6 @@ import Grid from '@mui/material/Grid2';
 import './cssbl.css';
 import logo from '../../assets/amounnet.png';
 import n2words from 'n2words';
-import { useReactToPrint } from 'react-to-print';
 const translations = {
   en: {
     timbre: 'Stamp',
@@ -179,17 +178,7 @@ const SingleDeliverysortie = () => {
     totalNetTTC += 1;  // Add 1 TND for timbre
   }
   const totalNetTTCInWords = n2words(totalNetTTC.toFixed(3), { lang: printLanguage === 'ar' ? 'ar' : printLanguage }); // Arabic or French/English
-  const handlePrint = useReactToPrint({
-    content: () => {
-      if (!printRef.current) {
-        console.error('Print ref is not available');
-        return null;
-      }
-      return printRef.current;
-    },
-    onBeforeGetContent: () => console.log('Preparing print content'),
-    onPrintError: (error) => console.error('Print error:', error)
-  });
+  const handlePrint =window.print(printRef)
 
   function displayDate() {
     const today = new Date();
