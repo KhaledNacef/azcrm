@@ -277,6 +277,20 @@ const SingleDeliverysortie = () => {
                 font-size: 12px !important;
                 text-align: ${isArabic ? 'right' : 'left'};
               }
+                 table thead {
+    background-color:#f5f5f5 !important;
+    color: #000 !important;
+  }
+    .img {
+    display: block !important;
+  }
+     h4 {
+    font-size: 34px !important; /* Adjust title font size */
+    font-weight: bold !important; /* Make the title bold */
+    text-align: center !important; /* Center the title */
+    margin-bottom: 20px !important; /* Adjust margin if necessary */
+    color: #333 !important; /* Set a dark color for the title */
+  }
             }
           `}
         </style>
