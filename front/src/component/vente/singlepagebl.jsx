@@ -118,7 +118,7 @@ const SingleDeliverysortie = () => {
   const [anchorEl, setAnchorEl] = useState(null);
   const [client, setClient] = useState({});
   const [deliveryNote, setDeliveryNote] = useState([]);
-  const printRef = useRef(); // Reference for printable content
+  const printRef = useRef(null);
 
   useEffect(() => {
     const fetchClientData = async () => {
@@ -246,7 +246,7 @@ const SingleDeliverysortie = () => {
       </Menu>
 
       {/* Printable content */}
-      <Box
+      <div
       ref={printRef} 
   sx={{
     p: 3,
@@ -442,7 +442,7 @@ const SingleDeliverysortie = () => {
             <Typography variant="body1">{translations[printLanguage].companySignature}</Typography>
           </Box>
         </Box>
-      </Box>
+      </div>
     </Box>
   );
 };
