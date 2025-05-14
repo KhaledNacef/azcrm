@@ -1,14 +1,13 @@
 @media print {
   /* Hide any debug information or elements that contain localhost */
   footer, .vite-footer, .react-footer, .vite-logo, .react-logo {
-    display: none !important;
-  }
-
-  /* Hide header or logo if they appear */
-  .vite-logo, .react-logo, .header {
-    display: none !important;
-  }
-
+      display: none !important;
+    }
+  
+    /* You can also try targeting the header if the logo appears there */
+    .vite-logo, .react-logo, .header {
+      display: none !important;
+    }
   /* Adjust other styles for printing */
   body {
     font-size: 12px !important;
@@ -29,24 +28,9 @@
   .MuiTableRow-root {
     font-size: 12px !important;
   }
+.img{
+  display: block !important;
 
-  /* Ensure images display correctly */
-  .img {
-    display: block !important;
-  }
-
-  /* Table header styling */
-  table thead {
-    background-color:#f5f5f5 !important;
-    color: #000 !important;
-  }
-
-  /* Style for the h4 title of the facture (invoice) */
-  h4 {
-    font-size: 34px !important; /* Adjust title font size */
-    font-weight: bold !important; /* Make the title bold */
-    text-align: center !important; /* Center the title */
-    margin-bottom: 20px !important; /* Adjust margin if necessary */
-    color: #333 !important; /* Set a dark color for the title */
-  }
+}
+  /* Any other styles you want to apply for print */
 }

@@ -360,20 +360,7 @@ const SingleDeliverysortie = () => {
           </Box>
         </Box>
 
-        <Typography 
-          className="invoice-title"
-          variant="h4" 
-          mb={3} 
-          textAlign="center"
-          sx={{
-            fontSize: '24px',
-            fontWeight: 'bold',
-            '@media print': {
-              fontSize: '24px !important',
-              fontWeight: 'bold !important'
-            }
-          }}
-        >
+        <Typography variant="h4" mb={3} textAlign="center">
           {translations[printLanguage].deliveryNote} - {id}/{formattedDate}
         </Typography>
         <TableContainer
@@ -382,18 +369,11 @@ const SingleDeliverysortie = () => {
     border: '1px solid #ccc',
     borderRadius: 2,
     mt: 2,
-    overflowX: 'auto'
   }}
 >
   <Table>
     <TableHead>
-      <TableRow sx={{ backgroundColor: '#f5f5f5', '@media print': {
-                    backgroundColor: '#f5f5f5 !important',
-                    '& th': {
-                      color: '#000 !important',
-                      backgroundColor: '#f5f5f5 !important'
-                    }
-                  } }}>
+      <TableRow sx={{ backgroundColor: '#f5f5f5' }}>
         <TableCell sx={{ textAlign: isArabic ? 'right' : 'left', borderRight: '1px solid #ccc' }}>{translations[printLanguage].designation}</TableCell>
         <TableCell sx={{ textAlign: isArabic ? 'right' : 'left', borderRight: '1px solid #ccc' }}>{translations[printLanguage].quantity}</TableCell>
         <TableCell sx={{ textAlign: isArabic ? 'right' : 'left', borderRight: '1px solid #ccc' }}>{translations[printLanguage].unit}</TableCell>
