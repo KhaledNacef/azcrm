@@ -145,7 +145,7 @@ const StockPage = () => {
         </Table>
       </TableContainer>
 {/* Total TTC */}
-<Box sx={{ mt: 2, display: 'flex', justifyContent: 'flex-end' }}>
+{/* <Box sx={{ mt: 2, display: 'flex', justifyContent: 'flex-end' }}>
   <Typography variant="h6">
     Total TTC:{' '}
     {filteredProducts
@@ -160,7 +160,7 @@ const StockPage = () => {
       .toFixed(3)}{' '}
     TND
   </Typography>
-</Box>
+</Box> */}
 
       {/* Snackbar for notifications */}
       <Snackbar
