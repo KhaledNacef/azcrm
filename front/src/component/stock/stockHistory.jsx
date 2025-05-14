@@ -14,6 +14,7 @@ import {
   Alert,
 } from '@mui/material';
 import axios from 'axios';
+import PaidIcon from '@mui/icons-material/Paid';
 
 const StockHPage = () => {
   const [products, setProducts] = useState([]);
@@ -65,7 +66,35 @@ const StockHPage = () => {
       <Typography variant="h4" gutterBottom>
         Tous Les Produits
       </Typography>
+<Grid container spacing={3} sx={{ mt: 2, mb: 4 }}>
+  {/* Total Prix d'achat */}
+  <Grid item xs={12} sm={6} md={4}>
+    <Card elevation={3}>
+      <CardContent>
+        <Box display="flex" justifyContent="space-between" alignItems="center" mb={1}>
+          <Typography variant="subtitle1" color="textSecondary">Total Prix d'achat</Typography>
+          <Avatar sx={{ bgcolor: 'warning.main' }}>
+            <PaidIcon />
+          </Avatar>
+        </Box>
+        <Typography variant="h5">
+          Total TTC:{' '}
+          {filteredProducts
+            .reduce((acc, product) => {
+              const unitPrice = product.prixU_HT;
+              const remise = product.rem > 0 ? (unitPrice * product.rem) / 100 : 0;
+              const prixUNetHT = unitPrice - remise;
+              const netHT = prixUNetHT * product.quantite;
+              const netTTC = netHT + (netHT * product.tva) / 100;
+              return acc + netTTC;
+            }, 0)
+            .toFixed(3)}
+        </Typography>      </CardContent>
+    </Card>
+  </Grid>
 
+ 
+</Grid>
       <TextField
         label="Search by Name or ID"
         variant="outlined"
@@ -128,22 +157,7 @@ const StockHPage = () => {
         </Table>
       </TableContainer>
 
-      <Box sx={{ mt: 2, display: 'flex', justifyContent: 'flex-end' }}>
-        <Typography variant="h6">
-          Total TTC:{' '}
-          {filteredProducts
-            .reduce((acc, product) => {
-              const unitPrice = product.prixU_HT;
-              const remise = product.rem > 0 ? (unitPrice * product.rem) / 100 : 0;
-              const prixUNetHT = unitPrice - remise;
-              const netHT = prixUNetHT * product.quantite;
-              const netTTC = netHT + (netHT * product.tva) / 100;
-              return acc + netTTC;
-            }, 0)
-            .toFixed(3)}
-        </Typography>
-      </Box>
-
+   
       <Snackbar
         open={snackbarOpen}
         autoHideDuration={6000}

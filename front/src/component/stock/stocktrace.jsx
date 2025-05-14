@@ -14,6 +14,9 @@ import {
   Alert,
 } from '@mui/material';
 import axios from 'axios';
+import MonetizationOnIcon from '@mui/icons-material/MonetizationOn';
+import PaidIcon from '@mui/icons-material/Paid';
+import TrendingUpIcon from '@mui/icons-material/TrendingUp';
 
 const StockTPage = () => {
   const [products, setProducts] = useState([]);
@@ -61,8 +64,8 @@ const StockTPage = () => {
   };
 
   const totalTTC = filteredProducts.reduce((acc, product) => {
-
-    return acc + product.prixU_HT;
+    const totalacaht=product.prixU_HT*product.quantite
+    return acc + totalacaht;
   }, 0);
 
   const totalSellPrice = filteredProducts.reduce((acc, product) => {
@@ -88,6 +91,52 @@ const StockTPage = () => {
       <Typography variant="h4" gutterBottom>
         Tous Les Produits
       </Typography>
+      <Grid container spacing={3} sx={{ mt: 2, mb: 4 }}>
+  {/* Total Prix d'achat */}
+  <Grid item xs={12} sm={6} md={4}>
+    <Card elevation={3}>
+      <CardContent>
+        <Box display="flex" justifyContent="space-between" alignItems="center" mb={1}>
+          <Typography variant="subtitle1" color="textSecondary">Total Prix d'achat</Typography>
+          <Avatar sx={{ bgcolor: 'warning.main' }}>
+            <PaidIcon />
+          </Avatar>
+        </Box>
+        <Typography variant="h5">{totalTTC.toFixed(3)} TND</Typography>
+      </CardContent>
+    </Card>
+  </Grid>
+
+  {/* Total Prix de Vente */}
+  <Grid item xs={12} sm={6} md={4}>
+    <Card elevation={3}>
+      <CardContent>
+        <Box display="flex" justifyContent="space-between" alignItems="center" mb={1}>
+          <Typography variant="subtitle1" color="textSecondary">Total Prix de Vente</Typography>
+          <Avatar sx={{ bgcolor: 'success.main' }}>
+            <MonetizationOnIcon />
+          </Avatar>
+        </Box>
+        <Typography variant="h5">{totalSellPrice.toFixed(3)} TND</Typography>
+      </CardContent>
+    </Card>
+  </Grid>
+
+  {/* Total Gain */}
+  <Grid item xs={12} sm={6} md={4}>
+    <Card elevation={3}>
+      <CardContent>
+        <Box display="flex" justifyContent="space-between" alignItems="center" mb={1}>
+          <Typography variant="subtitle1" color="textSecondary">Total Gain</Typography>
+          <Avatar sx={{ bgcolor: 'info.main' }}>
+            <TrendingUpIcon />
+          </Avatar>
+        </Box>
+        <Typography variant="h5">{totalProfit.toFixed(3)} TND</Typography>
+      </CardContent>
+    </Card>
+  </Grid>
+</Grid>
 
       <TextField
         label="Search by Name or ID"
@@ -157,11 +206,7 @@ const StockTPage = () => {
         </Table>
       </TableContainer>
 
-      <Box sx={{ mt: 3 }}>
-      <Typography variant="h6">Total Prix d'achat : {totalTTC.toFixed(3)} TND</Typography>
-        <Typography variant="h6">Total Prix De Vente : {totalSellPrice.toFixed(3)} TND</Typography>
-        <Typography variant="h6">Total Gain : {totalProfit.toFixed(3)} TND</Typography>
-      </Box>
+  
 
       <Snackbar
         open={snackbarOpen}
