@@ -179,19 +179,73 @@ const SingleDeliverysortie = () => {
     totalNetTTC += 1;  // Add 1 TND for timbre
   }
   const totalNetTTCInWords = n2words(totalNetTTC.toFixed(3), { lang: printLanguage === 'ar' ? 'ar' : printLanguage }); // Arabic or French/English
-
   const handlePrint = () => {
-    const originalContents = document.body.innerHTML;
-    const printContents = printRef.current.innerHTML;
-
-    document.body.innerHTML = printContents;
-    window.print();
-    window.onafterprint = () => {
-      document.body.innerHTML = originalContents;
-      window.location.reload();
-    };
+    // Create a clone of the printable content
+    const printContent = printRef.current.cloneNode(true);
+    
+    // Remove any existing print media queries
+    const styles = Array.from(document.styleSheets)
+      .map(sheet => {
+        try {
+          return Array.from(sheet.cssRules)
+            .filter(rule => rule.media && rule.media.mediaText.includes('print'))
+            .map(rule => rule.cssText)
+            .join('\n');
+        } catch (e) {
+          return '';
+        }
+      })
+      .join('\n');
+  
+    // Create a new window for printing
+    const printWindow = window.open('', '_blank');
+    printWindow.document.write(`
+      <!DOCTYPE html>
+      <html>
+        <head>
+          <title>Facture ${id}</title>
+          <style>
+            ${styles}
+            @media print {
+              body > *:not(.print-content) {
+                display: none !important;
+              }
+              .print-content {
+                all: initial !important;
+                display: block !important;
+              }
+              * {
+                box-shadow: none !important;
+                text-decoration: none !important;
+              }
+              table {
+                border-collapse: collapse !important;
+                width: 100% !important;
+              }
+              th, td {
+                border: 1px solid #ddd !important;
+              }
+              .MuiTable-root {
+                background-color: transparent !important;
+              }
+            }
+          </style>
+        </head>
+        <body>
+          <div class="print-content">
+            ${printContent.innerHTML}
+          </div>
+          <script>
+            window.onload = function() {
+              setTimeout(() => window.print(), 100);
+              window.onafterprint = () => window.close();
+            };
+          </script>
+        </body>
+      </html>
+    `);
+    printWindow.document.close();
   };
-
   function displayDate() {
     const today = new Date();
     const day = String(today.getDate()).padStart(2, '0');
@@ -260,27 +314,7 @@ const SingleDeliverysortie = () => {
           direction: isArabic ? 'rtl' : 'ltr',
         }}
       >
-        <style>
-          {`
-            @media print {
-              body {
-                font-size: 12px !important;
-                direction: ${isArabic ? 'rtl' : 'ltr'};
-              }
-              .MuiButton-root {
-                display: none !important;
-              }
-              .MuiTypography-root {
-                font-size: 12px !important;
-              }
-              .MuiTableCell-root {
-                font-size: 12px !important;
-                text-align: ${isArabic ? 'right' : 'left'};
-              }
-                
-            }
-          `}
-        </style>
+       
         <Box sx={{ 
           width: 742,
           height: 152,
