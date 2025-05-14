@@ -1,36 +1,70 @@
 @media print {
-  /* Hide any debug information or elements that contain localhost */
-  footer, .vite-footer, .react-footer, .vite-logo, .react-logo {
-      display: none !important;
-    }
-  
-    /* You can also try targeting the header if the logo appears there */
-    .vite-logo, .react-logo, .header {
-      display: none !important;
-    }
-  /* Adjust other styles for printing */
-  body {
-    font-size: 12px !important;
+  /* Hide everything by default */
+  body * {
+    visibility: hidden;
   }
 
+  /* Show only the content you want to print */
+  .print-content, .print-content * {
+    visibility: visible;
+  }
+
+  .print-content {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    padding: 20px;
+  }
+
+  /* Hide debug/logos/footers explicitly just in case */
+  footer, .vite-footer, .react-footer, .vite-logo, .react-logo, .header {
+    display: none !important;
+  }
+
+  /* Adjust body font size */
+  body {
+    font-size: 12px !important;
+    margin: 0;
+    padding: 0;
+  }
+
+  /* Typography adjustments */
   .MuiTypography-root {
     font-size: 12px !important;
   }
 
+  /* Hide all buttons */
   .MuiButton-root {
     display: none !important;
   }
 
-  .MuiTableCell-root {
+  /* Table styling */
+  .MuiTableCell-root, .MuiTableRow-root {
     font-size: 12px !important;
   }
 
-  .MuiTableRow-root {
-    font-size: 12px !important;
+  /* Images */
+  .img {
+    display: block !important;
+    max-width: 100%;
+    height: auto;
   }
-.img{
-  display: block !important;
 
-}
-  /* Any other styles you want to apply for print */
+  /* Page breaks */
+  .page-break {
+    page-break-before: always;
+  }
+
+  /* Remove margins for print */
+  .print-container {
+    margin: 0;
+    padding: 0;
+  }
+
+  /* Page setup */
+  @page {
+    margin: 0;
+    size: auto;
+  }
 }
