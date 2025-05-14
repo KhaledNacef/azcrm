@@ -181,47 +181,16 @@ const SingleDeliverysortie = () => {
   const totalNetTTCInWords = n2words(totalNetTTC.toFixed(3), { lang: printLanguage === 'ar' ? 'ar' : printLanguage }); // Arabic or French/English
 
   const handlePrint = () => {
-    const printContents = printRef.current.innerHTML;
+    // Add a class to body to trigger print styles
+    document.body.classList.add("print-mode");
   
-    // Open a new window for the print content
-    const printWindow = window.open('', '_blank');
-    
-    // Write the HTML structure and content to the new window
-    printWindow.document.write(`
-      <html>
-        <head>
-          <title>Delivery Note</title>
-          <link rel="stylesheet" type="text/css" href="cssbl.css" />
-          <style>
-            @media print {
-              body {
-                font-size: 12px !important;
-                direction: ${isArabic ? 'rtl' : 'ltr'};
-              }
-              .MuiButton-root {
-                display: none !important;
-              }
-              .MuiTypography-root {
-                font-size: 12px !important;
-              }
-              .MuiTableCell-root {
-                font-size: 12px !important;
-                text-align: ${isArabic ? 'right' : 'left'};
-              }
-            }
-          </style>
-        </head>
-        <body>
-          ${printContents}
-        </body>
-      </html>
-    `);
+    // Trigger print
+    window.print();
   
-    // Close the document to ensure it renders
-    printWindow.document.close();
-  
-    // Optional: focus the new window to ensure it's the active window
-    printWindow.focus();
+    // Remove the class after printing
+    window.onafterprint = () => {
+      document.body.classList.remove("print-mode");
+    };
   };
   
   
