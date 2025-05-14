@@ -344,15 +344,7 @@ const SingleDeliverysortie = () => {
         <Typography variant="h4" mb={3} textAlign="center">
         <strong>{translations[printLanguage].deliveryNote} - {id}/{formattedDate}</strong> 
         </Typography>
-        <TableContainer
-  component={Paper}
-  sx={{
-    border: '1px solid #ccc',
-    borderRadius: 2,
-    mt: 2,
-    overflowX: 'auto'
-  }}
->
+
   <Table>
     <TableHead>
       <TableRow sx={{ backgroundColor: '#f5f5f5' }}>
@@ -399,7 +391,6 @@ const SingleDeliverysortie = () => {
       })}
     </TableBody>
   </Table>
-</TableContainer>
 
              <Box sx={{ display: 'flex', justifyContent: 'flex-end', mt: 3 }}>
                 <Box sx={{ display: 'flex', 
