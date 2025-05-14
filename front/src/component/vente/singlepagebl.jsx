@@ -181,17 +181,75 @@ const SingleDeliverysortie = () => {
   const totalNetTTCInWords = n2words(totalNetTTC.toFixed(3), { lang: printLanguage === 'ar' ? 'ar' : printLanguage }); // Arabic or French/English
 
   const handlePrint = () => {
-    const originalContents = document.body.innerHTML;
-    const printContents = printRef.current.innerHTML;
-
-    document.body.innerHTML = printContents;
-    window.print();
-    window.onafterprint = () => {
-      document.body.innerHTML = originalContents;
-      window.location.reload();
-    };
+    const printWindow = window.open('', '_blank');
+    const printContent = printRef.current.innerHTML;
+    
+    printWindow.document.write(`
+      <!DOCTYPE html>
+      <html>
+        <head>
+          <title>Facture ${id}</title>
+          <style>
+            @page {
+              size: A4;
+              margin: 10mm;
+            }
+            body {
+              font-family: Arial, sans-serif;
+              margin: 0;
+              padding: 10mm;
+              direction: ${isArabic ? 'rtl' : 'ltr'};
+              font-size: 12px;
+            }
+            .print-content {
+              width: 100%;
+              max-width: 210mm;
+              margin: 0 auto;
+            }
+            table {
+              width: 100%;
+              border-collapse: collapse;
+            }
+            th, td {
+              border: 1px solid #ddd !important;
+              padding: 8px;
+              text-align: ${isArabic ? 'right' : 'left'};
+            }
+            th {
+              background-color: #f5f5f5 !important;
+              -webkit-print-color-adjust: exact;
+              print-color-adjust: exact;
+            }
+            /* Remove all shadows */
+            * {
+              box-shadow: none !important;
+            }
+            /* Ensure logo prints correctly */
+            img {
+              max-width: 100%;
+              height: auto;
+            }
+          </style>
+        </head>
+        <body>
+          <div class="print-content">
+            ${printContent}
+          </div>
+          <script>
+            window.onload = function() {
+              setTimeout(function() {
+                window.print();
+                window.onafterprint = function() {
+                  window.close();
+                };
+              }, 200);
+            };
+          </script>
+        </body>
+      </html>
+    `);
+    printWindow.document.close();
   };
-
   function displayDate() {
     const today = new Date();
     const day = String(today.getDate()).padStart(2, '0');
