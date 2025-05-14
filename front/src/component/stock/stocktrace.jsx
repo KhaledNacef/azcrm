@@ -12,6 +12,10 @@ import {
   Typography,
   Snackbar,
   Alert,
+  Card, 
+  CardContent, 
+  Avatar,
+  IconButton
 } from '@mui/material';
 import axios from 'axios';
 import MonetizationOnIcon from '@mui/icons-material/MonetizationOn';

@@ -12,6 +12,9 @@ import {
   Typography,
   Snackbar,
   Alert,
+  Card, 
+  CardContent, 
+  Avatar,
 } from '@mui/material';
 import axios from 'axios';
 import PaidIcon from '@mui/icons-material/Paid';
