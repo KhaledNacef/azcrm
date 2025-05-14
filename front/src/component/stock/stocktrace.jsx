@@ -70,7 +70,7 @@ const StockTPage = () => {
   }, 0);
 
   const totalSellPrice = filteredProducts.reduce((acc, product) => {
-    return acc + (product.sellprice || 0);
+    return acc + (product.sellprice*product.quantite || 0);
   }, 0);
 
   const totalProfit = filteredProducts.reduce((acc, product) => {
@@ -111,13 +111,9 @@ const StockTPage = () => {
               <TableCell><strong>Produit</strong></TableCell>
               <TableCell><strong>Unité</strong></TableCell>
               <TableCell><strong>Quantité</strong></TableCell>
-              <TableCell><strong>Prix d'achat TTC</strong></TableCell>
-              <TableCell><strong>TVA (%)</strong></TableCell>
-              <TableCell><strong>Rem (%)</strong></TableCell>
-              <TableCell><strong>Prix Net U (HT)</strong></TableCell>
-              <TableCell><strong>Total Net (HT)</strong></TableCell>
-              <TableCell><strong>Total Net (TTC)</strong></TableCell>
-              <TableCell><strong>Prix De Vente TTC</strong></TableCell>
+              <TableCell><strong>Prix d'achat (TTC)</strong></TableCell>
+              <TableCell><strong>Prix De Vente (TTC)</strong></TableCell>
+              <TableCell><strong>Total Prix De Vente (TTC)</strong></TableCell>
               <TableCell><strong>Gain Unitaire</strong></TableCell> 
               <TableCell><strong>Gain Total</strong></TableCell> 
           </TableRow>
@@ -137,6 +133,7 @@ const StockTPage = () => {
       const sellPrice = product.sellprice || 0;
       const gainPerUnit = sellPrice - netTTCPerUnit;
       const totalGain = gainPerUnit * product.quantite;
+      const totalprixvente=sellPrice*product.quantite
 
       return (
         <TableRow key={product.id}>
@@ -146,12 +143,8 @@ const StockTPage = () => {
           <TableCell>{product.Unite}</TableCell>
           <TableCell>{product.quantite}</TableCell>
           <TableCell>{unitPrice.toFixed(3)}{product.devise}</TableCell>
-          <TableCell>{product.tva} %</TableCell>
-          <TableCell>{hasRemise ? `${product.rem} %` : '-'}</TableCell>
-          <TableCell>{hasRemise ? prixUNetHT.toFixed(3) : '-'}{product.devise}</TableCell>
-          <TableCell>{netHT.toFixed(3)}{product.devise}</TableCell>
-          <TableCell>{netTTC.toFixed(3)}{product.devise}</TableCell>
           <TableCell>{(sellPrice|| 0).toFixed(3)}{product.devise}</TableCell>
+          <TableCell>{totalprixvente.toFixed(3)}{product.devise}</TableCell>
           <TableCell>{gainPerUnit.toFixed(3)}{product.devise}</TableCell> 
           <TableCell>{totalGain.toFixed(3)}{product.devise}</TableCell> 
         </TableRow>
@@ -169,7 +162,6 @@ const StockTPage = () => {
       </TableContainer>
 
       <Box sx={{ mt: 3 }}>
-        <Typography variant="h6">Total TTC : {totalTTC.toFixed(3)} TND</Typography>
         <Typography variant="h6">Total Prix De Vente : {totalSellPrice.toFixed(3)} TND</Typography>
         <Typography variant="h6">Total Gain : {totalProfit.toFixed(3)} TND</Typography>
       </Box>
