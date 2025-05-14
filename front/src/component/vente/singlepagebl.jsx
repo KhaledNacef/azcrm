@@ -314,7 +314,7 @@ const SingleDeliverysortie = () => {
           </Box>
 
           <Box sx={{ 
-            textAlign: 'right',
+            textAlign: 'left',
             order: isArabic ? 1 : 2,
             flex: 1,
             border: '1px solid',
