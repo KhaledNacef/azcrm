@@ -77,8 +77,8 @@ body {
 /* Print-specific styles */
 @media print {
   body {
-    -webkit-print-color-adjust: exact !important;
-    print-color-adjust: exact !important;
+    print-color-adjust: exact !important; /* Standard property for browsers like Firefox */
+    -webkit-print-color-adjust: exact !important; /* WebKit-specific for Chrome/Safari */
     background-color: white;
   }
 
@@ -93,6 +93,7 @@ body {
 
   .table th {
     background-color: #ddd !important;
-    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact; /* Standard property */
+    -webkit-print-color-adjust: exact; /* WebKit-specific */
   }
 }

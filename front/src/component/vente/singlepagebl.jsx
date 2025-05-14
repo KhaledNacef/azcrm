@@ -5,7 +5,7 @@ import Grid from '@mui/material/Grid2';
 import './cssbl.css';
 import logo from '../../assets/amounnet.png';
 import n2words from 'n2words';
-// Translation dictionaries
+import ReactDOMServer from 'react-dom/server';
 const translations = {
   en: {
     timbre: 'Stamp',
@@ -179,73 +179,82 @@ const SingleDeliverysortie = () => {
     totalNetTTC += 1;  // Add 1 TND for timbre
   }
   const totalNetTTCInWords = n2words(totalNetTTC.toFixed(3), { lang: printLanguage === 'ar' ? 'ar' : printLanguage }); // Arabic or French/English
-  const handlePrint = () => {
-    const printContent = printRef.current;
-    const printWindow = window.open('', '_blank');
-  
-    // Copy all stylesheets
-    const stylesheets = Array.from(document.styleSheets)
-      .map((styleSheet) => {
-        try {
-          if (styleSheet.href) {
-            // For external stylesheets (e.g., MUI CSS)
-            return `<link rel="stylesheet" type="text/css" href="${styleSheet.href}">`;
-          } else if (styleSheet.ownerNode && styleSheet.ownerNode.innerHTML) {
-            // For internal stylesheets
-            return `<style>${styleSheet.ownerNode.innerHTML}</style>`;
-          }
-        } catch (e) {
-          return '';
+
+// Handle print function
+const handlePrint = () => {
+  // Extract the content to be printed
+  const printContent = printRef.current;
+
+  // Convert the React component to static HTML
+  const printableMarkup = ReactDOMServer.renderToStaticMarkup(printContent);
+
+  // Create a new print window
+  const printWindow = window.open('', '_blank');
+
+  // Copy all stylesheets for print
+  const stylesheets = Array.from(document.styleSheets)
+    .map((styleSheet) => {
+      try {
+        if (styleSheet.href) {
+          // For external stylesheets (e.g., MUI CSS)
+          return `<link rel="stylesheet" type="text/css" href="${styleSheet.href}">`;
+        } else if (styleSheet.ownerNode && styleSheet.ownerNode.innerHTML) {
+          // For internal stylesheets
+          return `<style>${styleSheet.ownerNode.innerHTML}</style>`;
         }
-      })
-      .join('\n');
-  
-    printWindow.document.write(`
-      <html>
-        <head>
-          <title>Facture ${id}</title>
-          ${stylesheets}
-          <style>
-            @media print {
-              body {
-                -webkit-print-color-adjust: exact !important;
-                print-color-adjust: exact !important;
-              }
-              .print-container {
-                padding: 20px;
-                font-family: 'Roboto', sans-serif;
-              }
-              table {
-                width: 100%;
-                border-collapse: collapse;
-              }
-              th, td {
-                border: 1px solid #ccc;
-                padding: 8px;
-                text-align: center;
-              }
+      } catch (e) {
+        return '';
+      }
+    })
+    .join('\n');
+
+  // Write the HTML content to the print window
+  printWindow.document.write(`
+    <html>
+      <head>
+        <title>Facture ${id}</title>
+        ${stylesheets}
+        <style>
+          @media print {
+            body {
+              -webkit-print-color-adjust: exact !important;
+              print-color-adjust: exact !important;
             }
-          </style>
-        </head>
-        <body>
-          <div class="print-container">
-            ${printContent.innerHTML}
-          </div>
-          <script>
-            window.onload = () => {
-              setTimeout(() => {
-                window.print();
-                window.onafterprint = () => window.close();
-              }, 100);
-            };
-          </script>
-        </body>
-      </html>
-    `);
-  
-    printWindow.document.close();
-  };
-  
+            .print-container {
+              padding: 20px;
+              font-family: 'Roboto', sans-serif;
+            }
+            table {
+              width: 100%;
+              border-collapse: collapse;
+            }
+            th, td {
+              border: 1px solid #ccc;
+              padding: 8px;
+              text-align: center;
+            }
+          }
+        </style>
+      </head>
+      <body>
+        <div class="print-container">
+          ${printableMarkup}
+        </div>
+        <script>
+          window.onload = () => {
+            setTimeout(() => {
+              window.print();
+              window.onafterprint = () => window.close();
+            }, 100);
+          };
+        </script>
+      </body>
+    </html>
+  `);
+
+  // Close the document for printing
+  printWindow.document.close();
+};
   function displayDate() {
     const today = new Date();
     const day = String(today.getDate()).padStart(2, '0');
