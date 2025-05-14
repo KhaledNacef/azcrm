@@ -17,6 +17,7 @@ import axios from 'axios';
 import MonetizationOnIcon from '@mui/icons-material/MonetizationOn';
 import PaidIcon from '@mui/icons-material/Paid';
 import TrendingUpIcon from '@mui/icons-material/TrendingUp';
+import Grid from '@mui/material/Grid2';
 
 const StockTPage = () => {
   const [products, setProducts] = useState([]);

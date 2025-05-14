@@ -15,6 +15,7 @@ import {
 } from '@mui/material';
 import axios from 'axios';
 import PaidIcon from '@mui/icons-material/Paid';
+import Grid from '@mui/material/Grid2';
 
 const StockHPage = () => {
   const [products, setProducts] = useState([]);
