@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { Box, Typography, Table, TableHead, TableRow, TableCell, TableBody, Button, Menu, MenuItem,TableContainer,Paper} from '@mui/material';
+import { Box, Typography, Table, TableHead, TableRow, TableCell, TableBody, Button, Menu, MenuItem} from '@mui/material';
 import Grid from '@mui/material/Grid2';
 import './cssbl.css';
 import logo from '../../assets/amounnet.png';
@@ -111,12 +111,12 @@ const translations = {
 
 const SingleDeliverysortie = () => {
   const { code, clientId, codey, devise,id,datee,timbre } = useParams();
-  const printRef = useRef();
   const navigate = useNavigate();
   const [printLanguage, setPrintLanguage] = useState('fr');
   const [anchorEl, setAnchorEl] = useState(null);
   const [client, setClient] = useState({});
   const [deliveryNote, setDeliveryNote] = useState([]);
+  const printRef = useRef(); // Reference for printable content
 
   useEffect(() => {
     const fetchClientData = async () => {
@@ -211,40 +211,7 @@ const SingleDeliverysortie = () => {
     year: 'numeric',
   });
   const handlePrint = () => {
-    const printContent = printRef
-    const printWindow = window.open('', '_blank', 'width=800,height=600'); // Open a new window for printing
-  
-    // Write content to the new window
-    printWindow.document.write('<html><head><title>Delivery Note</title>');
-    
-    // You can include styles here to ensure the printed document has the same layout
-    printWindow.document.write(`
-      <style>
-        body {
-          font-family: Arial, sans-serif;
-        }
-        table {
-          width: 100%;
-          border-collapse: collapse;
-        }
-        th, td {
-          padding: 8px;
-          border: 1px solid #000;
-          text-align: left;
-        }
-      </style>
-    `);
-  
-    printWindow.document.write('</head><body>');
-    printWindow.document.write(printContent.innerHTML); // Add the content to be printed
-    printWindow.document.write('</body></html>');
-    printWindow.document.close(); // Close the document to complete it
-    
-    // Wait for the content to load and then trigger the print dialog
-    printWindow.onload = function () {
-      printWindow.print(); // Print the content
-      printWindow.close(); // Close the print window after printing
-    };
+    window.print();
   };
 
   return (
@@ -276,8 +243,7 @@ const SingleDeliverysortie = () => {
 
       {/* Printable content */}
       <Box
-  ref={printRef}
-  className="printable"
+      ref={printRef} 
   sx={{
     p: 3,
     backgroundColor: '#fff',
