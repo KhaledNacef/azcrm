@@ -210,19 +210,42 @@ const SingleDeliverysortie = () => {
     month: '2-digit',
     year: 'numeric',
   });
-
   const handlePrint = () => {
-    const printContent = printRef.current;
-    const printWindow = window.open('', '', 'height=600,width=800');
+    const printContent = document.getElementById('printable'); // Get the printable content
+    const printWindow = window.open('', '_blank', 'width=800,height=600'); // Open a new window for printing
+  
+    // Write content to the new window
     printWindow.document.write('<html><head><title>Delivery Note</title>');
-    printWindow.document.write('<style>body { font-family: Arial, sans-serif; }</style>'); // Add styles for printing here
+    
+    // You can include styles here to ensure the printed document has the same layout
+    printWindow.document.write(`
+      <style>
+        body {
+          font-family: Arial, sans-serif;
+        }
+        table {
+          width: 100%;
+          border-collapse: collapse;
+        }
+        th, td {
+          padding: 8px;
+          border: 1px solid #000;
+          text-align: left;
+        }
+      </style>
+    `);
+  
     printWindow.document.write('</head><body>');
-    printWindow.document.write(printContent.innerHTML);
+    printWindow.document.write(printContent.innerHTML); // Add the content to be printed
     printWindow.document.write('</body></html>');
-    printWindow.document.close();
-    printWindow.print();
+    printWindow.document.close(); // Close the document to complete it
+    
+    // Wait for the content to load and then trigger the print dialog
+    printWindow.onload = function () {
+      printWindow.print(); // Print the content
+      printWindow.close(); // Close the print window after printing
+    };
   };
-
 
   return (
     <Box sx={{ p: 3 }}>
@@ -254,7 +277,7 @@ const SingleDeliverysortie = () => {
       {/* Printable content */}
       <Box
   ref={printRef}
-  className="printable-content"
+  className="printable"
   sx={{
     p: 3,
     backgroundColor: '#fff',
