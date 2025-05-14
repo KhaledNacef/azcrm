@@ -400,7 +400,7 @@ const SingleDeliverysortie = () => {
           <TableRow
             key={index}
             sx={{
-              backgroundColor: index % 2 === 0 ? '#fafafa' : 'white'
+              backgroundColor:'white'
             }}
           >
             <TableCell sx={{ textAlign: isArabic ? 'right' : 'left', borderRight: '1px solid #ccc' }}>{prod.designation}</TableCell>
@@ -427,25 +427,25 @@ const SingleDeliverysortie = () => {
                    borderColor: 'grey.400', 
                   borderRadius: 2,
                   p: 2 }}>
-                  <Typography variant="body1" sx={{borderBottom:'1px'}}>
+                  <Typography variant="body1" sx={{borderBottom:'1px solid #ccc'}}>
                     <strong>{translations[printLanguage].prixNetHT}:</strong> {totalHT.toFixed(3)}{devise}
                   </Typography>
                   
-                  <Typography variant="body1" sx={{borderBottom:'1px'}}  >
+                  <Typography variant="body1" sx={{borderBottom:'1px solid #ccc'}}  >
                         <strong>{printLanguage === 'fr' ? 'Remise Totale' : printLanguage === 'en' ? 'Total Discount' : 'إجمالي الخصم'}:</strong> {totalRemise.toFixed(3)} {devise}
                   </Typography>
-                  <Typography variant="body1" sx={{borderBottom:'1px'}}  >
+                  <Typography variant="body1" sx={{borderBottom:'1px solid #ccc'}}  >
                         <strong>{printLanguage === 'fr' ? ' Totale Net HT ' : printLanguage === 'en' ? 'Total Net HT' : 'إجمالي الخصم'}:</strong> {totalnetht.toFixed(3)} {devise}
                   </Typography>
-                  <Typography variant="body1" sx={{borderBottom:'1px'}} >
+                  <Typography variant="body1" sx={{borderBottom:'1px solid #ccc'}} >
                     <strong>{translations[printLanguage].totaltva}:</strong> {totalTVA.toFixed(3)}{devise}
                   </Typography>
                   {timbre === 'true' && (
-                    <Typography variant="body1" sx={{borderBottom:'1px'}} >
+                    <Typography variant="body1" sx={{borderBottom:'1px solid #ccc'}} >
                       <strong>{translations[printLanguage].timbre}:</strong> 1TND
                     </Typography>
                   )}
-                  <Typography variant="body1" sx={{borderBottom:'1px'}} >
+                  <Typography variant="body1" sx={{borderBottom:'1px solid #ccc'}} >
                     <strong>{translations[printLanguage].prixNetTTC}:</strong> {totalNetTTC.toFixed(3)}{devise}
                   </Typography>
                 </Box>
