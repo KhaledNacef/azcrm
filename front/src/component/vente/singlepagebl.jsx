@@ -5,7 +5,9 @@ import Grid from '@mui/material/Grid2';
 import './cssbl.css';
 import logo from '../../assets/amounnet.png';
 import n2words from 'n2words';
-import { useReactToPrint } from "react-to-print";
+import html2canvas from 'html2canvas';
+import jsPDF from 'jspdf';
+import * as XLSX from 'xlsx';
 
 const translations = {
   en: {
@@ -212,43 +214,64 @@ const SingleDeliverysortie = () => {
     month: '2-digit',
     year: 'numeric',
   });
-  const handlePrint = () => {
-    const printContent = document.getElementById('printable-content');
-    const printWindow = window.open('', '_blank');
-    
-    // Clone the content to preserve styles
-    const contentClone = printContent.cloneNode(true);
-    
-    // Write the HTML with proper styles
-    printWindow.document.write(`
-      <!DOCTYPE html>
-      <html>
-        <head>
-          <title>Print</title>
-          <style>
-            @media print {
-              body { margin: 0; padding: 0; }
-              table { border-collapse: collapse; width: 100%; }
-              th { background-color: #f5f5f5 !important; }
-              img { max-width: 100%; height: auto; }
-            }
-          </style>
-        </head>
-        <body>
-          ${contentClone.outerHTML}
-        </body>
-      </html>
-    `);
-    
-    printWindow.document.close();
-    printWindow.focus();
-    
-    // Delay print to ensure content loads
-    setTimeout(() => {
-      printWindow.print();
-      printWindow.close();
-    }, 500);
+  const handlePrint = async () => {
+    const element = document.getElementById('printable-content');
+    try {
+      const canvas = await html2canvas(element, {
+        scale: 2,
+        useCORS: true,
+        logging: false,
+        backgroundColor: '#FFFFFF',
+      });
+  
+      const printWindow = window.open('', '_blank');
+      printWindow.document.write(`
+        <!DOCTYPE html>
+        <html>
+          <head>
+            <title>Print</title>
+          </head>
+          <body>
+            <img src="${canvas.toDataURL('image/png')}" style="width:100%;" />
+          </body>
+        </html>
+      `);
+      
+      printWindow.document.close();
+      printWindow.focus();
+      setTimeout(() => printWindow.print(), 500);
+    } catch (error) {
+      console.error('Print error:', error);
+    }
   };
+  
+  const handleDownloadPDF = async () => {
+    const element = document.getElementById('printable-content');
+    try {
+      const canvas = await html2canvas(element, {
+        scale: 2,
+        useCORS: true,
+        logging: false,
+        backgroundColor: '#FFFFFF',
+      });
+  
+      const imgData = canvas.toDataURL('image/png');
+      const pdf = new jsPDF({
+        orientation: 'portrait',
+        unit: 'mm',
+      });
+  
+      const imgProps = pdf.getImageProperties(imgData);
+      const pdfWidth = pdf.internal.pageSize.getWidth();
+      const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
+  
+      pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
+      pdf.save(`invoice-${id}.pdf`);
+    } catch (error) {
+      console.error('PDF generation error:', error);
+    }
+  };
+  
   
   return (
     <Box sx={{ p: 3 }}>
@@ -257,6 +280,9 @@ const SingleDeliverysortie = () => {
       </Button>
       <Button variant="contained" color="primary" onClick={handlePrint} sx={{ mb: 2, mr: 2 }}>
         {translations[printLanguage].print}
+      </Button>
+      <Button variant="contained" color="primary" onClick={handleDownloadPDF} sx={{ mb: 2, mr: 2 }}>
+        PDF
       </Button>
       <Button 
         variant="contained" 
