@@ -1,21 +1,18 @@
+/* Updated CSS */
 @media print {
   body {
     margin: 0 !important;
-    padding: 2 !important;
   }
   
   #printable-content {
-    width: 210mm !important;   /* A4 width */
-    min-height: 297mm !important; /* A4 height */
-    margin: 15mm auto !important; /* Add margins */
-    padding: 40mm !important; /* Inner padding */
+    width: 190mm !important;   /* Reduced width for margins */
+    min-height: 277mm !important; /* Reduced height for margins */
+    margin: 20mm auto !important; /* Symmetrical margins */
+    padding: 15mm !important; /* Reduced inner padding */
     box-sizing: border-box;
-    visibility: visible !important;
-    position: relative !important;
     background: white !important;
   }
 
-  /* Hide other elements */
   body > *:not(#printable-content) {
     display: none !important;
   }

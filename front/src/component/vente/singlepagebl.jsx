@@ -215,87 +215,92 @@ const SingleDeliverysortie = () => {
     year: 'numeric',
   });
 
-  const handlePrint = async () => {
-    const element = document.getElementById('printable-content');
-    try {
-      const canvas = await html2canvas(element, {
-        scale: 3, // Increased scale for better quality
-        useCORS: true,
-        logging: false,
-        backgroundColor: '#FFFFFF',
-        windowWidth: 210 * 3.78, // Convert 210mm to pixels
-        windowHeight: 297 * 3.78 // Convert 297mm to pixels
-      });
-  
-      const printWindow = window.open('', '_blank');
-      printWindow.document.write(`
-        <!DOCTYPE html>
-        <html>
-          <head>
-            <title>Print</title>
-            <style>
-              @page {
-                size: A4;
-                margin: 0;
-              }
-              body {
-                margin: 0;
-                padding: 5;
-              }
-              img {
-                width: 100% !important;
-                height: auto !important;
-                page-break-inside: avoid;
-              }
-            </style>
-          </head>
-          <body>
-            <img src="${canvas.toDataURL('image/png')}" />
-          </body>
-        </html>
-      `);
-      
-      printWindow.document.close();
-      printWindow.focus();
-      setTimeout(() => {
-        printWindow.print();
-        printWindow.close();
-      }, 500);
-    } catch (error) {
-      console.error('Print error:', error);
-    }
-  };
-  
-  const handleDownloadPDF = async () => {
-    const element = document.getElementById('printable-content');
-    try {
-      const canvas = await html2canvas(element, {
-        scale: 3,
-        useCORS: true,
-        logging: false,
-        backgroundColor: '#FFFFFF',
-        windowWidth: 210 * 3.78,
-        windowHeight: 297 * 3.78
-      });
-  
-      const imgData = canvas.toDataURL('image/png');
-      const pdf = new jsPDF({
-        orientation: 'portrait',
-        unit: 'mm',
-        format: 'a4',
-      });
-  
-      const imgProps = pdf.getImageProperties(imgData);
-      const pdfWidth = pdf.internal.pageSize.getWidth() - 30; // 15mm margins
-      const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
-  
-      // Center the image with margins
-      pdf.addImage(imgData, 'PNG', 15, 15, pdfWidth, pdfHeight);
-      pdf.save(`invoice-${id}.pdf`);
-    } catch (error) {
-      console.error('PDF generation error:', error);
-    }
-  };
+// Updated Print Function
+const handlePrint = async () => {
+  const element = document.getElementById('printable-content');
+  try {
+    const canvas = await html2canvas(element, {
+      scale: 3,
+      useCORS: true,
+      logging: false,
+      backgroundColor: '#FFFFFF',
+      windowWidth: 210 * 3.78,
+      windowHeight: 297 * 3.78
+    });
+
+    const printWindow = window.open('', '_blank');
+    printWindow.document.write(`
+      <!DOCTYPE html>
+      <html>
+        <head>
+          <title>Print</title>
+          <style>
+            @page {
+              size: A4;
+              margin: 15mm; /* Add page margin */
+            }
+            body {
+              margin: 0;
+              padding: 15mm; /* Body padding */
+            }
+            img {
+              width: 100% !important;
+              height: auto !important;
+              page-break-inside: avoid;
+            }
+          </style>
+        </head>
+        <body>
+          <img src="${canvas.toDataURL('image/png')}" />
+        </body>
+      </html>
+    `);
+    
+    printWindow.document.close();
+    printWindow.focus();
+    setTimeout(() => {
+      printWindow.print();
+      printWindow.close();
+    }, 500);
+  } catch (error) {
+    console.error('Print error:', error);
+  }
+};
+
+// Updated PDF Function
+const handleDownloadPDF = async () => {
+  const element = document.getElementById('printable-content');
+  try {
+    const canvas = await html2canvas(element, {
+      scale: 3,
+      useCORS: true,
+      logging: false,
+      backgroundColor: '#FFFFFF',
+      windowWidth: 210 * 3.78,
+      windowHeight: 297 * 3.78
+    });
+
+    const imgData = canvas.toDataURL('image/png');
+    const pdf = new jsPDF({
+      orientation: 'portrait',
+      unit: 'mm',
+      format: 'a4',
+    });
+
+    const imgProps = pdf.getImageProperties(imgData);
+    const pageWidth = pdf.internal.pageSize.getWidth() - 40; // 20mm margins each side
+    const pageHeight = (imgProps.height * pageWidth) / imgProps.width;
+    
+    // Position with 20mm margins
+    const xPosition = 20; // Left margin
+    const yPosition = 20; // Top margin
+
+    pdf.addImage(imgData, 'PNG', xPosition, yPosition, pageWidth, pageHeight);
+    pdf.save(`invoice-${id}.pdf`);
+  } catch (error) {
+    console.error('PDF generation error:', error);
+  }
+};
   return (
     <Box sx={{ p: 3 }}>
       <Button variant="outlined" onClick={() => navigate(-1)} sx={{ mb: 2, mr: 2 }}>
