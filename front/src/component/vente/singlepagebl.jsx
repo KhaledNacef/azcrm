@@ -219,10 +219,12 @@ const SingleDeliverysortie = () => {
     const element = document.getElementById('printable-content');
     try {
       const canvas = await html2canvas(element, {
-        scale: 2,
+        scale: 3, // Increased scale for better quality
         useCORS: true,
         logging: false,
         backgroundColor: '#FFFFFF',
+        windowWidth: 210 * 3.78, // Convert 210mm to pixels
+        windowHeight: 297 * 3.78 // Convert 297mm to pixels
       });
   
       const printWindow = window.open('', '_blank');
@@ -234,17 +236,15 @@ const SingleDeliverysortie = () => {
             <style>
               @page {
                 size: A4;
-                margin: 15mm; /* Add 15mm padding around content */
+                margin: 0;
               }
               body {
                 margin: 0;
                 padding: 0;
               }
               img {
-                width: 95% !important; /* Add 5% padding */
+                width: 100% !important;
                 height: auto !important;
-                margin: 0 auto;
-                display: block;
                 page-break-inside: avoid;
               }
             </style>
@@ -270,10 +270,12 @@ const SingleDeliverysortie = () => {
     const element = document.getElementById('printable-content');
     try {
       const canvas = await html2canvas(element, {
-        scale: 2,
+        scale: 3,
         useCORS: true,
         logging: false,
         backgroundColor: '#FFFFFF',
+        windowWidth: 210 * 3.78,
+        windowHeight: 297 * 3.78
       });
   
       const imgData = canvas.toDataURL('image/png');
@@ -284,21 +286,16 @@ const SingleDeliverysortie = () => {
       });
   
       const imgProps = pdf.getImageProperties(imgData);
-      const pageWidth = pdf.internal.pageSize.getWidth() - 30; // 15mm padding each side
-      const pageHeight = pdf.internal.pageSize.getHeight() - 30; // 15mm padding top/bottom
-      const imgHeight = (imgProps.height * pageWidth) / imgProps.width;
-      
-      // Center the image with padding
-      const xPosition = 15; // 15mm left padding
-      const yPosition = 15; // 15mm top padding
+      const pdfWidth = pdf.internal.pageSize.getWidth() - 30; // 15mm margins
+      const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
   
-      pdf.addImage(imgData, 'PNG', xPosition, yPosition, pageWidth, imgHeight);
+      // Center the image with margins
+      pdf.addImage(imgData, 'PNG', 15, 15, pdfWidth, pdfHeight);
       pdf.save(`invoice-${id}.pdf`);
     } catch (error) {
       console.error('PDF generation error:', error);
     }
   };
-  
   return (
     <Box sx={{ p: 3 }}>
       <Button variant="outlined" onClick={() => navigate(-1)} sx={{ mb: 2, mr: 2 }}>

@@ -1,11 +1,22 @@
 @media print {
-  body > :not(#printable-content) {
-    display: none;
+  body {
+    margin: 0 !important;
+    padding: 0 !important;
   }
+  
   #printable-content {
-    visibility: visible;
-    position: absolute;
-    left: 0;
-    top: 0;
+    width: 210mm !important;   /* A4 width */
+    min-height: 297mm !important; /* A4 height */
+    margin: 15mm auto !important; /* Add margins */
+    padding: 20mm !important; /* Inner padding */
+    box-sizing: border-box;
+    visibility: visible !important;
+    position: relative !important;
+    background: white !important;
+  }
+
+  /* Hide other elements */
+  body > *:not(#printable-content) {
+    display: none !important;
   }
 }
