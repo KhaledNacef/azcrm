@@ -299,34 +299,47 @@ const SingleDeliverysortie = () => {
       .page-break {
         page-break-after: always;
       }
+          .logo-container {
+        background-image: url(${logo});
+        background-size: contain;
+        background-repeat: no-repeat;
+        background-position: center;
+        width: 200px;
+        height: 100px;
+        margin: 0 auto;
     }
   `}
 </style>
-<Box sx={{ 
-  width: 742,
-  height: 152,
-  mx: 'auto',
-  mb: 3,
-  '@media print': {
+<Box 
+  sx={{ 
     width: '100%',
-    height: 'auto',
-    maxWidth: '200px'
-  }
-}}>
+    textAlign: 'center',
+    mb: 3,
+    '@media print': {
+      display: 'block !important',
+      visibility: 'visible !important'
+    }
+  }}
+>
   <img
     src={logo}
     alt="Company Logo"
-    style={{ 
-      width: '100%',
-      height: '100%',
-      objectFit: 'contain', // Changed from 'cover' to 'contain'
+    style={{
+      maxWidth: '200px',
+      height: 'auto',
+      display: 'block',
+      margin: '0 auto',
       '@media print': {
-        maxWidth: '200px'
+        visibility: 'visible !important',
+        opacity: '1 !important'
       }
+    }}
+    onError={(e) => {
+      e.target.onerror = null; 
+      e.target.src = '/fallback-logo.png'
     }}
   />
 </Box>
-
         
         {/* Company and Client Information */}
         <Box sx={{ 
@@ -430,15 +443,15 @@ const SingleDeliverysortie = () => {
               backgroundColor: index % 2 === 0 ? '#fafafa' : 'white'
             }}
           >
-            <TableCell sx={{ textAlign: isArabic ? 'right' : 'left', borderRight: '1px solid #ccc' }}>{prod.designation}</TableCell>
-            <TableCell sx={{ textAlign: isArabic ? 'right' : 'left', borderRight: '1px solid #ccc' }}>{prod.quantite}</TableCell>
-            <TableCell sx={{ textAlign: isArabic ? 'right' : 'left', borderRight: '1px solid #ccc' }}>{prod.Unite}</TableCell>
-            <TableCell sx={{ textAlign: isArabic ? 'right' : 'left', borderRight: '1px solid #ccc' }}>{basePrice.toFixed(3)}</TableCell>
-            <TableCell sx={{ textAlign: isArabic ? 'right' : 'left', borderRight: '1px solid #ccc' }}>{prod.tva}%</TableCell>
-            <TableCell sx={{ textAlign: isArabic ? 'right' : 'left', borderRight: '1px solid #ccc' }}>{remise}%</TableCell>
-            <TableCell sx={{ textAlign: isArabic ? 'right' : 'left', borderRight: '1px solid #ccc' }}>{priceAfterRemise.toFixed(3)}</TableCell>
-            <TableCell sx={{ textAlign: isArabic ? 'right' : 'left', borderRight: '1px solid #ccc' }}>{netHT.toFixed(3)}</TableCell>
-            <TableCell sx={{ textAlign: isArabic ? 'right' : 'left', borderRight: '1px solid #ccc' }}>{netTTC.toFixed(3)}</TableCell>
+            <TableCell sx={{ textAlign: isArabic ? 'right' : 'left', borderRight: '1px solid white' }}>{prod.designation}</TableCell>
+            <TableCell sx={{ textAlign: isArabic ? 'right' : 'left', borderRight: '1px solid white' }}>{prod.quantite}</TableCell>
+            <TableCell sx={{ textAlign: isArabic ? 'right' : 'left', borderRight: '1px solid white' }}>{prod.Unite}</TableCell>
+            <TableCell sx={{ textAlign: isArabic ? 'right' : 'left', borderRight: '1px solid white' }}>{basePrice.toFixed(3)}</TableCell>
+            <TableCell sx={{ textAlign: isArabic ? 'right' : 'left', borderRight: '1px solid white' }}>{prod.tva}%</TableCell>
+            <TableCell sx={{ textAlign: isArabic ? 'right' : 'left', borderRight: '1px solid white' }}>{remise}%</TableCell>
+            <TableCell sx={{ textAlign: isArabic ? 'right' : 'left', borderRight: '1px solid white' }}>{priceAfterRemise.toFixed(3)}</TableCell>
+            <TableCell sx={{ textAlign: isArabic ? 'right' : 'left', borderRight: '1px solid white' }}>{netHT.toFixed(3)}</TableCell>
+            <TableCell sx={{ textAlign: isArabic ? 'right' : 'left', borderRight: '1px solid white' }}>{netTTC.toFixed(3)}</TableCell>
           </TableRow>
         );
       })}
