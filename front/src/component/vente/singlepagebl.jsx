@@ -181,15 +181,85 @@ const SingleDeliverysortie = () => {
   const totalNetTTCInWords = n2words(totalNetTTC.toFixed(3), { lang: printLanguage === 'ar' ? 'ar' : printLanguage }); // Arabic or French/English
 
   const handlePrint = () => {
-    const originalContents = document.body.innerHTML;
-    const printContents = printRef.current.innerHTML;
-
-    document.body.innerHTML = printContents;
-    window.print();
-    window.onafterprint = () => {
-      document.body.innerHTML = originalContents;
-      window.location.reload();
-    };
+    const printWindow = window.open('', '_blank');
+    const printContent = printRef.current.innerHTML;
+    
+    printWindow.document.write(`
+      <!DOCTYPE html>
+      <html>
+        <head>
+          <title>Facture ${id}</title>
+          <style>
+            @page {
+              size: A4;
+              margin: 10mm;
+            }
+            body {
+              font-family: Arial, sans-serif;
+              margin: 0;
+              padding: 0;
+              direction: ${isArabic ? 'rtl' : 'ltr'};
+            }
+            .print-container {
+              width: 100%;
+              max-width: 210mm;
+              margin: 0 auto;
+              padding: 10mm;
+              box-sizing: border-box;
+            }
+            table {
+              width: 100%;
+              border-collapse: collapse;
+            }
+            th {
+              background-color: #f5f5f5 !important;
+              -webkit-print-color-adjust: exact;
+              print-color-adjust: exact;
+              color: #000 !important;
+            }
+            th, td {
+              border: 1px solid #ddd;
+              padding: 8px;
+              text-align: ${isArabic ? 'right' : 'left'};
+            }
+            .invoice-title {
+              font-size: 24px !important;
+              font-weight: bold !important;
+              text-align: center !important;
+              margin-bottom: 20px !important;
+            }
+            img {
+              max-width: 100%;
+              height: auto;
+            }
+            @media print {
+              body {
+                font-size: 12px;
+              }
+              .no-print {
+                display: none !important;
+              }
+            }
+          </style>
+        </head>
+        <body>
+          <div class="print-container">
+            ${printContent}
+          </div>
+          <script>
+            window.onload = function() {
+              setTimeout(function() {
+                window.print();
+                window.onafterprint = function() {
+                  window.close();
+                };
+              }, 200);
+            };
+          </script>
+        </body>
+      </html>
+    `);
+    printWindow.document.close();
   };
 
   function displayDate() {
@@ -277,20 +347,7 @@ const SingleDeliverysortie = () => {
                 font-size: 12px !important;
                 text-align: ${isArabic ? 'right' : 'left'};
               }
-                 table thead {
-    background-color:#f5f5f5 !important;
-    color: #000 !important;
-  }
-    .img {
-    display: block !important;
-  }
-     h4 {
-    font-size: 34px !important; /* Adjust title font size */
-    font-weight: bold !important; /* Make the title bold */
-    text-align: center !important; /* Center the title */
-    margin-bottom: 20px !important; /* Adjust margin if necessary */
-    color: #333 !important; /* Set a dark color for the title */
-  }
+                
             }
           `}
         </style>
@@ -373,7 +430,20 @@ const SingleDeliverysortie = () => {
           </Box>
         </Box>
 
-        <Typography variant="h4" mb={3} textAlign="center">
+        <Typography 
+          className="invoice-title"
+          variant="h4" 
+          mb={3} 
+          textAlign="center"
+          sx={{
+            fontSize: '24px',
+            fontWeight: 'bold',
+            '@media print': {
+              fontSize: '24px !important',
+              fontWeight: 'bold !important'
+            }
+          }}
+        >
           {translations[printLanguage].deliveryNote} - {id}/{formattedDate}
         </Typography>
         <TableContainer
@@ -387,7 +457,13 @@ const SingleDeliverysortie = () => {
 >
   <Table>
     <TableHead>
-      <TableRow sx={{ backgroundColor: '#f5f5f5' }}>
+      <TableRow sx={{ backgroundColor: '#f5f5f5', '@media print': {
+                    backgroundColor: '#f5f5f5 !important',
+                    '& th': {
+                      color: '#000 !important',
+                      backgroundColor: '#f5f5f5 !important'
+                    }
+                  } }}>
         <TableCell sx={{ textAlign: isArabic ? 'right' : 'left', borderRight: '1px solid #ccc' }}>{translations[printLanguage].designation}</TableCell>
         <TableCell sx={{ textAlign: isArabic ? 'right' : 'left', borderRight: '1px solid #ccc' }}>{translations[printLanguage].quantity}</TableCell>
         <TableCell sx={{ textAlign: isArabic ? 'right' : 'left', borderRight: '1px solid #ccc' }}>{translations[printLanguage].unit}</TableCell>
