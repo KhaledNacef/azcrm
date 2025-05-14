@@ -15,7 +15,6 @@ import {
   Card, 
   CardContent, 
   Avatar,
-  IconButton
 } from '@mui/material';
 import axios from 'axios';
 import MonetizationOnIcon from '@mui/icons-material/MonetizationOn';
@@ -178,10 +177,8 @@ const StockTPage = () => {
       const prixUNetHT = unitPrice - remise;
       const netHT = prixUNetHT * product.quantite;
       const netTTC = netHT + (netHT * product.tva) / 100;
-
-      const netTTCPerUnit = prixUNetHT + (prixUNetHT * product.tva) / 100;
       const sellPrice = product.sellprice || 0;
-      const gainPerUnit = sellPrice - netTTCPerUnit;
+      const gainPerUnit = sellPrice - unitPrice;
       const totalGain = gainPerUnit * product.quantite;
       const totalprixvente=sellPrice*product.quantite
 
