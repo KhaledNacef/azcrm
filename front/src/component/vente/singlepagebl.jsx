@@ -181,14 +181,15 @@ const SingleDeliverysortie = () => {
   const totalNetTTCInWords = n2words(totalNetTTC.toFixed(3), { lang: printLanguage === 'ar' ? 'ar' : printLanguage }); // Arabic or French/English
   const handlePrint = useReactToPrint({
     content: () => {
-      console.log('Print ref:', printRef.current); // Check if this logs the element
+      if (!printRef.current) {
+        console.error('Print ref is not available');
+        return null;
+      }
       return printRef.current;
     },
-    onBeforeGetContent: () => console.log('onBeforeGetContent'),
-    onBeforePrint: () => console.log('onBeforePrint'),
-    onAfterPrint: () => console.log('onAfterPrint'),
+    onBeforeGetContent: () => console.log('Preparing print content'),
+    onPrintError: (error) => console.error('Print error:', error)
   });
-
 
   function displayDate() {
     const today = new Date();
