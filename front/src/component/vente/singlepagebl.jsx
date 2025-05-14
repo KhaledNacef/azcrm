@@ -179,11 +179,14 @@ const SingleDeliverysortie = () => {
     totalNetTTC += 1;  // Add 1 TND for timbre
   }
   const totalNetTTCInWords = n2words(totalNetTTC.toFixed(3), { lang: printLanguage === 'ar' ? 'ar' : printLanguage }); // Arabic or French/English
-
- 
   const handlePrint = useReactToPrint({
-    content: () => printRef.current,
-
+    content: () => {
+      console.log('Print ref:', printRef.current); // Check if this logs the element
+      return printRef.current;
+    },
+    onBeforeGetContent: () => console.log('onBeforeGetContent'),
+    onBeforePrint: () => console.log('onBeforePrint'),
+    onAfterPrint: () => console.log('onAfterPrint'),
   });
 
 
@@ -245,17 +248,20 @@ const SingleDeliverysortie = () => {
       </Menu>
 
       {/* Printable content */}
-      <div
-        ref={printRef}
-        sx={{
-          border: '1px solid #ccc',
-          p: 3,
-          mt: 2,
-          backgroundColor: '#fff',
-          direction: isArabic ? 'rtl' : 'ltr',
-        }}
-      >
-       
+      <Box
+  ref={printRef}
+  className="printable-content"
+  sx={{
+    p: 3,
+    backgroundColor: '#fff',
+    direction: isArabic ? 'rtl' : 'ltr',
+    '@media print': {
+      width: '100%',
+      margin: 0,
+      padding: 0,
+    }
+  }}
+>
         <Box sx={{ 
           width: 742,
           height: 152,
@@ -443,7 +449,7 @@ const SingleDeliverysortie = () => {
             <Typography variant="body1">{translations[printLanguage].companySignature}</Typography>
           </Box>
         </Box>
-      </div>
+      </Box>
     </Box>
   );
 };

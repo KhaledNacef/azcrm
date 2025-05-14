@@ -1,6 +1,23 @@
+// Add this to your CSS file (cssbl.css)
 @media print {
-  body {
-    -webkit-print-color-adjust: exact;
-    print-color-adjust: exact;
+  body * {
+    visibility: hidden;
+  }
+  .printable-content, .printable-content * {
+    visibility: visible;
+  }
+  .printable-content {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+  }
+  /* Prevent page breaks inside table rows */
+  table {
+    page-break-inside: auto;
+  }
+  tr {
+    page-break-inside: avoid;
+    page-break-after: auto;
   }
 }
