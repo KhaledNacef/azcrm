@@ -183,8 +183,7 @@ const SingleDeliverysortie = () => {
  
   const handlePrint = useReactToPrint({
     content: () => printRef.current,
-    documentTitle: 'facture',
-    removeAfterPrint: true,
+
   });
 
 
