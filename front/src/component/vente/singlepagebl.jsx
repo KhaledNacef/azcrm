@@ -181,15 +181,7 @@ const SingleDeliverysortie = () => {
   const totalNetTTCInWords = n2words(totalNetTTC.toFixed(3), { lang: printLanguage === 'ar' ? 'ar' : printLanguage }); // Arabic or French/English
 
   const handlePrint = () => {
-    const originalContents = document.body.innerHTML;
-    const printContents = printRef.current.innerHTML;
-
-    document.body.innerHTML = printContents;
     window.print();
-    window.onafterprint = () => {
-      document.body.innerHTML = originalContents;
-      window.location.reload();
-    };
   };
 
   function displayDate() {
@@ -251,6 +243,7 @@ const SingleDeliverysortie = () => {
 
       {/* Printable content */}
       <Box
+         className="print-area"
         ref={printRef}
         sx={{
           border: '1px solid #ccc',
@@ -345,7 +338,12 @@ const SingleDeliverysortie = () => {
         <strong>{translations[printLanguage].deliveryNote} - {id}/{formattedDate}</strong> 
         </Typography>
 
-  <Table>
+  <Table   sx={{
+    border: '1px solid #ccc',
+    borderRadius: 2,
+    mt: 2,
+    overflowX: 'auto'
+  }}>
     <TableHead>
       <TableRow sx={{ backgroundColor: '#f5f5f5' }}>
         <TableCell sx={{ textAlign: isArabic ? 'right' : 'left', borderRight: '1px solid #ccc' }}>{translations[printLanguage].designation}</TableCell>
