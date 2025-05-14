@@ -7,8 +7,8 @@
   #printable-content {
     width: 190mm !important;   /* Reduced width for margins */
     min-height: 277mm !important; /* Reduced height for margins */
-    margin: 20mm auto !important; /* Symmetrical margins */
-    padding: 15mm !important; /* Reduced inner padding */
+    margin: 9mm auto !important; /* Symmetrical margins */
+    padding: 9mm !important; /* Reduced inner padding */
     box-sizing: border-box;
     background: white !important;
   }

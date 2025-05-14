@@ -237,11 +237,11 @@ const handlePrint = async () => {
           <style>
             @page {
               size: A4;
-              margin: 15mm; /* Add page margin */
+              margin: 9mm; /* Add page margin */
             }
             body {
               margin: 0;
-              padding: 15mm; /* Body padding */
+              padding: 9mm; /* Body padding */
             }
             img {
               width: 100% !important;
@@ -288,7 +288,7 @@ const handleDownloadPDF = async () => {
     });
 
     const imgProps = pdf.getImageProperties(imgData);
-    const pageWidth = pdf.internal.pageSize.getWidth() - 40; // 20mm margins each side
+    const pageWidth = pdf.internal.pageSize.getWidth() - 20; // 20mm margins each side
     const pageHeight = (imgProps.height * pageWidth) / imgProps.width;
     
     // Position with 20mm margins
