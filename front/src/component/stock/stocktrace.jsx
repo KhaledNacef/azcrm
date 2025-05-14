@@ -61,12 +61,8 @@ const StockTPage = () => {
   };
 
   const totalTTC = filteredProducts.reduce((acc, product) => {
-    const unitPrice = product.prixU_HT;
-    const remise = product.rem > 0 ? (unitPrice * product.rem) / 100 : 0;
-    const prixUNetHT = unitPrice - remise;
-    const netHT = prixUNetHT * product.quantite;
-    const netTTC = netHT + (netHT * product.tva) / 100;
-    return acc + netTTC;
+
+    return acc + product.prixU_HT;
   }, 0);
 
   const totalSellPrice = filteredProducts.reduce((acc, product) => {
@@ -162,6 +158,7 @@ const StockTPage = () => {
       </TableContainer>
 
       <Box sx={{ mt: 3 }}>
+      <Typography variant="h6">Total Prix d'achat : {totalTTC.toFixed(3)} TND</Typography>
         <Typography variant="h6">Total Prix De Vente : {totalSellPrice.toFixed(3)} TND</Typography>
         <Typography variant="h6">Total Gain : {totalProfit.toFixed(3)} TND</Typography>
       </Box>
