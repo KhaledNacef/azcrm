@@ -1,33 +1,98 @@
+/* cssbl.css */
+
+body {
+  font-family: 'Roboto', sans-serif;
+  margin: 0;
+  padding: 0;
+  color: #333;
+}
+
+.print-container {
+  padding: 20px;
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+.logo {
+  width: 150px;
+  margin-bottom: 20px;
+}
+
+.header, .footer {
+  text-align: center;
+  margin: 20px 0;
+}
+
+.header h1, .footer h3 {
+  margin: 0;
+  font-weight: bold;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 20px 0;
+}
+
+.table th,
+.table td {
+  border: 1px solid #ccc;
+  padding: 8px;
+  text-align: center;
+}
+
+.table th {
+  background-color: #f0f0f0;
+  font-weight: bold;
+}
+
+.totals {
+  margin-top: 20px;
+  float: right;
+  width: 300px;
+}
+
+.totals table {
+  width: 100%;
+}
+
+.signature-blocks {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 50px;
+}
+
+.signature {
+  width: 45%;
+  text-align: center;
+  font-size: 14px;
+}
+
+/* Arabic support */
+.arabic-text {
+  direction: rtl;
+  font-family: 'Amiri', serif;
+}
+
+/* Print-specific styles */
 @media print {
-  /* Hide any debug information or elements that contain localhost */
-  footer, .vite-footer, .react-footer, .vite-logo, .react-logo {
-      display: none !important;
-    }
-  
-    /* You can also try targeting the header if the logo appears there */
-    .vite-logo, .react-logo, .header {
-      display: none !important;
-    }
-  /* Adjust other styles for printing */
   body {
-    font-size: 12px !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+    background-color: white;
   }
 
-  .MuiTypography-root {
-    font-size: 12px !important;
-  }
-
-  .MuiButton-root {
+  .no-print {
     display: none !important;
   }
 
-  .MuiTableCell-root {
-    font-size: 12px !important;
+  .print-container {
+    padding: 30px;
+    page-break-inside: avoid;
   }
 
-  .MuiTableRow-root {
-    font-size: 12px !important;
+  .table th {
+    background-color: #ddd !important;
+    -webkit-print-color-adjust: exact;
   }
-
-  /* Any other styles you want to apply for print */
 }

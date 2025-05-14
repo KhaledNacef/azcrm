@@ -180,72 +180,72 @@ const SingleDeliverysortie = () => {
   }
   const totalNetTTCInWords = n2words(totalNetTTC.toFixed(3), { lang: printLanguage === 'ar' ? 'ar' : printLanguage }); // Arabic or French/English
   const handlePrint = () => {
-    // Create a clone of the printable content
-    const printContent = printRef.current.cloneNode(true);
-    
-    // Remove any existing print media queries
-    const styles = Array.from(document.styleSheets)
-      .map(sheet => {
+    const printContent = printRef.current;
+    const printWindow = window.open('', '_blank');
+  
+    // Copy all stylesheets
+    const stylesheets = Array.from(document.styleSheets)
+      .map((styleSheet) => {
         try {
-          return Array.from(sheet.cssRules)
-            .filter(rule => rule.media && rule.media.mediaText.includes('print'))
-            .map(rule => rule.cssText)
-            .join('\n');
+          if (styleSheet.href) {
+            // For external stylesheets (e.g., MUI CSS)
+            return `<link rel="stylesheet" type="text/css" href="${styleSheet.href}">`;
+          } else if (styleSheet.ownerNode && styleSheet.ownerNode.innerHTML) {
+            // For internal stylesheets
+            return `<style>${styleSheet.ownerNode.innerHTML}</style>`;
+          }
         } catch (e) {
           return '';
         }
       })
       .join('\n');
   
-    // Create a new window for printing
-    const printWindow = window.open('', '_blank');
     printWindow.document.write(`
-      <!DOCTYPE html>
       <html>
         <head>
           <title>Facture ${id}</title>
+          ${stylesheets}
           <style>
-            ${styles}
             @media print {
-              body > *:not(.print-content) {
-                display: none !important;
+              body {
+                -webkit-print-color-adjust: exact !important;
+                print-color-adjust: exact !important;
               }
-              .print-content {
-                all: initial !important;
-                display: block !important;
-              }
-              * {
-                box-shadow: none !important;
-                text-decoration: none !important;
+              .print-container {
+                padding: 20px;
+                font-family: 'Roboto', sans-serif;
               }
               table {
-                border-collapse: collapse !important;
-                width: 100% !important;
+                width: 100%;
+                border-collapse: collapse;
               }
               th, td {
-                border: 1px solid #ddd !important;
-              }
-              .MuiTable-root {
-                background-color: transparent !important;
+                border: 1px solid #ccc;
+                padding: 8px;
+                text-align: center;
               }
             }
           </style>
         </head>
         <body>
-          <div class="print-content">
+          <div class="print-container">
             ${printContent.innerHTML}
           </div>
           <script>
-            window.onload = function() {
-              setTimeout(() => window.print(), 100);
-              window.onafterprint = () => window.close();
+            window.onload = () => {
+              setTimeout(() => {
+                window.print();
+                window.onafterprint = () => window.close();
+              }, 100);
             };
           </script>
         </body>
       </html>
     `);
+  
     printWindow.document.close();
   };
+  
   function displayDate() {
     const today = new Date();
     const day = String(today.getDate()).padStart(2, '0');
