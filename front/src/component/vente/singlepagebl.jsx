@@ -182,16 +182,48 @@ const SingleDeliverysortie = () => {
 
   const handlePrint = () => {
     const printContents = printRef.current.innerHTML;
+  
+    // Open a new window for the print content
     const printWindow = window.open('', '_blank');
     
-    printWindow.document.write('<html><head><title>Delivery Note</title><link rel="stylesheet" type="text/css" href="cssbl.css" /></head><body>');
-    printWindow.document.write(printContents);
-    printWindow.document.write('</body></html>');
+    // Write the HTML structure and content to the new window
+    printWindow.document.write(`
+      <html>
+        <head>
+          <title>Delivery Note</title>
+          <link rel="stylesheet" type="text/css" href="cssbl.css" />
+          <style>
+            @media print {
+              body {
+                font-size: 12px !important;
+                direction: ${isArabic ? 'rtl' : 'ltr'};
+              }
+              .MuiButton-root {
+                display: none !important;
+              }
+              .MuiTypography-root {
+                font-size: 12px !important;
+              }
+              .MuiTableCell-root {
+                font-size: 12px !important;
+                text-align: ${isArabic ? 'right' : 'left'};
+              }
+            }
+          </style>
+        </head>
+        <body>
+          ${printContents}
+        </body>
+      </html>
+    `);
+  
+    // Close the document to ensure it renders
     printWindow.document.close();
   
-    // Optional: focus the new window if needed
+    // Optional: focus the new window to ensure it's the active window
     printWindow.focus();
   };
+  
   
   function displayDate() {
     const today = new Date();
