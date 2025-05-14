@@ -1,14 +1,14 @@
 @media print {
   body {
     margin: 0 !important;
-    padding: 0 !important;
+    padding: 2 !important;
   }
   
   #printable-content {
     width: 210mm !important;   /* A4 width */
     min-height: 297mm !important; /* A4 height */
     margin: 15mm auto !important; /* Add margins */
-    padding: 20mm !important; /* Inner padding */
+    padding: 100mm !important; /* Inner padding */
     box-sizing: border-box;
     visibility: visible !important;
     position: relative !important;
