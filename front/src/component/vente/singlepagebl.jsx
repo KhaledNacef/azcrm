@@ -214,6 +214,8 @@ const SingleDeliverysortie = () => {
     month: '2-digit',
     year: 'numeric',
   });
+
+
   const handlePrint = async () => {
     const element = document.getElementById('printable-content');
     try {
@@ -230,16 +232,34 @@ const SingleDeliverysortie = () => {
         <html>
           <head>
             <title>Print</title>
+            <style>
+              @page {
+                size: A4;
+                margin: 0;
+              }
+              body {
+                margin: 0;
+                padding: 0;
+              }
+              img {
+                width: 100% !important;
+                height: auto !important;
+                page-break-inside: avoid;
+              }
+            </style>
           </head>
           <body>
-            <img src="${canvas.toDataURL('image/png')}" style="width:100%;" />
+            <img src="${canvas.toDataURL('image/png')}" />
           </body>
         </html>
       `);
       
       printWindow.document.close();
       printWindow.focus();
-      setTimeout(() => printWindow.print(), 500);
+      setTimeout(() => {
+        printWindow.print();
+        printWindow.close();
+      }, 500);
     } catch (error) {
       console.error('Print error:', error);
     }
@@ -259,19 +279,32 @@ const SingleDeliverysortie = () => {
       const pdf = new jsPDF({
         orientation: 'portrait',
         unit: 'mm',
+        format: 'a4',
       });
   
       const imgProps = pdf.getImageProperties(imgData);
-      const pdfWidth = pdf.internal.pageSize.getWidth();
-      const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
+      const pageWidth = pdf.internal.pageSize.getWidth();
+      const pageHeight = pdf.internal.pageSize.getHeight();
+      const imgHeight = (imgProps.height * pageWidth) / imgProps.width;
+      
+      let position = 0;
+      let remainingHeight = imgHeight;
   
-      pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
+      while (remainingHeight > 0) {
+        pdf.addImage(imgData, 'PNG', 0, position, pageWidth, imgHeight);
+        remainingHeight -= pageHeight;
+        
+        if (remainingHeight > 0) {
+          pdf.addPage();
+          position -= pageHeight;
+        }
+      }
+  
       pdf.save(`invoice-${id}.pdf`);
     } catch (error) {
       console.error('PDF generation error:', error);
     }
   };
-  
   
   return (
     <Box sx={{ p: 3 }}>
@@ -306,11 +339,11 @@ const SingleDeliverysortie = () => {
       {/* Printable content */}
       <div
       id="printable-content"
-     sx={{
-    p: 3,
-    backgroundColor: '#fff',
-    direction: isArabic ? 'rtl' : 'ltr',
-  
+    style={{
+    width: '210mm', // A4 width
+    minHeight: '297mm', // A4 height
+    margin: '0 auto',
+    backgroundColor: '#fff'
   }}
 >
         <Box sx={{ 
