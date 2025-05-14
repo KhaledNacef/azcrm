@@ -245,7 +245,7 @@ const SingleDeliverysortie = () => {
       </Menu>
 
       {/* Printable content */}
-      <Box
+      <div
         ref={printRef}
         sx={{
           border: '1px solid #ccc',
@@ -443,7 +443,7 @@ const SingleDeliverysortie = () => {
             <Typography variant="body1">{translations[printLanguage].companySignature}</Typography>
           </Box>
         </Box>
-      </Box>
+      </div>
     </Box>
   );
 };
