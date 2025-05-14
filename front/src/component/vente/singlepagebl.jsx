@@ -227,9 +227,20 @@ const SingleDeliverysortie = () => {
       <Button variant="outlined" onClick={() => navigate(-1)} sx={{ mb: 2, mr: 2 }}>
         {translations[printLanguage].back}
       </Button>
-      <Button variant="contained" color="primary" onClick={handlePrint} sx={{ mb: 2, mr: 2 }}>
-        {translations[printLanguage].print}
-      </Button>
+      <Button 
+  variant="contained" 
+  color="primary" 
+  onClick={handlePrint}
+  sx={{ 
+    mb: 2, 
+    mr: 2,
+    '@media print': {
+      display: 'none !important'
+    }
+  }}
+>
+  {translations[printLanguage].print}
+</Button>
       <Button 
         variant="contained" 
         color="secondary" 
@@ -260,46 +271,62 @@ const SingleDeliverysortie = () => {
           direction: isArabic ? 'rtl' : 'ltr',
         }}
       >
-        <style>
-          {`
-            @media print {
-              body {
-                font-size: 12px !important;
-                direction: ${isArabic ? 'rtl' : 'ltr'};
-              }
-              .MuiButton-root {
-                display: none !important;
-              }
-              .MuiTypography-root {
-                font-size: 12px !important;
-              }
-              .MuiTableCell-root {
-                font-size: 12px !important;
-                text-align: ${isArabic ? 'right' : 'left'};
-              }
-            }
-          `}
-        </style>
-        <Box sx={{ 
-          width: 742,
-          height: 152,
-          mx: 'auto',
-          mb: 3,
-          display: 'flex',
-          justifyContent: 'center',
-          alignItems: 'center',
-          overflow: 'hidden'
-        }}>
-          <img
-            src={logo}
-            alt="Company Logo"
-            style={{ 
-              width: '100%',
-              height: '100%',
-              objectFit: 'cover'
-            }}
-          />
-        </Box>
+     <style>
+  {`
+    @media print {
+      body {
+        font-size: 12px !important;
+        direction: ${isArabic ? 'rtl' : 'ltr'};
+        padding: 0 !important;
+        margin: 0 !important;
+      }
+      .no-print {
+        display: none !important;
+      }
+      .print-container {
+        width: 100% !important;
+        margin: 0 !important;
+        padding: 0 !important;
+      }
+      table {
+        width: 100% !important;
+        table-layout: fixed !important;
+      }
+      img {
+        max-width: 200px !important;
+        height: auto !important;
+      }
+      .page-break {
+        page-break-after: always;
+      }
+    }
+  `}
+</style>
+<Box sx={{ 
+  width: 742,
+  height: 152,
+  mx: 'auto',
+  mb: 3,
+  '@media print': {
+    width: '100%',
+    height: 'auto',
+    maxWidth: '200px'
+  }
+}}>
+  <img
+    src={logo}
+    alt="Company Logo"
+    style={{ 
+      width: '100%',
+      height: '100%',
+      objectFit: 'contain', // Changed from 'cover' to 'contain'
+      '@media print': {
+        maxWidth: '200px'
+      }
+    }}
+  />
+</Box>
+
         
         {/* Company and Client Information */}
         <Box sx={{ 
@@ -359,7 +386,7 @@ const SingleDeliverysortie = () => {
           </Box>
         </Box>
 
-        <Typography variant="h4" mb={3} textAlign="center">
+        <Typography variant="h1" mb={3} textAlign="center">
           {translations[printLanguage].deliveryNote} - {id}/{formattedDate}
         </Typography>
         <TableContainer
@@ -431,21 +458,21 @@ const SingleDeliverysortie = () => {
                     <strong>{translations[printLanguage].prixNetHT}:</strong> {totalHT.toFixed(3)}{devise}
                   </Typography>
                   
-                  <Typography variant="body1" >
+                  <Typography variant="body1" sx={{borderBottom:'1px solid #ccc'}}  >
                         <strong>{printLanguage === 'fr' ? 'Remise Totale' : printLanguage === 'en' ? 'Total Discount' : 'إجمالي الخصم'}:</strong> {totalRemise.toFixed(3)} {devise}
                   </Typography>
-                  <Typography variant="body1" >
+                  <Typography variant="body1" sx={{borderBottom:'1px solid #ccc'}}  >
                         <strong>{printLanguage === 'fr' ? ' Totale Net HT ' : printLanguage === 'en' ? 'Total Net HT' : 'إجمالي الخصم'}:</strong> {totalnetht.toFixed(3)} {devise}
                   </Typography>
-                  <Typography variant="body1">
+                  <Typography variant="body1" sx={{borderBottom:'1px solid #ccc'}} >
                     <strong>{translations[printLanguage].totaltva}:</strong> {totalTVA.toFixed(3)}{devise}
                   </Typography>
                   {timbre === 'true' && (
-                    <Typography variant="body1">
+                    <Typography variant="body1" sx={{borderBottom:'1px solid #ccc'}} >
                       <strong>{translations[printLanguage].timbre}:</strong> 1TND
                     </Typography>
                   )}
-                  <Typography variant="body1">
+                  <Typography variant="body1" sx={{borderBottom:'1px solid #ccc'}} >
                     <strong>{translations[printLanguage].prixNetTTC}:</strong> {totalNetTTC.toFixed(3)}{devise}
                   </Typography>
                 </Box>
