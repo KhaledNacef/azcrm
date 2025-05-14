@@ -211,7 +211,16 @@ const SingleDeliverysortie = () => {
     year: 'numeric',
   });
   const handlePrint = () => {
-    window.print();
+    const printContent = printRef.current;  // Get the referenced content
+
+    const printWindow = window.open('', '_blank');
+    printWindow.document.write('<html><head><title>Print</title>');
+    printWindow.document.write('<style>@media print { body { margin: 0; } }</style>');
+    printWindow.document.write('<body>');
+    printWindow.document.write(printContent.innerHTML);  // Inject only the content inside the ref
+    printWindow.document.write('</body></html>');
+    printWindow.document.close();
+    printWindow.print();
   };
 
   return (
