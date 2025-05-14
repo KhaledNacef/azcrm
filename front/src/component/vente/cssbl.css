@@ -8,7 +8,7 @@
     width: 210mm !important;   /* A4 width */
     min-height: 297mm !important; /* A4 height */
     margin: 15mm auto !important; /* Add margins */
-    padding: 100mm !important; /* Inner padding */
+    padding: 40mm !important; /* Inner padding */
     box-sizing: border-box;
     visibility: visible !important;
     position: relative !important;

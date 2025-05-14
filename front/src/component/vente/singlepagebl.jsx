@@ -237,11 +237,10 @@ const SingleDeliverysortie = () => {
               @page {
                 size: A4;
                 margin: 0;
-                padding: 10;
               }
               body {
                 margin: 0;
-                padding: 0;
+                padding: 5;
               }
               img {
                 width: 100% !important;
