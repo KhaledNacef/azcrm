@@ -178,7 +178,47 @@ const SingleDeliverysortie = () => {
     totalNetTTC += 1;  // Add 1 TND for timbre
   }
   const totalNetTTCInWords = n2words(totalNetTTC.toFixed(3), { lang: printLanguage === 'ar' ? 'ar' : printLanguage }); // Arabic or French/English
-  const handlePrint =window.print(printRef)
+  const handlePrint = () => {
+    const printContent = printRef.current.innerHTML;
+    const originalContent = document.body.innerHTML;
+    
+    // Create print window
+    const printWindow = window.open('', '_blank', 'left=0,top=0,width=800,height=900,toolbar=0,scrollbars=0,status=0');
+    
+    printWindow.document.write(`
+      <html>
+        <head>
+          <title>Print</title>
+          <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap" />
+          <style>
+            @media print {
+              body { margin: 0; padding: 20px; }
+              .no-print, .print-button { display: none !important; }
+              table { width: 100%; border-collapse: collapse; }
+              td, th { border: 1px solid #ddd; padding: 8px; }
+              .total-box { border: 1px solid #000; padding: 10px; margin-top: 20px; }
+              .signature-section { margin-top: 50px; }
+              img { max-width: 200px; height: auto; }
+            }
+            body { direction: ${isArabic ? 'rtl' : 'ltr'}; font-family: 'Roboto', sans-serif; }
+          </style>
+        </head>
+        <body>
+          ${printContent}
+          <script>
+            window.onload = function() {
+              window.print();
+              window.onafterprint = function() {
+                window.close();
+              }
+            }
+          </script>
+        </body>
+      </html>
+    `);
+    
+    printWindow.document.close();
+  };
 
   function displayDate() {
     const today = new Date();
