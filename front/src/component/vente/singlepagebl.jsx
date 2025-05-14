@@ -214,12 +214,40 @@ const SingleDeliverysortie = () => {
   });
   const handlePrint = () => {
     const printContent = document.getElementById('printable-content');
-    const originalContents = document.body.innerHTML;
+    const printWindow = window.open('', '_blank');
     
-    document.body.innerHTML = printContent.innerHTML;
-    window.print();
-    document.body.innerHTML = originalContents;
-    window.location.reload(); // To restore functionality
+    // Clone the content to preserve styles
+    const contentClone = printContent.cloneNode(true);
+    
+    // Write the HTML with proper styles
+    printWindow.document.write(`
+      <!DOCTYPE html>
+      <html>
+        <head>
+          <title>Print</title>
+          <style>
+            @media print {
+              body { margin: 0; padding: 0; }
+              table { border-collapse: collapse; width: 100%; }
+              th { background-color: #f5f5f5 !important; }
+              img { max-width: 100%; height: auto; }
+            }
+          </style>
+        </head>
+        <body>
+          ${contentClone.outerHTML}
+        </body>
+      </html>
+    `);
+    
+    printWindow.document.close();
+    printWindow.focus();
+    
+    // Delay print to ensure content loads
+    setTimeout(() => {
+      printWindow.print();
+      printWindow.close();
+    }, 500);
   };
   
   return (
