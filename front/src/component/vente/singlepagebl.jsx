@@ -179,17 +179,104 @@ const SingleDeliverysortie = () => {
     totalNetTTC += 1;  // Add 1 TND for timbre
   }
   const totalNetTTCInWords = n2words(totalNetTTC.toFixed(3), { lang: printLanguage === 'ar' ? 'ar' : printLanguage }); // Arabic or French/English
-
   const handlePrint = () => {
-    const originalContents = document.body.innerHTML;
-    const printContents = printRef.current.innerHTML;
-
-    document.body.innerHTML = printContents;
-    window.print();
-    window.onafterprint = () => {
-      document.body.innerHTML = originalContents;
-      window.location.reload();
-    };
+    const printWindow = window.open('', '_blank');
+    const printContent = printRef.current.innerHTML;
+    
+    printWindow.document.write(`
+      <!DOCTYPE html>
+      <html>
+        <head>
+          <title>Facture ${id}</title>
+          <style>
+            body {
+              font-family: Arial, sans-serif;
+              margin: 20px;
+              direction: ${isArabic ? 'rtl' : 'ltr'};
+            }
+            .print-container {
+              width: 100%;
+              max-width: 800px;
+              margin: 0 auto;
+            }
+            .logo-container {
+              width: 742px;
+              height: 152px;
+              margin: 0 auto 20px;
+              text-align: center;
+            }
+            .logo-container img {
+              max-width: 100%;
+              max-height: 100%;
+              object-fit: contain;
+            }
+            .info-section {
+              display: flex;
+              justify-content: space-between;
+              margin-bottom: 20px;
+            }
+            .info-box {
+              flex: 1;
+              border: 1px solid #ccc;
+              border-radius: 4px;
+              padding: 10px;
+              margin: 0 10px;
+            }
+            table {
+              width: 100%;
+              border-collapse: collapse;
+              margin: 20px 0;
+            }
+            th, td {
+              border: 1px solid #ddd;
+              padding: 8px;
+              text-align: ${isArabic ? 'right' : 'left'};
+            }
+            th {
+              background-color: #f5f5f5;
+            }
+            .total-section {
+              border: 1px solid #ddd;
+              border-radius: 4px;
+              padding: 10px;
+              margin-left: auto;
+              width: fit-content;
+            }
+            .signature-section {
+              display: flex;
+              justify-content: space-between;
+              margin-top: 50px;
+            }
+            @page {
+              size: A4;
+              margin: 10mm;
+            }
+            @media print {
+              body {
+                font-size: 12px;
+              }
+              .no-print {
+                display: none !important;
+              }
+            }
+          </style>
+        </head>
+        <body>
+          <div class="print-container">
+            ${printContent}
+          </div>
+          <script>
+            window.onload = function() {
+              window.print();
+              window.onafterprint = function() {
+                window.close();
+              };
+            };
+          </script>
+        </body>
+      </html>
+    `);
+    printWindow.document.close();
   };
 
   function displayDate() {
@@ -258,6 +345,8 @@ const SingleDeliverysortie = () => {
           mt: 2,
           backgroundColor: '#fff',
           direction: isArabic ? 'rtl' : 'ltr',
+          width: '742px', // Fixed width for consistency
+          margin: '0 auto', // Center the content
         }}
       >
         <style>
@@ -359,7 +448,7 @@ const SingleDeliverysortie = () => {
           </Box>
         </Box>
 
-        <Typography variant="h1" mb={3} textAlign="center">
+        <Typography variant="h4" mb={3} textAlign="center">
           {translations[printLanguage].deliveryNote} - {id}/{formattedDate}
         </Typography>
         <TableContainer
