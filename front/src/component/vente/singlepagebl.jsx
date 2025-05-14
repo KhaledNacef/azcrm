@@ -5,7 +5,7 @@ import Grid from '@mui/material/Grid2';
 import './cssbl.css';
 import logo from '../../assets/amounnet.png';
 import n2words from 'n2words';
-// Translation dictionaries
+import { useReactToPrint } from 'react-to-print';
 const translations = {
   en: {
     timbre: 'Stamp',
@@ -180,9 +180,13 @@ const SingleDeliverysortie = () => {
   }
   const totalNetTTCInWords = n2words(totalNetTTC.toFixed(3), { lang: printLanguage === 'ar' ? 'ar' : printLanguage }); // Arabic or French/English
 
-  const handlePrint = () => {
-    window.print();
-  };
+ 
+  const handlePrint = useReactToPrint({
+    content: () => printRef.current,
+    documentTitle: 'facture',
+    removeAfterPrint: true,
+  });
+
 
   function displayDate() {
     const today = new Date();
