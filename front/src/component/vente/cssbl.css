@@ -1,14 +1,14 @@
-/* Updated CSS */
+/* CSS */
 @media print {
   body {
     margin: 0 !important;
   }
   
   #printable-content {
-    width: 190mm !important;   /* Reduced width for margins */
-    min-height: 277mm !important; /* Reduced height for margins */
-    margin: 9mm auto !important; /* Symmetrical margins */
-    padding: 9mm !important; /* Reduced inner padding */
+    width: 200mm !important;   /* 210mm - 10mm margins */
+    min-height: 287mm !important; /* 297mm - 10mm margins */
+    margin: 5mm auto !important;
+    padding: 5mm !important;
     box-sizing: border-box;
     background: white !important;
   }

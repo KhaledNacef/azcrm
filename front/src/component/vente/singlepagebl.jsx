@@ -215,7 +215,7 @@ const SingleDeliverysortie = () => {
     year: 'numeric',
   });
 
-// Updated Print Function
+
 const handlePrint = async () => {
   const element = document.getElementById('printable-content');
   try {
@@ -237,11 +237,11 @@ const handlePrint = async () => {
           <style>
             @page {
               size: A4;
-              margin: 9mm; /* Add page margin */
+              margin: 5mm; /* 5mm margin on all sides */
             }
             body {
               margin: 0;
-              padding: 9mm; /* Body padding */
+              padding: 0;
             }
             img {
               width: 100% !important;
@@ -288,14 +288,11 @@ const handleDownloadPDF = async () => {
     });
 
     const imgProps = pdf.getImageProperties(imgData);
-    const pageWidth = pdf.internal.pageSize.getWidth() - 20; // 20mm margins each side
+    const pageWidth = pdf.internal.pageSize.getWidth() - 10; // 5mm each side
     const pageHeight = (imgProps.height * pageWidth) / imgProps.width;
     
-    // Position with 20mm margins
-    const xPosition = 20; // Left margin
-    const yPosition = 20; // Top margin
-
-    pdf.addImage(imgData, 'PNG', xPosition, yPosition, pageWidth, pageHeight);
+    // Position with 5mm margins
+    pdf.addImage(imgData, 'PNG', 5, 5, pageWidth, pageHeight);
     pdf.save(`invoice-${id}.pdf`);
   } catch (error) {
     console.error('PDF generation error:', error);
