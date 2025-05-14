@@ -376,15 +376,15 @@ const SingleDeliverysortie = () => {
   <Table>
     <TableHead>
       <TableRow sx={{ backgroundColor: '#f5f5f5' }}>
-        <TableCell sx={{ textAlign: isArabic ? 'right' : 'left', borderRight: '1px solid #ccc',whiteSpace: 'nowrap', fontWeight: 'bold', fontSize: '13px' }}>{translations[printLanguage].designation}</TableCell>
-        <TableCell sx={{ textAlign: isArabic ? 'right' : 'left', borderRight: '1px solid #ccc',whiteSpace: 'nowrap', fontWeight: 'bold', fontSize: '13px' }}>{translations[printLanguage].quantity}</TableCell>
-        <TableCell sx={{ textAlign: isArabic ? 'right' : 'left', borderRight: '1px solid #ccc',whiteSpace: 'nowrap', fontWeight: 'bold', fontSize: '13px' }}>{translations[printLanguage].unit}</TableCell>
-        <TableCell sx={{ textAlign: isArabic ? 'right' : 'left', borderRight: '1px solid #ccc',whiteSpace: 'nowrap', fontWeight: 'bold', fontSize: '13px' }}>{translations[printLanguage].unitPrice}</TableCell>
-        <TableCell sx={{ textAlign: isArabic ? 'right' : 'left', borderRight: '1px solid #ccc',whiteSpace: 'nowrap', fontWeight: 'bold', fontSize: '13px' }}>{translations[printLanguage].tva}%</TableCell>
-        <TableCell sx={{ textAlign: isArabic ? 'right' : 'left', borderRight: '1px solid #ccc',whiteSpace: 'nowrap', fontWeight: 'bold', fontSize: '13px' }}>{translations[printLanguage].remise}%</TableCell>
-        <TableCell sx={{ textAlign: isArabic ? 'right' : 'left', borderRight: '1px solid #ccc',whiteSpace: 'nowrap', fontWeight: 'bold', fontSize: '13px' }}>{translations[printLanguage].prixNetU}</TableCell>
-        <TableCell sx={{ textAlign: isArabic ? 'right' : 'left', borderRight: '1px solid #ccc',whiteSpace: 'nowrap', fontWeight: 'bold', fontSize: '13px' }}>{translations[printLanguage].totalNetHT}</TableCell>
-        <TableCell sx={{ textAlign: isArabic ? 'right' : 'left', borderRight: '1px solid #ccc',whiteSpace: 'nowrap', fontWeight: 'bold', fontSize: '13px' }}>{translations[printLanguage].totalNetTTC}</TableCell>
+        <TableCell sx={{ textAlign: isArabic ? 'right' : 'left', borderRight: '1px solid #ccc'}}>{translations[printLanguage].designation}</TableCell>
+        <TableCell sx={{ textAlign: isArabic ? 'right' : 'left', borderRight: '1px solid #ccc'}}>{translations[printLanguage].quantity}</TableCell>
+        <TableCell sx={{ textAlign: isArabic ? 'right' : 'left', borderRight: '1px solid #ccc'}}>{translations[printLanguage].unit}</TableCell>
+        <TableCell sx={{ textAlign: isArabic ? 'right' : 'left', borderRight: '1px solid #ccc'}}>{translations[printLanguage].unitPrice}</TableCell>
+        <TableCell sx={{ textAlign: isArabic ? 'right' : 'left', borderRight: '1px solid #ccc'}}>{translations[printLanguage].tva}%</TableCell>
+        <TableCell sx={{ textAlign: isArabic ? 'right' : 'left', borderRight: '1px solid #ccc'}}>{translations[printLanguage].remise}%</TableCell>
+        <TableCell sx={{ textAlign: isArabic ? 'right' : 'left', borderRight: '1px solid #ccc'}}>{translations[printLanguage].prixNetU}</TableCell>
+        <TableCell sx={{ textAlign: isArabic ? 'right' : 'left', borderRight: '1px solid #ccc'}}>{translations[printLanguage].totalNetHT}</TableCell>
+        <TableCell sx={{ textAlign: isArabic ? 'right' : 'left', borderRight: '1px solid #ccc'}}>{translations[printLanguage].totalNetTTC}</TableCell>
       </TableRow>
     </TableHead>
 
