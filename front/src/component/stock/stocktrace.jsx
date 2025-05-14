@@ -76,18 +76,7 @@ const StockTPage = () => {
     return acc + (product.sellprice*product.quantite || 0);
   }, 0);
 
-  const totalProfit = filteredProducts.reduce((acc, product) => {
-    const unitPrice = product.prixU_HT;
-    const remise = product.rem > 0 ? (unitPrice * product.rem) / 100 : 0;
-    const prixUNetHT = unitPrice - remise;
-    const netHT = prixUNetHT * product.quantite;
-    const netTTC = netHT + (netHT * product.tva) / 100;
-  
-    const totalSellPrice = (product.sellprice || 0) * product.quantite;
-    const profit = totalSellPrice - netTTC;
-  
-    return acc + profit;
-  }, 0);
+  const totalProfit = totalSellPrice-totalTTC
   
 
   return (
