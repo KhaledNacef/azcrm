@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { Box, Typography, Table, TableHead, TableRow, TableCell, TableBody, Button, Menu, MenuItem } from '@mui/material';
+import { Box, Typography, Table, TableHead, TableRow, TableCell, TableBody, Button, Menu, MenuItem,TableContainer,Paper} from '@mui/material';
 import Grid from '@mui/material/Grid2';
 import './cssbl.css';
 import logo from '../../assets/amounnet.png';
@@ -311,7 +311,12 @@ const SingleDeliverysortie = () => {
           <Box sx={{ 
             textAlign: 'left',
             order: isArabic ? 2 : 1,
-            flex: 1
+            flex: 1,
+            border: '1px solid',
+            borderColor: 'grey.400', // You can change this to 'black' or another color
+            borderRadius: 2,
+            p: 2
+            
           }}>
             <Typography variant="body2">
               <strong>{translations[printLanguage].companyName}:</strong> AMOUNNET COMPANY EXPORT ET IMPORT
@@ -330,7 +335,11 @@ const SingleDeliverysortie = () => {
           <Box sx={{ 
             textAlign: 'right',
             order: isArabic ? 1 : 2,
-            flex: 1
+            flex: 1,
+            border: '1px solid',
+            borderColor: 'grey.400', // You can change this to 'black' or another color
+            borderRadius: 2,
+            p: 2
           }}>
             <Typography variant="body2">
               <strong>{translations[printLanguage].clientName}:</strong> {client?.fullname}
@@ -353,57 +362,71 @@ const SingleDeliverysortie = () => {
         <Typography variant="h4" mb={3} textAlign="center">
           {translations[printLanguage].deliveryNote} - {id}/{formattedDate}
         </Typography>
+        <TableContainer
+  component={Paper}
+  sx={{
+    border: '1px solid #ccc',
+    borderRadius: 2,
+    mt: 2,
+    overflowX: 'auto'
+  }}
+>
+  <Table>
+    <TableHead>
+      <TableRow sx={{ backgroundColor: '#f5f5f5' }}>
+        <TableCell sx={{ textAlign: isArabic ? 'right' : 'left' }}>{translations[printLanguage].designation}</TableCell>
+        <TableCell sx={{ textAlign: isArabic ? 'right' : 'left' }}>{translations[printLanguage].quantity}</TableCell>
+        <TableCell sx={{ textAlign: isArabic ? 'right' : 'left' }}>{translations[printLanguage].unit}</TableCell>
+        <TableCell sx={{ textAlign: isArabic ? 'right' : 'left' }}>{translations[printLanguage].unitPrice}</TableCell>
+        <TableCell sx={{ textAlign: isArabic ? 'right' : 'left' }}>{translations[printLanguage].tva}%</TableCell>
+        <TableCell sx={{ textAlign: isArabic ? 'right' : 'left' }}>{translations[printLanguage].remise}%</TableCell>
+        <TableCell sx={{ textAlign: isArabic ? 'right' : 'left' }}>{translations[printLanguage].prixNetU}</TableCell>
+        <TableCell sx={{ textAlign: isArabic ? 'right' : 'left' }}>{translations[printLanguage].totalNetHT}</TableCell>
+        <TableCell sx={{ textAlign: isArabic ? 'right' : 'left' }}>{translations[printLanguage].totalNetTTC}</TableCell>
+      </TableRow>
+    </TableHead>
 
-        <Table>
-          <TableHead>
-            <TableRow>
-              <TableCell sx={{ textAlign: isArabic ? 'right' : 'left' }}>{translations[printLanguage].designation}</TableCell>
-              <TableCell sx={{ textAlign: isArabic ? 'right' : 'left' }}>{translations[printLanguage].quantity}</TableCell>
-              <TableCell sx={{ textAlign: isArabic ? 'right' : 'left' }}>{translations[printLanguage].unit}</TableCell>
-              <TableCell sx={{ textAlign: isArabic ? 'right' : 'left' }}>{translations[printLanguage].unitPrice} </TableCell>
-              <TableCell sx={{ textAlign: isArabic ? 'right' : 'left' }}>{translations[printLanguage].tva}%</TableCell>
-              <TableCell sx={{ textAlign: isArabic ? 'right' : 'left' }}>{translations[printLanguage].remise}%</TableCell>
-              <TableCell sx={{ textAlign: isArabic ? 'right' : 'left' }}>{translations[printLanguage].prixNetU}</TableCell>
-              <TableCell sx={{ textAlign: isArabic ? 'right' : 'left' }}>{translations[printLanguage].totalNetHT}</TableCell>
-              <TableCell sx={{ textAlign: isArabic ? 'right' : 'left' }}>{translations[printLanguage].totalNetTTC}</TableCell>
+    <TableBody>
+      {deliveryNote.map((prod, index) => {
+        const basePrice = prod.prixU_HT;
+        const quantity = prod.quantite;
+        const remise = prod.rem && prod.rem > 0 ? prod.rem : 0;
 
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {deliveryNote.map((prod, index) =>{
-               const basePrice = prod.prixU_HT;
-               const quantity = prod.quantite;
-               const remise = prod.rem && prod.rem > 0 ? prod.rem : 0;
-           
-               // Apply remise to unit price
-               const priceAfterRemise = basePrice * (1 - remise / 100);
-           
-               // Net HT with remise
-               const netHT = priceAfterRemise * quantity;
-           
-               // Net TTC with TVA applied on discounted netHT
-               const netTTC = netHT * (1 + prod.tva / 100);
-              
-              return (
-                  
+        const priceAfterRemise = basePrice * (1 - remise / 100);
+        const netHT = priceAfterRemise * quantity;
+        const netTTC = netHT * (1 + prod.tva / 100);
 
-              <TableRow key={index}>
-                <TableCell sx={{ textAlign: isArabic ? 'right' : 'left' }}>{prod.designation}</TableCell>
-                <TableCell sx={{ textAlign: isArabic ? 'right' : 'left' }}>{prod.quantite}</TableCell>
-                <TableCell sx={{ textAlign: isArabic ? 'right' : 'left' }}>{prod.Unite}</TableCell>
-                <TableCell sx={{ textAlign: isArabic ? 'right' : 'left' }}>{prod.prixU_HT} </TableCell>
-                <TableCell sx={{ textAlign: isArabic ? 'right' : 'left' }}>{prod.tva}%</TableCell>
-                <TableCell sx={{ textAlign: isArabic ? 'right' : 'left' }}>{prod.rem}%</TableCell>
-                <TableCell sx={{ textAlign: isArabic ? 'right' : 'left' }}>{priceAfterRemise.toFixed(3)}</TableCell>
-                <TableCell sx={{ textAlign: isArabic ? 'right' : 'left' }}>{netHT.toFixed(3)} </TableCell>
-                <TableCell sx={{ textAlign: isArabic ? 'right' : 'left' }}>{netTTC.toFixed(3)} </TableCell>
-              </TableRow>
-)})}
-          </TableBody>
-        </Table>
+        return (
+          <TableRow
+            key={index}
+            sx={{
+              backgroundColor: index % 2 === 0 ? '#fafafa' : 'white'
+            }}
+          >
+            <TableCell sx={{ textAlign: isArabic ? 'right' : 'left' }}>{prod.designation}</TableCell>
+            <TableCell sx={{ textAlign: isArabic ? 'right' : 'left' }}>{prod.quantite}</TableCell>
+            <TableCell sx={{ textAlign: isArabic ? 'right' : 'left' }}>{prod.Unite}</TableCell>
+            <TableCell sx={{ textAlign: isArabic ? 'right' : 'left' }}>{basePrice.toFixed(3)}</TableCell>
+            <TableCell sx={{ textAlign: isArabic ? 'right' : 'left' }}>{prod.tva}%</TableCell>
+            <TableCell sx={{ textAlign: isArabic ? 'right' : 'left' }}>{remise}%</TableCell>
+            <TableCell sx={{ textAlign: isArabic ? 'right' : 'left' }}>{priceAfterRemise.toFixed(3)}</TableCell>
+            <TableCell sx={{ textAlign: isArabic ? 'right' : 'left' }}>{netHT.toFixed(3)}</TableCell>
+            <TableCell sx={{ textAlign: isArabic ? 'right' : 'left' }}>{netTTC.toFixed(3)}</TableCell>
+          </TableRow>
+        );
+      })}
+    </TableBody>
+  </Table>
+</TableContainer>
 
              <Box sx={{ display: 'flex', justifyContent: 'flex-end', mt: 3 }}>
-                <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end' }}>
+                <Box sx={{ display: 'flex', 
+                  flexDirection: 'column',
+                   alignItems: 'flex-end',
+                   border: '1px solid',
+                   borderColor: 'grey.400', 
+                  borderRadius: 2,
+                  p: 2 }}>
                   <Typography variant="body1">
                     <strong>{translations[printLanguage].prixNetHT}:</strong> {totalHT.toFixed(3)}{devise}
                   </Typography>
