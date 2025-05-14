@@ -1,36 +1,33 @@
-/* cssbl.css */
-
 @media print {
+  /* Hide any debug information or elements that contain localhost */
+  footer, .vite-footer, .react-footer, .vite-logo, .react-logo {
+      display: none !important;
+    }
+  
+    /* You can also try targeting the header if the logo appears there */
+    .vite-logo, .react-logo, .header {
+      display: none !important;
+    }
+  /* Adjust other styles for printing */
   body {
-    margin: 0;
-    padding: 0;
-    print-color-adjust: exact;
-    -webkit-print-color-adjust: exact;
-  }
-  .print-container {
-    padding: 10mm !important;
-    margin: 0 auto !important;
-    width: 190mm; /* slightly smaller than A4 width (210mm) to center it */
+    font-size: 12px !important;
   }
 
-  table {
-    width: 100%;
-    border-collapse: collapse;
-    table-layout: fixed; /* Prevent wrapping */
+  .MuiTypography-root {
+    font-size: 12px !important;
   }
 
-  th, td {
-    white-space: nowrap;
-    font-size: 12px;
-    border: 1px solid #000;
+  .MuiButton-root {
+    display: none !important;
   }
 
-  th {
-    font-weight: bold;
-    text-align: center;
+  .MuiTableCell-root {
+    font-size: 12px !important;
   }
 
-  button, .MuiButton-root, .MuiMenu-root {
-    display: none !important; /* Hide buttons and menus when printing */
+  .MuiTableRow-root {
+    font-size: 12px !important;
   }
+
+  /* Any other styles you want to apply for print */
 }
