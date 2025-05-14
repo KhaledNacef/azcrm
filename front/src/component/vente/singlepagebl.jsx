@@ -227,20 +227,9 @@ const SingleDeliverysortie = () => {
       <Button variant="outlined" onClick={() => navigate(-1)} sx={{ mb: 2, mr: 2 }}>
         {translations[printLanguage].back}
       </Button>
-      <Button 
-  variant="contained" 
-  color="primary" 
-  onClick={handlePrint}
-  sx={{ 
-    mb: 2, 
-    mr: 2,
-    '@media print': {
-      display: 'none !important'
-    }
-  }}
->
-  {translations[printLanguage].print}
-</Button>
+      <Button variant="contained" color="primary" onClick={handlePrint} sx={{ mb: 2, mr: 2 }}>
+        {translations[printLanguage].print}
+      </Button>
       <Button 
         variant="contained" 
         color="secondary" 
@@ -271,75 +260,46 @@ const SingleDeliverysortie = () => {
           direction: isArabic ? 'rtl' : 'ltr',
         }}
       >
-     <style>
-  {`
-    @media print {
-      body {
-        font-size: 12px !important;
-        direction: ${isArabic ? 'rtl' : 'ltr'};
-        padding: 0 !important;
-        margin: 0 !important;
-      }
-      .no-print {
-        display: none !important;
-      }
-      .print-container {
-        width: 100% !important;
-        margin: 0 !important;
-        padding: 0 !important;
-      }
-      table {
-        width: 100% !important;
-        table-layout: fixed !important;
-      }
-      img {
-        max-width: 200px !important;
-        height: auto !important;
-      }
-      .page-break {
-        page-break-after: always;
-      }
-          .logo-container {
-        background-image: url(${logo});
-        background-size: contain;
-        background-repeat: no-repeat;
-        background-position: center;
-        width: 200px;
-        height: 100px;
-        margin: 0 auto;
-    }
-  `}
-</style>
-<Box 
-  sx={{ 
-    width: '100%',
-    textAlign: 'center',
-    mb: 3,
-    '@media print': {
-      display: 'block !important',
-      visibility: 'visible !important'
-    }
-  }}
->
-  <img
-    src={logo}
-    alt="Company Logo"
-    style={{
-      maxWidth: '200px',
-      height: 'auto',
-      display: 'block',
-      margin: '0 auto',
-      '@media print': {
-        visibility: 'visible !important',
-        opacity: '1 !important'
-      }
-    }}
-    onError={(e) => {
-      e.target.onerror = null; 
-      e.target.src = '/fallback-logo.png'
-    }}
-  />
-</Box>
+        <style>
+          {`
+            @media print {
+              body {
+                font-size: 12px !important;
+                direction: ${isArabic ? 'rtl' : 'ltr'};
+              }
+              .MuiButton-root {
+                display: none !important;
+              }
+              .MuiTypography-root {
+                font-size: 12px !important;
+              }
+              .MuiTableCell-root {
+                font-size: 12px !important;
+                text-align: ${isArabic ? 'right' : 'left'};
+              }
+            }
+          `}
+        </style>
+        <Box sx={{ 
+          width: 742,
+          height: 152,
+          mx: 'auto',
+          mb: 3,
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+          overflow: 'hidden'
+        }}>
+          <img
+            src={logo}
+            alt="Company Logo"
+            style={{ 
+              width: '100%',
+              height: '100%',
+              objectFit: 'cover'
+            }}
+          />
+        </Box>
         
         {/* Company and Client Information */}
         <Box sx={{ 
@@ -443,15 +403,15 @@ const SingleDeliverysortie = () => {
               backgroundColor: index % 2 === 0 ? '#fafafa' : 'white'
             }}
           >
-            <TableCell sx={{ textAlign: isArabic ? 'right' : 'left', borderRight: '1px solid white' }}>{prod.designation}</TableCell>
-            <TableCell sx={{ textAlign: isArabic ? 'right' : 'left', borderRight: '1px solid white' }}>{prod.quantite}</TableCell>
-            <TableCell sx={{ textAlign: isArabic ? 'right' : 'left', borderRight: '1px solid white' }}>{prod.Unite}</TableCell>
-            <TableCell sx={{ textAlign: isArabic ? 'right' : 'left', borderRight: '1px solid white' }}>{basePrice.toFixed(3)}</TableCell>
-            <TableCell sx={{ textAlign: isArabic ? 'right' : 'left', borderRight: '1px solid white' }}>{prod.tva}%</TableCell>
-            <TableCell sx={{ textAlign: isArabic ? 'right' : 'left', borderRight: '1px solid white' }}>{remise}%</TableCell>
-            <TableCell sx={{ textAlign: isArabic ? 'right' : 'left', borderRight: '1px solid white' }}>{priceAfterRemise.toFixed(3)}</TableCell>
-            <TableCell sx={{ textAlign: isArabic ? 'right' : 'left', borderRight: '1px solid white' }}>{netHT.toFixed(3)}</TableCell>
-            <TableCell sx={{ textAlign: isArabic ? 'right' : 'left', borderRight: '1px solid white' }}>{netTTC.toFixed(3)}</TableCell>
+            <TableCell sx={{ textAlign: isArabic ? 'right' : 'left', borderRight: '1px solid #ccc' }}>{prod.designation}</TableCell>
+            <TableCell sx={{ textAlign: isArabic ? 'right' : 'left', borderRight: '1px solid #ccc' }}>{prod.quantite}</TableCell>
+            <TableCell sx={{ textAlign: isArabic ? 'right' : 'left', borderRight: '1px solid #ccc' }}>{prod.Unite}</TableCell>
+            <TableCell sx={{ textAlign: isArabic ? 'right' : 'left', borderRight: '1px solid #ccc' }}>{basePrice.toFixed(3)}</TableCell>
+            <TableCell sx={{ textAlign: isArabic ? 'right' : 'left', borderRight: '1px solid #ccc' }}>{prod.tva}%</TableCell>
+            <TableCell sx={{ textAlign: isArabic ? 'right' : 'left', borderRight: '1px solid #ccc' }}>{remise}%</TableCell>
+            <TableCell sx={{ textAlign: isArabic ? 'right' : 'left', borderRight: '1px solid #ccc' }}>{priceAfterRemise.toFixed(3)}</TableCell>
+            <TableCell sx={{ textAlign: isArabic ? 'right' : 'left', borderRight: '1px solid #ccc' }}>{netHT.toFixed(3)}</TableCell>
+            <TableCell sx={{ textAlign: isArabic ? 'right' : 'left', borderRight: '1px solid #ccc' }}>{netTTC.toFixed(3)}</TableCell>
           </TableRow>
         );
       })}
@@ -467,25 +427,25 @@ const SingleDeliverysortie = () => {
                    borderColor: 'grey.400', 
                   borderRadius: 2,
                   p: 2 }}>
-                  <Typography variant="body1">
+                  <Typography variant="body1" sx={{borderBottom:'1px'}}>
                     <strong>{translations[printLanguage].prixNetHT}:</strong> {totalHT.toFixed(3)}{devise}
                   </Typography>
                   
-                  <Typography variant="body1" sx={{borderBottom:'1px solid #ccc'}}  >
+                  <Typography variant="body1" sx={{borderBottom:'1px'}}  >
                         <strong>{printLanguage === 'fr' ? 'Remise Totale' : printLanguage === 'en' ? 'Total Discount' : 'إجمالي الخصم'}:</strong> {totalRemise.toFixed(3)} {devise}
                   </Typography>
-                  <Typography variant="body1" sx={{borderBottom:'1px solid #ccc'}}  >
+                  <Typography variant="body1" sx={{borderBottom:'1px'}}  >
                         <strong>{printLanguage === 'fr' ? ' Totale Net HT ' : printLanguage === 'en' ? 'Total Net HT' : 'إجمالي الخصم'}:</strong> {totalnetht.toFixed(3)} {devise}
                   </Typography>
-                  <Typography variant="body1" sx={{borderBottom:'1px solid #ccc'}} >
+                  <Typography variant="body1" sx={{borderBottom:'1px'}} >
                     <strong>{translations[printLanguage].totaltva}:</strong> {totalTVA.toFixed(3)}{devise}
                   </Typography>
                   {timbre === 'true' && (
-                    <Typography variant="body1" sx={{borderBottom:'1px solid #ccc'}} >
+                    <Typography variant="body1" sx={{borderBottom:'1px'}} >
                       <strong>{translations[printLanguage].timbre}:</strong> 1TND
                     </Typography>
                   )}
-                  <Typography variant="body1" sx={{borderBottom:'1px solid #ccc'}} >
+                  <Typography variant="body1" sx={{borderBottom:'1px'}} >
                     <strong>{translations[printLanguage].prixNetTTC}:</strong> {totalNetTTC.toFixed(3)}{devise}
                   </Typography>
                 </Box>
