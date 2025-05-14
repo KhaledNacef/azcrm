@@ -253,6 +253,7 @@ const SingleDeliverysortie = () => {
 
       {/* Printable content */}
       <Box
+        className="print-content"
         ref={printRef}
         sx={{
           border: '1px solid #ccc',
