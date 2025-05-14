@@ -246,7 +246,6 @@ const SingleDeliverysortie = () => {
 
       {/* Printable content */}
       <Box
-         className="print-area"
         ref={printRef}
         sx={{
           border: '1px solid #ccc',
