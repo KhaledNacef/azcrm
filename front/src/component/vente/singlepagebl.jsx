@@ -215,7 +215,6 @@ const SingleDeliverysortie = () => {
     year: 'numeric',
   });
 
-
   const handlePrint = async () => {
     const element = document.getElementById('printable-content');
     try {
@@ -235,15 +234,17 @@ const SingleDeliverysortie = () => {
             <style>
               @page {
                 size: A4;
-                margin: 0;
+                margin: 15mm; /* Add 15mm padding around content */
               }
               body {
                 margin: 0;
                 padding: 0;
               }
               img {
-                width: 100% !important;
+                width: 95% !important; /* Add 5% padding */
                 height: auto !important;
+                margin: 0 auto;
+                display: block;
                 page-break-inside: avoid;
               }
             </style>
@@ -283,23 +284,15 @@ const SingleDeliverysortie = () => {
       });
   
       const imgProps = pdf.getImageProperties(imgData);
-      const pageWidth = pdf.internal.pageSize.getWidth();
-      const pageHeight = pdf.internal.pageSize.getHeight();
+      const pageWidth = pdf.internal.pageSize.getWidth() - 30; // 15mm padding each side
+      const pageHeight = pdf.internal.pageSize.getHeight() - 30; // 15mm padding top/bottom
       const imgHeight = (imgProps.height * pageWidth) / imgProps.width;
       
-      let position = 0;
-      let remainingHeight = imgHeight;
+      // Center the image with padding
+      const xPosition = 15; // 15mm left padding
+      const yPosition = 15; // 15mm top padding
   
-      while (remainingHeight > 0) {
-        pdf.addImage(imgData, 'PNG', 0, position, pageWidth, imgHeight);
-        remainingHeight -= pageHeight;
-        
-        if (remainingHeight > 0) {
-          pdf.addPage();
-          position -= pageHeight;
-        }
-      }
-  
+      pdf.addImage(imgData, 'PNG', xPosition, yPosition, pageWidth, imgHeight);
       pdf.save(`invoice-${id}.pdf`);
     } catch (error) {
       console.error('PDF generation error:', error);
@@ -339,11 +332,11 @@ const SingleDeliverysortie = () => {
       {/* Printable content */}
       <div
       id="printable-content"
-    style={{
-    width: '210mm', // A4 width
-    minHeight: '297mm', // A4 height
-    margin: '0 auto',
-    backgroundColor: '#fff'
+     sx={{
+    p: 3,
+    backgroundColor: '#fff',
+    direction: isArabic ? 'rtl' : 'ltr',
+  
   }}
 >
         <Box sx={{ 
