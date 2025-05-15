@@ -386,48 +386,74 @@ const handleDownloadPDF = async () => {
           />
         </Box>
 
-        <Grid container spacing={2} sx={{ mb: 4 }}>
-          <Grid item xs={6} sx={{ textAlign: isArabic ? 'right' : 'left' }}>
-            <Typography variant="body2">
-              <strong>{translations[printLanguage].companyName}:</strong> AMOUNNET COMPANY EXPORT ET IMPORT
-            </Typography>
-            <Typography variant="body2">
-              <strong>{translations[printLanguage].companyAddress}:</strong> RUE DU LAC TOBA BERGES DU LAC1053 TUNIS
-            </Typography>
-            <Typography variant="body2">
-              <strong>{translations[printLanguage].companyPhone}:</strong> +987654321
-            </Typography>
-            <Typography variant="body2">
-              <strong>{translations[printLanguage].companyVAT}:</strong> 1867411P/A/M/000
-            </Typography>
-          </Grid>
-
-          <Grid item xs={6} sx={{ textAlign: isArabic ? 'left' : 'right' }}>
-            <Typography variant="body2">
-              <strong>{translations[printLanguage].clientName}:</strong> {client?.fullname}
-            </Typography>
-            <Typography variant="body2">
-              <strong>{translations[printLanguage].clientAddress}:</strong> {client?.address}
-            </Typography>
-            <Typography variant="body2">
-              <strong>{translations[printLanguage].clientPhone}:</strong> {client?.tel}
-            </Typography>
-            <Typography variant="body2">
-              <strong>{translations[printLanguage].clientFax}:</strong> {client?.fax}
-            </Typography>
-            <Typography variant="body2">
-              <strong>{translations[printLanguage].matriculefisacl}:</strong> {client?.matriculefisacl}
-            </Typography>
-          </Grid>
-        </Grid>
+          <Box sx={{ 
+         display: 'flex', 
+         justifyContent: 'space-between', 
+         mb: 2,
+         flexDirection: isArabic ? 'row' : 'row',
+         gap: 2 // Add space between the two boxes
+       }}>
+         <Box sx={{ 
+           textAlign: isArabic ? 'right' : 'left',
+           order: isArabic ? 2 : 1,
+           flex: 1,
+           border: '1px solid',
+           borderColor: 'grey.400',
+           borderRadius: 2,
+           p: 2
+         }}>
+           <Typography variant="body2">
+             <strong>{translations[printLanguage].companyName}:</strong> AMOUNNET COMPANY EXPORT ET IMPORT
+           </Typography>
+           <Typography variant="body2">
+             <strong>{translations[printLanguage].companyAddress}:</strong> RUE DU LAC TOBA BERGES DU LAC1053 TUNIS
+           </Typography>
+           <Typography variant="body2">
+             <strong>{translations[printLanguage].companyPhone}:</strong> +987654321
+           </Typography>
+           <Typography variant="body2">
+             <strong>{translations[printLanguage].companyVAT}:</strong> 1867411P/A/M/000
+           </Typography>
+         </Box>
+       
+         <Box sx={{ 
+           textAlign: isArabic ? 'right' : 'left',
+           order: isArabic ? 1 : 2,
+           flex: 1,
+           border: '1px solid',
+           borderColor: 'grey.400',
+           borderRadius: 2,
+           p: 2
+         }}>
+           <Typography variant="body2">
+             <strong>{translations[printLanguage].clientName}:</strong> {client?.fullname}
+           </Typography>
+           <Typography variant="body2">
+             <strong>{translations[printLanguage].clientAddress}:</strong> {client?.address}
+           </Typography>
+           <Typography variant="body2">
+             <strong>{translations[printLanguage].clientPhone}:</strong> {client?.tel}
+           </Typography>
+           <Typography variant="body2">
+             <strong>{translations[printLanguage].clientFax}:</strong> {client?.fax}
+           </Typography>
+           <Typography variant="body2">
+             <strong>{translations[printLanguage].matriculefisacl}:</strong> {client?.matriculefisacl}
+           </Typography>
+         </Box>
+       </Box>
 
         <Typography variant="h4" mb={3} textAlign="center">
         <strong> {translations[printLanguage].deliveryNote}- {id}/{formattedDate}</strong> 
         </Typography>
 
-        <Table>
-          <TableHead>
-            <TableRow>
+<Table   sx={{
+    border: '1px solid #ccc',
+    borderRadius: 2,
+    mt: 2,
+    overflowX: 'auto'
+  }}>          <TableHead>
+            <TableRow sx={{ backgroundColor: '#f5f5f5' }}>
                           <TableCell sx={{ textAlign: isArabic ? 'right' : 'left', borderRight: '1px solid #ccc'  }}>{translations[printLanguage].designation}</TableCell>
                           <TableCell sx={{ textAlign: isArabic ? 'right' : 'left', borderRight: '1px solid #ccc'  }}>{translations[printLanguage].quantity}</TableCell>
                           <TableCell sx={{ textAlign: isArabic ? 'right' : 'left', borderRight: '1px solid #ccc'  }}>{translations[printLanguage].unit}</TableCell>

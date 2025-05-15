@@ -383,7 +383,7 @@ const handleDownloadPDF = async () => {
   gap: 2 // Add space between the two boxes
 }}>
   <Box sx={{ 
-    textAlign: 'left',
+    textAlign: isArabic ? 'right' : 'left',
     order: isArabic ? 2 : 1,
     flex: 1,
     border: '1px solid',
@@ -406,7 +406,7 @@ const handleDownloadPDF = async () => {
   </Box>
 
   <Box sx={{ 
-    textAlign: 'left',
+    textAlign: isArabic ? 'right' : 'left',
     order: isArabic ? 1 : 2,
     flex: 1,
     border: '1px solid',
