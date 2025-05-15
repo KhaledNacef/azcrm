@@ -6,7 +6,8 @@ import './fvdesign.css';
 import CreateDeliveryNoteModal from '../vente/cratebl.jsx';
 import logo from '../../assets/amounnet.png';
 import n2words from 'n2words';
-
+import html2canvas from 'html2canvas';
+import jsPDF from 'jspdf';
 const translations = {
   en: {
     timbre: 'Stamp',
