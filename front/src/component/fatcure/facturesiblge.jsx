@@ -250,7 +250,7 @@ const BCsingleACHAT = () => {
      sx={{
     p: 3,
     backgroundColor: '#fff',
-    direction: isArabic ? 'rtl' : 'ltr',
+    direction: language === 'ar' ? 'rtl' : 'ltr',
     border: '1px solid #ccc'
 
   
