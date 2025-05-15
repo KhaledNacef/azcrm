@@ -221,7 +221,7 @@ const SingleDeliverysortie = () => {
     
     // Create a clone to modify for printing
     const printClone = element.cloneNode(true);
-    printClone.style.fontSize = '90%'; // Reduce text size by 10%
+    printClone.style.fontSize = '60%'; // Reduce text size by 10%
     document.body.appendChild(printClone);
     
     try {
@@ -293,7 +293,7 @@ const SingleDeliverysortie = () => {
     
     // Create a clone to modify for PDF
     const pdfClone = element.cloneNode(true);
-    pdfClone.style.fontSize = '90%'; // Reduce text size by 10%
+    pdfClone.style.fontSize = '60%'; // Reduce text size by 10%
     document.body.appendChild(pdfClone);
     
     try {
