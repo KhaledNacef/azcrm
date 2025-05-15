@@ -4,7 +4,8 @@ import axios from 'axios';
 import { Box, Typography, Button, Table, TableHead, TableRow, TableCell, TableBody, CircularProgress, Select, MenuItem } from '@mui/material';
 import './cssba.css';
 import logo from '../../assets/amounnet.png';
-
+import html2canvas from 'html2canvas';
+import jsPDF from 'jspdf';
 const Reteune = () => {
   const { code, supplierId, codey, timbre,num} = useParams();
   const navigate = useNavigate();
@@ -83,14 +84,118 @@ const Reteune = () => {
 
   const displayDate = () => new Date().toLocaleDateString('fr-FR');
 
-  const handlePrint = () => {
-    const printContents = printRef.current.innerHTML;
-    const originalContents = document.body.innerHTML;
-    document.body.innerHTML = printContents;
-    window.print();
-    document.body.innerHTML = originalContents;
-    navigate(previousLocation);
+
+  const handlePrint = async () => {
+    const element = document.getElementById('printable-content');
+    
+    // Create a clone to modify for printing
+    const printClone = element.cloneNode(true);
+    printClone.style.fontSize = '50%'; // Reduce text size by 10%
+    document.body.appendChild(printClone);
+    
+    try {
+      const canvas = await html2canvas(printClone, {
+        scale: 3,
+        useCORS: true,
+        logging: false,
+        backgroundColor: '#FFFFFF',
+        windowWidth: 210 * 3.78,
+        windowHeight: 297 * 3.78
+      });
+  
+      document.body.removeChild(printClone); // Remove the clone after capturing
+  
+      const iframe = document.createElement('iframe');
+      iframe.style.position = 'fixed';
+      iframe.style.right = '0';
+      iframe.style.bottom = '0';
+      iframe.style.width = '0';
+      iframe.style.height = '0';
+      iframe.style.border = '0';
+      document.body.appendChild(iframe);
+  
+      const doc = iframe.contentWindow.document;
+      doc.open();
+      doc.write(`
+        <!DOCTYPE html>
+        <html>
+          <head>
+            <title>Print</title>
+            <style>
+              @page {
+                size: A4;
+                margin: 5mm;
+              }
+              body {
+                margin: 0;
+                padding: 0;
+              }
+              img {
+                width: 100%;
+                height: auto;
+                page-break-inside: avoid;
+              }
+            </style>
+          </head>
+          <body>
+            <img src="${canvas.toDataURL('image/png')}" />
+          </body>
+        </html>
+      `);
+      doc.close();
+  
+      iframe.onload = () => {
+        setTimeout(() => {
+          iframe.contentWindow.focus();
+          iframe.contentWindow.print();
+          document.body.removeChild(iframe);
+        }, 500);
+      };
+    } catch (error) {
+      console.error('Print error:', error);
+      document.body.removeChild(printClone);
+    }
   };
+  
+  const handleDownloadPDF = async () => {
+    const element = document.getElementById('printable-content');
+    
+    // Create a clone to modify for PDF
+    const pdfClone = element.cloneNode(true);
+    pdfClone.style.fontSize = '50%'; // Reduce text size by 10%
+    document.body.appendChild(pdfClone);
+    
+    try {
+      const canvas = await html2canvas(pdfClone, {
+        scale: 3,
+        useCORS: true,
+        logging: false,
+        backgroundColor: '#FFFFFF',
+        windowWidth: 210 * 3.78,
+        windowHeight: 297 * 3.78
+      });
+  
+      document.body.removeChild(pdfClone); // Remove the clone after capturing
+  
+      const imgData = canvas.toDataURL('image/png');
+      const pdf = new jsPDF({
+        orientation: 'portrait',
+        unit: 'mm',
+        format: 'a4',
+      });
+  
+      const imgProps = pdf.getImageProperties(imgData);
+      const pageWidth = pdf.internal.pageSize.getWidth() - 10; // 5mm each side
+      const pageHeight = (imgProps.height * pageWidth) / imgProps.width;
+      
+      pdf.addImage(imgData, 'PNG', 5, 5, pageWidth, pageHeight);
+      pdf.save(`invoice-${id}.pdf`);
+    } catch (error) {
+      console.error('PDF generation error:', error);
+      document.body.removeChild(pdfClone);
+    }
+  };
+
 
   if (loading) return <CircularProgress />;
   if (error) return <Typography color="error">{error}</Typography>;
@@ -99,13 +204,17 @@ const Reteune = () => {
     <Box sx={{ p: 3 }}>
       <Button variant="outlined" onClick={() => navigate(-1)} sx={{ mb: 2 }}>Back</Button>
       <Button variant="contained" onClick={handlePrint} sx={{ mb: 2, ml: 2 }}>Print</Button>
+      <Button variant="contained" color="primary" onClick={handleDownloadPDF} sx={{ mb: 2, mr: 2 }}>
+                    PDF
+                  </Button>
       <Select value={language} onChange={(e) => setLanguage(e.target.value)} sx={{ mb: 2 }}>
         <MenuItem value="fr">Français</MenuItem>
         <MenuItem value="ar">عربي</MenuItem>
         <MenuItem value="en">English</MenuItem>
       </Select>
 
-      <Box ref={printRef} sx={{ border: 1, p: 3, mt: 2, direction: language === 'ar' ? 'rtl' : 'ltr' }}>
+      <div
+      id="printable-content" sx={{ border: 1, p: 3, mt: 2, direction: language === 'ar' ? 'rtl' : 'ltr' }}>
          <Box sx={{ 
                  width: 742,
                  height: 152,
@@ -182,7 +291,7 @@ const Reteune = () => {
             <Typography>{translations[language].beneficiary}</Typography>
           </Box>
         </Box>
-      </Box>
+      </div>
     </Box>
   );
 };
