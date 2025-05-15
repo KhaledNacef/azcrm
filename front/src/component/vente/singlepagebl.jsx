@@ -218,8 +218,14 @@ const SingleDeliverysortie = () => {
 
   const handlePrint = async () => {
     const element = document.getElementById('printable-content');
+    
+    // Create a clone to modify for printing
+    const printClone = element.cloneNode(true);
+    printClone.style.fontSize = '90%'; // Reduce text size by 10%
+    document.body.appendChild(printClone);
+    
     try {
-      const canvas = await html2canvas(element, {
+      const canvas = await html2canvas(printClone, {
         scale: 3,
         useCORS: true,
         logging: false,
@@ -228,7 +234,7 @@ const SingleDeliverysortie = () => {
         windowHeight: 297 * 3.78
       });
   
-      const imgData = canvas.toDataURL('image/png');
+      document.body.removeChild(printClone); // Remove the clone after capturing
   
       const iframe = document.createElement('iframe');
       iframe.style.position = 'fixed';
@@ -263,7 +269,7 @@ const SingleDeliverysortie = () => {
             </style>
           </head>
           <body>
-            <img src="${imgData}" />
+            <img src="${canvas.toDataURL('image/png')}" />
           </body>
         </html>
       `);
@@ -278,41 +284,48 @@ const SingleDeliverysortie = () => {
       };
     } catch (error) {
       console.error('Print error:', error);
+      document.body.removeChild(printClone);
     }
   };
   
-
-// Updated PDF Function
-const handleDownloadPDF = async () => {
-  const element = document.getElementById('printable-content');
-  try {
-    const canvas = await html2canvas(element, {
-      scale: 3,
-      useCORS: true,
-      logging: false,
-      backgroundColor: '#FFFFFF',
-      windowWidth: 210 * 3.78,
-      windowHeight: 297 * 3.78
-    });
-
-    const imgData = canvas.toDataURL('image/png');
-    const pdf = new jsPDF({
-      orientation: 'portrait',
-      unit: 'mm',
-      format: 'a4',
-    });
-
-    const imgProps = pdf.getImageProperties(imgData);
-    const pageWidth = pdf.internal.pageSize.getWidth() - 10; // 5mm each side
-    const pageHeight = (imgProps.height * pageWidth) / imgProps.width;
+  const handleDownloadPDF = async () => {
+    const element = document.getElementById('printable-content');
     
-    // Position with 5mm margins
-    pdf.addImage(imgData, 'PNG', 5, 5, pageWidth, pageHeight);
-    pdf.save(`invoice-${id}.pdf`);
-  } catch (error) {
-    console.error('PDF generation error:', error);
-  }
-};
+    // Create a clone to modify for PDF
+    const pdfClone = element.cloneNode(true);
+    pdfClone.style.fontSize = '90%'; // Reduce text size by 10%
+    document.body.appendChild(pdfClone);
+    
+    try {
+      const canvas = await html2canvas(pdfClone, {
+        scale: 3,
+        useCORS: true,
+        logging: false,
+        backgroundColor: '#FFFFFF',
+        windowWidth: 210 * 3.78,
+        windowHeight: 297 * 3.78
+      });
+  
+      document.body.removeChild(pdfClone); // Remove the clone after capturing
+  
+      const imgData = canvas.toDataURL('image/png');
+      const pdf = new jsPDF({
+        orientation: 'portrait',
+        unit: 'mm',
+        format: 'a4',
+      });
+  
+      const imgProps = pdf.getImageProperties(imgData);
+      const pageWidth = pdf.internal.pageSize.getWidth() - 10; // 5mm each side
+      const pageHeight = (imgProps.height * pageWidth) / imgProps.width;
+      
+      pdf.addImage(imgData, 'PNG', 5, 5, pageWidth, pageHeight);
+      pdf.save(`invoice-${id}.pdf`);
+    } catch (error) {
+      console.error('PDF generation error:', error);
+      document.body.removeChild(pdfClone);
+    }
+  };
   return (
     <Box sx={{ p: 3 }}>
       <Button variant="outlined" onClick={() => navigate(-1)} sx={{ mb: 2, mr: 2 }}>
@@ -433,7 +446,7 @@ const handleDownloadPDF = async () => {
 </Box>
 
 
-        <Typography variant="h4" mb={3} textAlign="center">
+        <Typography variant="h5" mb={3} textAlign="center">
         <strong>{translations[printLanguage].deliveryNote} - {id}/{formattedDate}</strong> 
         </Typography>
 
