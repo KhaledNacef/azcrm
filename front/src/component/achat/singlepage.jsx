@@ -3,9 +3,9 @@ import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { Box, Typography, Button, Table, TableHead, TableRow, TableCell, TableBody, CircularProgress, Select, MenuItem } from '@mui/material';
 import './cssba.css';
-import logo from '../../assets/amounnet.png';  // Relative path
 import n2words from 'n2words';
-
+import html2canvas from 'html2canvas';
+import jsPDF from 'jspdf';
 const SingleDeliveryNote = () => {
   const { code, supplierId, codey, timbre,num } = useParams();
   const navigate = useNavigate();
@@ -15,7 +15,6 @@ const SingleDeliveryNote = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [language, setLanguage] = useState('fr');  // Default language is French
-  const previousLocation = window.location.pathname;
 
   useEffect(() => {
     const fetchData = async () => {
@@ -82,21 +81,115 @@ const SingleDeliveryNote = () => {
     return `${day}/${month}/${year}`;
   }
 
-  const handlePrint = () => {
-    const originalContents = document.body.innerHTML;
-    const printContents = printRef.current.innerHTML;
-
-    // Replace the body content with printable content
-    document.body.innerHTML = printContents;
-
-    // Trigger the print dialog
-    window.print();
-
-    // After printing is done, restore the original content and navigate back
-    window.onafterprint = () => {
-      document.body.innerHTML = originalContents; // Restore original page content
-      navigate(previousLocation); // Navigate back to the previous page
-    };
+  const handlePrint = async () => {
+    const element = document.getElementById('printable-content');
+    
+    // Create a clone to modify for printing
+    const printClone = element.cloneNode(true);
+    printClone.style.fontSize = '50%'; // Reduce text size by 10%
+    document.body.appendChild(printClone);
+    
+    try {
+      const canvas = await html2canvas(printClone, {
+        scale: 3,
+        useCORS: true,
+        logging: false,
+        backgroundColor: '#FFFFFF',
+        windowWidth: 210 * 3.78,
+        windowHeight: 297 * 3.78
+      });
+  
+      document.body.removeChild(printClone); // Remove the clone after capturing
+  
+      const iframe = document.createElement('iframe');
+      iframe.style.position = 'fixed';
+      iframe.style.right = '0';
+      iframe.style.bottom = '0';
+      iframe.style.width = '0';
+      iframe.style.height = '0';
+      iframe.style.border = '0';
+      document.body.appendChild(iframe);
+  
+      const doc = iframe.contentWindow.document;
+      doc.open();
+      doc.write(`
+        <!DOCTYPE html>
+        <html>
+          <head>
+            <title>Print</title>
+            <style>
+              @page {
+                size: A4;
+                margin: 5mm;
+              }
+              body {
+                margin: 0;
+                padding: 0;
+              }
+              img {
+                width: 100%;
+                height: auto;
+                page-break-inside: avoid;
+              }
+            </style>
+          </head>
+          <body>
+            <img src="${canvas.toDataURL('image/png')}" />
+          </body>
+        </html>
+      `);
+      doc.close();
+  
+      iframe.onload = () => {
+        setTimeout(() => {
+          iframe.contentWindow.focus();
+          iframe.contentWindow.print();
+          document.body.removeChild(iframe);
+        }, 500);
+      };
+    } catch (error) {
+      console.error('Print error:', error);
+      document.body.removeChild(printClone);
+    }
+  };
+  
+  const handleDownloadPDF = async () => {
+    const element = document.getElementById('printable-content');
+    
+    // Create a clone to modify for PDF
+    const pdfClone = element.cloneNode(true);
+    pdfClone.style.fontSize = '50%'; // Reduce text size by 10%
+    document.body.appendChild(pdfClone);
+    
+    try {
+      const canvas = await html2canvas(pdfClone, {
+        scale: 3,
+        useCORS: true,
+        logging: false,
+        backgroundColor: '#FFFFFF',
+        windowWidth: 210 * 3.78,
+        windowHeight: 297 * 3.78
+      });
+  
+      document.body.removeChild(pdfClone); // Remove the clone after capturing
+  
+      const imgData = canvas.toDataURL('image/png');
+      const pdf = new jsPDF({
+        orientation: 'portrait',
+        unit: 'mm',
+        format: 'a4',
+      });
+  
+      const imgProps = pdf.getImageProperties(imgData);
+      const pageWidth = pdf.internal.pageSize.getWidth() - 10; // 5mm each side
+      const pageHeight = (imgProps.height * pageWidth) / imgProps.width;
+      
+      pdf.addImage(imgData, 'PNG', 5, 5, pageWidth, pageHeight);
+      pdf.save(`invoice-${id}.pdf`);
+    } catch (error) {
+      console.error('PDF generation error:', error);
+      document.body.removeChild(pdfClone);
+    }
   };
 
   // Translations for French, Arabic, and English
@@ -188,7 +281,9 @@ const SingleDeliveryNote = () => {
       <Button variant="contained" color="primary" onClick={handlePrint} sx={{ mb: 2, ml: 2 }}>
         Imprimer
       </Button>
-
+   <Button variant="contained" color="primary" onClick={handleDownloadPDF} sx={{ mb: 2, mr: 2 }}>
+              PDF
+            </Button>
       {/* Language selection */}
       <Select
         value={language}
@@ -201,86 +296,78 @@ const SingleDeliveryNote = () => {
       </Select>
 
       {/* Printable content */}
-      <Box
-  ref={printRef}
-  sx={{
-    border: '1px solid #ccc',
+      <div
+      id="printable-content"
+     sx={{
     p: 3,
-    mt: 2,
     backgroundColor: '#fff',
-    direction: language === 'ar' ? 'rtl' : 'ltr',  // Apply RTL for Arabic
+    direction: language === 'ar' ? 'rtl' : 'ltr',
+    border: '1px solid #ccc'
+
+  
   }}
 >
-   <style>
-  {`
-    @media print {
-      body {
-        font-size: 12px !important;
-        direction: ${language === 'ar' ? 'rtl' : 'ltr'} !important; /* Apply RTL for Arabic */
-      }
-      .MuiTypography-root {
-        font-size: 12px !important;
-      }
-      .MuiButton-root {
-        display: none !important;
-      }
-      .MuiTableCell-root {
-        font-size: 12px !important;
-      }
-    }
-  `}
-</style>
-          
+    
+ 
         {/* Company and Supplier Information with Labels */}
-        <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 3, direction: language === 'ar' ? 'rtl' : 'ltr' }}>
-
+  <Box sx={{ 
+  display: 'flex', 
+  justifyContent: 'space-between', 
+  mb: 2,
+  gap: 2 ,
+  direction: language === 'ar' ? 'rtl' : 'ltr' // Add space between the two boxes
+}}>
 {/* Supplier info (Always on the left) */}
 <Box sx={{
   flex: 1,
-  display: 'flex',
-  flexDirection: 'column',
-  gap: 2,
-  marginRight: '1rem', // Space between supplier and company
-  textAlign: 'left'     // Always left-aligned
+  border: '1px solid',
+  borderColor: 'grey.400',
+  borderRadius: 2,
+  p: 2,
+  textAlign: language === 'ar' ? 'right' : 'left'
 }}>
-  <Typography variant="body1"><strong>{translations[language].supplierName}:</strong> {supplier.fullname}</Typography>
-  <Typography variant="body1"><strong>{translations[language].supplierAddress}:</strong> {supplier?.address || 'Adresse inconnue'}</Typography>
-  <Typography variant="body1"><strong>{translations[language].supplierPhone}:</strong> {supplier?.tel || 'Numéro inconnu'}</Typography>
-  <Typography variant="body1"><strong>{translations[language].matriculefisacl}:</strong> {supplier?.matriculefisacl || 'Matriculefisacl inconnu'}</Typography>
+  <Typography variant="body2"><strong>{translations[language].supplierName}:</strong> {supplier.fullname}</Typography>
+  <Typography variant="body2"><strong>{translations[language].supplierAddress}:</strong> {supplier?.address || 'Adresse inconnue'}</Typography>
+  <Typography variant="body2"><strong>{translations[language].supplierPhone}:</strong> {supplier?.tel || 'Numéro inconnu'}</Typography>
+  <Typography variant="body2"><strong>{translations[language].matriculefisacl}:</strong> {supplier?.matriculefisacl || 'Matriculefisacl inconnu'}</Typography>
 </Box>
 
 {/* Company info (Always on the right) */}
 <Box sx={{
-  flex: 1,
-  display: 'flex',
-  flexDirection: 'column',
-  gap: 2,
-  marginLeft: '1rem', // Space between company and supplier
-  textAlign: 'right'  // Always right-aligned
+ flex: 1,
+ border: '1px solid',
+ borderColor: 'grey.400',
+ borderRadius: 2,
+ p: 2,
+  textAlign: language === 'ar' ? 'right' : 'left'
 }}>
-  <Typography variant="body1"><strong>{translations[language].companyName}:</strong> AMOUNNET COMPANY EXPORT ET IMPORT</Typography>
-  <Typography variant="body1"><strong>{translations[language].companyAddress}:</strong> RUE DU LAC TOBA BERGES DU LAC1053 TUNIS</Typography>
-  <Typography variant="body1"><strong>{translations[language].companyPhone}:</strong> +987654321</Typography>
-  <Typography variant="body1"><strong>{translations[language].matriculefisacl}:</strong> 1867411P/A/M/000</Typography>
+  <Typography variant="body2"><strong>{translations[language].companyName}:</strong> AMOUNNET COMPANY EXPORT ET IMPORT</Typography>
+  <Typography variant="body2"><strong>{translations[language].companyAddress}:</strong> RUE DU LAC TOBA BERGES DU LAC1053 TUNIS</Typography>
+  <Typography variant="body2"><strong>{translations[language].companyPhone}:</strong> +987654321</Typography>
+  <Typography variant="body2"><strong>{translations[language].matriculefisacl}:</strong> 1867411P/A/M/000</Typography>
 </Box>
 
 </Box>
 
-        <Typography variant="h4" mb={3} textAlign="center">
+        <Typography variant="h5" mb={3} textAlign="center">
           {translations[language].bonDeAchat} - {num}
         </Typography>
 
-        <Table>
-          <TableHead>
-            <TableRow>
-              <TableCell>{translations[language].designation}</TableCell>
-              <TableCell>{translations[language].unite}</TableCell>
-              <TableCell>{translations[language].quantite}</TableCell>
-              <TableCell>{translations[language].prixUHT}</TableCell>
-              <TableCell>{translations[language].tva}</TableCell>
-              <TableCell>{translations[language].rem}</TableCell>
-              <TableCell>{translations[language].prixNetHT}</TableCell>
-              <TableCell>{translations[language].prixNetTTC}</TableCell>
+ <Table   sx={{
+    border: '1px solid #ccc',
+    borderRadius: 2,
+    mt: 2,
+    overflowX: 'auto'
+  }}>           <TableHead>
+           <TableRow sx={{ backgroundColor: '#f5f5f5' }}>
+              <TableCell sx={{ textAlign:language === 'ar' ? 'right' : 'left', borderRight: '1px solid #ccc' }} >{translations[language].designation}</TableCell>
+              <TableCell sx={{ textAlign:language === 'ar' ? 'right' : 'left', borderRight: '1px solid #ccc' }} >{translations[language].unite}</TableCell>
+              <TableCell sx={{ textAlign:language === 'ar' ? 'right' : 'left', borderRight: '1px solid #ccc' }} >{translations[language].quantite}</TableCell>
+              <TableCell sx={{ textAlign:language === 'ar' ? 'right' : 'left', borderRight: '1px solid #ccc' }} >{translations[language].prixUHT}</TableCell>
+              <TableCell sx={{ textAlign:language === 'ar' ? 'right' : 'left', borderRight: '1px solid #ccc' }} >{translations[language].tva}</TableCell>
+              <TableCell sx={{ textAlign:language === 'ar' ? 'right' : 'left', borderRight: '1px solid #ccc' }} >{translations[language].rem}</TableCell>
+              <TableCell sx={{ textAlign:language === 'ar' ? 'right' : 'left', borderRight: '1px solid #ccc' }} >{translations[language].prixNetHT}</TableCell>
+              <TableCell sx={{ textAlign:language === 'ar' ? 'right' : 'left', borderRight: '1px solid #ccc' }} >{translations[language].prixNetTTC}</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -299,15 +386,20 @@ const SingleDeliveryNote = () => {
     const netTTC = netHT * (1 + prod.tva / 100);
 
     return (
-      <TableRow key={index}>
-        <TableCell>{prod.designation}</TableCell>
-        <TableCell>{prod.Unite}</TableCell>
-        <TableCell>{prod.quantite}</TableCell>
-        <TableCell>{prod.prixU_HT.toFixed(3)}</TableCell>
-        <TableCell>{prod.tva}%</TableCell>
-        <TableCell>{prod.rem}%</TableCell>
-        <TableCell>{netHT.toFixed(3)}</TableCell>
-        <TableCell>{netTTC.toFixed(3)}</TableCell>
+       <TableRow
+                  key={index}
+                  sx={{
+                    backgroundColor:'white'
+                  }}
+                >  
+        <TableCell sx={{ borderRight: '1px solid #ccc' }} >{prod.designation}</TableCell>
+        <TableCell sx={{ borderRight: '1px solid #ccc' }} >{prod.Unite}</TableCell>
+        <TableCell sx={{ borderRight: '1px solid #ccc' }} >{prod.quantite}</TableCell>
+        <TableCell sx={{ borderRight: '1px solid #ccc' }} >{prod.prixU_HT.toFixed(3)}</TableCell>
+        <TableCell sx={{ borderRight: '1px solid #ccc' }} >{prod.tva}%</TableCell>
+        <TableCell sx={{ borderRight: '1px solid #ccc' }} >{prod.rem}%</TableCell>
+        <TableCell sx={{ borderRight: '1px solid #ccc' }} >{netHT.toFixed(3)}</TableCell>
+        <TableCell sx={{ borderRight: '1px solid #ccc' }} >{netTTC.toFixed(3)}</TableCell>
       </TableRow>
     );
   })}
@@ -315,27 +407,35 @@ const SingleDeliveryNote = () => {
         </Table>
 
         {/* Total Section - Moved to the Right Side */}
-        <Box sx={{ display: 'flex', justifyContent: 'flex-end', mt: 3 }}>
-          <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end' }}>
-            <Typography variant="body1">
+          <Box sx={{ display: 'flex', justifyContent: 'flex-end', mt: 3 , direction: language === 'ar' ? 'rtl' : 'ltr' }}>
+        
+                  <Box sx={{
+                           
+                           border: '1px solid',
+                           borderColor: 'grey.400', 
+                          borderRadius: 2,
+                          p: 2, display: 'flex', flexDirection: 'column', alignItems: language === 'ar' ? 'flex-end' : 'flex-start' }}>
+
+
+            <Typography sx={{borderBottom:'1px solid #ccc'}} variant="body1">
               <strong>{translations[language].prixNetHT}:</strong> {totalHT.toFixed(3)}TND
             </Typography>
             
-            <Typography variant="body1" >
+            <Typography sx={{borderBottom:'1px solid #ccc'}} variant="body1" >
                   <strong>{language === 'fr' ? 'Remise Totale' : language === 'en' ? 'Total Discount' : 'إجمالي الخصم'}:</strong> {totalRemise.toFixed(3)} TND
             </Typography>
-            <Typography variant="body1" >
+            <Typography sx={{borderBottom:'1px solid #ccc'}} variant="body1" >
                   <strong>{language === 'fr' ? ' Totale Net HT ' : language === 'en' ? 'Total Net HT' : 'إجمالي الخصم'}:</strong> {totalnetht.toFixed(3)} TND
             </Typography>
-            <Typography variant="body1">
+            <Typography sx={{borderBottom:'1px solid #ccc'}} variant="body1">
               <strong>{translations[language].totaltva}:</strong> {totalTVA.toFixed(3)}TND
             </Typography>
             {timbre === 'true' && (
-              <Typography variant="body1">
+              <Typography sx={{borderBottom:'1px solid #ccc'}} variant="body1">
                 <strong>{translations[language].timbre}:</strong> 1TND
               </Typography>
             )}
-            <Typography variant="body1">
+            <Typography sx={{borderBottom:'1px solid #ccc'}} variant="body1">
               <strong>{translations[language].prixNetTTC}:</strong> {totalNetTTC.toFixed(3)}TND
             </Typography>
           </Box>
@@ -356,7 +456,7 @@ const SingleDeliveryNote = () => {
           </Box>
         </Box>
         {displayDate()}
-      </Box>
+      </div>
     </Box>
   );
 };

@@ -265,7 +265,8 @@ const BCsingleACHAT = () => {
   display: 'flex', 
   justifyContent: 'space-between', 
   mb: 2,
-  gap: 2 // Add space between the two boxes
+  gap: 2 ,
+  direction: language === 'ar' ? 'rtl' : 'ltr' // Add space between the two boxes
 }}>
 {/* Supplier Information (Always on the Left) */}
 <Box sx={{
@@ -326,8 +327,9 @@ const BCsingleACHAT = () => {
     borderRadius: 2,
     mt: 2,
     overflowX: 'auto'
-  }}>          <TableHead>
-      <TableRow sx={{ backgroundColor: '#f5f5f5' }}>
+  }}>         
+          <TableHead>
+           <TableRow sx={{ backgroundColor: '#f5f5f5' }}>
               <TableCell sx={{ textAlign:language === 'ar' ? 'right' : 'left', borderRight: '1px solid #ccc' }} >{language === 'fr' ? 'Designation' : language === 'en' ? 'Designation' : 'التسمية'}</TableCell>
               <TableCell sx={{ textAlign:language === 'ar' ? 'right' : 'left', borderRight: '1px solid #ccc' }} >{language === 'fr' ? 'Unite' : language === 'en' ? 'Unit' : 'وحدة'}</TableCell>
               <TableCell sx={{ textAlign:language === 'ar' ? 'right' : 'left', borderRight: '1px solid #ccc' }} >{language === 'fr' ? 'Quantité' : language === 'en' ? 'Quantity' : 'الكمية'}</TableCell>
@@ -360,14 +362,15 @@ const BCsingleACHAT = () => {
             sx={{
               backgroundColor:'white'
             }}
-          >        <TableCell>{prod.designation}</TableCell>
-        <TableCell>{prod.Unite}</TableCell>
-        <TableCell>{prod.quantite}</TableCell>
-        <TableCell>{prod.prixU_HT}</TableCell>
-        <TableCell>{prod.tva}%</TableCell>
-        <TableCell>{prod.rem}%</TableCell>
-        <TableCell>{netHT.toFixed(3)}</TableCell>
-        <TableCell>{netTTC.toFixed(3)}</TableCell>
+          >       
+         <TableCell sx={{ borderRight: '1px solid #ccc' }} >{prod.designation}</TableCell>
+        <TableCell sx={{ borderRight: '1px solid #ccc' }} >{prod.Unite}</TableCell>
+        <TableCell sx={{ borderRight: '1px solid #ccc' }} >{prod.quantite}</TableCell>
+        <TableCell sx={{ borderRight: '1px solid #ccc' }} >{prod.prixU_HT}</TableCell>
+        <TableCell sx={{ borderRight: '1px solid #ccc' }} >{prod.tva}%</TableCell>
+        <TableCell sx={{ borderRight: '1px solid #ccc' }} >{prod.rem}%</TableCell>
+        <TableCell sx={{ borderRight: '1px solid #ccc' }} >{netHT.toFixed(3)}</TableCell>
+        <TableCell sx={{ borderRight: '1px solid #ccc' }} >{netTTC.toFixed(3)}</TableCell>
       </TableRow>
     );
   })}
