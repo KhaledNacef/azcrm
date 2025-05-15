@@ -216,56 +216,71 @@ const SingleDeliverysortie = () => {
   });
 
 
-const handlePrint = async () => {
-  const element = document.getElementById('printable-content');
-  try {
-    const canvas = await html2canvas(element, {
-      scale: 3,
-      useCORS: true,
-      logging: false,
-      backgroundColor: '#FFFFFF',
-      windowWidth: 210 * 3.78,
-      windowHeight: 297 * 3.78
-    });
-
-    const printWindow = window.open('', '_blank');
-    printWindow.document.write(`
-      <!DOCTYPE html>
-      <html>
-        <head>
-          <title>Print</title>
-          <style>
-            @page {
-              size: A4;
-              margin: 5mm; /* 5mm margin on all sides */
-            }
-            body {
-              margin: 0;
-              padding: 0;
-            }
-            img {
-              width: 100% !important;
-              height: auto !important;
-              page-break-inside: avoid;
-            }
-          </style>
-        </head>
-        <body>
-          <img src="${canvas.toDataURL('image/png')}" />
-        </body>
-      </html>
-    `);
-    
-    printWindow.document.close();
-    printWindow.focus();
-    setTimeout(() => {
-      printWindow.print();
-      printWindow.close();
-    }, 500);
-  } catch (error) {
-    console.error('Print error:', error);
-  }
-};
+  const handlePrint = async () => {
+    const element = document.getElementById('printable-content');
+    try {
+      const canvas = await html2canvas(element, {
+        scale: 3,
+        useCORS: true,
+        logging: false,
+        backgroundColor: '#FFFFFF',
+        windowWidth: 210 * 3.78,
+        windowHeight: 297 * 3.78
+      });
+  
+      const imgData = canvas.toDataURL('image/png');
+  
+      const iframe = document.createElement('iframe');
+      iframe.style.position = 'fixed';
+      iframe.style.right = '0';
+      iframe.style.bottom = '0';
+      iframe.style.width = '0';
+      iframe.style.height = '0';
+      iframe.style.border = '0';
+      document.body.appendChild(iframe);
+  
+      const doc = iframe.contentWindow.document;
+      doc.open();
+      doc.write(`
+        <!DOCTYPE html>
+        <html>
+          <head>
+            <title>Print</title>
+            <style>
+              @page {
+                size: A4;
+                margin: 5mm;
+              }
+              body {
+                margin: 0;
+                padding: 0;
+              }
+              img {
+                width: 100%;
+                height: auto;
+                page-break-inside: avoid;
+              }
+            </style>
+          </head>
+          <body>
+            <img src="${imgData}" />
+          </body>
+        </html>
+      `);
+      doc.close();
+  
+      iframe.onload = () => {
+        setTimeout(() => {
+          iframe.contentWindow.focus();
+          iframe.contentWindow.print();
+          document.body.removeChild(iframe);
+        }, 500);
+      };
+    } catch (error) {
+      console.error('Print error:', error);
+    }
+  };
+  
 
 // Updated PDF Function
 const handleDownloadPDF = async () => {
