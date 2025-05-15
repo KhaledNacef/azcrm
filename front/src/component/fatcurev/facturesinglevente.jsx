@@ -494,8 +494,12 @@ const totalHT = deliveryNote.reduce((acc, prod) => {
               return (
                   
 
-              <TableRow key={index}>
-                <TableCell sx={{ textAlign: isArabic ? 'right' : 'left', borderRight: '1px solid #ccc'  }}>{prod.designation}</TableCell>
+ <TableRow
+            key={index}
+            sx={{
+              backgroundColor:'white'
+            }}
+          >                <TableCell sx={{ textAlign: isArabic ? 'right' : 'left', borderRight: '1px solid #ccc'  }}>{prod.designation}</TableCell>
                 <TableCell sx={{ textAlign: isArabic ? 'right' : 'left', borderRight: '1px solid #ccc'  }}>{prod.quantite}</TableCell>
                 <TableCell sx={{ textAlign: isArabic ? 'right' : 'left', borderRight: '1px solid #ccc'  }}>{prod.Unite}</TableCell>
                 <TableCell sx={{ textAlign: isArabic ? 'right' : 'left', borderRight: '1px solid #ccc'  }}>{prod.prixU_HT.toFixed(3)} </TableCell>

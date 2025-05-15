@@ -363,6 +363,8 @@ const SingleDeliverysortie = () => {
     p: 3,
     backgroundColor: '#fff',
     direction: isArabic ? 'rtl' : 'ltr',
+    border: '1px solid #ccc'
+
   
   }}
 >

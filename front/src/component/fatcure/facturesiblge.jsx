@@ -6,7 +6,8 @@ import './fdesign.css';
 import CreateDeliveryNoteModala from '../achat/crate.jsx'; // Ensure correct file name
 import logo from '../../assets/amounnet.png';  // Relative path
 import n2words from 'n2words';
-
+import html2canvas from 'html2canvas';
+import jsPDF from 'jspdf';
 const BCsingleACHAT = () => {
   const { code, supplierId, codey, timbre,num} = useParams();
   const navigate = useNavigate();
@@ -105,18 +106,115 @@ const BCsingleACHAT = () => {
     const year = today.getFullYear();
     return `${day}/${month}/${year}`;
   }
-
-  const handlePrint = () => {
-    const originalContents = document.body.innerHTML;
-    const printContents = printRef.current.innerHTML;
-
-    document.body.innerHTML = printContents;
-    window.print();
-
-    window.onafterprint = () => {
-      document.body.innerHTML = originalContents;
-      navigate(window.location.pathname);  // Navigate back after printing
-    };
+  const handlePrint = async () => {
+    const element = document.getElementById('printable-content');
+    
+    // Create a clone to modify for printing
+    const printClone = element.cloneNode(true);
+    printClone.style.fontSize = '50%'; // Reduce text size by 10%
+    document.body.appendChild(printClone);
+    
+    try {
+      const canvas = await html2canvas(printClone, {
+        scale: 3,
+        useCORS: true,
+        logging: false,
+        backgroundColor: '#FFFFFF',
+        windowWidth: 210 * 3.78,
+        windowHeight: 297 * 3.78
+      });
+  
+      document.body.removeChild(printClone); // Remove the clone after capturing
+  
+      const iframe = document.createElement('iframe');
+      iframe.style.position = 'fixed';
+      iframe.style.right = '0';
+      iframe.style.bottom = '0';
+      iframe.style.width = '0';
+      iframe.style.height = '0';
+      iframe.style.border = '0';
+      document.body.appendChild(iframe);
+  
+      const doc = iframe.contentWindow.document;
+      doc.open();
+      doc.write(`
+        <!DOCTYPE html>
+        <html>
+          <head>
+            <title>Print</title>
+            <style>
+              @page {
+                size: A4;
+                margin: 5mm;
+              }
+              body {
+                margin: 0;
+                padding: 0;
+              }
+              img {
+                width: 100%;
+                height: auto;
+                page-break-inside: avoid;
+              }
+            </style>
+          </head>
+          <body>
+            <img src="${canvas.toDataURL('image/png')}" />
+          </body>
+        </html>
+      `);
+      doc.close();
+  
+      iframe.onload = () => {
+        setTimeout(() => {
+          iframe.contentWindow.focus();
+          iframe.contentWindow.print();
+          document.body.removeChild(iframe);
+        }, 500);
+      };
+    } catch (error) {
+      console.error('Print error:', error);
+      document.body.removeChild(printClone);
+    }
+  };
+  
+  const handleDownloadPDF = async () => {
+    const element = document.getElementById('printable-content');
+    
+    // Create a clone to modify for PDF
+    const pdfClone = element.cloneNode(true);
+    pdfClone.style.fontSize = '50%'; // Reduce text size by 10%
+    document.body.appendChild(pdfClone);
+    
+    try {
+      const canvas = await html2canvas(pdfClone, {
+        scale: 3,
+        useCORS: true,
+        logging: false,
+        backgroundColor: '#FFFFFF',
+        windowWidth: 210 * 3.78,
+        windowHeight: 297 * 3.78
+      });
+  
+      document.body.removeChild(pdfClone); // Remove the clone after capturing
+  
+      const imgData = canvas.toDataURL('image/png');
+      const pdf = new jsPDF({
+        orientation: 'portrait',
+        unit: 'mm',
+        format: 'a4',
+      });
+  
+      const imgProps = pdf.getImageProperties(imgData);
+      const pageWidth = pdf.internal.pageSize.getWidth() - 10; // 5mm each side
+      const pageHeight = (imgProps.height * pageWidth) / imgProps.width;
+      
+      pdf.addImage(imgData, 'PNG', 5, 5, pageWidth, pageHeight);
+      pdf.save(`invoice-${id}.pdf`);
+    } catch (error) {
+      console.error('PDF generation error:', error);
+      document.body.removeChild(pdfClone);
+    }
   };
  
   return (
@@ -127,6 +225,9 @@ const BCsingleACHAT = () => {
       <Button variant="contained" color="primary" onClick={handlePrint} sx={{ mb: 2, mr: 2 }}>
         Imprimer
       </Button>
+      <Button variant="contained" color="primary" onClick={handleDownloadPDF} sx={{ mb: 2, mr: 2 }}>
+              PDF
+            </Button>
       <Button variant="contained" color="primary" onClick={handleOpen} sx={{ mb: 2, mr: 2 }}>
         Créer un Bon D'ACHAT
       </Button>
@@ -144,83 +245,70 @@ const BCsingleACHAT = () => {
       </Box>
 
       {/* Printable content */}
-      <Box
-        ref={printRef}
-        sx={{
-          border: '1px solid #ccc',
-          p: 3,
-          mt: 2,
-          backgroundColor: '#fff',
-          direction: language === 'ar' ? 'rtl' : 'ltr',  // Set RTL for Arabic
-        }}
-      >
-       <style>
-  {`
-    @media print {
-      body {
-        font-size: 12px !important;
-        direction: ${language === 'ar' ? 'rtl' : 'ltr'} !important;
-      }
-      .MuiTypography-root {
-        font-size: 12px !important;
-      }
-      .MuiButton-root {
-        display: none !important;
-      }
-      .MuiTableCell-root {
-        font-size: 12px !important;
-      }
-    }
-  `}
-</style>
+      <div
+      id="printable-content"
+     sx={{
+    p: 3,
+    backgroundColor: '#fff',
+    direction: isArabic ? 'rtl' : 'ltr',
+    border: '1px solid #ccc'
+
+  
+  }}
+>
+     
 
    
 
  {/* Company and Supplier Information with Labels */}
-<Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 3 }}>
-
+  <Box sx={{ 
+  display: 'flex', 
+  justifyContent: 'space-between', 
+  mb: 2,
+  gap: 2 // Add space between the two boxes
+}}>
 {/* Supplier Information (Always on the Left) */}
 <Box sx={{
   flex: 1,
-  display: 'flex',
-  flexDirection: 'column',
-  gap: 2,
-  marginRight: '1rem',
+  border: '1px solid',
+  borderColor: 'grey.400',
+  borderRadius: 2,
+  p: 2,
   textAlign: language === 'ar' ? 'right' : 'left'
 }}>
-  <Typography variant="body1">
+  <Typography variant="body2">
     <strong>{language === 'fr' ? 'Nom du fournisseur' : language === 'en' ? 'Supplier Name' : 'اسم المورد'}:</strong> {supplier.fullname}
   </Typography>
-  <Typography variant="body1">
+  <Typography variant="body2">
     <strong>{language === 'fr' ? 'Adresse du fournisseur' : language === 'en' ? 'Supplier Address' : 'عنوان المورد'}:</strong> {supplier?.address || 'Adresse inconnue'}
   </Typography>
-  <Typography variant="body1">
+  <Typography variant="body2">
     <strong>{language === 'fr' ? 'Téléphone du fournisseur' : language === 'en' ? 'Supplier Phone' : 'هاتف المورد'}:</strong> {supplier?.tel || 'Numéro inconnu'}
   </Typography>
-  <Typography variant="body1">
+  <Typography variant="body2">
     <strong>{language === 'fr' ? 'matriculefisacl' : language === 'en' ? 'Tax Identification Number' : "الرقم الجبائي"}:</strong> {supplier?.matriculefisacl || 'Code TVA inconnu'}
   </Typography>
 </Box>
 
 {/* Company Information (Always on the Right) */}
 <Box sx={{
-  flex: 1,
-  display: 'flex',
-  flexDirection: 'column',
-  gap: 2,
-  marginLeft: '1rem',
-  textAlign: language === 'ar' ? 'left' : 'right'
+ flex: 1,
+ border: '1px solid',
+ borderColor: 'grey.400',
+ borderRadius: 2,
+ p: 2,
+  textAlign: language === 'ar' ? 'right' : 'left'
 }}>
-  <Typography variant="body1">
+  <Typography variant="body2">
     <strong>{language === 'fr' ? 'Nom de la Client' : language === 'en' ? 'Company Name' : 'اسم الشركة'}:</strong> AMOUNNET COMPANY EXPORT ET IMPORT
   </Typography>
-  <Typography variant="body1">
+  <Typography variant="body2">
     <strong>{language === 'fr' ? 'Adresse de la Client' : language === 'en' ? 'Company Address' : 'عنوان الشركة'}:</strong> RUE DU LAC TOBA BERGES DU LAC1053 TUNIS
   </Typography>
-  <Typography variant="body1">
+  <Typography variant="body2">
     <strong>{language === 'fr' ? 'Téléphone de la Client' : language === 'en' ? 'Company Phone' : 'هاتف الشركة'}:</strong> +987654321
   </Typography>
-  <Typography variant="body1">
+  <Typography variant="body2">
     <strong>{language === 'fr' ? 'Matriculefisacl' : language === 'en' ? 'Tax Identification Number' : "الرقم الجبائي"}:</strong> 1867411P/A/M/000
   </Typography>
 </Box>
@@ -228,22 +316,26 @@ const BCsingleACHAT = () => {
 </Box>
 
 
-        <Typography variant="h4" mb={3} textAlign="center">
+        <Typography variant="h5" mb={3} textAlign="center">
           {language === 'fr' ? 'Bon De Livraison' : language === 'en' ? 'Order Form' : 'نموذج الطلب'} - {num}
         </Typography>
 
         {/* Table */}
-        <Table>
-          <TableHead>
-            <TableRow>
-              <TableCell>{language === 'fr' ? 'Designation' : language === 'en' ? 'Designation' : 'التسمية'}</TableCell>
-              <TableCell>{language === 'fr' ? 'Unite' : language === 'en' ? 'Unit' : 'وحدة'}</TableCell>
-              <TableCell>{language === 'fr' ? 'Quantité' : language === 'en' ? 'Quantity' : 'الكمية'}</TableCell>
-              <TableCell>{language === 'fr' ? 'Prix U (HT)' : language === 'en' ? 'Unit Price(HT)' : 'سعر الوحدة(بدون TVA)'}</TableCell>
-              <TableCell>{language === 'fr' ? 'TVA (%)' : language === 'en' ? 'VAT(%)' : 'ضريبة القيمة المضافة(%)'}</TableCell>
-              <TableCell>{language === 'fr' ? 'Rem (%)' : language === 'en' ? 'Discount(%)' : 'خصم(%)'}</TableCell>
-              <TableCell>{language === 'fr' ? 'Total NET HT' : language === 'en' ? 'Total NET HT' : 'إجمالي قبل الضريبة'}</TableCell>
-              <TableCell>{language === 'fr' ? 'Total TTC' : language === 'en' ? 'Total TTC' : 'إجمالي  الضريبة'}</TableCell>
+ <Table   sx={{
+    border: '1px solid #ccc',
+    borderRadius: 2,
+    mt: 2,
+    overflowX: 'auto'
+  }}>          <TableHead>
+      <TableRow sx={{ backgroundColor: '#f5f5f5' }}>
+              <TableCell sx={{ textAlign:language === 'ar' ? 'right' : 'left', borderRight: '1px solid #ccc' }} >{language === 'fr' ? 'Designation' : language === 'en' ? 'Designation' : 'التسمية'}</TableCell>
+              <TableCell sx={{ textAlign:language === 'ar' ? 'right' : 'left', borderRight: '1px solid #ccc' }} >{language === 'fr' ? 'Unite' : language === 'en' ? 'Unit' : 'وحدة'}</TableCell>
+              <TableCell sx={{ textAlign:language === 'ar' ? 'right' : 'left', borderRight: '1px solid #ccc' }} >{language === 'fr' ? 'Quantité' : language === 'en' ? 'Quantity' : 'الكمية'}</TableCell>
+              <TableCell sx={{ textAlign:language === 'ar' ? 'right' : 'left', borderRight: '1px solid #ccc' }} >{language === 'fr' ? 'Prix U (HT)' : language === 'en' ? 'Unit Price(HT)' : 'سعر الوحدة(بدون TVA)'}</TableCell>
+              <TableCell sx={{ textAlign:language === 'ar' ? 'right' : 'left', borderRight: '1px solid #ccc' }} >{language === 'fr' ? 'TVA (%)' : language === 'en' ? 'VAT(%)' : 'ضريبة القيمة المضافة(%)'}</TableCell>
+              <TableCell sx={{ textAlign:language === 'ar' ? 'right' : 'left', borderRight: '1px solid #ccc' }} >{language === 'fr' ? 'Rem (%)' : language === 'en' ? 'Discount(%)' : 'خصم(%)'}</TableCell>
+              <TableCell sx={{ textAlign:language === 'ar' ? 'right' : 'left', borderRight: '1px solid #ccc' }} >{language === 'fr' ? 'Total NET HT' : language === 'en' ? 'Total NET HT' : 'إجمالي قبل الضريبة'}</TableCell>
+              <TableCell sx={{ textAlign:language === 'ar' ? 'right' : 'left', borderRight: '1px solid #ccc' }} >{language === 'fr' ? 'Total TTC' : language === 'en' ? 'Total TTC' : 'إجمالي  الضريبة'}</TableCell>
 
             </TableRow>
           </TableHead>
@@ -263,8 +355,12 @@ const BCsingleACHAT = () => {
     const netTTC = netHT * (1 + prod.tva / 100);
 
     return (
-      <TableRow key={index}>
-        <TableCell>{prod.designation}</TableCell>
+ <TableRow
+            key={index}
+            sx={{
+              backgroundColor:'white'
+            }}
+          >        <TableCell>{prod.designation}</TableCell>
         <TableCell>{prod.Unite}</TableCell>
         <TableCell>{prod.quantite}</TableCell>
         <TableCell>{prod.prixU_HT}</TableCell>
@@ -279,27 +375,34 @@ const BCsingleACHAT = () => {
         </Table>
 
         {/* Totals Section */}
-        <Box sx={{ display: 'flex', justifyContent: 'flex-end', marginTop: '20px', direction: language === 'ar' ? 'rtl' : 'ltr' }}>
-          <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: language === 'ar' ? 'flex-end' : 'flex-start' }}>
-            <Typography variant="body1"><strong>{language === 'fr' ? 'Total HT' : language === 'en' ? 'Total HT' : 'الإجمالي قبل الضريبة'}:</strong> {totalHT.toFixed(3)} TND</Typography>
-            <Typography variant="body1" >
+        <Box sx={{ display: 'flex', justifyContent: 'flex-end', mt: 3 , direction: language === 'ar' ? 'rtl' : 'ltr' }}>
+
+          <Box sx={{
+                   
+                   border: '1px solid',
+                   borderColor: 'grey.400', 
+                  borderRadius: 2,
+                  p: 2, display: 'flex', flexDirection: 'column', alignItems: language === 'ar' ? 'flex-end' : 'flex-start' }}>
+
+            <Typography sx={{borderBottom:'1px solid #ccc'}} variant="body1"><strong>{language === 'fr' ? 'Total HT' : language === 'en' ? 'Total HT' : 'الإجمالي قبل الضريبة'}:</strong> {totalHT.toFixed(3)} TND</Typography>
+            <Typography sx={{borderBottom:'1px solid #ccc'}} variant="body1" >
                   <strong>{language === 'fr' ? 'Remise Totale' : language === 'en' ? 'Total Discount' : 'إجمالي الخصم'}:</strong> {totalRemise.toFixed(3)} TND
            </Typography>
 
-              <Typography variant="body1" >
+              <Typography sx={{borderBottom:'1px solid #ccc'}} variant="body1" >
                   <strong>{language === 'fr' ? ' Totale Net HT ' : language === 'en' ? 'Total Net HT' : 'إجمالي الخصم'}:</strong> {totalnetht.toFixed(3)} TND
             </Typography>
 
-            <Typography variant="body1"><strong>{language === 'fr' ? 'Total TVA' : language === 'en' ? 'Total VAT' : 'إجمالي ضريبة القيمة المضافة'}:</strong> {totalTVA.toFixed(3)} TND</Typography>
+            <Typography sx={{borderBottom:'1px solid #ccc'}} variant="body1"><strong>{language === 'fr' ? 'Total TVA' : language === 'en' ? 'Total VAT' : 'إجمالي ضريبة القيمة المضافة'}:</strong> {totalTVA.toFixed(3)} TND</Typography>
             
 
             {timbre === 'true' && (
-            <Typography variant="body1">
+            <Typography sx={{borderBottom:'1px solid #ccc'}} variant="body1">
               <strong>{language === 'fr' ? 'Timbre' : language === 'en' ? 'Stamp' : 'طابع'}:</strong> 1 TND
               </Typography>          
               )}
 
-            <Typography variant="body1"><strong>{language === 'fr' ? 'Total TTC' : language === 'en' ? 'Total TTC' : 'الإجمالي شامل'}:</strong> {totalNetTTC.toFixed(3)} TND</Typography>
+            <Typography sx={{borderBottom:'1px solid #ccc'}} variant="body1"><strong>{language === 'fr' ? 'Total TTC' : language === 'en' ? 'Total TTC' : 'الإجمالي شامل'}:</strong> {totalNetTTC.toFixed(3)} TND</Typography>
           </Box>
         </Box>
         <Box sx={{ mt: 5, textAlign: 'center' }}>
@@ -319,7 +422,7 @@ const BCsingleACHAT = () => {
                 </Box>
                 {displayDate()}
 
-      </Box>
+      </div>
 
       <Modal open={open} onClose={handleClose}>
         <Box
