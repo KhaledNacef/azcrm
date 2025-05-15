@@ -8,6 +8,8 @@ import logo from '../../assets/amounnet.png';
 import n2words from 'n2words';
 import html2canvas from 'html2canvas';
 import jsPDF from 'jspdf';
+
+
 const translations = {
   en: {
     timbre: 'Stamp',
@@ -24,7 +26,7 @@ const translations = {
     clientAddress: "Client Address",
     clientPhone: "Client Phone",
     clientFax: "Fax",
-    deliveryNote: "Facture",
+    deliveryNote: "Delivery Note", // changed from "Facture"
     designation: "Designation",
     quantity: "Quantity",
     unit: "Unit",
@@ -37,13 +39,12 @@ const translations = {
     print: "Print",
     back: "Back",
     remise: "Discount",
-    totaltva:'Total VAT',
-    prixNetHT: 'Total Price(HT)',
-    prixNetTTC: 'Net Price(TTC)',
-
+    totaltva: "Total VAT",
+    prixNetHT: "Total Price(HT)",
+    prixNetTTC: "Net Price(TTC)",
   },
   fr: {
-    timbre: 'Timbre',
+    timbre: "Timbre",
     tva: "T.V.A",
     prixNetU: "P Net U HT",
     totalNetHT: "Tot Net HT",
@@ -56,7 +57,7 @@ const translations = {
     clientAddress: "Adresse du Client",
     clientPhone: "Téléphone du Client",
     clientFax: "Fax",
-    deliveryNote: "Facture",
+    deliveryNote: "Bon de livraison", // changed from "Facture"
     designation: "Designation",
     quantity: "Qte",
     unit: "Unité",
@@ -68,17 +69,14 @@ const translations = {
     date: "Date",
     print: "Imprimer",
     back: "Retour",
-    matriculefisacl:'Matriculefisacl',
+    matriculefisacl: "Matriculefisacl",
     remise: "Rem",
-    totaltva:'Tot T.V.A',
-    prixNetHT: 'Tot Prix (HT)',
-    prixNetTTC: 'Tot Prix Net(TTC)',
-
-
-
+    totaltva: "Tot T.V.A",
+    prixNetHT: "Tot Prix (HT)",
+    prixNetTTC: "Tot Prix Net(TTC)",
   },
   ar: {
-    timbre: 'الطابع',
+    timbre: "الطابع",
     companyName: "اسم الشركة",
     companyAddress: "عنوان الشركة",
     companyPhone: "هاتف الشركة",
@@ -87,7 +85,7 @@ const translations = {
     clientAddress: "عنوان العميل",
     clientPhone: "هاتف العميل",
     clientFax: "فاكس",
-    deliveryNote: "إذن صرف",
+    deliveryNote: "إذن صرف", // kept as-is for Arabic
     designation: "الوصف",
     quantity: "الكمية",
     unit: "الوحدة",
@@ -99,16 +97,15 @@ const translations = {
     date: "التاريخ",
     print: "طباعة",
     back: "رجوع",
-    matriculefisacl:"الرقم الجبائي",
+    matriculefisacl: "الرقم الجبائي",
     remise: "خصم",
     tva: "الضريبة على القيمة المضافة",
     prixNetU: "السعر الصافي للوحدة دون ضريبة",
     totalNetHT: "المجموع الصافي دون ضريبة",
     totalNetTTC: "المجموع الصافي مع الضريبة",
-    totaltva:'إجمالي ضريبة القيمة المضافة',
-    prixNetHT: 'السعر(بدون ضريبة)',
-    prixNetTTC: 'السعر الصافي(شاملة الضريبة)',
-
+    totaltva: "إجمالي ضريبة القيمة المضافة",
+    prixNetHT: "السعر(بدون ضريبة)",
+    prixNetTTC: "السعر الصافي(شاملة الضريبة)",
   }
 };
 
