@@ -43,10 +43,10 @@ const translations = {
   },
   fr: {
     timbre: 'Timbre',
-    tva: "TVA",
-    prixNetU: "Prix Net U HT",
-    totalNetHT: "Total Net HT",
-    totalNetTTC: "Total Net TTC",
+    tva: "T.V.A",
+    prixNetU: "P Net U HT",
+    totalNetHT: "Tot Net HT",
+    totalNetTTC: "Tot Net TTC",
     companyName: "Nom de la société",
     companyAddress: "Adresse de la société",
     companyPhone: "Téléphone de la société",
@@ -57,21 +57,21 @@ const translations = {
     clientFax: "Fax",
     deliveryNote: "Facture",
     designation: "Designation",
-    quantity: "Quantité",
+    quantity: "Qte",
     unit: "Unité",
-    unitPrice: "Prix U",
-    netPrice: "Prix Net",
-    totalNet: "Total Net",
+    unitPrice: "P U (HT)",
+    netPrice: "P Net",
+    totalNet: "Tot Net",
     clientSignature: "Signature du Client",
     companySignature: "Signature de la Société",
     date: "Date",
     print: "Imprimer",
     back: "Retour",
     matriculefisacl:'Matriculefisacl',
-    remise: "Remise",
-    totaltva:'Total TVA',
-    prixNetHT: 'Total Prix (HT)',
-    prixNetTTC: 'Prix Net(TTC)',
+    remise: "Rem",
+    totaltva:'Tot T.V.A',
+    prixNetHT: 'Tot Prix (HT)',
+    prixNetTTC: 'Tot Prix Net(TTC)',
 
 
 
@@ -183,30 +183,7 @@ const totalHT = deliveryNote.reduce((acc, prod) => {
   const totalNetTTCInWords = n2words(totalNetTTC.toFixed(3), { lang: printLanguage === 'ar' ? 'ar' : printLanguage }); // Arabic or French/English
 
 
-  const handlePrint = () => {
-    const printContents = printRef.current.innerHTML;
-    const originalContents = document.body.innerHTML;
-  
-    const tempDiv = document.createElement('div');
-    tempDiv.innerHTML = printContents;
-    const logoImg = tempDiv.querySelector('.print-logo');
-  
-    const triggerPrint = () => {
-      document.body.innerHTML = printContents;
-      window.print();
-      document.body.innerHTML = originalContents;
-    };
-  
-    if (logoImg?.complete) {
-      triggerPrint();
-    } else {
-      const img = new Image();
-      img.src = logo;
-      img.onload = () => {
-        triggerPrint();
-      };
-    }
-  };
+
   
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
@@ -234,6 +211,109 @@ const totalHT = deliveryNote.reduce((acc, prod) => {
     month: '2-digit',
     year: 'numeric',
   });
+
+
+
+
+  const handlePrint = async () => {
+    const element = document.getElementById('printable-content');
+    try {
+      const canvas = await html2canvas(element, {
+        scale: 3,
+        useCORS: true,
+        logging: false,
+        backgroundColor: '#FFFFFF',
+        windowWidth: 210 * 3.78,
+        windowHeight: 297 * 3.78
+      });
+  
+      const imgData = canvas.toDataURL('image/png');
+  
+      const iframe = document.createElement('iframe');
+      iframe.style.position = 'fixed';
+      iframe.style.right = '0';
+      iframe.style.bottom = '0';
+      iframe.style.width = '0';
+      iframe.style.height = '0';
+      iframe.style.border = '0';
+      document.body.appendChild(iframe);
+  
+      const doc = iframe.contentWindow.document;
+      doc.open();
+      doc.write(`
+        <!DOCTYPE html>
+        <html>
+          <head>
+            <title>Print</title>
+            <style>
+              @page {
+                size: A4;
+                margin: 5mm;
+              }
+              body {
+                margin: 0;
+                padding: 0;
+              }
+              img {
+                width: 100%;
+                height: auto;
+                page-break-inside: avoid;
+              }
+            </style>
+          </head>
+          <body>
+            <img src="${imgData}" />
+          </body>
+        </html>
+      `);
+      doc.close();
+  
+      iframe.onload = () => {
+        setTimeout(() => {
+          iframe.contentWindow.focus();
+          iframe.contentWindow.print();
+          document.body.removeChild(iframe);
+        }, 500);
+      };
+    } catch (error) {
+      console.error('Print error:', error);
+    }
+  };
+  
+
+// Updated PDF Function
+const handleDownloadPDF = async () => {
+  const element = document.getElementById('printable-content');
+  try {
+    const canvas = await html2canvas(element, {
+      scale: 3,
+      useCORS: true,
+      logging: false,
+      backgroundColor: '#FFFFFF',
+      windowWidth: 210 * 3.78,
+      windowHeight: 297 * 3.78
+    });
+
+    const imgData = canvas.toDataURL('image/png');
+    const pdf = new jsPDF({
+      orientation: 'portrait',
+      unit: 'mm',
+      format: 'a4',
+    });
+
+    const imgProps = pdf.getImageProperties(imgData);
+    const pageWidth = pdf.internal.pageSize.getWidth() - 10; // 5mm each side
+    const pageHeight = (imgProps.height * pageWidth) / imgProps.width;
+    
+    // Position with 5mm margins
+    pdf.addImage(imgData, 'PNG', 5, 5, pageWidth, pageHeight);
+    pdf.save(`invoice-${id}.pdf`);
+  } catch (error) {
+    console.error('PDF generation error:', error);
+  }
+};
+  
+
   return (
     <Box sx={{ p: 3 }}>
       <Button variant="outlined" onClick={() => navigate(-1)} sx={{ mb: 2, mr: 2 }}>
@@ -243,7 +323,9 @@ const totalHT = deliveryNote.reduce((acc, prod) => {
     <Button onClick={handlePrint} variant="contained" color="primary" sx={{ mb: 2, mr: 2 }}>
       Imprimer
     </Button>
-  
+  <Button variant="contained" color="primary" onClick={handleDownloadPDF} sx={{ mb: 2, mr: 2 }}>
+          PDF
+        </Button>
         <Button 
         variant="contained" 
         color="secondary" 
@@ -269,51 +351,15 @@ const totalHT = deliveryNote.reduce((acc, prod) => {
         <MenuItem onClick={() => selectLanguage('ar')}>AR</MenuItem>
       </Menu>
 
-      <Box
-        ref={printRef}
-        sx={{
-          border: '1px solid #ccc',
-          p: 3,
-          mt: 2,
-          backgroundColor: '#fff',
-          direction: isArabic ? 'rtl' : 'ltr',
-        }}
-      >
-   <style>
-  {
-    `
-      @media print {
-        body {
-          font-size: 12px !important;
-          direction: ${isArabic ? 'rtl' : 'ltr'};
-        }
-        .MuiButton-root {
-          display: none !important;
-        }
-        .MuiTypography-root {
-          font-size: 12px !important;
-        }
-        .MuiTableCell-root {
-          font-size: 12px !important;
-          text-align: ${isArabic ? 'right' : 'left'};
-        }
-        .print-logo {
-          display: block !important;
-          visibility: visible !important;
-          max-width: 100% !important;
-          height: auto !important;
-        }
-        .logo-conatiner {
-          display: block !important;
-          visibility: visible !important;
-          max-width: 742px !important;
-          height: 152px !important;
-          overflow: hidden;
-        }
-      }
-    `
-  }
-</style>
+      <div
+      id="printable-content"
+     sx={{
+    p: 3,
+    backgroundColor: '#fff',
+    direction: isArabic ? 'rtl' : 'ltr',
+  
+  }}
+>
 
         <Box className="logo-conatiner"
         sx={{ 
@@ -333,7 +379,7 @@ const totalHT = deliveryNote.reduce((acc, prod) => {
             style={{ 
               width: '100%',
               height: '100%',
-              objectFit: 'cover'
+              objectFit: 'contain'
 
             }}
             className="print-logo"
@@ -376,21 +422,21 @@ const totalHT = deliveryNote.reduce((acc, prod) => {
         </Grid>
 
         <Typography variant="h4" mb={3} textAlign="center">
-          {translations[printLanguage].deliveryNote}- {id}/{formattedDate}
+        <strong> {translations[printLanguage].deliveryNote}- {id}/{formattedDate}</strong> 
         </Typography>
 
         <Table>
           <TableHead>
             <TableRow>
-             <TableCell sx={{ textAlign: isArabic ? 'right' : 'left' }}>{translations[printLanguage].designation}</TableCell>
-                          <TableCell sx={{ textAlign: isArabic ? 'right' : 'left' }}>{translations[printLanguage].quantity}</TableCell>
-                          <TableCell sx={{ textAlign: isArabic ? 'right' : 'left' }}>{translations[printLanguage].unit}</TableCell>
-                          <TableCell sx={{ textAlign: isArabic ? 'right' : 'left' }}>{translations[printLanguage].unitPrice} </TableCell>
-                          <TableCell sx={{ textAlign: isArabic ? 'right' : 'left' }}>{translations[printLanguage].tva}%</TableCell>
-                          <TableCell sx={{ textAlign: isArabic ? 'right' : 'left' }}>{translations[printLanguage].remise}%</TableCell>
-                          <TableCell sx={{ textAlign: isArabic ? 'right' : 'left' }}>{translations[printLanguage].prixNetU}</TableCell>
-                          <TableCell sx={{ textAlign: isArabic ? 'right' : 'left' }}>{translations[printLanguage].totalNetHT}</TableCell>
-                          <TableCell sx={{ textAlign: isArabic ? 'right' : 'left' }}>{translations[printLanguage].totalNetTTC}</TableCell>
+                          <TableCell sx={{ textAlign: isArabic ? 'right' : 'left', borderRight: '1px solid #ccc'  }}>{translations[printLanguage].designation}</TableCell>
+                          <TableCell sx={{ textAlign: isArabic ? 'right' : 'left', borderRight: '1px solid #ccc'  }}>{translations[printLanguage].quantity}</TableCell>
+                          <TableCell sx={{ textAlign: isArabic ? 'right' : 'left', borderRight: '1px solid #ccc'  }}>{translations[printLanguage].unit}</TableCell>
+                          <TableCell sx={{ textAlign: isArabic ? 'right' : 'left', borderRight: '1px solid #ccc'  }}>{translations[printLanguage].unitPrice} </TableCell>
+                          <TableCell sx={{ textAlign: isArabic ? 'right' : 'left', borderRight: '1px solid #ccc'  }}>{translations[printLanguage].tva}%</TableCell>
+                          <TableCell sx={{ textAlign: isArabic ? 'right' : 'left', borderRight: '1px solid #ccc'  }}>{translations[printLanguage].remise}%</TableCell>
+                          <TableCell sx={{ textAlign: isArabic ? 'right' : 'left', borderRight: '1px solid #ccc'  }}>{translations[printLanguage].prixNetU}</TableCell>
+                          <TableCell sx={{ textAlign: isArabic ? 'right' : 'left', borderRight: '1px solid #ccc'  }}>{translations[printLanguage].totalNetHT}</TableCell>
+                          <TableCell sx={{ textAlign: isArabic ? 'right' : 'left', borderRight: '1px solid #ccc'  }}>{translations[printLanguage].totalNetTTC}</TableCell>
             
             </TableRow>
           </TableHead>
@@ -413,41 +459,47 @@ const totalHT = deliveryNote.reduce((acc, prod) => {
                   
 
               <TableRow key={index}>
-                <TableCell sx={{ textAlign: isArabic ? 'right' : 'left' }}>{prod.designation}</TableCell>
-                <TableCell sx={{ textAlign: isArabic ? 'right' : 'left' }}>{prod.quantite}</TableCell>
-                <TableCell sx={{ textAlign: isArabic ? 'right' : 'left' }}>{prod.Unite}</TableCell>
-                <TableCell sx={{ textAlign: isArabic ? 'right' : 'left' }}>{prod.prixU_HT.toFixed(3)} </TableCell>
-                <TableCell sx={{ textAlign: isArabic ? 'right' : 'left' }}>{prod.tva}%</TableCell>
-                <TableCell sx={{ textAlign: isArabic ? 'right' : 'left' }}>{prod.rem}%</TableCell>
-                <TableCell sx={{ textAlign: isArabic ? 'right' : 'left' }}>{priceAfterRemise.toFixed(3)}</TableCell>
-                <TableCell sx={{ textAlign: isArabic ? 'right' : 'left' }}>{netHT.toFixed(3)} </TableCell>
-                <TableCell sx={{ textAlign: isArabic ? 'right' : 'left' }}>{netTTC.toFixed(3)} </TableCell>
+                <TableCell sx={{ textAlign: isArabic ? 'right' : 'left', borderRight: '1px solid #ccc'  }}>{prod.designation}</TableCell>
+                <TableCell sx={{ textAlign: isArabic ? 'right' : 'left', borderRight: '1px solid #ccc'  }}>{prod.quantite}</TableCell>
+                <TableCell sx={{ textAlign: isArabic ? 'right' : 'left', borderRight: '1px solid #ccc'  }}>{prod.Unite}</TableCell>
+                <TableCell sx={{ textAlign: isArabic ? 'right' : 'left', borderRight: '1px solid #ccc'  }}>{prod.prixU_HT.toFixed(3)} </TableCell>
+                <TableCell sx={{ textAlign: isArabic ? 'right' : 'left', borderRight: '1px solid #ccc'  }}>{prod.tva}%</TableCell>
+                <TableCell sx={{ textAlign: isArabic ? 'right' : 'left', borderRight: '1px solid #ccc'  }}>{prod.rem}%</TableCell>
+                <TableCell sx={{ textAlign: isArabic ? 'right' : 'left', borderRight: '1px solid #ccc'  }}>{priceAfterRemise.toFixed(3)}</TableCell>
+                <TableCell sx={{ textAlign: isArabic ? 'right' : 'left', borderRight: '1px solid #ccc'  }}>{netHT.toFixed(3)} </TableCell>
+                <TableCell sx={{ textAlign: isArabic ? 'right' : 'left', borderRight: '1px solid #ccc'  }}>{netTTC.toFixed(3)} </TableCell>
               </TableRow>
 )})}
           </TableBody>
         </Table>
 
        <Box sx={{ display: 'flex', justifyContent: 'flex-end', mt: 3 }}>
-                      <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end' }}>
-                        <Typography variant="body1">
+                     <Box sx={{ display: 'flex', 
+                                      flexDirection: 'column',
+                                       alignItems: 'flex-end',
+                                       border: '1px solid',
+                                       borderColor: 'grey.400', 
+                                      borderRadius: 2,
+                                      p: 2 }}>
+                        <Typography sx={{borderBottom:'1px solid #ccc'}} variant="body1">
                           <strong>{translations[printLanguage].prixNetHT}:</strong> {totalHT.toFixed(3)}TND
                         </Typography>
                         
-                        <Typography variant="body1" >
+                        <Typography sx={{borderBottom:'1px solid #ccc'}} variant="body1" >
                               <strong>{printLanguage === 'fr' ? 'Remise Totale' : printLanguage === 'en' ? 'Total Discount' : 'إجمالي الخصم'}:</strong> {totalRemise.toFixed(3)} {devise}
                         </Typography>
-                        <Typography variant="body1" >
+                        <Typography sx={{borderBottom:'1px solid #ccc'}} variant="body1" >
                               <strong>{printLanguage === 'fr' ? ' Totale Net HT ' : printLanguage === 'en' ? 'Total Net HT' : 'إجمالي الخصم'}:</strong> {totalnetht.toFixed(3)} {devise}
                         </Typography>
-                        <Typography variant="body1">
+                        <Typography sx={{borderBottom:'1px solid #ccc'}} variant="body1">
                           <strong>{translations[printLanguage].totaltva}:</strong> {totalTVA.toFixed(3)}{devise}
                         </Typography>
                         {timbre === 'true' && (
-                          <Typography variant="body1">
+                          <Typography sx={{borderBottom:'1px solid #ccc'}} variant="body1">
                             <strong>{translations[printLanguage].timbre}:</strong> 1TND
                           </Typography>
                         )}
-                        <Typography variant="body1">
+                        <Typography sx={{borderBottom:'1px solid #ccc'}} variant="body1">
                           <strong>{translations[printLanguage].prixNetTTC}:</strong> {totalNetTTC.toFixed(3)}{devise}
                         </Typography>
                       </Box>
@@ -473,7 +525,7 @@ const totalHT = deliveryNote.reduce((acc, prod) => {
             <Typography variant="body1">{translations[printLanguage].companySignature}</Typography>
           </Box>
         </Box>
-      </Box>
+      </div>
 
       <Modal open={open} onClose={handleClose}>
         <Box
