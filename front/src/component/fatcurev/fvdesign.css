@@ -1,33 +1,19 @@
+/* CSS */
 @media print {
-  /* Hide any debug information or elements that contain localhost */
-  footer, .vite-footer, .react-footer, .vite-logo, .react-logo {
-      display: none !important;
-    }
-  
-    /* You can also try targeting the header if the logo appears there */
-    .vite-logo, .react-logo, .header {
-      display: none !important;
-    }
-  /* Adjust other styles for printing */
   body {
-    font-size: 12px !important;
+    margin: 0 !important;
+  }
+  
+  #printable-content {
+    width: 200mm !important;   /* 210mm - 10mm margins */
+    min-height: 287mm !important; /* 297mm - 10mm margins */
+    margin: 5mm auto !important;
+    padding: 5mm !important;
+    box-sizing: border-box;
+    background: white !important;
   }
 
-  .MuiTypography-root {
-    font-size: 12px !important;
-  }
-
-  .MuiButton-root {
+  body > *:not(#printable-content) {
     display: none !important;
   }
-
-  .MuiTableCell-root {
-    font-size: 12px !important;
-  }
-
-  .MuiTableRow-root {
-    font-size: 12px !important;
-  }
-
-  /* Any other styles you want to apply for print */
 }

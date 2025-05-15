@@ -5,8 +5,8 @@
   }
   
   #printable-content {
-    width: 200mm !important;   /* 210mm - 10mm margins */
-    min-height: 287mm !important; /* 297mm - 10mm margins */
+    width: 210mm !important;   /* 210mm - 10mm margins */
+    min-height: 297mm !important; /* 297mm - 10mm margins */
     margin: 5mm auto !important;
     padding: 5mm !important;
     box-sizing: border-box;
