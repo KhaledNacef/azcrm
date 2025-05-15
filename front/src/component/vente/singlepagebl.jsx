@@ -449,7 +449,7 @@ const SingleDeliverysortie = () => {
 
 
         <Typography variant="h5" mb={3} textAlign="center">
-        <strong>{translations[printLanguage].deliveryNote} - {id}/{formattedDate}</strong> 
+        {translations[printLanguage].deliveryNote} - {id}/{formattedDate}
         </Typography>
 
   <Table   sx={{
