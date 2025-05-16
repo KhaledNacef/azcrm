@@ -83,18 +83,23 @@ const StockTPage = () => {
   const totalTVAFromSellPrice = filteredProducts.reduce((acc, product) => {
     // Skip products with no TVA or invalid TVA values
     if (!product.tva || product.tva <= 0) return acc;
-    
+  
     // Safeguard against missing sellprice or quantity
-    const sellprice = product.sellprice || 0;
+    const sellpriceTTC = product.sellprice || 0;
     const quantite = product.quantite || 0;
-    
-    // Calculate TVA amount for each product
-    const tvaRate = product.tva / 100;
-    const productTotalTTC = sellprice * quantite;
-    const productTVA = productTotalTTC * (tvaRate / (1 + tvaRate));
-    
+  
+    // Calculate total TTC for this product
+    const totalTTC = sellpriceTTC * quantite;
+  
+    // Calculate HT by removing TVA from TTC
+    const ht = totalTTC / (1 + product.tva / 100);
+  
+    // TVA is simply TTC - HT
+    const productTVA = totalTTC - ht;
+  
     return acc + productTVA;
   }, 0);
+  
 
   return (
     <Box sx={{ p: 3 }}>

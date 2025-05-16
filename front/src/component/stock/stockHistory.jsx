@@ -97,30 +97,34 @@ const StockHPage = () => {
         </Typography>      </CardContent>
     </Card>
   </Grid>
-
   <Grid item xs={12} sm={6} md={4}>
   <Card elevation={3}>
     <CardContent>
       <Box display="flex" justifyContent="space-between" alignItems="center" mb={1}>
-        <Typography variant="subtitle1" color="textSecondary">TVA par Produit</Typography>
+        <Typography variant="subtitle1" color="textSecondary">Total TVA</Typography>
         <Avatar sx={{ bgcolor: 'info.main' }}>
           <ReceiptIcon />
         </Avatar>
       </Box>
-      {filteredProducts.map((product) => {
-        const tvaAmount = ((product.prixU_HT - (product.prixU_HT * (product.rem || 0) / 100)) * 
-                          product.quantite * (product.tva / 100));
-        
-        return (
-          <Typography key={product.id} variant="body2" gutterBottom>
-            {product.designation}: {tvaAmount.toFixed(3)} 
-          </Typography>
-        );
-      })}
+
+      {/* Total TVA calculation using your exact formula */}
+      <Typography variant="h6">
+        {filteredProducts.reduce((acc, product) => {
+          const prixU_HT = product.prixU_HT || 0;
+          const remise = product.rem || 0;
+          const quantite = product.quantite || 0;
+          const tva = product.tva || 0;
+
+          const prixAvecRemise = prixU_HT - (prixU_HT * remise / 100);
+          const tvaAmount = prixAvecRemise * quantite * (tva / 100);
+
+          return acc + tvaAmount;
+        }, 0).toFixed(3)} TND
+      </Typography>
     </CardContent>
   </Card>
 </Grid>
- 
+
 </Grid>
       <TextField
         label="Search by Name or ID"
