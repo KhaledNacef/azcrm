@@ -22,7 +22,9 @@ import PaidIcon from '@mui/icons-material/Paid';
 import TrendingUpIcon from '@mui/icons-material/TrendingUp';
 import Grid from '@mui/material/Grid2';
 import ReceiptIcon from '@mui/icons-material/Receipt';
-
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 const StockTPage = () => {
   const [products, setProducts] = useState([]);
   const [filteredProducts, setFilteredProducts] = useState([]);
@@ -31,7 +33,8 @@ const StockTPage = () => {
   const [snackbarMessage, setSnackbarMessage] = useState('');
   const [snackbarSeverity, setSnackbarSeverity] = useState('success');
   const [exchangeRates, setExchangeRates] = useState({});
-
+const [startDate, setStartDate] = useState(null);
+  const [endDate, setEndDate] = useState(null);
   useEffect(() => {
     const fetchStockAndRates = async () => {
       try {
@@ -51,18 +54,38 @@ const StockTPage = () => {
     fetchStockAndRates();
   }, []);
 
-  const handleSearch = (event) => {
-    const query = event.target.value.toLowerCase();
-    setSearchQuery(query);
-
-    const filtered = products.filter(
-      (product) =>
-        product.designation.toLowerCase().includes(query) ||
-        product.codeClient.toString().includes(query)
-    );
-    setFilteredProducts(filtered);
-  };
-
+  useEffect(() => {
+     applyFilters();
+   }, [searchQuery, startDate, endDate, products]);
+ 
+   const handleSearch = (event) => {
+     setSearchQuery(event.target.value.toLowerCase());
+   };
+ 
+   const applyFilters = () => {
+     let filtered = [...products];
+ 
+     // Apply search filter
+     if (searchQuery) {
+       filtered = filtered.filter(
+         (product) =>
+           product.designation.toLowerCase().includes(searchQuery) ||
+           product.codeClient.toString().includes(searchQuery)
+       );
+     }
+ 
+     // Apply date range filter
+     if (startDate || endDate) {
+       filtered = filtered.filter((product) => {
+         const productDate = new Date(product.createdAt);
+         const matchesStart = !startDate || productDate >= new Date(startDate);
+         const matchesEnd = !endDate || productDate <= new Date(endDate);
+         return matchesStart && matchesEnd;
+       });
+     }
+ 
+     setFilteredProducts(filtered);
+   };
   const showSnackbar = (message, severity) => {
     setSnackbarMessage(message);
     setSnackbarSeverity(severity);
@@ -111,11 +134,39 @@ const StockTPage = () => {
     
   }, 0);
 
+  const resetDateFilters = () => {
+    setStartDate(null);
+    setEndDate(null);
+  };
+
   return (
     <Box sx={{ p: 3 }}>
       <Typography variant="h4" gutterBottom>
         Tous Les Produits
       </Typography>
+
+  <LocalizationProvider dateAdapter={AdapterDateFns}>
+        <Box sx={{ display: 'flex', gap: 2, mb: 3 }}>
+          <DatePicker
+            label="Start Date"
+            value={startDate}
+            onChange={handleStartDateChange}
+            renderInput={(params) => <TextField {...params} />}
+          />
+          <DatePicker
+            label="End Date"
+            value={endDate}
+            onChange={handleEndDateChange}
+            renderInput={(params) => <TextField {...params} />}
+          />
+          {(startDate || endDate) && (
+            <button onClick={resetDateFilters} style={{ marginLeft: '10px' }}>
+              Reset Dates
+            </button>
+          )}
+        </Box>
+      </LocalizationProvider>
+
       <Grid container spacing={3} sx={{ mt: 2, mb: 4 }}>
   {/* Total Prix d'achat */}
   <Grid item xs={12} sm={6} md={4}>
@@ -202,6 +253,8 @@ const StockTPage = () => {
               <TableCell><strong>Total Prix De Vente (TTC)</strong></TableCell>
               <TableCell><strong>Gain Unitaire</strong></TableCell> 
               <TableCell><strong>Gain Total</strong></TableCell> 
+              <TableCell><strong>Date</strong></TableCell>
+              
           </TableRow>
           </TableHead>
 
@@ -218,6 +271,7 @@ const StockTPage = () => {
       const gainPerUnit = sellPrice - unitPrice;
       const totalGain = gainPerUnit * product.quantite;
       const totalprixvente=sellPrice*product.quantite
+      const createdAtDate = new Date(product.createdAt).toLocaleDateString();
 
       return (
         <TableRow key={product.id}>
@@ -231,6 +285,7 @@ const StockTPage = () => {
           <TableCell>{totalprixvente.toFixed(3)} {product.devise}</TableCell>
           <TableCell>{gainPerUnit.toFixed(3)} {product.devise}</TableCell> 
           <TableCell>{totalGain.toFixed(3)} {product.devise}</TableCell> 
+          <TableCell>{createdAtDate}</TableCell>
         </TableRow>
       );
     })
