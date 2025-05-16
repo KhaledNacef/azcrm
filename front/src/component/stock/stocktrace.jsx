@@ -133,7 +133,14 @@ const [startDate, setStartDate] = useState(null);
     return acc +convertToTND(productTVA,product.devise)
     
   }, 0);
+ 
+  const handleStartDateChange = (date) => {
+    setStartDate(date);
+  };
 
+  const handleEndDateChange = (date) => {
+    setEndDate(date);
+  };
   const resetDateFilters = () => {
     setStartDate(null);
     setEndDate(null);
