@@ -78,38 +78,37 @@ const StockTPage = () => {
     if (currency === 'TND') return amount;
   
     const rate = exchangeRates[currency];
-    if (!rate) {
-      console.warn(`No exchange rate found for currency: ${currency}`);
-      return amount; // Return original amount if rate not found
-    }
+    if (!rate) return 0;
   
-    return amount * rate; // Convert to TND
+    return amount / rate; // since base is TND
   };
 
   const totalTTC = filteredProducts.reduce((acc, product) => {
-    const amountInTND = convertToTND(product.prixU_HT, product.devise);
-    const totalacaht = amountInTND * product.quantite;
+    const totalacaht=product.prixU_HT*product.quantite
+    convertToTND(totalacaht,product.devise)
     return acc + totalacaht;
   }, 0);
 
   const totalSellPrice = filteredProducts.reduce((acc, product) => {
-    const amountInTND = convertToTND(product.sellprice, product.devise);
-    return acc + (amountInTND * product.quantite || 0);
+    return acc + convertToTND((product.sellprice*product.quantite || 0),product.devise)
+    ;
   }, 0);
 
-  const totalProfit = totalSellPrice - totalTTC;
+  const totalProfit = totalSellPrice-totalTTC
   
+
   const totalTVAFromSellPrice = filteredProducts.reduce((acc, product) => {
     if (!product.tva || product.tva <= 0) return acc;
   
-    const sellpriceInTND = convertToTND(product.sellprice, product.devise) || 0;
+    const sellpriceTTC = product.sellprice || 0;
     const quantite = product.quantite || 0;
   
-    const totalTTC = sellpriceInTND * quantite;
+    const totalTTC = sellpriceTTC * quantite;
     const ht = totalTTC / (1 + product.tva / 100);
     const productTVA = totalTTC - ht;
   
-    return acc + productTVA;
+    return acc +convertToTND(productTVA,product.devise)
+    
   }, 0);
 
   return (
@@ -118,66 +117,67 @@ const StockTPage = () => {
         Tous Les Produits
       </Typography>
       <Grid container spacing={3} sx={{ mt: 2, mb: 4 }}>
-        {/* Total Prix d'achat */}
-        <Grid item xs={12} sm={6} md={4}>
-          <Card elevation={3}>
-            <CardContent>
-              <Box display="flex" justifyContent="space-between" alignItems="center" mb={1}>
-                <Typography variant="subtitle1" color="textSecondary">Total Prix d'achat</Typography>
-                <Avatar sx={{ bgcolor: 'warning.main' }}>
-                  <PaidIcon />
-                </Avatar>
-              </Box>
-              <Typography variant="h5">{totalTTC.toFixed(3)} TND</Typography>
-            </CardContent>
-          </Card>
-        </Grid>
+  {/* Total Prix d'achat */}
+  <Grid item xs={12} sm={6} md={4}>
+    <Card elevation={3}>
+      <CardContent>
+        <Box display="flex" justifyContent="space-between" alignItems="center" mb={1}>
+          <Typography variant="subtitle1" color="textSecondary">Total Prix d'achat</Typography>
+          <Avatar sx={{ bgcolor: 'warning.main' }}>
+            <PaidIcon />
+          </Avatar>
+        </Box>
+        <Typography variant="h5">{totalTTC.toFixed(3)} TND</Typography>
+      </CardContent>
+    </Card>
+  </Grid>
 
-        {/* Total Prix de Vente */}
-        <Grid item xs={12} sm={6} md={4}>
-          <Card elevation={3}>
-            <CardContent>
-              <Box display="flex" justifyContent="space-between" alignItems="center" mb={1}>
-                <Typography variant="subtitle1" color="textSecondary">Total Prix de Vente</Typography>
-                <Avatar sx={{ bgcolor: 'success.main' }}>
-                  <MonetizationOnIcon />
-                </Avatar>
-              </Box>
-              <Typography variant="h5">{totalSellPrice.toFixed(3)} TND</Typography>
-            </CardContent>
-          </Card>
-        </Grid>
+  {/* Total Prix de Vente */}
+  <Grid item xs={12} sm={6} md={4}>
+    <Card elevation={3}>
+      <CardContent>
+        <Box display="flex" justifyContent="space-between" alignItems="center" mb={1}>
+          <Typography variant="subtitle1" color="textSecondary">Total Prix de Vente</Typography>
+          <Avatar sx={{ bgcolor: 'success.main' }}>
+            <MonetizationOnIcon />
+          </Avatar>
+        </Box>
+        <Typography variant="h5">{totalSellPrice.toFixed(3)} TND</Typography>
+      </CardContent>
+    </Card>
+  </Grid>
 
-        {/* Total Gain */}
-        <Grid item xs={12} sm={6} md={4}>
-          <Card elevation={3}>
-            <CardContent>
-              <Box display="flex" justifyContent="space-between" alignItems="center" mb={1}>
-                <Typography variant="subtitle1" color="textSecondary">Total Gain</Typography>
-                <Avatar sx={{ bgcolor: 'info.main' }}>
-                  <TrendingUpIcon />
-                </Avatar>
-              </Box>
-              <Typography variant="h5">{totalProfit.toFixed(3)} TND</Typography>
-            </CardContent>
-          </Card>
-        </Grid>
-        <Grid item xs={12} sm={6} md={4}>
-          <Card elevation={3}>
-            <CardContent>
-              <Box display="flex" justifyContent="space-between" alignItems="center" mb={1}>
-                <Typography variant="subtitle1" color="textSecondary">Total TVA </Typography>
-                <Avatar sx={{ bgcolor: 'info.main' }}>
-                  <ReceiptIcon />
-                </Avatar>
-              </Box>
-              <Typography variant="h5">
-                {totalTVAFromSellPrice.toFixed(3)} TND
-              </Typography>
-            </CardContent>
-          </Card>
-        </Grid>
-      </Grid>
+  {/* Total Gain */}
+  <Grid item xs={12} sm={6} md={4}>
+    <Card elevation={3}>
+      <CardContent>
+        <Box display="flex" justifyContent="space-between" alignItems="center" mb={1}>
+          <Typography variant="subtitle1" color="textSecondary">Total Gain</Typography>
+          <Avatar sx={{ bgcolor: 'info.main' }}>
+            <TrendingUpIcon />
+          </Avatar>
+        </Box>
+        <Typography variant="h5">{totalProfit.toFixed(3)} TND</Typography>
+      </CardContent>
+    </Card>
+  </Grid>
+  <Grid item xs={12} sm={6} md={4}>
+  <Card elevation={3}>
+    <CardContent>
+      <Box display="flex" justifyContent="space-between" alignItems="center" mb={1}>
+        <Typography variant="subtitle1" color="textSecondary">Total TVA </Typography>
+        <Avatar sx={{ bgcolor: 'info.main' }}>
+          <ReceiptIcon />
+        </Avatar>
+      </Box>
+      <Typography variant="h5">
+        {totalTVAFromSellPrice.toFixed(3)}
+      </Typography>
+    </CardContent>
+  </Card>
+</Grid>
+
+</Grid>
 
       <TextField
         label="Search by Name or ID"
@@ -202,43 +202,50 @@ const StockTPage = () => {
               <TableCell><strong>Total Prix De Vente (TTC)</strong></TableCell>
               <TableCell><strong>Gain Unitaire</strong></TableCell> 
               <TableCell><strong>Gain Total</strong></TableCell> 
-            </TableRow>
+          </TableRow>
           </TableHead>
 
           <TableBody>
-            {filteredProducts.length > 0 ? (
-              filteredProducts.map((product) => {
-                const unitPrice = convertToTND(product.prixU_HT, product.devise);
-                const sellPrice = convertToTND(product.sellprice, product.devise) || 0;
-                const gainPerUnit = sellPrice - unitPrice;
-                const totalGain = gainPerUnit * product.quantite;
-                const totalprixvente = sellPrice * product.quantite;
+  {filteredProducts.length > 0 ? (
+    filteredProducts.map((product) => {
+      const unitPrice = product.prixU_HT;
+      const hasRemise = product.rem > 0;
+      const remise = hasRemise ? (unitPrice * product.rem) / 100 : 0;
+      const prixUNetHT = unitPrice - remise;
+      const netHT = prixUNetHT * product.quantite;
+      const netTTC = netHT + (netHT * product.tva) / 100;
+      const sellPrice = convertToTND((product.sellprice || 0),product.devise);
+      const gainPerUnit = sellPrice - unitPrice;
+      const totalGain = gainPerUnit * product.quantite;
+      const totalprixvente=sellPrice*product.quantite
 
-                return (
-                  <TableRow key={product.id}>
-                    <TableCell>{product.id}</TableCell>
-                    <TableCell>{product.codeClient}</TableCell>
-                    <TableCell>{product.designation}</TableCell>
-                    <TableCell>{product.Unite}</TableCell>
-                    <TableCell>{product.quantite}</TableCell>
-                    <TableCell>{unitPrice.toFixed(3)} TND</TableCell>
-                    <TableCell>{sellPrice.toFixed(3)} TND</TableCell>
-                    <TableCell>{totalprixvente.toFixed(3)} TND</TableCell>
-                    <TableCell>{gainPerUnit.toFixed(3)} TND</TableCell> 
-                    <TableCell>{totalGain.toFixed(3)} TND</TableCell> 
-                  </TableRow>
-                );
-              })
-            ) : (
-              <TableRow>
-                <TableCell colSpan={13} align="center">
-                  No products found.
-                </TableCell>
-              </TableRow>
-            )}
-          </TableBody>
+      return (
+        <TableRow key={product.id}>
+          <TableCell>{product.id}</TableCell>
+          <TableCell>{product.codeClient}</TableCell>
+          <TableCell>{product.designation}</TableCell>
+          <TableCell>{product.Unite}</TableCell>
+          <TableCell>{product.quantite}</TableCell>
+          <TableCell>{unitPrice.toFixed(3)}{product.devise}</TableCell>
+          <TableCell>{(sellPrice|| 0).toFixed(3)}{product.devise}</TableCell>
+          <TableCell>{totalprixvente.toFixed(3)}{product.devise}</TableCell>
+          <TableCell>{gainPerUnit.toFixed(3)}{product.devise}</TableCell> 
+          <TableCell>{totalGain.toFixed(3)}{product.devise}</TableCell> 
+        </TableRow>
+      );
+    })
+  ) : (
+    <TableRow>
+      <TableCell colSpan={13} align="center">
+        No products found.
+      </TableCell>
+    </TableRow>
+  )}
+</TableBody>
         </Table>
       </TableContainer>
+
+  
 
       <Snackbar
         open={snackbarOpen}
