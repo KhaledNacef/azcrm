@@ -16,6 +16,9 @@ import {
   CardContent, 
   Avatar,
 } from '@mui/material';
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import axios from 'axios';
 import PaidIcon from '@mui/icons-material/Paid';
 import Grid from '@mui/material/Grid2';
@@ -28,6 +31,8 @@ const StockHPage = () => {
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState('');
   const [snackbarSeverity, setSnackbarSeverity] = useState('success');
+  const [startDate, setStartDate] = useState(null);
+  const [endDate, setEndDate] = useState(null);
 
   useEffect(() => {
     const fetchStock = async () => {
@@ -44,15 +49,36 @@ const StockHPage = () => {
     fetchStock();
   }, []);
 
-  const handleSearch = (event) => {
-    const query = event.target.value.toLowerCase();
-    setSearchQuery(query);
+  useEffect(() => {
+    applyFilters();
+  }, [searchQuery, startDate, endDate, products]);
 
-    const filtered = products.filter(
-      (product) =>
-        product.designation.toLowerCase().includes(query) ||
-        product.id.toString().includes(query)
-    );
+  const handleSearch = (event) => {
+    setSearchQuery(event.target.value.toLowerCase());
+  };
+
+  const applyFilters = () => {
+    let filtered = [...products];
+
+    // Apply search filter
+    if (searchQuery) {
+      filtered = filtered.filter(
+        (product) =>
+          product.designation.toLowerCase().includes(searchQuery) ||
+          product.codesuplier.toString().includes(searchQuery)
+      );
+    }
+
+    // Apply date range filter
+    if (startDate || endDate) {
+      filtered = filtered.filter((product) => {
+        const productDate = new Date(product.createdAt);
+        const matchesStart = !startDate || productDate >= new Date(startDate);
+        const matchesEnd = !endDate || productDate <= new Date(endDate);
+        return matchesStart && matchesEnd;
+      });
+    }
+
     setFilteredProducts(filtered);
   };
 
@@ -66,66 +92,101 @@ const StockHPage = () => {
     setSnackbarOpen(false);
   };
 
+  const handleStartDateChange = (date) => {
+    setStartDate(date);
+  };
+
+  const handleEndDateChange = (date) => {
+    setEndDate(date);
+  };
+
+  const resetDateFilters = () => {
+    setStartDate(null);
+    setEndDate(null);
+  };
+
   return (
     <Box sx={{ p: 3 }}>
       <Typography variant="h4" gutterBottom>
         Tous Les Produits
       </Typography>
-<Grid container spacing={3} sx={{ mt: 2, mb: 4 }}>
-  {/* Total Prix d'achat */}
-  <Grid item xs={12} sm={6} md={4}>
-    <Card elevation={3}>
-      <CardContent>
-        <Box display="flex" justifyContent="space-between" alignItems="center" mb={1}>
-          <Typography variant="subtitle1" color="textSecondary">Total Prix d'achat</Typography>
-          <Avatar sx={{ bgcolor: 'warning.main' }}>
-            <PaidIcon />
-          </Avatar>
+
+      <LocalizationProvider dateAdapter={AdapterDateFns}>
+        <Box sx={{ display: 'flex', gap: 2, mb: 3 }}>
+          <DatePicker
+            label="Start Date"
+            value={startDate}
+            onChange={handleStartDateChange}
+            renderInput={(params) => <TextField {...params} />}
+          />
+          <DatePicker
+            label="End Date"
+            value={endDate}
+            onChange={handleEndDateChange}
+            renderInput={(params) => <TextField {...params} />}
+          />
+          {(startDate || endDate) && (
+            <button onClick={resetDateFilters} style={{ marginLeft: '10px' }}>
+              Reset Dates
+            </button>
+          )}
         </Box>
-        <Typography variant="h5">
-          Total TTC:{' '}
-          {filteredProducts
-            .reduce((acc, product) => {
-              const unitPrice = product.prixU_HT;
-              const remise = product.rem > 0 ? (unitPrice * product.rem) / 100 : 0;
-              const prixUNetHT = unitPrice - remise;
-              const netHT = prixUNetHT * product.quantite;
-              const netTTC = netHT + (netHT * product.tva) / 100;
-              return acc + netTTC;
-            }, 0)
-            .toFixed(3)}
-        </Typography>      </CardContent>
-    </Card>
-  </Grid>
-  <Grid item xs={12} sm={6} md={4}>
-  <Card elevation={3}>
-    <CardContent>
-      <Box display="flex" justifyContent="space-between" alignItems="center" mb={1}>
-        <Typography variant="subtitle1" color="textSecondary">Total TVA</Typography>
-        <Avatar sx={{ bgcolor: 'info.main' }}>
-          <ReceiptIcon />
-        </Avatar>
-      </Box>
+      </LocalizationProvider>
 
-      {/* Total TVA calculation using your exact formula */}
-      <Typography variant="h6">
-        {filteredProducts.reduce((acc, product) => {
-          const prixU_HT = product.prixU_HT || 0;
-          const remise = product.rem || 0;
-          const quantite = product.quantite || 0;
-          const tva = product.tva || 0;
+      <Grid container spacing={3} sx={{ mt: 2, mb: 4 }}>
+        {/* Total Prix d'achat */}
+        <Grid item xs={12} sm={6} md={4}>
+          <Card elevation={3}>
+            <CardContent>
+              <Box display="flex" justifyContent="space-between" alignItems="center" mb={1}>
+                <Typography variant="subtitle1" color="textSecondary">Total Prix d'achat</Typography>
+                <Avatar sx={{ bgcolor: 'warning.main' }}>
+                  <PaidIcon />
+                </Avatar>
+              </Box>
+              <Typography variant="h5">
+                Total TTC:{' '}
+                {filteredProducts
+                  .reduce((acc, product) => {
+                    const unitPrice = product.prixU_HT;
+                    const remise = product.rem > 0 ? (unitPrice * product.rem) / 100 : 0;
+                    const prixUNetHT = unitPrice - remise;
+                    const netHT = prixUNetHT * product.quantite;
+                    const netTTC = netHT + (netHT * product.tva) / 100;
+                    return acc + netTTC;
+                  }, 0)
+                  .toFixed(3)}
+              </Typography>
+            </CardContent>
+          </Card>
+        </Grid>
+        <Grid item xs={12} sm={6} md={4}>
+          <Card elevation={3}>
+            <CardContent>
+              <Box display="flex" justifyContent="space-between" alignItems="center" mb={1}>
+                <Typography variant="subtitle1" color="textSecondary">Total TVA</Typography>
+                <Avatar sx={{ bgcolor: 'info.main' }}>
+                  <ReceiptIcon />
+                </Avatar>
+              </Box>
+              <Typography variant="h6">
+                {filteredProducts.reduce((acc, product) => {
+                  const prixU_HT = product.prixU_HT || 0;
+                  const remise = product.rem || 0;
+                  const quantite = product.quantite || 0;
+                  const tva = product.tva || 0;
 
-          const prixAvecRemise = prixU_HT - (prixU_HT * remise / 100);
-          const tvaAmount = prixAvecRemise * quantite * (tva / 100);
+                  const prixAvecRemise = prixU_HT - (prixU_HT * remise / 100);
+                  const tvaAmount = prixAvecRemise * quantite * (tva / 100);
 
-          return acc + tvaAmount;
-        }, 0).toFixed(3)} TND
-      </Typography>
-    </CardContent>
-  </Card>
-</Grid>
+                  return acc + tvaAmount;
+                }, 0).toFixed(3)} TND
+              </Typography>
+            </CardContent>
+          </Card>
+        </Grid>
+      </Grid>
 
-</Grid>
       <TextField
         label="Search by Name or ID"
         variant="outlined"
@@ -149,6 +210,7 @@ const StockHPage = () => {
               <TableCell><strong>Rem (%)</strong></TableCell>
               <TableCell><strong>Prix Net U (HT)</strong></TableCell>
               <TableCell><strong>Prix Net (TTC)</strong></TableCell>
+              <TableCell><strong>Date</strong></TableCell>
             </TableRow>
           </TableHead>
 
@@ -161,6 +223,7 @@ const StockHPage = () => {
                 const prixUNetHT = unitPrice - remise;
                 const netHT = prixUNetHT * product.quantite;
                 const netTTC = netHT + (netHT * product.tva) / 100;
+                const createdAtDate = new Date(product.createdAt).toLocaleDateString();
 
                 return (
                   <TableRow key={product.id}>
@@ -174,12 +237,13 @@ const StockHPage = () => {
                     <TableCell>{hasRemise ? `${product.rem} %` : '-'}</TableCell>
                     <TableCell>{hasRemise ? prixUNetHT.toFixed(3) : '-'}</TableCell>
                     <TableCell>{netTTC.toFixed(3)}</TableCell>
+                    <TableCell>{createdAtDate}</TableCell>
                   </TableRow>
                 );
               })
             ) : (
               <TableRow>
-                <TableCell colSpan={9} align="center">
+                <TableCell colSpan={11} align="center">
                   No products found.
                 </TableCell>
               </TableRow>
@@ -188,7 +252,6 @@ const StockHPage = () => {
         </Table>
       </TableContainer>
 
-   
       <Snackbar
         open={snackbarOpen}
         autoHideDuration={6000}

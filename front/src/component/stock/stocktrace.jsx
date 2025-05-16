@@ -58,7 +58,7 @@ const StockTPage = () => {
     const filtered = products.filter(
       (product) =>
         product.designation.toLowerCase().includes(query) ||
-        product.id.toString().includes(query)
+        product.codeClient.toString().includes(query)
     );
     setFilteredProducts(filtered);
   };
@@ -226,11 +226,11 @@ const StockTPage = () => {
           <TableCell>{product.designation}</TableCell>
           <TableCell>{product.Unite}</TableCell>
           <TableCell>{product.quantite}</TableCell>
-          <TableCell>{unitPrice.toFixed(3)}{product.devise}</TableCell>
-          <TableCell>{(sellPrice|| 0).toFixed(3)}{product.devise}</TableCell>
-          <TableCell>{totalprixvente.toFixed(3)}{product.devise}</TableCell>
-          <TableCell>{gainPerUnit.toFixed(3)}{product.devise}</TableCell> 
-          <TableCell>{totalGain.toFixed(3)}{product.devise}</TableCell> 
+          <TableCell>{unitPrice.toFixed(3)} TND</TableCell>
+          <TableCell>{(sellPrice|| 0).toFixed(3)} {product.devise}</TableCell>
+          <TableCell>{totalprixvente.toFixed(3)} {product.devise}</TableCell>
+          <TableCell>{gainPerUnit.toFixed(3)} {product.devise}</TableCell> 
+          <TableCell>{totalGain.toFixed(3)} {product.devise}</TableCell> 
         </TableRow>
       );
     })
