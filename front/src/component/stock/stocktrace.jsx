@@ -21,6 +21,7 @@ import MonetizationOnIcon from '@mui/icons-material/MonetizationOn';
 import PaidIcon from '@mui/icons-material/Paid';
 import TrendingUpIcon from '@mui/icons-material/TrendingUp';
 import Grid from '@mui/material/Grid2';
+import ReceiptIcon from '@mui/icons-material/Receipt';
 
 const StockTPage = () => {
   const [products, setProducts] = useState([]);
@@ -79,6 +80,22 @@ const StockTPage = () => {
   const totalProfit = totalSellPrice-totalTTC
   
 
+  const totalTVAFromSellPrice = filteredProducts.reduce((acc, product) => {
+    // Skip products with no TVA or invalid TVA values
+    if (!product.tva || product.tva <= 0) return acc;
+    
+    // Safeguard against missing sellprice or quantity
+    const sellprice = product.sellprice || 0;
+    const quantite = product.quantite || 0;
+    
+    // Calculate TVA amount for each product
+    const tvaRate = product.tva / 100;
+    const productTotalTTC = sellprice * quantite;
+    const productTVA = productTotalTTC * (tvaRate / (1 + tvaRate));
+    
+    return acc + productTVA;
+  }, 0);
+
   return (
     <Box sx={{ p: 3 }}>
       <Typography variant="h4" gutterBottom>
@@ -129,6 +146,22 @@ const StockTPage = () => {
       </CardContent>
     </Card>
   </Grid>
+  <Grid item xs={12} sm={6} md={4}>
+  <Card elevation={3}>
+    <CardContent>
+      <Box display="flex" justifyContent="space-between" alignItems="center" mb={1}>
+        <Typography variant="subtitle1" color="textSecondary">Total TVA </Typography>
+        <Avatar sx={{ bgcolor: 'info.main' }}>
+          <ReceiptIcon />
+        </Avatar>
+      </Box>
+      <Typography variant="h5">
+        {totalTVAFromSellPrice.toFixed(3)} {devise}
+      </Typography>
+    </CardContent>
+  </Card>
+</Grid>
+
 </Grid>
 
       <TextField

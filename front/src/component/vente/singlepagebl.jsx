@@ -326,6 +326,10 @@ const SingleDeliverysortie = () => {
       document.body.removeChild(pdfClone);
     }
   };
+
+  const hasTVA = deliveryNote.some((prod) => prod.tva && prod.tva > 0);
+  const hasRemise = deliveryNote.some((prod) => prod.rem && prod.rem > 0);
+
   return (
     <Box sx={{ p: 3 }}>
       <Button variant="outlined" onClick={() => navigate(-1)} sx={{ mb: 2, mr: 2 }}>
@@ -464,8 +468,8 @@ const SingleDeliverysortie = () => {
         <TableCell sx={{ textAlign: isArabic ? 'right' : 'left', borderRight: '1px solid #ccc' }}>{translations[printLanguage].quantity}</TableCell>
         <TableCell sx={{ textAlign: isArabic ? 'right' : 'left', borderRight: '1px solid #ccc' }}>{translations[printLanguage].unit}</TableCell>
         <TableCell sx={{ textAlign: isArabic ? 'right' : 'left', borderRight: '1px solid #ccc' }}>{translations[printLanguage].unitPrice}</TableCell>
-        <TableCell sx={{ textAlign: isArabic ? 'right' : 'left', borderRight: '1px solid #ccc' }}>{translations[printLanguage].tva}%</TableCell>
-        <TableCell sx={{ textAlign: isArabic ? 'right' : 'left', borderRight: '1px solid #ccc' }}>{translations[printLanguage].remise}%</TableCell>
+        {hasTVA && <TableCell sx={{ textAlign: isArabic ? 'right' : 'left', borderRight: '1px solid #ccc' }}>{translations[printLanguage].tva}%</TableCell>}
+        {hasRemise &&<TableCell sx={{ textAlign: isArabic ? 'right' : 'left', borderRight: '1px solid #ccc' }}>{translations[printLanguage].remise}%</TableCell>}
         <TableCell sx={{ textAlign: isArabic ? 'right' : 'left', borderRight: '1px solid #ccc' }}>{translations[printLanguage].prixNetU}</TableCell>
         <TableCell sx={{ textAlign: isArabic ? 'right' : 'left', borderRight: '1px solid #ccc' }}>{translations[printLanguage].totalNetHT}</TableCell>
         <TableCell sx={{ textAlign: isArabic ? 'right' : 'left', borderRight: '1px solid #ccc' }}>{translations[printLanguage].totalNetTTC}</TableCell>
@@ -494,8 +498,8 @@ const SingleDeliverysortie = () => {
             <TableCell sx={{ textAlign: isArabic ? 'right' : 'left', borderRight: '1px solid #ccc' }}>{prod.Unite}</TableCell>
             <TableCell sx={{ textAlign: isArabic ? 'right' : 'left', borderRight: '1px solid #ccc' }}>{basePrice.toFixed(3)}</TableCell>
             <TableCell sx={{ textAlign: isArabic ? 'right' : 'left', borderRight: '1px solid #ccc' }}>{prod.tva}%</TableCell>
-            <TableCell sx={{ textAlign: isArabic ? 'right' : 'left', borderRight: '1px solid #ccc' }}>{remise}%</TableCell>
-            <TableCell sx={{ textAlign: isArabic ? 'right' : 'left', borderRight: '1px solid #ccc' }}>{priceAfterRemise.toFixed(3)}</TableCell>
+            {hasRemise && <TableCell sx={{ textAlign: isArabic ? 'right' : 'left', borderRight: '1px solid #ccc' }}>{remise}%</TableCell>}
+            {hasTVA && <TableCell sx={{ textAlign: isArabic ? 'right' : 'left', borderRight: '1px solid #ccc' }}>{priceAfterRemise.toFixed(3)}</TableCell>}
             <TableCell sx={{ textAlign: isArabic ? 'right' : 'left', borderRight: '1px solid #ccc' }}>{netHT.toFixed(3)}</TableCell>
             <TableCell sx={{ textAlign: isArabic ? 'right' : 'left', borderRight: '1px solid #ccc' }}>{netTTC.toFixed(3)}</TableCell>
           </TableRow>
@@ -515,16 +519,18 @@ const SingleDeliverysortie = () => {
                   <Typography variant="body1" sx={{borderBottom:'1px solid #ccc'}}>
                     <strong>{translations[printLanguage].prixNetHT}:</strong> {totalHT.toFixed(3)}{devise}
                   </Typography>
-                  
+                  {hasRemise &&
                   <Typography variant="body1" sx={{borderBottom:'1px solid #ccc'}}  >
                         <strong>{printLanguage === 'fr' ? 'Remise Totale' : printLanguage === 'en' ? 'Total Discount' : 'إجمالي الخصم'}:</strong> {totalRemise.toFixed(3)} {devise}
-                  </Typography>
+                  </Typography>}
+                  
                   <Typography variant="body1" sx={{borderBottom:'1px solid #ccc'}}  >
                         <strong>{printLanguage === 'fr' ? ' Totale Net HT ' : printLanguage === 'en' ? 'Total Net HT' : 'إجمالي الخصم'}:</strong> {totalnetht.toFixed(3)} {devise}
                   </Typography>
+                  {hasTVA &&
                   <Typography variant="body1" sx={{borderBottom:'1px solid #ccc'}} >
                     <strong>{translations[printLanguage].totaltva}:</strong> {totalTVA.toFixed(3)}{devise}
-                  </Typography>
+                  </Typography>}
                   {timbre === 'true' && (
                     <Typography variant="body1" sx={{borderBottom:'1px solid #ccc'}} >
                       <strong>{translations[printLanguage].timbre}:</strong> 1TND

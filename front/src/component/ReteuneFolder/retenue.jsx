@@ -253,7 +253,7 @@ const Reteune = () => {
           <Typography>{translations[language].matricule}: {supplier.matriculefisacl}</Typography>
         </Box>
 
-        <Typography variant="h4" textAlign="center" sx={{ mb: 4 }}>
+        <Typography variant="h6" textAlign="center" sx={{ mb: 4 }}>
           {translations[language].title} - {num}
         </Typography>
 

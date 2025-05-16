@@ -323,7 +323,8 @@ const totalHT = deliveryNote.reduce((acc, prod) => {
     }
   };
   
-
+  const hasTVA = deliveryNote.some((prod) => prod.tva && prod.tva > 0);
+  const hasRemise = deliveryNote.some((prod) => prod.rem && prod.rem > 0);
   return (
     <Box sx={{ p: 3 }}>
       <Button variant="outlined" onClick={() => navigate(-1)} sx={{ mb: 2, mr: 2 }}>
@@ -468,8 +469,8 @@ const totalHT = deliveryNote.reduce((acc, prod) => {
                           <TableCell sx={{ textAlign: isArabic ? 'right' : 'left', borderRight: '1px solid #ccc'  }}>{translations[printLanguage].quantity}</TableCell>
                           <TableCell sx={{ textAlign: isArabic ? 'right' : 'left', borderRight: '1px solid #ccc'  }}>{translations[printLanguage].unit}</TableCell>
                           <TableCell sx={{ textAlign: isArabic ? 'right' : 'left', borderRight: '1px solid #ccc'  }}>{translations[printLanguage].unitPrice} </TableCell>
-                          <TableCell sx={{ textAlign: isArabic ? 'right' : 'left', borderRight: '1px solid #ccc'  }}>{translations[printLanguage].tva}%</TableCell>
-                          <TableCell sx={{ textAlign: isArabic ? 'right' : 'left', borderRight: '1px solid #ccc'  }}>{translations[printLanguage].remise}%</TableCell>
+                          {hasTVA &&<TableCell sx={{ textAlign: isArabic ? 'right' : 'left', borderRight: '1px solid #ccc'  }}>{translations[printLanguage].tva}%</TableCell>}
+                          {hasRemise &&<TableCell sx={{ textAlign: isArabic ? 'right' : 'left', borderRight: '1px solid #ccc'  }}>{translations[printLanguage].remise}%</TableCell>}
                           <TableCell sx={{ textAlign: isArabic ? 'right' : 'left', borderRight: '1px solid #ccc'  }}>{translations[printLanguage].prixNetU}</TableCell>
                           <TableCell sx={{ textAlign: isArabic ? 'right' : 'left', borderRight: '1px solid #ccc'  }}>{translations[printLanguage].totalNetHT}</TableCell>
                           <TableCell sx={{ textAlign: isArabic ? 'right' : 'left', borderRight: '1px solid #ccc'  }}>{translations[printLanguage].totalNetTTC}</TableCell>
@@ -503,8 +504,8 @@ const totalHT = deliveryNote.reduce((acc, prod) => {
                 <TableCell sx={{ textAlign: isArabic ? 'right' : 'left', borderRight: '1px solid #ccc'  }}>{prod.quantite}</TableCell>
                 <TableCell sx={{ textAlign: isArabic ? 'right' : 'left', borderRight: '1px solid #ccc'  }}>{prod.Unite}</TableCell>
                 <TableCell sx={{ textAlign: isArabic ? 'right' : 'left', borderRight: '1px solid #ccc'  }}>{prod.prixU_HT.toFixed(3)} </TableCell>
-                <TableCell sx={{ textAlign: isArabic ? 'right' : 'left', borderRight: '1px solid #ccc'  }}>{prod.tva}%</TableCell>
-                <TableCell sx={{ textAlign: isArabic ? 'right' : 'left', borderRight: '1px solid #ccc'  }}>{prod.rem}%</TableCell>
+                {hasTVA && <TableCell sx={{ textAlign: isArabic ? 'right' : 'left', borderRight: '1px solid #ccc'  }}>{prod.tva}%</TableCell>}
+                {hasRemise &&<TableCell sx={{ textAlign: isArabic ? 'right' : 'left', borderRight: '1px solid #ccc'  }}>{prod.rem}%</TableCell>}
                 <TableCell sx={{ textAlign: isArabic ? 'right' : 'left', borderRight: '1px solid #ccc'  }}>{priceAfterRemise.toFixed(3)}</TableCell>
                 <TableCell sx={{ textAlign: isArabic ? 'right' : 'left', borderRight: '1px solid #ccc'  }}>{netHT.toFixed(3)} </TableCell>
                 <TableCell sx={{ textAlign: isArabic ? 'right' : 'left', borderRight: '1px solid #ccc'  }}>{netTTC.toFixed(3)} </TableCell>
@@ -524,16 +525,17 @@ const totalHT = deliveryNote.reduce((acc, prod) => {
                         <Typography sx={{borderBottom:'1px solid #ccc'}} variant="body1">
                           <strong>{translations[printLanguage].prixNetHT}:</strong> {totalHT.toFixed(3)}TND
                         </Typography>
-                        
+                        {hasRemise && 
                         <Typography sx={{borderBottom:'1px solid #ccc'}} variant="body1" >
                               <strong>{printLanguage === 'fr' ? 'Remise Totale' : printLanguage === 'en' ? 'Total Discount' : 'إجمالي الخصم'}:</strong> {totalRemise.toFixed(3)} {devise}
-                        </Typography>
+                        </Typography>}
                         <Typography sx={{borderBottom:'1px solid #ccc'}} variant="body1" >
                               <strong>{printLanguage === 'fr' ? ' Totale Net HT ' : printLanguage === 'en' ? 'Total Net HT' : 'إجمالي الخصم'}:</strong> {totalnetht.toFixed(3)} {devise}
                         </Typography>
+                        {hasTVA &&
                         <Typography sx={{borderBottom:'1px solid #ccc'}} variant="body1">
                           <strong>{translations[printLanguage].totaltva}:</strong> {totalTVA.toFixed(3)}{devise}
-                        </Typography>
+                        </Typography>}
                         {timbre === 'true' && (
                           <Typography sx={{borderBottom:'1px solid #ccc'}} variant="body1">
                             <strong>{translations[printLanguage].timbre}:</strong> 1TND
