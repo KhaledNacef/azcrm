@@ -113,7 +113,7 @@ const StockHPage = () => {
         
         return (
           <Typography key={product.id} variant="body2" gutterBottom>
-            {product.designation}: {tvaAmount.toFixed(3)} {devise}
+            {product.designation}: {tvaAmount.toFixed(3)} 
           </Typography>
         );
       })}

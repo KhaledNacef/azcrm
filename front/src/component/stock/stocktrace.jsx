@@ -156,7 +156,7 @@ const StockTPage = () => {
         </Avatar>
       </Box>
       <Typography variant="h5">
-        {totalTVAFromSellPrice.toFixed(3)} {devise}
+        {totalTVAFromSellPrice.toFixed(3)}
       </Typography>
     </CardContent>
   </Card>
