@@ -62,30 +62,34 @@ const [startDate, setStartDate] = useState(null);
      setSearchQuery(event.target.value.toLowerCase());
    };
  
+
    const applyFilters = () => {
-     let filtered = [...products];
- 
-     // Apply search filter
-     if (searchQuery) {
-       filtered = filtered.filter(
-         (product) =>
-           product.designation.toLowerCase().includes(searchQuery) ||
-           product.codeClient.toString().includes(searchQuery)
-       );
-     }
- 
-     // Apply date range filter
-     if (startDate || endDate) {
-       filtered = filtered.filter((product) => {
-         const productDate = new Date(product.createdAt);
-         const matchesStart = !startDate || productDate >= new Date(startDate);
-         const matchesEnd = !endDate || productDate <= new Date(endDate);
-         return matchesStart && matchesEnd;
-       });
-     }
- 
-     setFilteredProducts(filtered);
-   };
+    let filtered = [...products];
+  
+    if (searchQuery) {
+      filtered = filtered.filter(
+        (product) =>
+          product.designation.toLowerCase().includes(searchQuery) ||
+          product.codesuplier.toString().includes(searchQuery)
+      );
+    }
+  
+    if (startDate || endDate) {
+      filtered = filtered.filter((product) => {
+        const productDate = new Date(product.createdAt);
+        const start = startDate ? new Date(startDate.setHours(0, 0, 0, 0)) : null;
+        const end = endDate ? new Date(endDate.setHours(23, 59, 59, 999)) : null;
+  
+        const matchesStart = !start || productDate >= start;
+        const matchesEnd = !end || productDate <= end;
+        return matchesStart && matchesEnd;
+      });
+    }
+  
+    setFilteredProducts(filtered);
+  };
+
+  
   const showSnackbar = (message, severity) => {
     setSnackbarMessage(message);
     setSnackbarSeverity(severity);
@@ -154,16 +158,18 @@ const [startDate, setStartDate] = useState(null);
 
   <LocalizationProvider dateAdapter={AdapterDateFns}>
         <Box sx={{ display: 'flex', gap: 2, mb: 3 }}>
-          <DatePicker
-            label="Start Date"
-            value={startDate}
-            onChange={handleStartDateChange}
-            renderInput={(params) => <TextField {...params} />}
-          />
+              <DatePicker
+           label="Start Date"
+           value={startDate}
+           onChange={handleStartDateChange}
+           format="dd/MM/yyyy"
+           renderInput={(params) => <TextField {...params} />}
+         />
           <DatePicker
             label="End Date"
             value={endDate}
             onChange={handleEndDateChange}
+            format="dd/MM/yyyy"
             renderInput={(params) => <TextField {...params} />}
           />
           {(startDate || endDate) && (
@@ -278,7 +284,7 @@ const [startDate, setStartDate] = useState(null);
       const gainPerUnit = sellPrice - unitPrice;
       const totalGain = gainPerUnit * product.quantite;
       const totalprixvente=sellPrice*product.quantite
-      const createdAtDate = new Date(product.createdAt).toLocaleDateString();
+      const createdAtDate = new Date(product.createdAt).toLocaleDateString('fr-FR');
 
       return (
         <TableRow key={product.id}>
