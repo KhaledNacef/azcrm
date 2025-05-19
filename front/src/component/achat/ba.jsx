@@ -17,9 +17,11 @@ import {
   CircularProgress,
   Snackbar,
   Alert,
+  Modal
 } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import CreateDeliveryNoteModala from './crate.jsx'; // Ensure correct file name
 
 const BonAchatPage = () => {
   const navigate = useNavigate();
@@ -95,7 +97,8 @@ const BonAchatPage = () => {
       setOpenDialog(false);
     }
   };
-
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
   // Confirmation dialog handlers
   const handleOpenDialog = (note) => {
     setSelectedNote(note);
@@ -115,7 +118,9 @@ const BonAchatPage = () => {
       <Typography variant="h4" mb={3}>
       Facture
       </Typography>
-
+<Button variant="contained" color="primary" onClick={handleOpen} sx={{ mb: 2, mr: 2 }}>
+        Créer un Bon D'ACHAT
+      </Button>
       {/* Search Field */}
       <TextField
         label="Rechercher par Code"
@@ -215,6 +220,23 @@ const BonAchatPage = () => {
           {snackbar.message}
         </Alert>
       </Snackbar>
+      <Modal open={open} onClose={handleClose}>
+        <Box
+          sx={{
+            position: 'absolute',
+            top: '50%',
+            left: '50%',
+            transform: 'translate(-50%, -50%)',
+            bgcolor: 'background.paper',
+            boxShadow: 24,
+            p: 4,
+            borderRadius: 2,
+            width: 500,
+          }}
+        >
+          <CreateDeliveryNoteModala   />
+        </Box>
+      </Modal>
     </Box>
   );
 };

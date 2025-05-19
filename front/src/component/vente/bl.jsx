@@ -9,9 +9,11 @@ import {
   TableRow,
   Typography,
   TextField,
+  Modal
 } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import CreateDeliveryNoteModal from './cratebl.jsx';
 
 const BonsortiePage = () => {
   const navigate = useNavigate();
@@ -30,7 +32,8 @@ const BonsortiePage = () => {
   useEffect(() => {
     fetchDeliveryNotes();
   }, []);
-
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
   // Format date to dd/mm/yyyy
   const formatDate = (dateString) => {
     const date = new Date(dateString);
@@ -52,7 +55,9 @@ const BonsortiePage = () => {
       <Typography variant="h4" mb={3}>
         Facture
       </Typography>
-
+<Button variant="contained" color="primary" onClick={handleOpen} sx={{ mb: 2, mr: 2 }}>
+        Créer un Facture Vente
+      </Button>
       <TextField
         label="Rechercher par ID/Date (ex: 1/01/01/2025)"
         variant="outlined"
@@ -103,6 +108,23 @@ const BonsortiePage = () => {
           )}
         </TableBody>
       </Table>
+      <Modal open={open} onClose={handleClose}>
+        <Box
+          sx={{
+            position: 'absolute',
+            top: '50%',
+            left: '50%',
+            transform: 'translate(-50%, -50%)',
+            bgcolor: 'background.paper',
+            boxShadow: 24,
+            p: 4,
+            borderRadius: 2,
+            width: 500,
+          }}
+        >
+          <CreateDeliveryNoteModal  />
+        </Box>
+      </Modal>
     </Box>
   );
 };

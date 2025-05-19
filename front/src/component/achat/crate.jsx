@@ -85,7 +85,6 @@ const CreateDeliveryNoteModala = ({ onAddDeliveryNote, codey }) => {
     }]);
 
     setNewProduct("");
-    setTva(0);
     setPrixU_HT(0);
     setQuantite(1);
     setRem(0);
@@ -105,7 +104,7 @@ const CreateDeliveryNoteModala = ({ onAddDeliveryNote, codey }) => {
       timbre,
       products,
       spulierName: suppliern,
-      codey,
+      codey:codey || 10,
     };
 
     try {
