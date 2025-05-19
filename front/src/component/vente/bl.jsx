@@ -17,6 +17,8 @@ import CreateDeliveryNoteModal from './cratebl.jsx';
 
 const BonsortiePage = () => {
   const navigate = useNavigate();
+    const [open, setOpen] = useState(false);
+  
   const [deliveryNotes, setDeliveryNotes] = useState([]);
   const [searchQuery, setSearchQuery] = useState('');
 

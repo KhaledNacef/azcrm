@@ -28,6 +28,8 @@ const BonAchatPage = () => {
 
   // States
   const [deliveryNotes, setDeliveryNotes] = useState([]);
+    const [open, setOpen] = useState(false);
+  
   const [searchQuery, setSearchQuery] = useState('');
   const [loading, setLoading] = useState(true);
   const [selectedNote, setSelectedNote] = useState(null);
