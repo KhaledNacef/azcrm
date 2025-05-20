@@ -99,6 +99,11 @@ const BonAchatPage = () => {
       setOpenDialog(false);
     }
   };
+  const addDeliveryNote = () => {
+    handleClose();
+    fetchDeliveryNotes();
+  };
+
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
   // Confirmation dialog handlers
@@ -236,7 +241,7 @@ const BonAchatPage = () => {
             width: 500,
           }}
         >
-          <CreateDeliveryNoteModala   />
+          <CreateDeliveryNoteModala onAddDeliveryNote={addDeliveryNote}  />
         </Box>
       </Modal>
     </Box>

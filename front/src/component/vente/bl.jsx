@@ -51,7 +51,13 @@ const BonsortiePage = () => {
     const idDateCombo = `${note.id}/${formattedDate}`;
     return idDateCombo.toLowerCase().includes(searchQuery.toLowerCase());
   });
+  const addDeliveryNote = () => {
+    handleClose();
+    fetchDeliveryNotes(); // ✅ Refresh table after adding
+  };
 
+
+  
   return (
     <Box sx={{ p: 3 }}>
       <Typography variant="h4" mb={3}>
@@ -124,7 +130,7 @@ const BonsortiePage = () => {
             width: 500,
           }}
         >
-          <CreateDeliveryNoteModal  />
+          <CreateDeliveryNoteModal onAddDeliveryNote={addDeliveryNote}  />
         </Box>
       </Modal>
     </Box>
