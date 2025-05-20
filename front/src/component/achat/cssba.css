@@ -2,6 +2,7 @@
 @media print {
   body {
     margin: 0 !important;
+    zoom: 0.9; /* Slightly scale down everything */
   }
   
   #printable-content {
@@ -11,10 +12,33 @@
     padding: 5mm !important;
     box-sizing: border-box;
     background: white !important;
+    font-size: 10px !important; /* Base font size for all content */
+  }
+
+  /* Make table fonts even smaller */
+  #printable-content .MuiTable-root {
+    font-size: 9px !important;
+  }
+  
+  /* Reduce table cell padding */
+  #printable-content .MuiTableCell-root {
+    padding: 4px 6px !important;
+    line-height: 1.2 !important;
+  }
+  
+  /* Slightly larger font for headers */
+  #printable-content .MuiTableHead-root .MuiTableCell-root {
+    font-size: 9.5px !important;
+    font-weight: bold !important;
   }
 
   body > *:not(#printable-content) {
     display: none !important;
   }
   
+  /* Ensure table borders print correctly */
+  .MuiTableRow-root {
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
 }

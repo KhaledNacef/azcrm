@@ -86,7 +86,22 @@ const SingleDeliveryNote = () => {
     
     // Create a clone to modify for printing
     const printClone = element.cloneNode(true);
-    printClone.style.fontSize = '30%'; // Reduce text size by 10%
+    
+    // Apply smaller font sizes directly to all text elements
+    const textElements = printClone.querySelectorAll('*');
+    textElements.forEach(el => {
+      const currentSize = window.getComputedStyle(el).fontSize;
+      const newSize = `${parseFloat(currentSize) * 0.7}px`; // Reduce to 70% of original size
+      el.style.fontSize = newSize;
+      el.style.lineHeight = '1.2'; // Tighter line spacing
+    });
+    
+    // Special handling for table cells
+    const tableCells = printClone.querySelectorAll('.MuiTableCell-root');
+    tableCells.forEach(cell => {
+      cell.style.padding = '4px 6px'; // Reduce cell padding
+    });
+    
     document.body.appendChild(printClone);
     
     try {
@@ -99,7 +114,7 @@ const SingleDeliveryNote = () => {
         windowHeight: 297 * 3.78
       });
   
-      document.body.removeChild(printClone); // Remove the clone after capturing
+      document.body.removeChild(printClone);
   
       const iframe = document.createElement('iframe');
       iframe.style.position = 'fixed';
@@ -152,7 +167,6 @@ const SingleDeliveryNote = () => {
       document.body.removeChild(printClone);
     }
   };
-  
   const handleDownloadPDF = async () => {
     const element = document.getElementById('printable-content');
     
@@ -353,20 +367,23 @@ const SingleDeliveryNote = () => {
           {translations[language].bonDeAchat} - {num}
         </Typography>
 
-      <Table   
-            sx={{
-              border: '1px solid #ccc',
-              borderRadius: 2,
-              mt: 2,
-              overflowX: 'auto',
-              // Add print-specific font size
-              '@media print': {
-                '& .MuiTableCell-root': {
-                  fontSize: '0.65rem !important',  // Smaller font size for printing
-                  padding: '6px 8px !important'    // Reduced padding for compact look
-                }
-              }
-            }}>       
+        <Table sx={{
+  border: '1px solid #ccc',
+  borderRadius: 2,
+  mt: 2,
+  overflowX: 'auto',
+  '@media print': {
+    '& .MuiTableCell-root': {
+      fontSize: '0.65rem !important',
+      padding: '4px 6px !important',
+      lineHeight: '1.2 !important'
+    },
+    '& .MuiTableHead-root .MuiTableCell-root': {
+      fontSize: '0.7rem !important',
+      fontWeight: 'bold !important'
+    }
+  }
+}}>      
           <TableHead>
            <TableRow sx={{ backgroundColor: '#f5f5f5' }}>
               <TableCell sx={{ textAlign:language === 'ar' ? 'right' : 'left', borderRight: '1px solid #ccc','@media print': {
