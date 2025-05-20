@@ -224,14 +224,20 @@ const ProductPage = () => {
       />
 
       {/* Tableau des Produits */}
-      <TableContainer component={Paper}>
-        <Table>
+        <TableContainer 
+              component={Paper}
+              sx={{
+                maxHeight: '900px', // Set your desired max height
+                overflow: 'auto'
+              }}
+            >
+              <Table stickyHeader>
           <TableHead>
             <TableRow>
-              <TableCell><strong>ID</strong></TableCell>
-              <TableCell><strong>Nom</strong></TableCell>
-              <TableCell><strong>Unité</strong></TableCell>
-              <TableCell><strong>Actions</strong></TableCell>
+              <TableCell sx={{ position: 'sticky', top: 0, bgcolor: 'background.paper', zIndex: 1 }}><strong>ID</strong></TableCell>
+              <TableCell sx={{ position: 'sticky', top: 0, bgcolor: 'background.paper', zIndex: 1 }}><strong>Nom</strong></TableCell>
+              <TableCell sx={{ position: 'sticky', top: 0, bgcolor: 'background.paper', zIndex: 1 }}><strong>Unité</strong></TableCell>
+              <TableCell sx={{ position: 'sticky', top: 0, bgcolor: 'background.paper', zIndex: 1 }}><strong>Actions</strong></TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
