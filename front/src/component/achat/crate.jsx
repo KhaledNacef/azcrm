@@ -69,23 +69,17 @@ const CreateDeliveryNoteModala = ({ onAddDeliveryNote, codey }) => {
       return;
     }
 
-    const selectedProduct = availableProducts.find((p) => p.designation === newProduct);
-
-    if (!selectedProduct) {
-      setSnackbar({ open: true, message: "Produit invalide sélectionné.", severity: "error" });
-      return;
-    }
 
     setProducts([...products, {
-      designation: selectedProduct.designation,
-      Unite: selectedProduct.Unite,
+      designation: newProduct.designation,
+      Unite: newProduct.Unite,
       tva: parseFloat(tva) || 0,
       prixU_HT: Number(prixU_HT) || 0,
       quantite: Number(quantite) || 1,
       rem:rem
     }]);
 
-    setNewProduct("");
+    setNewProduct(null);
     setPrixU_HT(0);
     setQuantite(1);
     setRem(0);

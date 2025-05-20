@@ -79,8 +79,7 @@ const CreatebcModala = ({ onAddDeliveryNote }) => {
       return;
     }
 
-    const selectedProduct = availableProducts.find((p) => p.designation === newProduct);
-    if (!selectedProduct) {
+    if (!newProduct) {
       setSnackbarMessage("Produit invalide sélectionné.");
       setSnackbarSeverity("error");
       setSnackbarOpen(true);
@@ -90,8 +89,8 @@ const CreatebcModala = ({ onAddDeliveryNote }) => {
     setProducts([
       ...products,
       {
-        designation: selectedProduct.designation,
-        Unite: selectedProduct.Unite,
+        designation: newProduct.designation,
+        Unite: newProduct.Unite,
         tva: Number(tva),
         prixU_HT: Number(prixU_HT),
         quantite: Number(quantite),
@@ -99,7 +98,7 @@ const CreatebcModala = ({ onAddDeliveryNote }) => {
       },
     ]);
 
-    setNewProduct("");
+    setNewProduct(null);
     setPrixU_HT(0);
     setQuantite(1);
     setRem(0);
