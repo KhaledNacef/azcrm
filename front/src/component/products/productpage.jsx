@@ -227,7 +227,7 @@ const ProductPage = () => {
         <TableContainer 
               component={Paper}
               sx={{
-                maxHeight: '900px', // Set your desired max height
+                maxHeight: '600px', // Set your desired max height
                 overflow: 'auto'
               }}
             >
