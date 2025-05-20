@@ -1,35 +1,20 @@
+/* CSS */
 @media print {
   body {
     margin: 0 !important;
-    background: white !important;
-    width: 210mm !important; /* Full A4 width */
   }
-
-  /* Hide everything except printable content */
-  body > *:not(#printable-content) {
-    display: none !important;
-  }
-
+  
   #printable-content {
-    width: 190mm !important; /* 210mm - 10mm margins */
-    min-height: 277mm !important; /* 297mm - 10mm margins */
-    margin: 10mm auto !important;
-    padding: 0 !important;
+    width: 200mm !important;   /* 210mm - 10mm margins */
+    min-height: 287mm !important; /* 297mm - 10mm margins */
+    margin: 5mm auto !important;
+    padding: 5mm !important;
     box-sizing: border-box;
     background: white !important;
-    
-    /* Just reduce font size - adjust as needed */
-    font-size: 10px !important; /* Base size */
+    font-size: 10pt !important;
   }
 
-  /* Make headings proportionally smaller */
-  #printable-content h1 { font-size: 1.8em !important; }
-  #printable-content h2 { font-size: 1.5em !important; }
-  #printable-content h3 { font-size: 1.2em !important; }
-
-  /* Print margins */
-  @page {
-    size: A4;
-    margin: 0;
+  body > *:not(#printable-content) {
+    display: none !important;
   }
 }

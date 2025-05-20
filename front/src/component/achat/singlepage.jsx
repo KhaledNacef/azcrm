@@ -81,83 +81,117 @@ const SingleDeliveryNote = () => {
     return `${day}/${month}/${year}`;
   }
 
-  const handlePrint = () => {
-    const content = document.getElementById('printable-content');
+  const handlePrint = async () => {
+    const element = document.getElementById('printable-content');
     
-    // Store original styles
-    const originalStyles = {
-      fontSize: content.style.fontSize,
-      width: content.style.width,
-      margin: content.style.margin
-    };
+    // Create a clone to modify for printing
+    const printClone = element.cloneNode(true);
+    printClone.style.fontSize = '30%'; // Reduce text size by 10%
+    document.body.appendChild(printClone);
+    
+    try {
+      const canvas = await html2canvas(printClone, {
+        scale: 2,
+        useCORS: true,
+        logging: false,
+        backgroundColor: '#FFFFFF',
+        windowWidth: 210 * 3.78,
+        windowHeight: 297 * 3.78
+      });
   
-    // Apply print styles
-    content.style.fontSize = '10px'; // Adjust as needed
-    content.style.width = '190mm';
-    content.style.margin = '10mm auto';
+      document.body.removeChild(printClone); // Remove the clone after capturing
   
-    // Print
-    window.print();
+      const iframe = document.createElement('iframe');
+      iframe.style.position = 'fixed';
+      iframe.style.right = '0';
+      iframe.style.bottom = '0';
+      iframe.style.width = '0';
+      iframe.style.height = '0';
+      iframe.style.border = '0';
+      document.body.appendChild(iframe);
   
-    // Restore original styles
-    setTimeout(() => {
-      content.style.fontSize = originalStyles.fontSize;
-      content.style.width = originalStyles.width;
-      content.style.margin = originalStyles.margin;
-    }, 500);
+      const doc = iframe.contentWindow.document;
+      doc.open();
+      doc.write(`
+        <!DOCTYPE html>s
+        <html>
+          <head>
+            <title>Print</title>
+            <style>
+              @page {
+                size: A4;
+                margin: 5mm;
+              }
+              body {
+                margin: 0;
+                padding: 0;
+              }
+              img {
+                width: 100%;
+                height: auto;
+                page-break-inside: avoid;
+              }
+            </style>
+          </head>
+          <body>
+            <img src="${canvas.toDataURL('image/png')}" />
+          </body>
+        </html>
+      `);
+      doc.close();
+  
+      iframe.onload = () => {
+        setTimeout(() => {
+          iframe.contentWindow.focus();
+          iframe.contentWindow.print();
+          document.body.removeChild(iframe);
+        }, 500);
+      };
+    } catch (error) {
+      console.error('Print error:', error);
+      document.body.removeChild(printClone);
+    }
   };
-
-const handleDownloadPDF = async () => {
+  
+  const handleDownloadPDF = async () => {
     const element = document.getElementById('printable-content');
     
     // Create a clone to modify for PDF
     const pdfClone = element.cloneNode(true);
-    
-    // Same scaling approach as print
-    pdfClone.style.transform = 'scale(0.7)';
-    pdfClone.style.transformOrigin = 'top left';
-    pdfClone.style.width = '142.86%';
-    pdfClone.style.overflow = 'visible';
-    
-    const container = document.createElement('div');
-    container.style.position = 'absolute';
-    container.style.left = '0';
-    container.style.top = '0';
-    container.style.width = '100%';
-    container.appendChild(pdfClone);
-    
-    document.body.appendChild(container);
+    pdfClone.style.fontSize = '50%'; // Reduce text size by 10%
+    document.body.appendChild(pdfClone);
     
     try {
-        const canvas = await html2canvas(pdfClone, {
-            scale: 2,
-            useCORS: true,
-            logging: false,
-            backgroundColor: '#FFFFFF',
-            width: pdfClone.scrollWidth,
-            height: pdfClone.scrollHeight
-        });
-
-        document.body.removeChild(container);
-
-        const imgData = canvas.toDataURL('image/png');
-        const pdf = new jsPDF({
-            orientation: 'portrait',
-            unit: 'mm',
-            format: 'a4',
-        });
-
-        const imgProps = pdf.getImageProperties(imgData);
-        const pageWidth = pdf.internal.pageSize.getWidth() - 10; // 5mm each side
-        const pageHeight = (imgProps.height * pageWidth) / imgProps.width;
-        
-        pdf.addImage(imgData, 'PNG', 5, 5, pageWidth, pageHeight);
-        pdf.save(`invoice-${id}.pdf`);
+      const canvas = await html2canvas(pdfClone, {
+        scale: 3,
+        useCORS: true,
+        logging: false,
+        backgroundColor: '#FFFFFF',
+        windowWidth: 210 * 3.78,
+        windowHeight: 297 * 3.78
+      });
+  
+      document.body.removeChild(pdfClone); // Remove the clone after capturing
+  
+      const imgData = canvas.toDataURL('image/png');
+      const pdf = new jsPDF({
+        orientation: 'portrait',
+        unit: 'mm',
+        format: 'a4',
+      });
+  
+      const imgProps = pdf.getImageProperties(imgData);
+      const pageWidth = pdf.internal.pageSize.getWidth() - 10; // 5mm each side
+      const pageHeight = (imgProps.height * pageWidth) / imgProps.width;
+      
+      pdf.addImage(imgData, 'PNG', 5, 5, pageWidth, pageHeight);
+      pdf.save(`invoice-${id}.pdf`);
     } catch (error) {
-        console.error('PDF generation error:', error);
-        document.body.removeChild(container);
+      console.error('PDF generation error:', error);
+      document.body.removeChild(pdfClone);
     }
-};
+  };
+
   // Translations for French, Arabic, and English
   const translations = {
     fr: {
