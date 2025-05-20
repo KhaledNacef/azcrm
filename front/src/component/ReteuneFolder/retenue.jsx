@@ -85,17 +85,32 @@ const Reteune = () => {
   const displayDate = () => new Date().toLocaleDateString('fr-FR');
 
 
-  const handlePrint = async () => {
+ const handlePrint = async () => {
     const element = document.getElementById('printable-content');
     
     // Create a clone to modify for printing
     const printClone = element.cloneNode(true);
-    printClone.style.fontSize = '50%'; // Reduce text size by 10%
+    
+    // Apply smaller font sizes directly to all text elements
+    const textElements = printClone.querySelectorAll('*');
+    textElements.forEach(el => {
+      const currentSize = window.getComputedStyle(el).fontSize;
+      const newSize = `${parseFloat(currentSize) * 0.7}px`; // Reduce to 70% of original size
+      el.style.fontSize = newSize;
+      el.style.lineHeight = '1.2'; // Tighter line spacing
+    });
+    
+    // Special handling for table cells
+    const tableCells = printClone.querySelectorAll('.MuiTableCell-root');
+    tableCells.forEach(cell => {
+      cell.style.padding = '4px 6px'; // Reduce cell padding
+    });
+    
     document.body.appendChild(printClone);
     
     try {
       const canvas = await html2canvas(printClone, {
-        scale: 3,
+        scale: 2,
         useCORS: true,
         logging: false,
         backgroundColor: '#FFFFFF',
@@ -103,7 +118,7 @@ const Reteune = () => {
         windowHeight: 297 * 3.78
       });
   
-      document.body.removeChild(printClone); // Remove the clone after capturing
+      document.body.removeChild(printClone);
   
       const iframe = document.createElement('iframe');
       iframe.style.position = 'fixed';
@@ -156,7 +171,6 @@ const Reteune = () => {
       document.body.removeChild(printClone);
     }
   };
-  
   const handleDownloadPDF = async () => {
     const element = document.getElementById('printable-content');
     

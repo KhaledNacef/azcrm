@@ -1,33 +1,44 @@
+/* CSS */
 @media print {
-  /* Hide any debug information or elements that contain localhost */
-  footer, .vite-footer, .react-footer, .vite-logo, .react-logo {
-      display: none !important;
-    }
-  
-    /* You can also try targeting the header if the logo appears there */
-    .vite-logo, .react-logo, .header {
-      display: none !important;
-    }
-  /* Adjust other styles for printing */
   body {
-    font-size: 12px !important;
+    margin: 0 !important;
+    zoom: 0.9; /* Slightly scale down everything */
+  }
+  
+  #printable-content {
+    width: 200mm !important;   /* 210mm - 10mm margins */
+    min-height: 287mm !important; /* 297mm - 10mm margins */
+    margin: 5mm auto !important;
+    padding: 5mm !important;
+    box-sizing: border-box;
+    background: white !important;
+    font-size: 10px !important; /* Base font size for all content */
   }
 
-  .MuiTypography-root {
-    font-size: 12px !important;
+  /* Make table fonts even smaller */
+  #printable-content .MuiTable-root {
+    font-size: 9px !important;
+  }
+  
+  /* Reduce table cell padding */
+  #printable-content .MuiTableCell-root {
+    padding: 4px 6px !important;
+    line-height: 1.2 !important;
+  }
+  
+  /* Slightly larger font for headers */
+  #printable-content .MuiTableHead-root .MuiTableCell-root {
+    font-size: 9.5px !important;
+    font-weight: bold !important;
   }
 
-  .MuiButton-root {
+  body > *:not(#printable-content) {
     display: none !important;
   }
-
-  .MuiTableCell-root {
-    font-size: 12px !important;
-  }
-
+  
+  /* Ensure table borders print correctly */
   .MuiTableRow-root {
-    font-size: 12px !important;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
   }
-
-  /* Any other styles you want to apply for print */
 }

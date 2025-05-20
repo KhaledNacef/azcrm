@@ -216,77 +216,92 @@ const SingleDeliverysortie = () => {
   });
 
 
-  const handlePrint = async () => {
-    const element = document.getElementById('printable-content');
-    
-    // Create a clone to modify for printing
-    const printClone = element.cloneNode(true);
-    printClone.style.fontSize = '50%'; // Reduce text size by 10%
-    document.body.appendChild(printClone);
-    
-    try {
-      const canvas = await html2canvas(printClone, {
-        scale: 3,
-        useCORS: true,
-        logging: false,
-        backgroundColor: '#FFFFFF',
-        windowWidth: 210 * 3.78,
-        windowHeight: 297 * 3.78
-      });
-  
-      document.body.removeChild(printClone); // Remove the clone after capturing
-  
-      const iframe = document.createElement('iframe');
-      iframe.style.position = 'fixed';
-      iframe.style.right = '0';
-      iframe.style.bottom = '0';
-      iframe.style.width = '0';
-      iframe.style.height = '0';
-      iframe.style.border = '0';
-      document.body.appendChild(iframe);
-  
-      const doc = iframe.contentWindow.document;
-      doc.open();
-      doc.write(`
-        <!DOCTYPE html>
-        <html>
-          <head>
-            <title>Print</title>
-            <style>
-              @page {
-                size: A4;
-                margin: 5mm;
-              }
-              body {
-                margin: 0;
-                padding: 0;
-              }
-              img {
-                width: 100%;
-                height: auto;
-                page-break-inside: avoid;
-              }
-            </style>
-          </head>
-          <body>
-            <img src="${canvas.toDataURL('image/png')}" />
-          </body>
-        </html>
-      `);
-      doc.close();
-  
-      iframe.onload = () => {
-        setTimeout(() => {
-          iframe.contentWindow.focus();
-          iframe.contentWindow.print();
-          document.body.removeChild(iframe);
-        }, 500);
-      };
-    } catch (error) {
-      console.error('Print error:', error);
-      document.body.removeChild(printClone);
-    }
-  };
+   const handlePrint = async () => {
+     const element = document.getElementById('printable-content');
+     
+     // Create a clone to modify for printing
+     const printClone = element.cloneNode(true);
+     
+     // Apply smaller font sizes directly to all text elements
+     const textElements = printClone.querySelectorAll('*');
+     textElements.forEach(el => {
+       const currentSize = window.getComputedStyle(el).fontSize;
+       const newSize = `${parseFloat(currentSize) * 0.7}px`; // Reduce to 70% of original size
+       el.style.fontSize = newSize;
+       el.style.lineHeight = '1.2'; // Tighter line spacing
+     });
+     
+     // Special handling for table cells
+     const tableCells = printClone.querySelectorAll('.MuiTableCell-root');
+     tableCells.forEach(cell => {
+       cell.style.padding = '4px 6px'; // Reduce cell padding
+     });
+     
+     document.body.appendChild(printClone);
+     
+     try {
+       const canvas = await html2canvas(printClone, {
+         scale: 2,
+         useCORS: true,
+         logging: false,
+         backgroundColor: '#FFFFFF',
+         windowWidth: 210 * 3.78,
+         windowHeight: 297 * 3.78
+       });
+   
+       document.body.removeChild(printClone);
+   
+       const iframe = document.createElement('iframe');
+       iframe.style.position = 'fixed';
+       iframe.style.right = '0';
+       iframe.style.bottom = '0';
+       iframe.style.width = '0';
+       iframe.style.height = '0';
+       iframe.style.border = '0';
+       document.body.appendChild(iframe);
+   
+       const doc = iframe.contentWindow.document;
+       doc.open();
+       doc.write(`
+         <!DOCTYPE html>
+         <html>
+           <head>
+             <title>Print</title>
+             <style>
+               @page {
+                 size: A4;
+                 margin: 5mm;
+               }
+               body {
+                 margin: 0;
+                 padding: 0;
+               }
+               img {
+                 width: 100%;
+                 height: auto;
+                 page-break-inside: avoid;
+               }
+             </style>
+           </head>
+           <body>
+             <img src="${canvas.toDataURL('image/png')}" />
+           </body>
+         </html>
+       `);
+       doc.close();
+   
+       iframe.onload = () => {
+         setTimeout(() => {
+           iframe.contentWindow.focus();
+           iframe.contentWindow.print();
+           document.body.removeChild(iframe);
+         }, 500);
+       };
+     } catch (error) {
+       console.error('Print error:', error);
+       document.body.removeChild(printClone);
+     }
+   };
   
   const handleDownloadPDF = async () => {
     const element = document.getElementById('printable-content');
@@ -456,23 +471,61 @@ const SingleDeliverysortie = () => {
         {translations[printLanguage].deliveryNote} - {id}/{formattedDate}
         </Typography>
 
-  <Table   sx={{
-    border: '1px solid #ccc',
-    borderRadius: 2,
-    mt: 2,
-    overflowX: 'auto'
-  }}>
+  <Table sx={{
+  border: '1px solid #ccc',
+  borderRadius: 2,
+  mt: 2,
+  overflowX: 'auto',
+  '@media print': {
+    '& .MuiTableCell-root': {
+      fontSize: '0.65rem !important',
+      padding: '4px 6px !important',
+      lineHeight: '1.2 !important'
+    },
+    '& .MuiTableHead-root .MuiTableCell-root': {
+      fontSize: '0.7rem !important',
+      fontWeight: 'bold !important'
+    }
+  }
+}}> 
     <TableHead>
       <TableRow sx={{ backgroundColor: '#f5f5f5' }}>
-        <TableCell sx={{ textAlign: isArabic ? 'right' : 'left', borderRight: '1px solid #ccc' }}>{translations[printLanguage].designation}</TableCell>
-        <TableCell sx={{ textAlign: isArabic ? 'right' : 'left', borderRight: '1px solid #ccc' }}>{translations[printLanguage].quantity}</TableCell>
-        <TableCell sx={{ textAlign: isArabic ? 'right' : 'left', borderRight: '1px solid #ccc' }}>{translations[printLanguage].unit}</TableCell>
-        <TableCell sx={{ textAlign: isArabic ? 'right' : 'left', borderRight: '1px solid #ccc' }}>{translations[printLanguage].unitPrice}</TableCell>
-        {hasTVA && <TableCell sx={{ textAlign: isArabic ? 'right' : 'left', borderRight: '1px solid #ccc' }}>{translations[printLanguage].tva}%</TableCell>}
-        {hasRemise &&<TableCell sx={{ textAlign: isArabic ? 'right' : 'left', borderRight: '1px solid #ccc' }}>{translations[printLanguage].remise}%</TableCell>}
-        {hasRemise &&<TableCell sx={{ textAlign: isArabic ? 'right' : 'left', borderRight: '1px solid #ccc' }}>{translations[printLanguage].prixNetU}</TableCell>}
-        {hasRemise &&<TableCell sx={{ textAlign: isArabic ? 'right' : 'left', borderRight: '1px solid #ccc' }}>{translations[printLanguage].totalNetHT}</TableCell>}
-        <TableCell sx={{ textAlign: isArabic ? 'right' : 'left', borderRight: '1px solid #ccc' }}>{translations[printLanguage].totalNetTTC}</TableCell>
+        <TableCell sx={{ textAlign: isArabic ? 'right' : 'left', borderRight: '1px solid #ccc','@media print': {
+          fontSize: '0.7rem !important',  // Slightly larger for headers
+          fontWeight: 'bold !important'
+        } }}>{translations[printLanguage].designation}</TableCell>
+        <TableCell sx={{ textAlign: isArabic ? 'right' : 'left', borderRight: '1px solid #ccc','@media print': {
+          fontSize: '0.7rem !important',  // Slightly larger for headers
+          fontWeight: 'bold !important'
+        } }}>{translations[printLanguage].quantity}</TableCell>
+        <TableCell sx={{ textAlign: isArabic ? 'right' : 'left', borderRight: '1px solid #ccc','@media print': {
+          fontSize: '0.7rem !important',  // Slightly larger for headers
+          fontWeight: 'bold !important'
+        } }}>{translations[printLanguage].unit}</TableCell>
+        <TableCell sx={{ textAlign: isArabic ? 'right' : 'left', borderRight: '1px solid #ccc','@media print': {
+          fontSize: '0.7rem !important',  // Slightly larger for headers
+          fontWeight: 'bold !important'
+        } }}>{translations[printLanguage].unitPrice}</TableCell>
+        {hasTVA && <TableCell sx={{ textAlign: isArabic ? 'right' : 'left', borderRight: '1px solid #ccc','@media print': {
+          fontSize: '0.7rem !important',  // Slightly larger for headers
+          fontWeight: 'bold !important'
+        } }}>{translations[printLanguage].tva}%</TableCell>}
+        {hasRemise &&<TableCell sx={{ textAlign: isArabic ? 'right' : 'left', borderRight: '1px solid #ccc','@media print': {
+          fontSize: '0.7rem !important',  // Slightly larger for headers
+          fontWeight: 'bold !important'
+        } }}>{translations[printLanguage].remise}%</TableCell>}
+        {hasRemise &&<TableCell sx={{ textAlign: isArabic ? 'right' : 'left', borderRight: '1px solid #ccc','@media print': {
+          fontSize: '0.7rem !important',  // Slightly larger for headers
+          fontWeight: 'bold !important'
+        } }}>{translations[printLanguage].prixNetU}</TableCell>}
+        {hasRemise &&<TableCell sx={{ textAlign: isArabic ? 'right' : 'left', borderRight: '1px solid #ccc','@media print': {
+          fontSize: '0.7rem !important',  // Slightly larger for headers
+          fontWeight: 'bold !important'
+        } }}>{translations[printLanguage].totalNetHT}</TableCell>}
+        <TableCell sx={{ textAlign: isArabic ? 'right' : 'left', borderRight: '1px solid #ccc','@media print': {
+          fontSize: '0.7rem !important',  // Slightly larger for headers
+          fontWeight: 'bold !important'
+        } }}>{translations[printLanguage].totalNetTTC}</TableCell>
       </TableRow>
     </TableHead>
 
@@ -487,12 +540,17 @@ const SingleDeliverysortie = () => {
         const netTTC = netHT * (1 + prod.tva / 100);
 
         return (
-          <TableRow
-            key={index}
-            sx={{
-              backgroundColor:'white'
-            }}
-          >
+         <TableRow
+                        key={index}
+                        sx={{
+                          backgroundColor: 'white',
+                          '@media print': {
+                            '& .MuiTableCell-root': {
+                              fontSize: '0.65rem !important'
+                            }
+                          }
+                        }}
+                      > 
             <TableCell sx={{ textAlign: isArabic ? 'right' : 'left', borderRight: '1px solid #ccc' }}>{prod.designation}</TableCell>
             <TableCell sx={{ textAlign: isArabic ? 'right' : 'left', borderRight: '1px solid #ccc' }}>{prod.quantite}</TableCell>
             <TableCell sx={{ textAlign: isArabic ? 'right' : 'left', borderRight: '1px solid #ccc' }}>{prod.Unite}</TableCell>
@@ -516,33 +574,33 @@ const SingleDeliverysortie = () => {
                    borderColor: 'grey.400', 
                   borderRadius: 2,
                   p: 2 }}>
-                  <Typography variant="body1" sx={{borderBottom:'1px solid #ccc'}}>
+                  <Typography variant="body2" sx={{borderBottom:'1px solid #ccc'}}>
                     <strong>{translations[printLanguage].prixNetHT}:</strong> {totalHT.toFixed(3)}{devise}
                   </Typography>
                   {hasRemise &&
-                  <Typography variant="body1" sx={{borderBottom:'1px solid #ccc'}}  >
+                  <Typography variant="body2" sx={{borderBottom:'1px solid #ccc'}}  >
                         <strong>{printLanguage === 'fr' ? 'Remise Totale' : printLanguage === 'en' ? 'Total Discount' : 'إجمالي الخصم'}:</strong> {totalRemise.toFixed(3)} {devise}
                   </Typography>}
                   {hasRemise &&
-                  <Typography variant="body1" sx={{borderBottom:'1px solid #ccc'}}  >
+                  <Typography variant="body2" sx={{borderBottom:'1px solid #ccc'}}  >
                         <strong>{printLanguage === 'fr' ? ' Totale Net HT ' : printLanguage === 'en' ? 'Total Net HT' : 'إجمالي الخصم'}:</strong> {totalnetht.toFixed(3)} {devise}
                   </Typography>}
                   {hasTVA &&
-                  <Typography variant="body1" sx={{borderBottom:'1px solid #ccc'}} >
+                  <Typography variant="body2" sx={{borderBottom:'1px solid #ccc'}} >
                     <strong>{translations[printLanguage].totaltva}:</strong> {totalTVA.toFixed(3)}{devise}
                   </Typography>}
                   {timbre === 'true' && (
-                    <Typography variant="body1" sx={{borderBottom:'1px solid #ccc'}} >
+                    <Typography variant="body2" sx={{borderBottom:'1px solid #ccc'}} >
                       <strong>{translations[printLanguage].timbre}:</strong> 1TND
                     </Typography>
                   )}
-                  <Typography variant="body1" sx={{borderBottom:'1px solid #ccc'}} >
+                  <Typography variant="body2" sx={{borderBottom:'1px solid #ccc'}} >
                     <strong>{translations[printLanguage].prixNetTTC}:</strong> {totalNetTTC.toFixed(3)}{devise}
                   </Typography>
                 </Box>
               </Box>
     <Box sx={{ mt: 5, textAlign: 'center' }}>
-  <Typography variant="body1" sx={{ fontStyle: 'italic' }}>
+  <Typography variant="body2" sx={{ fontStyle: 'italic' }}>
     {printLanguage === 'fr' && `Montant en lettres : ${totalNetTTCInWords.toUpperCase()}  ${devise}`}
     {printLanguage === 'en' && `Amount in words: ${totalNetTTCInWords.toUpperCase()}  ${devise}`}
     {printLanguage === 'ar' && `المبلغ بالحروف: ${totalNetTTCInWords.toUpperCase()} ${devise}`}
@@ -555,10 +613,10 @@ const SingleDeliverysortie = () => {
           flexDirection: isArabic ? 'row-reverse' : 'row'
         }}>
           <Box sx={{ textAlign: isArabic ? 'right' : 'left' }}>
-            <Typography variant="body1">{translations[printLanguage].clientSignature}</Typography>
+            <Typography variant="body2">{translations[printLanguage].clientSignature}</Typography>
           </Box>
           <Box sx={{ textAlign: isArabic ? 'left' : 'right' }}>
-            <Typography variant="body1">{translations[printLanguage].companySignature}</Typography>
+            <Typography variant="body2">{translations[printLanguage].companySignature}</Typography>
           </Box>
         </Box>
       </div>

@@ -111,12 +111,27 @@ const BCsingleACHAT = () => {
     
     // Create a clone to modify for printing
     const printClone = element.cloneNode(true);
-    printClone.style.fontSize = '50%'; // Reduce text size by 10%
+    
+    // Apply smaller font sizes directly to all text elements
+    const textElements = printClone.querySelectorAll('*');
+    textElements.forEach(el => {
+      const currentSize = window.getComputedStyle(el).fontSize;
+      const newSize = `${parseFloat(currentSize) * 0.7}px`; // Reduce to 70% of original size
+      el.style.fontSize = newSize;
+      el.style.lineHeight = '1.2'; // Tighter line spacing
+    });
+    
+    // Special handling for table cells
+    const tableCells = printClone.querySelectorAll('.MuiTableCell-root');
+    tableCells.forEach(cell => {
+      cell.style.padding = '4px 6px'; // Reduce cell padding
+    });
+    
     document.body.appendChild(printClone);
     
     try {
       const canvas = await html2canvas(printClone, {
-        scale: 3,
+        scale: 2,
         useCORS: true,
         logging: false,
         backgroundColor: '#FFFFFF',
@@ -124,7 +139,7 @@ const BCsingleACHAT = () => {
         windowHeight: 297 * 3.78
       });
   
-      document.body.removeChild(printClone); // Remove the clone after capturing
+      document.body.removeChild(printClone);
   
       const iframe = document.createElement('iframe');
       iframe.style.position = 'fixed';
@@ -177,7 +192,6 @@ const BCsingleACHAT = () => {
       document.body.removeChild(printClone);
     }
   };
-  
   const handleDownloadPDF = async () => {
     const element = document.getElementById('printable-content');
     
@@ -322,22 +336,57 @@ const BCsingleACHAT = () => {
         </Typography>
 
         {/* Table */}
- <Table   sx={{
-    border: '1px solid #ccc',
-    borderRadius: 2,
-    mt: 2,
-    overflowX: 'auto'
-  }}>         
+        <Table sx={{
+  border: '1px solid #ccc',
+  borderRadius: 2,
+  mt: 2,
+  overflowX: 'auto',
+  '@media print': {
+    '& .MuiTableCell-root': {
+      fontSize: '0.65rem !important',
+      padding: '4px 6px !important',
+      lineHeight: '1.2 !important'
+    },
+    '& .MuiTableHead-root .MuiTableCell-root': {
+      fontSize: '0.7rem !important',
+      fontWeight: 'bold !important'
+    }
+  }
+}}>         
           <TableHead>
            <TableRow sx={{ backgroundColor: '#f5f5f5' }}>
-              <TableCell sx={{ textAlign:language === 'ar' ? 'right' : 'left', borderRight: '1px solid #ccc' }} >{language === 'fr' ? 'Designation' : language === 'en' ? 'Designation' : 'التسمية'}</TableCell>
-              <TableCell sx={{ textAlign:language === 'ar' ? 'right' : 'left', borderRight: '1px solid #ccc' }} >{language === 'fr' ? 'Unite' : language === 'en' ? 'Unit' : 'وحدة'}</TableCell>
-              <TableCell sx={{ textAlign:language === 'ar' ? 'right' : 'left', borderRight: '1px solid #ccc' }} >{language === 'fr' ? 'Quantité' : language === 'en' ? 'Quantity' : 'الكمية'}</TableCell>
-              <TableCell sx={{ textAlign:language === 'ar' ? 'right' : 'left', borderRight: '1px solid #ccc' }} >{language === 'fr' ? 'Prix U (HT)' : language === 'en' ? 'Unit Price(HT)' : 'سعر الوحدة(بدون TVA)'}</TableCell>
-              <TableCell sx={{ textAlign:language === 'ar' ? 'right' : 'left', borderRight: '1px solid #ccc' }} >{language === 'fr' ? 'TVA (%)' : language === 'en' ? 'VAT(%)' : 'ضريبة القيمة المضافة(%)'}</TableCell>
-              <TableCell sx={{ textAlign:language === 'ar' ? 'right' : 'left', borderRight: '1px solid #ccc' }} >{language === 'fr' ? 'Rem (%)' : language === 'en' ? 'Discount(%)' : 'خصم(%)'}</TableCell>
-              <TableCell sx={{ textAlign:language === 'ar' ? 'right' : 'left', borderRight: '1px solid #ccc' }} >{language === 'fr' ? 'Total NET HT' : language === 'en' ? 'Total NET HT' : 'إجمالي قبل الضريبة'}</TableCell>
-              <TableCell sx={{ textAlign:language === 'ar' ? 'right' : 'left', borderRight: '1px solid #ccc' }} >{language === 'fr' ? 'Total TTC' : language === 'en' ? 'Total TTC' : 'إجمالي  الضريبة'}</TableCell>
+              <TableCell sx={{ textAlign:language === 'ar' ? 'right' : 'left', borderRight: '1px solid #ccc','@media print': {
+          fontSize: '0.7rem !important',  // Slightly larger for headers
+          fontWeight: 'bold !important'
+        } }} >{language === 'fr' ? 'Designation' : language === 'en' ? 'Designation' : 'التسمية'}</TableCell>
+              <TableCell sx={{ textAlign:language === 'ar' ? 'right' : 'left', borderRight: '1px solid #ccc','@media print': {
+          fontSize: '0.7rem !important',  // Slightly larger for headers
+          fontWeight: 'bold !important'
+        } }} >{language === 'fr' ? 'Unite' : language === 'en' ? 'Unit' : 'وحدة'}</TableCell>
+              <TableCell sx={{ textAlign:language === 'ar' ? 'right' : 'left', borderRight: '1px solid #ccc','@media print': {
+          fontSize: '0.7rem !important',  // Slightly larger for headers
+          fontWeight: 'bold !important'
+        } }} >{language === 'fr' ? 'Quantité' : language === 'en' ? 'Quantity' : 'الكمية'}</TableCell>
+              <TableCell sx={{ textAlign:language === 'ar' ? 'right' : 'left', borderRight: '1px solid #ccc','@media print': {
+          fontSize: '0.7rem !important',  // Slightly larger for headers
+          fontWeight: 'bold !important'
+        } }} >{language === 'fr' ? 'Prix U (HT)' : language === 'en' ? 'Unit Price(HT)' : 'سعر الوحدة(بدون TVA)'}</TableCell>
+              <TableCell sx={{ textAlign:language === 'ar' ? 'right' : 'left', borderRight: '1px solid #ccc','@media print': {
+          fontSize: '0.7rem !important',  // Slightly larger for headers
+          fontWeight: 'bold !important'
+        } }} >{language === 'fr' ? 'TVA (%)' : language === 'en' ? 'VAT(%)' : 'ضريبة القيمة المضافة(%)'}</TableCell>
+              <TableCell sx={{ textAlign:language === 'ar' ? 'right' : 'left', borderRight: '1px solid #ccc','@media print': {
+          fontSize: '0.7rem !important',  // Slightly larger for headers
+          fontWeight: 'bold !important'
+        } }} >{language === 'fr' ? 'Rem (%)' : language === 'en' ? 'Discount(%)' : 'خصم(%)'}</TableCell>
+              <TableCell sx={{ textAlign:language === 'ar' ? 'right' : 'left', borderRight: '1px solid #ccc','@media print': {
+          fontSize: '0.7rem !important',  // Slightly larger for headers
+          fontWeight: 'bold !important'
+        } }} >{language === 'fr' ? 'Total NET HT' : language === 'en' ? 'Total NET HT' : 'إجمالي قبل الضريبة'}</TableCell>
+              <TableCell sx={{ textAlign:language === 'ar' ? 'right' : 'left', borderRight: '1px solid #ccc','@media print': {
+          fontSize: '0.7rem !important',  // Slightly larger for headers
+          fontWeight: 'bold !important'
+        } }} >{language === 'fr' ? 'Total TTC' : language === 'en' ? 'Total TTC' : 'إجمالي  الضريبة'}</TableCell>
 
             </TableRow>
           </TableHead>
@@ -357,12 +406,17 @@ const BCsingleACHAT = () => {
     const netTTC = netHT * (1 + prod.tva / 100);
 
     return (
- <TableRow
-            key={index}
-            sx={{
-              backgroundColor:'white'
-            }}
-          >       
+  <TableRow
+                   key={index}
+                   sx={{
+                     backgroundColor: 'white',
+                     '@media print': {
+                       '& .MuiTableCell-root': {
+                         fontSize: '0.65rem !important'
+                       }
+                     }
+                   }}
+                 >       
          <TableCell sx={{ borderRight: '1px solid #ccc' }} >{prod.designation}</TableCell>
         <TableCell sx={{ borderRight: '1px solid #ccc' }} >{prod.Unite}</TableCell>
         <TableCell sx={{ borderRight: '1px solid #ccc' }} >{prod.quantite}</TableCell>
