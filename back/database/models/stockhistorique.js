@@ -10,22 +10,11 @@ const StockH = {
     type: DataTypes.FLOAT,
     allowNull: false,
   },
-  prixU_TTC: {
-    type: DataTypes.FLOAT,
-    allowNull: true, // Computed field
-  },
   tva: {
     type: DataTypes.FLOAT,
     allowNull: false,
   },
-  netTTC: {
-    type: DataTypes.FLOAT,
-    allowNull: true, // Computed field
-  },
-  netHT: {
-    type: DataTypes.FLOAT,
-    allowNull: true, // Computed field
-  },
+ 
   quantite: {
     type: DataTypes.FLOAT,
     allowNull: false,
@@ -39,20 +28,13 @@ const StockH = {
     allowNull: true,
   },
   
-  dernierprixU_HT: {
-    type: DataTypes.FLOAT,
-    allowNull: true,
-  },
   rem: {
     type: DataTypes.FLOAT,
     allowNull: true, // Allow null because it's computed dynamically
   },
-  moyenneprix: {
-    type: DataTypes.FLOAT,
-    allowNull: true,
-  },
+  
   codesuplier: {
-    type: DataTypes.FLOAT,
+    type: DataTypes.STRING,
     allowNull: true,
   }
 };
