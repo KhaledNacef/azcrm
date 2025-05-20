@@ -86,112 +86,138 @@ const SingleDeliveryNote = () => {
     
     // Create a clone to modify for printing
     const printClone = element.cloneNode(true);
-    printClone.style.fontSize = '50%'; // Reduce text size by 10%
-    document.body.appendChild(printClone);
+    
+    // Better approach to reduce size
+    printClone.style.transform = 'scale(0.7)';
+    printClone.style.transformOrigin = 'top left';
+    printClone.style.width = '142.86%'; // 100%/0.7
+    printClone.style.overflow = 'visible';
+    
+    // Create a container for proper printing
+    const container = document.createElement('div');
+    container.style.position = 'absolute';
+    container.style.left = '0';
+    container.style.top = '0';
+    container.style.width = '100%';
+    container.appendChild(printClone);
+    
+    document.body.appendChild(container);
     
     try {
-      const canvas = await html2canvas(printClone, {
-        scale: 3,
-        useCORS: true,
-        logging: false,
-        backgroundColor: '#FFFFFF',
-        windowWidth: 210 * 3.78,
-        windowHeight: 297 * 3.78
-      });
-  
-      document.body.removeChild(printClone); // Remove the clone after capturing
-  
-      const iframe = document.createElement('iframe');
-      iframe.style.position = 'fixed';
-      iframe.style.right = '0';
-      iframe.style.bottom = '0';
-      iframe.style.width = '0';
-      iframe.style.height = '0';
-      iframe.style.border = '0';
-      document.body.appendChild(iframe);
-  
-      const doc = iframe.contentWindow.document;
-      doc.open();
-      doc.write(`
-        <!DOCTYPE html>
-        <html>
-          <head>
-            <title>Print</title>
-            <style>
-              @page {
-                size: A4;
-                margin: 5mm;
-              }
-              body {
-                margin: 0;
-                padding: 0;
-              }
-              img {
-                width: 100%;
-                height: auto;
-                page-break-inside: avoid;
-              }
-            </style>
-          </head>
-          <body>
-            <img src="${canvas.toDataURL('image/png')}" />
-          </body>
-        </html>
-      `);
-      doc.close();
-  
-      iframe.onload = () => {
-        setTimeout(() => {
-          iframe.contentWindow.focus();
-          iframe.contentWindow.print();
-          document.body.removeChild(iframe);
-        }, 500);
-      };
+        const canvas = await html2canvas(printClone, {
+            scale: 2, // Reduced from 3 for better performance
+            useCORS: true,
+            logging: false,
+            backgroundColor: '#FFFFFF',
+            width: printClone.scrollWidth,
+            height: printClone.scrollHeight
+        });
+
+        document.body.removeChild(container); // Remove the container after capturing
+
+        const iframe = document.createElement('iframe');
+        iframe.style.position = 'fixed';
+        iframe.style.right = '0';
+        iframe.style.bottom = '0';
+        iframe.style.width = '0';
+        iframe.style.height = '0';
+        iframe.style.border = '0';
+        document.body.appendChild(iframe);
+
+        const doc = iframe.contentWindow.document;
+        doc.open();
+        doc.write(`
+            <!DOCTYPE html>
+            <html>
+                <head>
+                    <title>Print</title>
+                    <style>
+                        @page {
+                            size: A4;
+                            margin: 5mm;
+                        }
+                        body {
+                            margin: 0;
+                            padding: 0;
+                        }
+                        img {
+                            width: 100%;
+                            height: auto;
+                            page-break-inside: avoid;
+                        }
+                    </style>
+                </head>
+                <body>
+                    <img src="${canvas.toDataURL('image/png')}" />
+                </body>
+            </html>
+        `);
+        doc.close();
+
+        iframe.onload = () => {
+            setTimeout(() => {
+                iframe.contentWindow.focus();
+                iframe.contentWindow.print();
+                document.body.removeChild(iframe);
+            }, 500);
+        };
     } catch (error) {
-      console.error('Print error:', error);
-      document.body.removeChild(printClone);
+        console.error('Print error:', error);
+        document.body.removeChild(container);
     }
-  };
-  
-  const handleDownloadPDF = async () => {
+};
+
+const handleDownloadPDF = async () => {
     const element = document.getElementById('printable-content');
     
     // Create a clone to modify for PDF
     const pdfClone = element.cloneNode(true);
-    pdfClone.style.fontSize = '50%'; // Reduce text size by 10%
-    document.body.appendChild(pdfClone);
+    
+    // Same scaling approach as print
+    pdfClone.style.transform = 'scale(0.7)';
+    pdfClone.style.transformOrigin = 'top left';
+    pdfClone.style.width = '142.86%';
+    pdfClone.style.overflow = 'visible';
+    
+    const container = document.createElement('div');
+    container.style.position = 'absolute';
+    container.style.left = '0';
+    container.style.top = '0';
+    container.style.width = '100%';
+    container.appendChild(pdfClone);
+    
+    document.body.appendChild(container);
     
     try {
-      const canvas = await html2canvas(pdfClone, {
-        scale: 3,
-        useCORS: true,
-        logging: false,
-        backgroundColor: '#FFFFFF',
-        windowWidth: 210 * 3.78,
-        windowHeight: 297 * 3.78
-      });
-  
-      document.body.removeChild(pdfClone); // Remove the clone after capturing
-  
-      const imgData = canvas.toDataURL('image/png');
-      const pdf = new jsPDF({
-        orientation: 'portrait',
-        unit: 'mm',
-        format: 'a4',
-      });
-  
-      const imgProps = pdf.getImageProperties(imgData);
-      const pageWidth = pdf.internal.pageSize.getWidth() - 10; // 5mm each side
-      const pageHeight = (imgProps.height * pageWidth) / imgProps.width;
-      
-      pdf.addImage(imgData, 'PNG', 5, 5, pageWidth, pageHeight);
-      pdf.save(`invoice-${id}.pdf`);
-    } catch (error) {
-      console.error('PDF generation error:', error);
-      document.body.removeChild(pdfClone);
-    }
-  };
+        const canvas = await html2canvas(pdfClone, {
+            scale: 2,
+            useCORS: true,
+            logging: false,
+            backgroundColor: '#FFFFFF',
+            width: pdfClone.scrollWidth,
+            height: pdfClone.scrollHeight
+        });
 
+        document.body.removeChild(container);
+
+        const imgData = canvas.toDataURL('image/png');
+        const pdf = new jsPDF({
+            orientation: 'portrait',
+            unit: 'mm',
+            format: 'a4',
+        });
+
+        const imgProps = pdf.getImageProperties(imgData);
+        const pageWidth = pdf.internal.pageSize.getWidth() - 10; // 5mm each side
+        const pageHeight = (imgProps.height * pageWidth) / imgProps.width;
+        
+        pdf.addImage(imgData, 'PNG', 5, 5, pageWidth, pageHeight);
+        pdf.save(`invoice-${id}.pdf`);
+    } catch (error) {
+        console.error('PDF generation error:', error);
+        document.body.removeChild(container);
+    }
+};
   // Translations for French, Arabic, and English
   const translations = {
     fr: {

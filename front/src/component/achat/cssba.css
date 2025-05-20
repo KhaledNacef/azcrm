@@ -1,20 +1,42 @@
-/* CSS */
 @media print {
   body {
     margin: 0 !important;
+    padding: 0 !important;
+    background: white !important;
+    width: 100% !important;
+  }
+  
+  /* Hide everything except the printable content */
+  body > *:not(#printable-content) {
+    display: none !important;
   }
   
   #printable-content {
-    width: 200mm !important;   /* 210mm - 10mm margins */
-    min-height: 287mm !important; /* 297mm - 10mm margins */
+    /* A4 dimensions with 10mm margins (210mm × 297mm) */
+    width: 190mm !important;   /* 210mm - 10mm margins each side */
+    min-height: 277mm !important; /* 297mm - 10mm margins top/bottom */
     margin: 5mm auto !important;
     padding: 5mm !important;
     box-sizing: border-box;
     background: white !important;
-    font-size: small;
+    color: black !important;
+    
+    /* Font and content scaling */
+    font-size: 10pt !important; /* Better to use pt for print */
+    zoom: 0.7; /* Alternative to transform that works better in some browsers */
+    
+    /* Ensure no page breaks inside important elements */
+    page-break-inside: avoid;
   }
-
-  body > *:not(#printable-content) {
-    display: none !important;
+  
+  /* Force black text for all elements (in case dark mode interferes) */
+  #printable-content * {
+    color: inherit !important;
+  }
+  
+  /* Print-specific adjustments */
+  @page {
+    size: A4;
+    margin: 0mm; /* We're handling margins in the content */
   }
 }
