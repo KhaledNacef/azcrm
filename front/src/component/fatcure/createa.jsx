@@ -24,7 +24,7 @@ const CreatebcModala = ({ onAddDeliveryNote }) => {
   const [suppliern, setSuppliern] = useState("");
   const [timbre, setTimbre] = useState(false);
   const [products, setProducts] = useState([]);
-  const [newProduct, setNewProduct] = useState("");
+  const [newProduct, setNewProduct] = useState(null);
   const [tva, setTva] = useState(0);
   const [prixU_HT, setPrixU_HT] = useState(0);
   const [rem, setRem] = useState(0);

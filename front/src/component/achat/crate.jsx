@@ -21,7 +21,7 @@ const CreateDeliveryNoteModala = ({ onAddDeliveryNote, codey }) => {
   const [suppliern, setSuppliern] = useState("");
   const [timbre, setTimbre] = useState(false);
   const [products, setProducts] = useState([]);
-  const [newProduct, setNewProduct] = useState("");
+  const [newProduct, setNewProduct] = useState(null);
   const [tva, setTva] = useState(0);
   const [prixU_HT, setPrixU_HT] = useState(0);
   const [quantite, setQuantite] = useState(1);
