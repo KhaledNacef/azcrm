@@ -136,8 +136,8 @@ const CreateDeliveryNoteModala = ({ onAddDeliveryNote, codey }) => {
        onChange={(event, newValue) => {
          setNewProduct(newValue);
        }}
-       options={availableProducts.filter((prod) => prod.quantite > 0)}
-       getOptionLabel={(option) => `${option.designation} (${option.quantite} en stock)`}
+       options={availableProducts}
+       getOptionLabel={(option) => `${option.designation} `}
        openOnFocus
        renderInput={(params) => (
          <TextField
