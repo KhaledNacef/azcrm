@@ -81,91 +81,31 @@ const SingleDeliveryNote = () => {
     return `${day}/${month}/${year}`;
   }
 
-  const handlePrint = async () => {
-    const element = document.getElementById('printable-content');
+  const handlePrint = () => {
+    const content = document.getElementById('printable-content');
     
-    // Create a clone to modify for printing
-    const printClone = element.cloneNode(true);
-    
-    // Better approach to reduce size
-    printClone.style.transform = 'scale(0.7)';
-    printClone.style.transformOrigin = 'top left';
-    printClone.style.width = '142.86%'; // 100%/0.7
-    printClone.style.overflow = 'visible';
-    
-    // Create a container for proper printing
-    const container = document.createElement('div');
-    container.style.position = 'absolute';
-    container.style.left = '0';
-    container.style.top = '0';
-    container.style.width = '100%';
-    container.appendChild(printClone);
-    
-    document.body.appendChild(container);
-    
-    try {
-        const canvas = await html2canvas(printClone, {
-            scale: 2, // Reduced from 3 for better performance
-            useCORS: true,
-            logging: false,
-            backgroundColor: '#FFFFFF',
-            width: printClone.scrollWidth,
-            height: printClone.scrollHeight
-        });
-
-        document.body.removeChild(container); // Remove the container after capturing
-
-        const iframe = document.createElement('iframe');
-        iframe.style.position = 'fixed';
-        iframe.style.right = '0';
-        iframe.style.bottom = '0';
-        iframe.style.width = '0';
-        iframe.style.height = '0';
-        iframe.style.border = '0';
-        document.body.appendChild(iframe);
-
-        const doc = iframe.contentWindow.document;
-        doc.open();
-        doc.write(`
-            <!DOCTYPE html>
-            <html>
-                <head>
-                    <title>Print</title>
-                    <style>
-                        @page {
-                            size: A4;
-                            margin: 5mm;
-                        }
-                        body {
-                            margin: 0;
-                            padding: 0;
-                        }
-                        img {
-                            width: 100%;
-                            height: auto;
-                            page-break-inside: avoid;
-                        }
-                    </style>
-                </head>
-                <body>
-                    <img src="${canvas.toDataURL('image/png')}" />
-                </body>
-            </html>
-        `);
-        doc.close();
-
-        iframe.onload = () => {
-            setTimeout(() => {
-                iframe.contentWindow.focus();
-                iframe.contentWindow.print();
-                document.body.removeChild(iframe);
-            }, 500);
-        };
-    } catch (error) {
-        console.error('Print error:', error);
-        document.body.removeChild(container);
-    }
-};
+    // Store original styles
+    const originalStyles = {
+      fontSize: content.style.fontSize,
+      width: content.style.width,
+      margin: content.style.margin
+    };
+  
+    // Apply print styles
+    content.style.fontSize = '10px'; // Adjust as needed
+    content.style.width = '190mm';
+    content.style.margin = '10mm auto';
+  
+    // Print
+    window.print();
+  
+    // Restore original styles
+    setTimeout(() => {
+      content.style.fontSize = originalStyles.fontSize;
+      content.style.width = originalStyles.width;
+      content.style.margin = originalStyles.margin;
+    }, 500);
+  };
 
 const handleDownloadPDF = async () => {
     const element = document.getElementById('printable-content');
