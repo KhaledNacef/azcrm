@@ -359,25 +359,48 @@ const SingleDeliveryNote = () => {
               borderRadius: 2,
               mt: 2,
               overflowX: 'auto',
-              // Add print-specific styles
+              // Add print-specific font size
               '@media print': {
-                fontSize: '0.7rem !important', // Reduce font size for printing
                 '& .MuiTableCell-root': {
-                  padding: '4px !important', // Reduce cell padding
-                  fontSize: '0.7rem !important', // Inherit from table
+                  fontSize: '0.65rem !important',  // Smaller font size for printing
+                  padding: '6px 8px !important'    // Reduced padding for compact look
                 }
               }
             }}>       
           <TableHead>
            <TableRow sx={{ backgroundColor: '#f5f5f5' }}>
-              <TableCell sx={{ textAlign:language === 'ar' ? 'right' : 'left', borderRight: '1px solid #ccc' }} >{translations[language].designation}</TableCell>
-              <TableCell sx={{ textAlign:language === 'ar' ? 'right' : 'left', borderRight: '1px solid #ccc' }} >{translations[language].unite}</TableCell>
-              <TableCell sx={{ textAlign:language === 'ar' ? 'right' : 'left', borderRight: '1px solid #ccc' }} >{translations[language].quantite}</TableCell>
-              <TableCell sx={{ textAlign:language === 'ar' ? 'right' : 'left', borderRight: '1px solid #ccc' }} >{translations[language].prixUHT}</TableCell>
-              <TableCell sx={{ textAlign:language === 'ar' ? 'right' : 'left', borderRight: '1px solid #ccc' }} >{translations[language].tva}</TableCell>
-              <TableCell sx={{ textAlign:language === 'ar' ? 'right' : 'left', borderRight: '1px solid #ccc' }} >{translations[language].rem}</TableCell>
-              <TableCell sx={{ textAlign:language === 'ar' ? 'right' : 'left', borderRight: '1px solid #ccc' }} >{translations[language].prixNetHT}</TableCell>
-              <TableCell sx={{ textAlign:language === 'ar' ? 'right' : 'left', borderRight: '1px solid #ccc' }} >{translations[language].prixNetTTC}</TableCell>
+              <TableCell sx={{ textAlign:language === 'ar' ? 'right' : 'left', borderRight: '1px solid #ccc','@media print': {
+          fontSize: '0.7rem !important',  // Slightly larger for headers
+          fontWeight: 'bold !important'
+        } }} >{translations[language].designation}</TableCell>
+              <TableCell sx={{ textAlign:language === 'ar' ? 'right' : 'left', borderRight: '1px solid #ccc','@media print': {
+          fontSize: '0.7rem !important',  // Slightly larger for headers
+          fontWeight: 'bold !important'
+        } }} >{translations[language].unite}</TableCell>
+              <TableCell sx={{ textAlign:language === 'ar' ? 'right' : 'left', borderRight: '1px solid #ccc','@media print': {
+          fontSize: '0.7rem !important',  // Slightly larger for headers
+          fontWeight: 'bold !important'
+        } }} >{translations[language].quantite}</TableCell>
+              <TableCell sx={{ textAlign:language === 'ar' ? 'right' : 'left', borderRight: '1px solid #ccc','@media print': {
+          fontSize: '0.7rem !important',  // Slightly larger for headers
+          fontWeight: 'bold !important'
+        } }} >{translations[language].prixUHT}</TableCell>
+              <TableCell sx={{ textAlign:language === 'ar' ? 'right' : 'left', borderRight: '1px solid #ccc','@media print': {
+          fontSize: '0.7rem !important',  // Slightly larger for headers
+          fontWeight: 'bold !important'
+        } }} >{translations[language].tva}</TableCell>
+              <TableCell sx={{ textAlign:language === 'ar' ? 'right' : 'left', borderRight: '1px solid #ccc','@media print': {
+          fontSize: '0.7rem !important',  // Slightly larger for headers
+          fontWeight: 'bold !important'
+        } }} >{translations[language].rem}</TableCell>
+              <TableCell sx={{ textAlign:language === 'ar' ? 'right' : 'left', borderRight: '1px solid #ccc','@media print': {
+          fontSize: '0.7rem !important',  // Slightly larger for headers
+          fontWeight: 'bold !important'
+        } }} >{translations[language].prixNetHT}</TableCell>
+              <TableCell sx={{ textAlign:language === 'ar' ? 'right' : 'left', borderRight: '1px solid #ccc','@media print': {
+          fontSize: '0.7rem !important',  // Slightly larger for headers
+          fontWeight: 'bold !important'
+        } }} >{translations[language].prixNetTTC}</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -399,7 +422,12 @@ const SingleDeliveryNote = () => {
        <TableRow
                   key={index}
                   sx={{
-                    backgroundColor:'white'
+                    backgroundColor: 'white',
+                    '@media print': {
+                      '& .MuiTableCell-root': {
+                        fontSize: '0.65rem !important'
+                      }
+                    }
                   }}
                 >  
         <TableCell sx={{ borderRight: '1px solid #ccc' }} >{prod.designation}</TableCell>
