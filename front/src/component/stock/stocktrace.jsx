@@ -252,21 +252,27 @@ const [startDate, setStartDate] = useState(null);
         sx={{ mb: 3 }}
       />
 
-      <TableContainer component={Paper}>
-        <Table>
+      <TableContainer 
+        component={Paper}
+        sx={{
+          maxHeight: '900px', // Set your desired max height
+          overflow: 'auto'
+        }}
+      >
+        <Table stickyHeader>
           <TableHead>
             <TableRow>
-              <TableCell><strong>ID</strong></TableCell>
-              <TableCell><strong>Code Facture</strong></TableCell>
-              <TableCell><strong>Produit</strong></TableCell>
-              <TableCell><strong>Unité</strong></TableCell>
-              <TableCell><strong>Quantité</strong></TableCell>
-              <TableCell><strong>Prix d'achat (TTC)</strong></TableCell>
-              <TableCell><strong>Prix De Vente (TTC)</strong></TableCell>
-              <TableCell><strong>Total Prix De Vente (TTC)</strong></TableCell>
-              <TableCell><strong>Gain Unitaire</strong></TableCell> 
-              <TableCell><strong>Gain Total</strong></TableCell> 
-              <TableCell><strong>Date</strong></TableCell>
+              <TableCell sx={{ position: 'sticky', top: 0, bgcolor: 'background.paper', zIndex: 1 }}><strong>ID</strong></TableCell>
+              <TableCell sx={{ position: 'sticky', top: 0, bgcolor: 'background.paper', zIndex: 1 }}><strong>Code Facture</strong></TableCell>
+              <TableCell sx={{ position: 'sticky', top: 0, bgcolor: 'background.paper', zIndex: 1 }}><strong>Produit</strong></TableCell>
+              <TableCell sx={{ position: 'sticky', top: 0, bgcolor: 'background.paper', zIndex: 1 }}><strong>Unité</strong></TableCell>
+              <TableCell sx={{ position: 'sticky', top: 0, bgcolor: 'background.paper', zIndex: 1 }}><strong>Quantité</strong></TableCell>
+              <TableCell sx={{ position: 'sticky', top: 0, bgcolor: 'background.paper', zIndex: 1 }}><strong>Prix d'achat (TTC)</strong></TableCell>
+              <TableCell sx={{ position: 'sticky', top: 0, bgcolor: 'background.paper', zIndex: 1 }}><strong>Prix De Vente (TTC)</strong></TableCell>
+              <TableCell sx={{ position: 'sticky', top: 0, bgcolor: 'background.paper', zIndex: 1 }}><strong>Total Prix De Vente (TTC)</strong></TableCell>
+              <TableCell sx={{ position: 'sticky', top: 0, bgcolor: 'background.paper', zIndex: 1 }}><strong>Gain Unitaire</strong></TableCell> 
+              <TableCell sx={{ position: 'sticky', top: 0, bgcolor: 'background.paper', zIndex: 1 }}><strong>Gain Total</strong></TableCell> 
+              <TableCell sx={{ position: 'sticky', top: 0, bgcolor: 'background.paper', zIndex: 1 }}><strong>Date</strong></TableCell>
               
           </TableRow>
           </TableHead>
