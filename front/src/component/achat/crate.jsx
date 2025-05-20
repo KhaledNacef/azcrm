@@ -14,6 +14,7 @@ import {
   Snackbar,
   Alert,
 } from "@mui/material";
+import Autocomplete from "@mui/material/Autocomplete";
 
 const CreateDeliveryNoteModala = ({ onAddDeliveryNote, codey }) => {
   const [supplier, setSupplier] = useState(0);
@@ -130,9 +131,28 @@ const CreateDeliveryNoteModala = ({ onAddDeliveryNote, codey }) => {
         <MenuItem value="false">Non</MenuItem>
       </TextField>
 
-      <TextField label="Produit" value={newProduct} onChange={(e) => setNewProduct(e.target.value)} select fullWidth margin="normal">
-        {availableProducts.map((prod) => (<MenuItem key={prod.id} value={prod.designation}>{prod.designation}</MenuItem>))}
-      </TextField>
+        <Autocomplete
+       value={newProduct}
+       onChange={(event, newValue) => {
+         setNewProduct(newValue);
+       }}
+       options={availableProducts.filter((prod) => prod.quantite > 0)}
+       getOptionLabel={(option) => `${option.designation} (${option.quantite} en stock)`}
+       openOnFocus
+       renderInput={(params) => (
+         <TextField
+           {...params}
+           label="Produit"
+           fullWidth
+           margin="normal"
+         />
+       )}
+       ListboxProps={{
+         style: {
+           maxHeight: "200px",
+         },
+       }}
+     />
 
       <TextField label="TVA (%)" type="number" value={tva} onChange={(e) => setTva(Number(e.target.value) || 0)} fullWidth margin="normal" />
       <TextField label="Prix U HT" type="number" value={prixU_HT} onChange={(e) => setPrixU_HT(Number(e.target.value) || 0)} fullWidth margin="normal" />

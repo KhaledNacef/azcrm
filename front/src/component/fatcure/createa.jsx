@@ -14,6 +14,7 @@ import {
   Snackbar,
   Alert
 } from "@mui/material";
+import Autocomplete from "@mui/material/Autocomplete";
 
 const CreatebcModala = ({ onAddDeliveryNote }) => {
   const [code, setCode] = useState("");
@@ -173,20 +174,29 @@ const CreatebcModala = ({ onAddDeliveryNote }) => {
             </TextField>
 
       {/* Product selection */}
-      <TextField
-        label="Produit"
-        value={newProduct || ""}
-        onChange={(e) => setNewProduct(e.target.value)}
-        select
-        fullWidth
-        margin="normal"
-      >
-        {availableProducts.map((prod) => (
-          <MenuItem key={prod.id} value={prod.designation}>
-            {prod.designation}
-          </MenuItem>
-        ))}
-      </TextField>
+       <Autocomplete
+     value={newProduct}
+     onChange={(event, newValue) => {
+       setNewProduct(newValue);
+     }}
+     options={availableProducts.filter((prod) => prod.quantite > 0)}
+     getOptionLabel={(option) => `${option.designation} (${option.quantite} en stock)`}
+     openOnFocus
+     renderInput={(params) => (
+       <TextField
+         {...params}
+         label="Produit"
+         fullWidth
+         margin="normal"
+       />
+     )}
+     ListboxProps={{
+       style: {
+         maxHeight: "200px",
+       },
+     }}
+   />
+   
 
       {/* TVA, Price, and Quantity input */}
       <TextField
