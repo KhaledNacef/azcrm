@@ -11,10 +11,33 @@
     padding: 5mm !important;
     box-sizing: border-box;
     background: white !important;
-    font-size: 10pt !important;
   }
 
   body > *:not(#printable-content) {
     display: none !important;
   }
+
+  /* Make table fonts smaller */
+  .MuiTable-root {
+    font-size: 0.7rem !important;
+  }
+  
+  /* Reduce cell padding */
+  .MuiTableCell-root {
+    padding: 4px 6px !important;
+  }
+  
+  /* Keep borders visible */
+  .MuiTableRow-root {
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+  
+  /* Ensure table fits page */
+  .MuiTableContainer-root {
+    width: 100% !important;
+    overflow: visible !important;
+  }
+
+
 }
