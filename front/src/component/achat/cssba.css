@@ -11,6 +11,7 @@
     padding: 5mm !important;
     box-sizing: border-box;
     background: white !important;
+    font-size: small;
   }
 
   body > *:not(#printable-content) {
