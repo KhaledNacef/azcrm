@@ -167,45 +167,81 @@ const SingleDeliveryNote = () => {
       document.body.removeChild(printClone);
     }
   };
-  const handleDownloadPDF = async () => {
-    const element = document.getElementById('printable-content');
-    
-    // Create a clone to modify for PDF
-    const pdfClone = element.cloneNode(true);
-    pdfClone.style.fontSize = '50%'; // Reduce text size by 10%
-    document.body.appendChild(pdfClone);
-    
-    try {
-      const canvas = await html2canvas(pdfClone, {
-        scale: 3,
-        useCORS: true,
-        logging: false,
-        backgroundColor: '#FFFFFF',
-        windowWidth: 210 * 3.78,
-        windowHeight: 297 * 3.78
-      });
-  
-      document.body.removeChild(pdfClone); // Remove the clone after capturing
-  
-      const imgData = canvas.toDataURL('image/png');
-      const pdf = new jsPDF({
-        orientation: 'portrait',
-        unit: 'mm',
-        format: 'a4',
-      });
-  
-      const imgProps = pdf.getImageProperties(imgData);
-      const pageWidth = pdf.internal.pageSize.getWidth() - 10; // 5mm each side
-      const pageHeight = (imgProps.height * pageWidth) / imgProps.width;
-      
-      pdf.addImage(imgData, 'PNG', 5, 5, pageWidth, pageHeight);
-      pdf.save(`invoice-${id}.pdf`);
-    } catch (error) {
-      console.error('PDF generation error:', error);
-      document.body.removeChild(pdfClone);
-    }
-  };
-
+   const handleDownloadPDF = async () => {
+     const element = document.getElementById('printable-content');
+     
+     // Create a clone to modify for PDF
+     const pdfClone = element.cloneNode(true);
+     
+     // Apply the same styling modifications as handlePrint
+     const textElements = pdfClone.querySelectorAll('*');
+     textElements.forEach(el => {
+       const currentSize = window.getComputedStyle(el).fontSize;
+       const newSize = `${parseFloat(currentSize) * 0.7}px`; // Same 70% reduction as print
+       el.style.fontSize = newSize;
+       el.style.lineHeight = '1.2'; // Consistent line spacing
+     });
+   
+     // Match table cell padding from print function
+     const tableCells = pdfClone.querySelectorAll('.MuiTableCell-root');
+     tableCells.forEach(cell => {
+       cell.style.padding = '4px 6px';
+     });
+   
+     // Additional PDF-specific optimizations
+     pdfClone.style.width = '210mm'; // Explicit A4 width
+     pdfClone.style.margin = '0 auto'; // Center content
+     document.body.appendChild(pdfClone);
+   
+     try {
+       const canvas = await html2canvas(pdfClone, {
+         scale: 3, // Higher scale for better PDF quality
+         useCORS: true,
+         logging: false,
+         backgroundColor: '#FFFFFF',
+         windowWidth: 210 * 3.78, // A4 width in pixels
+         windowHeight: pdfClone.scrollHeight, // Dynamic height
+         scrollX: 0,
+         scrollY: 0,
+         allowTaint: true
+       });
+   
+       document.body.removeChild(pdfClone);
+   
+       const imgData = canvas.toDataURL('image/png', 1.0);
+       const pdf = new jsPDF({
+         orientation: 'portrait',
+         unit: 'mm',
+         format: 'a4',
+       });
+   
+       const imgProps = pdf.getImageProperties(imgData);
+       const pdfWidth = pdf.internal.pageSize.getWidth() - 10; // 5mm margins
+       const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
+   
+       // Add first page
+       pdf.addImage(imgData, 'PNG', 5, 5, pdfWidth, pdfHeight);
+   
+       // Handle multi-page documents
+       let heightLeft = pdfHeight;
+       let position = 5; // Start position
+       const pageHeight = pdf.internal.pageSize.getHeight() - 10;
+   
+       if (heightLeft > pageHeight) {
+         while (heightLeft > 0) {
+           position = heightLeft - pageHeight;
+           pdf.addPage();
+           pdf.addImage(imgData, 'PNG', 5, -position, pdfWidth, pdfHeight);
+           heightLeft -= pageHeight;
+         }
+       }
+   
+       pdf.save(`invoice-${id || 'document'}.pdf`);
+     } catch (error) {
+       console.error('PDF generation error:', error);
+       document.body.removeChild(pdfClone);
+     }
+   };
   // Translations for French, Arabic, and English
   const translations = {
     fr: {
