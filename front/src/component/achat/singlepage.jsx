@@ -353,12 +353,22 @@ const SingleDeliveryNote = () => {
           {translations[language].bonDeAchat} - {num}
         </Typography>
 
- <Table   sx={{
-    border: '1px solid #ccc',
-    borderRadius: 2,
-    mt: 2,
-    overflowX: 'auto'
-  }}>           <TableHead>
+      <Table   
+            sx={{
+              border: '1px solid #ccc',
+              borderRadius: 2,
+              mt: 2,
+              overflowX: 'auto',
+              // Add print-specific styles
+              '@media print': {
+                fontSize: '0.7rem !important', // Reduce font size for printing
+                '& .MuiTableCell-root': {
+                  padding: '4px !important', // Reduce cell padding
+                  fontSize: 'inherit !important', // Inherit from table
+                }
+              }
+            }}>       
+          <TableHead>
            <TableRow sx={{ backgroundColor: '#f5f5f5' }}>
               <TableCell sx={{ textAlign:language === 'ar' ? 'right' : 'left', borderRight: '1px solid #ccc' }} >{translations[language].designation}</TableCell>
               <TableCell sx={{ textAlign:language === 'ar' ? 'right' : 'left', borderRight: '1px solid #ccc' }} >{translations[language].unite}</TableCell>
