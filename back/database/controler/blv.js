@@ -120,24 +120,31 @@ async function createBs(req, res) {
       });
       // Handle StockP (general stock)
       const stockP = await StockP.findOne({
-        where: {
-          designation,
-        },
+        where: { designation },
+        transaction
       });
 
+      
       if (stockP) {
-        // Update the StockP entry
-        await stockP.update(
-          {
-         // Update the price
-            quantite: stockP.quantite - quantite, // Deduct the sold quantity
-          },
-          {
-            where: {
-              designation,
+        const newQuantity = stockP.quantite - quantite;
+        
+        if (newQuantity <= 0) {
+          // Remove the StockP entry if quantity is zero or negative
+          await StockP.destroy({
+            where: { designation },
+            transaction
+          });
+        } else {
+          // Update the StockP entry
+          await stockP.update(
+            {
+              quantite: newQuantity
             },
-          }
-        );
+            { transaction }
+          );
+        }
+      } else {
+        console.warn(`Product ${designation} not found in StockP`);
       }
     });
 
