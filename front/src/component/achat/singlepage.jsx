@@ -326,10 +326,10 @@ const SingleDeliveryNote = () => {
   p: 2,
   textAlign: language === 'ar' ? 'right' : 'left'
 }}>
-  <Typography variant="body3"><strong>{translations[language].supplierName}:</strong> {supplier.fullname}</Typography>
-  <Typography variant="body3"><strong>{translations[language].supplierAddress}:</strong> {supplier?.address || 'Adresse inconnue'}</Typography>
-  <Typography variant="body3"><strong>{translations[language].supplierPhone}:</strong> {supplier?.tel || 'Numéro inconnu'}</Typography>
-  <Typography variant="body3"><strong>{translations[language].matriculefisacl}:</strong> {supplier?.matriculefisacl || 'Matriculefisacl inconnu'}</Typography>
+  <Typography variant="body2"><strong>{translations[language].supplierName}:</strong> {supplier.fullname}</Typography>
+  <Typography variant="body2"><strong>{translations[language].supplierAddress}:</strong> {supplier?.address || 'Adresse inconnue'}</Typography>
+  <Typography variant="body2"><strong>{translations[language].supplierPhone}:</strong> {supplier?.tel || 'Numéro inconnu'}</Typography>
+  <Typography variant="body2"><strong>{translations[language].matriculefisacl}:</strong> {supplier?.matriculefisacl || 'Matriculefisacl inconnu'}</Typography>
 </Box>
 
 {/* Company info (Always on the right) */}
@@ -341,10 +341,10 @@ const SingleDeliveryNote = () => {
  p: 2,
   textAlign: language === 'ar' ? 'right' : 'left'
 }}>
-  <Typography variant="body3"><strong>{translations[language].companyName}:</strong> AMOUNNET COMPANY EXPORT ET IMPORT</Typography>
-  <Typography variant="body3"><strong>{translations[language].companyAddress}:</strong> RUE DU LAC TOBA BERGES DU LAC1053 TUNIS</Typography>
-  <Typography variant="body3"><strong>{translations[language].companyPhone}:</strong> +987654321</Typography>
-  <Typography variant="body3"><strong>{translations[language].matriculefisacl}:</strong> 1867411P/A/M/000</Typography>
+  <Typography variant="body2"><strong>{translations[language].companyName}:</strong> AMOUNNET COMPANY EXPORT ET IMPORT</Typography>
+  <Typography variant="body2"><strong>{translations[language].companyAddress}:</strong> RUE DU LAC TOBA BERGES DU LAC1053 TUNIS</Typography>
+  <Typography variant="body2"><strong>{translations[language].companyPhone}:</strong> +987654321</Typography>
+  <Typography variant="body2"><strong>{translations[language].matriculefisacl}:</strong> 1867411P/A/M/000</Typography>
 </Box>
 
 </Box>
@@ -364,7 +364,7 @@ const SingleDeliveryNote = () => {
                 fontSize: '0.7rem !important', // Reduce font size for printing
                 '& .MuiTableCell-root': {
                   padding: '4px !important', // Reduce cell padding
-                  fontSize: 'inherit !important', // Inherit from table
+                  fontSize: '0.7rem !important', // Inherit from table
                 }
               }
             }}>       
@@ -427,31 +427,31 @@ const SingleDeliveryNote = () => {
                           p: 2, display: 'flex', flexDirection: 'column', alignItems: language === 'ar' ? 'flex-end' : 'flex-start' }}>
 
 
-            <Typography sx={{borderBottom:'1px solid #ccc'}} variant="body3">
+            <Typography sx={{borderBottom:'1px solid #ccc'}} variant="body2">
               <strong>{translations[language].prixNetHT}:</strong> {totalHT.toFixed(3)}TND
             </Typography>
             
-            <Typography sx={{borderBottom:'1px solid #ccc'}} variant="body3" >
+            <Typography sx={{borderBottom:'1px solid #ccc'}} variant="body2" >
                   <strong>{language === 'fr' ? 'Remise Totale' : language === 'en' ? 'Total Discount' : 'إجمالي الخصم'}:</strong> {totalRemise.toFixed(3)} TND
             </Typography>
-            <Typography sx={{borderBottom:'1px solid #ccc'}} variant="body3" >
+            <Typography sx={{borderBottom:'1px solid #ccc'}} variant="body2" >
                   <strong>{language === 'fr' ? ' Totale Net HT ' : language === 'en' ? 'Total Net HT' : 'إجمالي الخصم'}:</strong> {totalnetht.toFixed(3)} TND
             </Typography>
-            <Typography sx={{borderBottom:'1px solid #ccc'}} variant="body3">
+            <Typography sx={{borderBottom:'1px solid #ccc'}} variant="body2">
               <strong>{translations[language].totaltva}:</strong> {totalTVA.toFixed(3)}TND
             </Typography>
             {timbre === 'true' && (
-              <Typography sx={{borderBottom:'1px solid #ccc'}} variant="body3">
+              <Typography sx={{borderBottom:'1px solid #ccc'}} variant="body2">
                 <strong>{translations[language].timbre}:</strong> 1TND
               </Typography>
             )}
-            <Typography sx={{borderBottom:'1px solid #ccc'}} variant="body3">
+            <Typography sx={{borderBottom:'1px solid #ccc'}} variant="body2">
               <strong>{translations[language].prixNetTTC}:</strong> {totalNetTTC.toFixed(3)}TND
             </Typography>
           </Box>
         </Box>
         <Box sx={{ mt: 5, textAlign: 'center' }}>
-  <Typography variant="body3" sx={{ fontStyle: 'italic' }}>
+  <Typography variant="body2" sx={{ fontStyle: 'italic' }}>
     {language === 'fr' && `Montant en lettres : ${totalNetTTCInWords.toUpperCase()} DINARS`}
     {language === 'en' && `Amount in words: ${totalNetTTCInWords.toUpperCase()} DINARS`}
     {language === 'ar' && `المبلغ بالحروف: ${totalNetTTCInWords.toUpperCase()} دينار`}
@@ -459,10 +459,10 @@ const SingleDeliveryNote = () => {
 </Box>
         <Box sx={{ display: 'flex', justifyContent: 'space-between', mt: 4 }}>
           <Box sx={{ textAlign: 'center' }}>
-            <Typography variant="body3">{translations[language].signatureFournisseur}</Typography>
+            <Typography variant="body2">{translations[language].signatureFournisseur}</Typography>
           </Box>
           <Box sx={{ textAlign: 'center' }}>
-            <Typography variant="body3">{translations[language].signatureSociete}</Typography>
+            <Typography variant="body2">{translations[language].signatureSociete}</Typography>
           </Box>
         </Box>
         {displayDate()}
