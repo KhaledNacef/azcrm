@@ -261,7 +261,7 @@ const BCsingleACHAT = () => {
         }
       }
   
-      pdf.save(`invoice-${id || 'document'}.pdf`);
+      pdf.save(`invoice-${num || 'document'}.pdf`);
     } catch (error) {
       console.error('PDF generation error:', error);
       document.body.removeChild(pdfClone);
