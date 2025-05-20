@@ -216,93 +216,92 @@ const SingleDeliverysortie = () => {
   });
 
 
-   const handlePrint = async () => {
-     const element = document.getElementById('printable-content');
-     
-     // Create a clone to modify for printing
-     const printClone = element.cloneNode(true);
-     
-     // Apply smaller font sizes directly to all text elements
-     const textElements = printClone.querySelectorAll('*');
-     textElements.forEach(el => {
-       const currentSize = window.getComputedStyle(el).fontSize;
-       const newSize = `${parseFloat(currentSize) * 0.7}px`; // Reduce to 70% of original size
-       el.style.fontSize = newSize;
-       el.style.lineHeight = '1.2'; // Tighter line spacing
-     });
-     
-     // Special handling for table cells
-     const tableCells = printClone.querySelectorAll('.MuiTableCell-root');
-     tableCells.forEach(cell => {
-       cell.style.padding = '4px 6px'; // Reduce cell padding
-     });
-     
-     document.body.appendChild(printClone);
-     
-     try {
-       const canvas = await html2canvas(printClone, {
-         scale: 2,
-         useCORS: true,
-         logging: false,
-         backgroundColor: '#FFFFFF',
-         windowWidth: 210 * 3.78,
-         windowHeight: 297 * 3.78
-       });
-   
-       document.body.removeChild(printClone);
-   
-       const iframe = document.createElement('iframe');
-       iframe.style.position = 'fixed';
-       iframe.style.right = '0';
-       iframe.style.bottom = '0';
-       iframe.style.width = '0';
-       iframe.style.height = '0';
-       iframe.style.border = '0';
-       document.body.appendChild(iframe);
-   
-       const doc = iframe.contentWindow.document;
-       doc.open();
-       doc.write(`
-         <!DOCTYPE html>
-         <html>
-           <head>
-             <title>Print</title>
-             <style>
-               @page {
-                 size: A4;
-                 margin: 5mm;
-               }
-               body {
-                 margin: 0;
-                 padding: 0;
-               }
-               img {
-                 width: 100%;
-                 height: auto;
-                 page-break-inside: avoid;
-               }
-             </style>
-           </head>
-           <body>
-             <img src="${canvas.toDataURL('image/png')}" />
-           </body>
-         </html>
-       `);
-       doc.close();
-   
-       iframe.onload = () => {
-         setTimeout(() => {
-           iframe.contentWindow.focus();
-           iframe.contentWindow.print();
-           document.body.removeChild(iframe);
-         }, 500);
-       };
-     } catch (error) {
-       console.error('Print error:', error);
-       document.body.removeChild(printClone);
-     }
-   };
+  const handlePrint = async () => {
+    const element = document.getElementById('printable-content');
+    
+    // Create a clone to modify for printing
+    const printClone = element.cloneNode(true);
+    
+    // Apply smaller font sizes directly to all text elements
+    const textElements = printClone.querySelectorAll('*');
+    textElements.forEach(el => {
+      const currentSize = window.getComputedStyle(el).fontSize;
+      const newSize = `${parseFloat(currentSize) * 0.7}px`; // Reduce to 70% of original size
+      el.style.fontSize = newSize;
+      el.style.lineHeight = '1.2'; // Tighter line spacing
+    });
+    
+    // Special handling for table cells
+    const tableCells = printClone.querySelectorAll('.MuiTableCell-root');
+    tableCells.forEach(cell => {
+      cell.style.padding = '4px 6px'; // Reduce cell padding
+    });
+    
+    document.body.appendChild(printClone);
+    
+    try {
+      const canvas = await html2canvas(printClone, {
+        scale: 2,
+        useCORS: true,
+        logging: false,
+        backgroundColor: '#FFFFFF',
+        windowWidth: 210 * 3.78,
+        windowHeight: 297 * 3.78
+      });
   
+      document.body.removeChild(printClone);
+  
+      const iframe = document.createElement('iframe');
+      iframe.style.position = 'fixed';
+      iframe.style.right = '0';
+      iframe.style.bottom = '0';
+      iframe.style.width = '0';
+      iframe.style.height = '0';
+      iframe.style.border = '0';
+      document.body.appendChild(iframe);
+  
+      const doc = iframe.contentWindow.document;
+      doc.open();
+      doc.write(`
+        <!DOCTYPE html>
+        <html>
+          <head>
+            <title>Print</title>
+            <style>
+              @page {
+                size: A4;
+                margin: 5mm;
+              }
+              body {
+                margin: 0;
+                padding: 0;
+              }
+              img {
+                width: 100%;
+                height: auto;
+                page-break-inside: avoid;
+              }
+            </style>
+          </head>
+          <body>
+            <img src="${canvas.toDataURL('image/png')}" />
+          </body>
+        </html>
+      `);
+      doc.close();
+  
+      iframe.onload = () => {
+        setTimeout(() => {
+          iframe.contentWindow.focus();
+          iframe.contentWindow.print();
+          document.body.removeChild(iframe);
+        }, 500);
+      };
+    } catch (error) {
+      console.error('Print error:', error);
+      document.body.removeChild(printClone);
+    }
+  };
   const handleDownloadPDF = async () => {
     const element = document.getElementById('printable-content');
     
