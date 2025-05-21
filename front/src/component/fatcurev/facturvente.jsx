@@ -129,7 +129,7 @@ const Boncommandev = () => {
               <TableRow key={note.code}>
                 <TableCell>{formatCode(note.id, note.createdAt)}</TableCell>
                 <TableCell>{note.clientName || 'N/A'}</TableCell>
-                <TableCell>{note.timbre}</TableCell>                
+                <TableCell>{note.timbre ? 'Oui' : 'Non'}</TableCell>                
                 <TableCell>{formatDate(note.createdAt)}</TableCell>
                 <TableCell>
                   <Button

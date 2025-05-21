@@ -20,18 +20,21 @@ import {
   Modal,
   Chip
 } from '@mui/material';
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import CreateDeliveryNoteModala from './crate.jsx'; // Ensure correct file name
+import CreateDeliveryNoteModala from './crate.jsx';
 
 const BonAchatPage = () => {
   const navigate = useNavigate();
 
   // States
   const [deliveryNotes, setDeliveryNotes] = useState([]);
-    const [open, setOpen] = useState(false);
-    const [todayInvoicesCount, setTodayInvoicesCount] = useState(0);
-  
+  const [open, setOpen] = useState(false);
+  const [todayInvoicesCount, setTodayInvoicesCount] = useState(0);
+  const [filteredNotes, setFilteredNotes] = useState([]);
   const [searchQuery, setSearchQuery] = useState('');
   const [loading, setLoading] = useState(true);
   const [selectedNote, setSelectedNote] = useState(null);
@@ -41,6 +44,8 @@ const BonAchatPage = () => {
     message: '',
     severity: 'success',
   });
+  const [startDate, setStartDate] = useState(null);
+  const [endDate, setEndDate] = useState(null);
 
   // Fetch delivery notes
   const fetchDeliveryNotes = async () => {
@@ -48,8 +53,8 @@ const BonAchatPage = () => {
       setLoading(true);
       const response = await axios.get('https://api.azcrm.deviceshopleader.com/api/v1/bonachat/stock/getall');
       setDeliveryNotes(response.data);
-     countTodayInvoices(response.data);
-
+      setFilteredNotes(response.data);
+      countTodayInvoices(response.data);
     } catch (error) {
       console.error('Error fetching delivery notes:', error);
       setSnackbar({
@@ -62,10 +67,77 @@ const BonAchatPage = () => {
     }
   };
 
-  // Filter notes based on search
-  const filteredNotes = deliveryNotes.filter(note =>
-    note.num?.toLowerCase().includes(searchQuery.toLowerCase())
-  );
+  // Handle date changes
+  const handleStartDateChange = (date) => {
+    setStartDate(date);
+    applyFilters(searchQuery, date, endDate);
+  };
+
+  const handleEndDateChange = (date) => {
+    setEndDate(date);
+    applyFilters(searchQuery, startDate, date);
+  };
+
+  const resetDateFilters = () => {
+    setStartDate(null);
+    setEndDate(null);
+    applyFilters(searchQuery, null, null);
+  };
+
+  // Apply all filters
+  const applyFilters = (search = searchQuery, start = startDate, end = endDate) => {
+    let filtered = [...deliveryNotes];
+
+    // Apply search filter
+    if (search) {
+      filtered = filtered.filter(note =>
+        note.num?.toLowerCase().includes(search.toLowerCase()) ||
+        note.spulierName?.toLowerCase().includes(search.toLowerCase())
+      );
+    }
+
+    // Apply date filters
+    if (start || end) {
+      filtered = filtered.filter(note => {
+        if (!note.createdAt) return false;
+        
+        const noteDate = new Date(note.createdAt);
+        const startDateObj = start ? new Date(start) : null;
+        const endDateObj = end ? new Date(end) : null;
+
+        if (startDateObj) startDateObj.setHours(0, 0, 0, 0);
+        if (endDateObj) endDateObj.setHours(23, 59, 59, 999);
+
+        const afterStart = !startDateObj || noteDate >= startDateObj;
+        const beforeEnd = !endDateObj || noteDate <= endDateObj;
+
+        return afterStart && beforeEnd;
+      });
+    }
+
+    setFilteredNotes(filtered);
+  };
+
+  // Handle search query change
+  const handleSearchChange = (e) => {
+    const query = e.target.value;
+    setSearchQuery(query);
+    applyFilters(query, startDate, endDate);
+  };
+
+  // Count today's invoices
+  const countTodayInvoices = (notes) => {
+    const today = new Date();
+    const todayString = today.toISOString().split('T')[0];
+    
+    const count = notes.filter(note => {
+      if (!note.createdAt) return false;
+      const noteDate = new Date(note.createdAt).toISOString().split('T')[0];
+      return noteDate === todayString;
+    }).length;
+    
+    setTodayInvoicesCount(count);
+  };
 
   // Handle reteune creation
   const handleCreateReteune = async () => {
@@ -73,7 +145,7 @@ const BonAchatPage = () => {
 
     try {
       const payload = {
-        num:selectedNote.num,
+        num: selectedNote.num,
         spulierId: selectedNote.spulierId,
         timbre: selectedNote.timbre,
         code: selectedNote.code,
@@ -90,7 +162,6 @@ const BonAchatPage = () => {
         severity: 'success',
       });
       
-      // Refresh the list
       fetchDeliveryNotes();
     } catch (error) {
       console.error('Erreur lors de la création du reteune :', error);
@@ -103,6 +174,7 @@ const BonAchatPage = () => {
       setOpenDialog(false);
     }
   };
+
   const addDeliveryNote = () => {
     handleClose();
     fetchDeliveryNotes();
@@ -110,6 +182,7 @@ const BonAchatPage = () => {
 
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
+
   // Confirmation dialog handlers
   const handleOpenDialog = (note) => {
     setSelectedNote(note);
@@ -124,52 +197,58 @@ const BonAchatPage = () => {
     fetchDeliveryNotes();
   }, []);
 
-
-  const countTodayInvoices = (notes) => {
-    const today = new Date();
-    const todayString = today.toISOString().split('T')[0]; // Get YYYY-MM-DD format
-    
-    const count = notes.filter(note => {
-      const noteDate = new Date(note.createdAt).toISOString().split('T')[0];
-      return noteDate === todayString;
-    }).length;
-    
-    setTodayInvoicesCount(count);
-  };
- 
-
-
-
   return (
     <Box sx={{ p: 3 }}>
-            <Typography variant="h4" gutterBottom> {/* gutterBottom adds spacing below */}
-          Factures Achat
-        </Typography>
-        <Chip 
-          label={`${todayInvoicesCount} Factures Achat aujourd'hui`}
-          color="primary"
-          variant="outlined"
-          sx={{ 
-            fontSize: '1rem', 
-            padding: '8px 16px',
-            m: 2,
-             // Optional: adds margin below the chip if needed
-          }}
-        />
-        <Button variant="contained" color="primary" onClick={handleOpen} sx={{ m: 2}}>
+      <Typography variant="h4" gutterBottom>
+        Factures Achat
+      </Typography>
+      <Chip 
+        label={`${todayInvoicesCount} Factures Achat aujourd'hui`}
+        color="primary"
+        variant="outlined"
+        sx={{ 
+          fontSize: '1rem', 
+          padding: '8px 16px',
+          m: 2,
+        }}
+      />
+      <Button variant="contained" color="primary" onClick={handleOpen} sx={{ m: 2 }}>
         Créer un Bon D'ACHAT
       </Button>
-                   <TextField
-        label="Rechercher par Code"
+
+      {/* Date Filters */}
+      <LocalizationProvider dateAdapter={AdapterDateFns}>
+        <Box sx={{ display: 'flex', gap: 2, mb: 3 }}>
+          <DatePicker
+            label="Date de début"
+            value={startDate}
+            onChange={handleStartDateChange}
+            format="dd/MM/yyyy"
+            renderInput={(params) => <TextField {...params} />}
+          />
+          <DatePicker
+            label="Date de fin"
+            value={endDate}
+            onChange={handleEndDateChange}
+            format="dd/MM/yyyy"
+            renderInput={(params) => <TextField {...params} />}
+          />
+          {(startDate || endDate) && (
+            <Button onClick={resetDateFilters} variant="outlined" sx={{ ml: 2 }}>
+              Réinitialiser
+            </Button>
+          )}
+        </Box>
+      </LocalizationProvider>
+
+      <TextField
+        label="Rechercher par Code ou Fournisseur"
         variant="outlined"
         fullWidth
         value={searchQuery}
-        onChange={(e) => setSearchQuery(e.target.value)}
+        onChange={handleSearchChange}
         sx={{ mb: 3 }}
       />
-
-      {/* Search Field */}
-    
 
       {/* Loading State */}
       {loading && (
@@ -192,9 +271,9 @@ const BonAchatPage = () => {
         <TableBody>
           {!loading && filteredNotes.length > 0 ? (
             filteredNotes.map((note) => (
-              <TableRow key={note.code}>
-              <TableCell>{note.num}</TableCell>
-              <TableCell>{note.spulierName || 'N/A'}</TableCell>
+              <TableRow key={note.id}>
+                <TableCell>{note.num}</TableCell>
+                <TableCell>{note.spulierName || 'N/A'}</TableCell>
                 <TableCell>{note.timbre ? 'Oui' : 'Non'}</TableCell>
                 <TableCell>
                   {note.createdAt ? new Date(note.createdAt).toLocaleDateString() : 'N/A'}
@@ -231,7 +310,7 @@ const BonAchatPage = () => {
         <DialogTitle>Confirmer la création</DialogTitle>
         <DialogContent>
           <DialogContentText>
-            Êtes-vous sûr de vouloir créer un retour pour le bon {selectedNote?.codey} ?
+            Êtes-vous sûr de vouloir créer un retour pour le bon {selectedNote?.num} ?
           </DialogContentText>
         </DialogContent>
         <DialogActions>
@@ -260,6 +339,8 @@ const BonAchatPage = () => {
           {snackbar.message}
         </Alert>
       </Snackbar>
+
+      {/* Modal for creating new delivery note */}
       <Modal open={open} onClose={handleClose}>
         <Box
           sx={{
@@ -274,7 +355,7 @@ const BonAchatPage = () => {
             width: 500,
           }}
         >
-          <CreateDeliveryNoteModala onAddDeliveryNote={addDeliveryNote}  />
+          <CreateDeliveryNoteModala onAddDeliveryNote={addDeliveryNote} />
         </Box>
       </Modal>
     </Box>

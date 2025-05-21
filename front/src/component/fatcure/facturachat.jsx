@@ -8,26 +8,30 @@ import {
   TableHead,
   TableRow,
   Typography,
-  Modal,
   TextField,
+  Modal,
   Chip
 } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import CreatebcModala from './createa.jsx'; // Ensure correct file name
 import axios from 'axios';
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
+
+
 
 const Boncommande = () => {
   const navigate = useNavigate();
   
   // State to hold the delivery notes
   const [deliveryNotes, setDeliveryNotes] = useState([]);
-
-  // State for search query
-  const [searchQuery, setSearchQuery] = useState('');
-  const [todayInvoicesCount, setTodayInvoicesCount] = useState(0);
+    const [open, setOpen] = useState(false);
+    const [todayInvoicesCount, setTodayInvoicesCount] = useState(0);
+    const [filteredNotes, setFilteredNotes] = useState([]);
+    const [searchQuery, setSearchQuery] = useState('');
 
   // Modal state
-  const [open, setOpen] = useState(false);
 
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
@@ -42,6 +46,7 @@ const Boncommande = () => {
     try {
       const response = await axios.get('https://api.azcrm.deviceshopleader.com/api/v1/boncommandall/factures/get'); // Adjust URL as needed
       setDeliveryNotes(response.data); 
+      setFilteredNotes(response.data);
       countTodayInvoices(response.data);
 
     } catch (error) {
@@ -49,10 +54,62 @@ const Boncommande = () => {
     }
   };
 
-  // Filtered delivery notes based on search query
-  const filteredDeliveryNotes = deliveryNotes.filter((note) =>
-    note.num.toLowerCase().includes(searchQuery.toLowerCase())
-  );
+   const handleStartDateChange = (date) => {
+    setStartDate(date);
+    applyFilters(searchQuery, date, endDate);
+  };
+
+  const handleEndDateChange = (date) => {
+    setEndDate(date);
+    applyFilters(searchQuery, startDate, date);
+  };
+
+  const resetDateFilters = () => {
+    setStartDate(null);
+    setEndDate(null);
+    applyFilters(searchQuery, null, null);
+  };
+
+  // Apply all filters
+  const applyFilters = (search = searchQuery, start = startDate, end = endDate) => {
+    let filtered = [...deliveryNotes];
+
+    // Apply search filter
+    if (search) {
+      filtered = filtered.filter(note =>
+        note.num?.toLowerCase().includes(search.toLowerCase()) ||
+        note.spulierName?.toLowerCase().includes(search.toLowerCase())
+      );
+    }
+
+    // Apply date filters
+    if (start || end) {
+      filtered = filtered.filter(note => {
+        if (!note.createdAt) return false;
+        
+        const noteDate = new Date(note.createdAt);
+        const startDateObj = start ? new Date(start) : null;
+        const endDateObj = end ? new Date(end) : null;
+
+        if (startDateObj) startDateObj.setHours(0, 0, 0, 0);
+        if (endDateObj) endDateObj.setHours(23, 59, 59, 999);
+
+        const afterStart = !startDateObj || noteDate >= startDateObj;
+        const beforeEnd = !endDateObj || noteDate <= endDateObj;
+
+        return afterStart && beforeEnd;
+      });
+    }
+
+    setFilteredNotes(filtered);
+  };
+
+  // Handle search query change
+  const handleSearchChange = (e) => {
+    const query = e.target.value;
+    setSearchQuery(query);
+    applyFilters(query, startDate, endDate);
+  };
 
   useEffect(() => {
     fetchDeliveryNotes();
@@ -93,15 +150,38 @@ const Boncommande = () => {
         Créer un Bon De Livraison
       </Button>
 
-      {/* Search Field */}
-      <TextField
-        label="Rechercher par Code"
-        variant="outlined"
-        fullWidth
-        value={searchQuery}
-        onChange={(e) => setSearchQuery(e.target.value)}
-        sx={{ mb: 3 }}
-      />
+        <LocalizationProvider dateAdapter={AdapterDateFns}>
+              <Box sx={{ display: 'flex', gap: 2, mb: 3 }}>
+                <DatePicker
+                  label="Date de début"
+                  value={startDate}
+                  onChange={handleStartDateChange}
+                  format="dd/MM/yyyy"
+                  renderInput={(params) => <TextField {...params} />}
+                />
+                <DatePicker
+                  label="Date de fin"
+                  value={endDate}
+                  onChange={handleEndDateChange}
+                  format="dd/MM/yyyy"
+                  renderInput={(params) => <TextField {...params} />}
+                />
+                {(startDate || endDate) && (
+                  <Button onClick={resetDateFilters} variant="outlined" sx={{ ml: 2 }}>
+                    Réinitialiser
+                  </Button>
+                )}
+              </Box>
+            </LocalizationProvider>
+      
+            <TextField
+              label="Rechercher par Code ou Fournisseur"
+              variant="outlined"
+              fullWidth
+              value={searchQuery}
+              onChange={handleSearchChange}
+              sx={{ mb: 3 }}
+            />
 
       {/* Button to open the modal for creating a new delivery note */}
     
@@ -118,13 +198,15 @@ const Boncommande = () => {
           </TableRow>
         </TableHead>
         <TableBody>
-          {filteredDeliveryNotes && Array.isArray(filteredDeliveryNotes) && filteredDeliveryNotes.length > 0 ? (
-            filteredDeliveryNotes.map((note) => (
-              <TableRow key={note.id || note.code}> {/* Use a unique identifier */}
-              <TableCell>{note.num}</TableCell>
-                <TableCell>{note.spulierName || "N/A"}</TableCell>
-                <TableCell>{note.timbre ? "Oui" : "Non"}</TableCell>
-                <TableCell>{note.createdAt ? new Date(note.createdAt).toLocaleDateString() : "N/A"}</TableCell>
+            { filteredNotes.length > 0 ? (
+                      filteredNotes.map((note) => (
+                        <TableRow key={note.id}>
+                          <TableCell>{note.num}</TableCell>
+                          <TableCell>{note.spulierName || 'N/A'}</TableCell>
+                          <TableCell>{note.timbre ? 'Oui' : 'Non'}</TableCell>
+                          <TableCell>
+                            {note.createdAt ? new Date(note.createdAt).toLocaleDateString() : 'N/A'}
+                          </TableCell>
                 <TableCell>
                   <Button
                     variant="outlined"
