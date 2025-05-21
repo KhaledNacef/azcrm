@@ -8,7 +8,7 @@ const FactureV =  {
     primaryKey: true,
   } ,
      timbre: {
-      type: DataTypes.STRING,
+      type: DataTypes.BOOLEAN,
       allowNull: false,
     },
   clientId: {

@@ -71,7 +71,33 @@ const SingleDeliveryNote = () => {
   if (timbre === 'true') {
     totalNetTTC += 1;  // Add 1 TND for timbre
   }
-  const totalNetTTCInWords = n2words(totalNetTTC.toFixed(3), { lang: language === 'ar' ? 'ar' : language }); // Arabic or French/English
+const formatAmountInWords = (amount, language, currency = 'TND') => {
+  // Format the number with 3 decimal places
+  const formattedAmount = amount.toFixed(3);
+  
+  // Convert to words based on language
+  let amountInWords = n2words(formattedAmount, { 
+    lang: language === 'ar' ? 'ar' : language 
+  });
+
+  // Language-specific formatting
+  if (language === 'fr') {
+    // French: replace "virgule" with "et"
+    amountInWords = amountInWords.replace('virgule', 'et');
+  } else if (language === 'ar') {
+    // Arabic: ensure "و" is used for decimals
+    amountInWords = amountInWords.replace(/،/g, ' و');
+  }
+
+  // Add currency
+  const currencies = {
+    fr: `${amountInWords} dinars`, 
+    ar: `${amountInWords} دينارا`,
+    en: `${amountInWords} dinars`
+  };
+
+  return currencies[language] || `${amountInWords} ${currency}`;
+};
 
   function displayDate() {
     const today = new Date();
@@ -533,9 +559,8 @@ const SingleDeliveryNote = () => {
         </Box>
         <Box sx={{ mt: 5, textAlign: 'center' }}>
   <Typography variant="body2" sx={{ fontStyle: 'italic' }}>
-    {language === 'fr' && `Montant en lettres : ${totalNetTTCInWords.toUpperCase()} DINARS`}
-    {language === 'en' && `Amount in words: ${totalNetTTCInWords.toUpperCase()} DINARS`}
-    {language === 'ar' && `المبلغ بالحروف: ${totalNetTTCInWords.toUpperCase()} دينار`}
+    {formatAmountInWords(totalNetTTC,language)}
+    
   </Typography>
 </Box>
         <Box sx={{ display: 'flex', justifyContent: 'space-between', mt: 4 }}>
