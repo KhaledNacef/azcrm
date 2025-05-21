@@ -99,9 +99,10 @@ const Boncommandev = () => {
      
 
       {/* Button to create a new delivery note */}
-      <Button variant="contained" color="primary" onClick={handleOpen}>
+      <Button variant="contained" color="primary" sx={{ mb: 3 }} onClick={handleOpen}>
         Créer un Bon De Livraison
       </Button>
+
        <TextField
         label="Rechercher par Code"
         variant="outlined"
