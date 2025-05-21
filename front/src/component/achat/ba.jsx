@@ -142,22 +142,20 @@ const BonAchatPage = () => {
 
   return (
     <Box sx={{ p: 3 }}>
-       <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 3 }}>
-                   <Typography variant="h4">
-                     Factures Achat
-                   </Typography>
-                   <Chip 
-                     label={`${todayInvoicesCount} factures Achat aujourd'hui`}
-                     color="primary"
-                     variant="outlined"
-                     sx={{ fontSize: '1rem', padding: '8px 16px' }}
-                   />
-                 </Box>
-<Button variant="contained" color="primary" onClick={handleOpen} sx={{ mb: 2, mr: 2 }}>
-        Créer un Bon D'ACHAT
-      </Button>
-      {/* Search Field */}
-      <TextField
+            <Typography variant="h4" gutterBottom> {/* gutterBottom adds spacing below */}
+          Factures Achat
+        </Typography>
+        <Chip 
+          label={`${todayInvoicesCount} Factures Achat aujourd'hui`}
+          color="primary"
+          variant="outlined"
+          sx={{ 
+            fontSize: '1rem', 
+            padding: '8px 16px',
+            mb: 2 // Optional: adds margin below the chip if needed
+          }}
+        />
+                   <TextField
         label="Rechercher par Code"
         variant="outlined"
         fullWidth
@@ -165,6 +163,11 @@ const BonAchatPage = () => {
         onChange={(e) => setSearchQuery(e.target.value)}
         sx={{ mb: 3 }}
       />
+<Button variant="contained" color="primary" onClick={handleOpen} sx={{ mb: 2, mr: 2 }}>
+        Créer un Bon D'ACHAT
+      </Button>
+      {/* Search Field */}
+    
 
       {/* Loading State */}
       {loading && (

@@ -81,17 +81,19 @@ const BonsortiePage = () => {
   
   return (
     <Box sx={{ p: 3 }}>
-       <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 3 }}>
-              <Typography variant="h4">
-                Factures Vente
-              </Typography>
-              <Chip 
-                label={`${todayInvoicesCount} factures Vente aujourd'hui`}
-                color="primary"
-                variant="outlined"
-                sx={{ fontSize: '1rem', padding: '8px 16px' }}
-              />
-            </Box>
+       <Typography variant="h4" gutterBottom> {/* gutterBottom adds spacing below */}
+    Factures Vente
+  </Typography>
+  <Chip 
+    label={`${todayInvoicesCount} factures Vente aujourd'hui`}
+    color="primary"
+    variant="outlined"
+    sx={{ 
+      fontSize: '1rem', 
+      padding: '8px 16px',
+      mb: 2 // Optional: adds margin below the chip if needed
+    }}
+  />
       
 <Button variant="contained" color="primary" onClick={handleOpen} sx={{ mb: 2, mr: 2 }}>
         Créer un Facture Vente

@@ -80,21 +80,21 @@ const Boncommandev = () => {
     const formattedCode = formatCode(note.id, note.createdAt);
     return formattedCode.toLowerCase().includes(searchQuery.toLowerCase());
   });
-
   return (
     <Box sx={{ p: 3 }}>
-      <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 3 }}>
-        <Typography variant="h4">
-          Bon De Livraison Vente
-        </Typography>
-        <Chip 
-          label={`${todayInvoicesCount} Bon De Livraison Vente aujourd'hui`}
-          color="primary"
-          variant="outlined"
-          sx={{ fontSize: '1rem', padding: '8px 16px' }}
-        />
-      </Box>
-
+          <Typography variant="h4" gutterBottom> {/* gutterBottom adds spacing below */}
+        Bon De Livraison Vente
+      </Typography>
+      <Chip 
+        label={`${todayInvoicesCount} Bon De Livraison Vente aujourd'hui`}
+        color="primary"
+        variant="outlined"
+        sx={{ 
+          fontSize: '1rem', 
+          padding: '8px 16px',
+          mb: 2 // Optional: adds margin below the chip if needed
+        }}
+      />
       {/* Search bar */}
      
 
