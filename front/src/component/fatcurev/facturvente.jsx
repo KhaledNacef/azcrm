@@ -10,6 +10,7 @@ import {
   Typography,
   Modal,
   TextField,
+  TableContainer,
   Chip
 } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
@@ -200,14 +201,21 @@ const [startDate, setStartDate] = useState(null);
              />
 
       {/* Delivery Notes Table */}
-      <Table sx={{ mt: 3 }}>
+     <TableContainer 
+             component={Paper}
+             sx={{
+               maxHeight: '700px', // Set your desired max height
+               overflow: 'auto'
+             }}
+           >
+             <Table stickyHeader>
         <TableHead>
           <TableRow>
-            <TableCell>Code</TableCell>
-            <TableCell>Client</TableCell>
-            <TableCell>Timbre</TableCell>
-            <TableCell>Date</TableCell>
-            <TableCell>Actions</TableCell>
+                  <TableCell sx={{ position: 'sticky', top: 0, bgcolor: 'background.paper', zIndex: 1 }}>Code</TableCell>
+                  <TableCell sx={{ position: 'sticky', top: 0, bgcolor: 'background.paper', zIndex: 1 }}>Client</TableCell>
+                  <TableCell sx={{ position: 'sticky', top: 0, bgcolor: 'background.paper', zIndex: 1 }}>Timbre</TableCell>
+                  <TableCell sx={{ position: 'sticky', top: 0, bgcolor: 'background.paper', zIndex: 1 }}>Date</TableCell>
+                  <TableCell sx={{ position: 'sticky', top: 0, bgcolor: 'background.paper', zIndex: 1 }}>Actions</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
@@ -237,6 +245,8 @@ const [startDate, setStartDate] = useState(null);
           )}
         </TableBody>
       </Table>
+    </TableContainer>
+      
 
       {/* Modal for creating a delivery note */}
       <Modal open={open} onClose={handleClose}>

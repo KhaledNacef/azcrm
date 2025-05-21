@@ -10,6 +10,7 @@ import {
   Typography,
   TextField,
   Modal,
+  TableContainer,
   Chip
 } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
@@ -195,14 +196,21 @@ const BonsortiePage = () => {
                     sx={{ mb: 3 }}
                   />
 
-      <Table sx={{ mt: 3 }}>
+   <TableContainer 
+          component={Paper}
+          sx={{
+            maxHeight: '700px', // Set your desired max height
+            overflow: 'auto'
+          }}
+        >
+          <Table stickyHeader>
         <TableHead>
           <TableRow>
-            <TableCell>Code</TableCell>
-            <TableCell>Client</TableCell>
-            <TableCell>Timbre</TableCell>
-            <TableCell>Date</TableCell>
-            <TableCell>Actions</TableCell>
+            <TableCell sx={{ position: 'sticky', top: 0, bgcolor: 'background.paper', zIndex: 1 }}>Code</TableCell>
+            <TableCell sx={{ position: 'sticky', top: 0, bgcolor: 'background.paper', zIndex: 1 }}>Client</TableCell>
+            <TableCell sx={{ position: 'sticky', top: 0, bgcolor: 'background.paper', zIndex: 1 }}>Timbre</TableCell>
+            <TableCell sx={{ position: 'sticky', top: 0, bgcolor: 'background.paper', zIndex: 1 }}>Date</TableCell>
+            <TableCell sx={{ position: 'sticky', top: 0, bgcolor: 'background.paper', zIndex: 1 }}>Actions</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
@@ -236,6 +244,8 @@ const BonsortiePage = () => {
           )}
         </TableBody>
       </Table>
+   </TableContainer>
+      
       <Modal open={open} onClose={handleClose}>
         <Box
           sx={{

@@ -10,7 +10,8 @@ import {
   Typography,
   TextField,
   Modal,
-  Chip
+  Chip,
+  TableContainer
 } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import CreatebcModala from './createa.jsx'; // Ensure correct file name
@@ -188,14 +189,21 @@ const Boncommande = () => {
     
 
       {/* Delivery Notes Table */}
-      <Table sx={{ mt: 3 }}>
+      <TableContainer 
+              component={Paper}
+              sx={{
+                maxHeight: '700px', // Set your desired max height
+                overflow: 'auto'
+              }}
+            >
+              <Table stickyHeader>
         <TableHead>
           <TableRow>
-            <TableCell>Code</TableCell>
-            <TableCell>Fournisseur</TableCell>
-            <TableCell>Timbre</TableCell>
-            <TableCell>Date</TableCell>
-            <TableCell>Actions</TableCell>
+            <TableCell  sx={{ position: 'sticky', top: 0, bgcolor: 'background.paper', zIndex: 1 }}>Code</TableCell>
+            <TableCell  sx={{ position: 'sticky', top: 0, bgcolor: 'background.paper', zIndex: 1 }}>Fournisseur</TableCell>
+            <TableCell  sx={{ position: 'sticky', top: 0, bgcolor: 'background.paper', zIndex: 1 }}>Timbre</TableCell>
+            <TableCell  sx={{ position: 'sticky', top: 0, bgcolor: 'background.paper', zIndex: 1 }}>Date</TableCell>
+            <TableCell  sx={{ position: 'sticky', top: 0, bgcolor: 'background.paper', zIndex: 1 }}>Actions</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
@@ -225,6 +233,7 @@ const Boncommande = () => {
           )}
         </TableBody>
       </Table>
+   </TableContainer>
 
       {/* Modal for creating a new delivery note */}
       <Modal open={open} onClose={handleClose}>

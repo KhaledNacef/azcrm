@@ -18,6 +18,7 @@ import {
   Snackbar,
   Alert,
   Modal,
+  TableContainer, 
   Chip
 } from '@mui/material';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
@@ -258,14 +259,21 @@ const BonAchatPage = () => {
       )}
 
       {/* Delivery Notes Table */}
-      <Table sx={{ mt: 3 }}>
+     <TableContainer 
+             component={Paper}
+             sx={{
+               maxHeight: '700px', // Set your desired max height
+               overflow: 'auto'
+             }}
+           >
+             <Table stickyHeader>
         <TableHead>
           <TableRow>
-            <TableCell>Code</TableCell>
-            <TableCell>Fournisseur</TableCell>
-            <TableCell>Timbre</TableCell>
-            <TableCell>Date</TableCell>
-            <TableCell>Actions</TableCell>
+            <TableCell sx={{ position: 'sticky', top: 0, bgcolor: 'background.paper', zIndex: 1 }}>Code</TableCell>
+            <TableCell sx={{ position: 'sticky', top: 0, bgcolor: 'background.paper', zIndex: 1 }}>Client</TableCell>
+            <TableCell sx={{ position: 'sticky', top: 0, bgcolor: 'background.paper', zIndex: 1 }}>Timbre</TableCell>
+            <TableCell sx={{ position: 'sticky', top: 0, bgcolor: 'background.paper', zIndex: 1 }}>Date</TableCell>
+            <TableCell sx={{ position: 'sticky', top: 0, bgcolor: 'background.paper', zIndex: 1 }}>Actions</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
@@ -304,6 +312,7 @@ const BonAchatPage = () => {
           )}
         </TableBody>
       </Table>
+   </TableContainer>
 
       {/* Confirmation Dialog */}
       <Dialog open={openDialog} onClose={handleCloseDialog}>
