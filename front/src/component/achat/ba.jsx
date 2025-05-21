@@ -152,9 +152,13 @@ const BonAchatPage = () => {
           sx={{ 
             fontSize: '1rem', 
             padding: '8px 16px',
-            mb: 2 // Optional: adds margin below the chip if needed
+            m: 2,
+             // Optional: adds margin below the chip if needed
           }}
         />
+        <Button variant="contained" color="primary" onClick={handleOpen} sx={{ mb: 2, mr: 2 }}>
+        Créer un Bon D'ACHAT
+      </Button>
                    <TextField
         label="Rechercher par Code"
         variant="outlined"
@@ -163,9 +167,7 @@ const BonAchatPage = () => {
         onChange={(e) => setSearchQuery(e.target.value)}
         sx={{ mb: 3 }}
       />
-<Button variant="contained" color="primary" onClick={handleOpen} sx={{ mb: 2, mr: 2 }}>
-        Créer un Bon D'ACHAT
-      </Button>
+
       {/* Search Field */}
     
 

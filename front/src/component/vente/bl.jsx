@@ -91,7 +91,7 @@ const BonsortiePage = () => {
     sx={{ 
       fontSize: '1rem', 
       padding: '8px 16px',
-      mb: 2 // Optional: adds margin below the chip if needed
+      m: 2 // Optional: adds margin below the chip if needed
     }}
   />
       
