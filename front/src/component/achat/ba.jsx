@@ -156,7 +156,7 @@ const BonAchatPage = () => {
              // Optional: adds margin below the chip if needed
           }}
         />
-        <Button variant="contained" color="primary" onClick={handleOpen} sx={{ mb: 2, mr: 2 }}>
+        <Button variant="contained" color="primary" onClick={handleOpen} sx={{ m: 2}}>
         Créer un Bon D'ACHAT
       </Button>
                    <TextField
@@ -165,7 +165,7 @@ const BonAchatPage = () => {
         fullWidth
         value={searchQuery}
         onChange={(e) => setSearchQuery(e.target.value)}
-        sx={{ m: 2 }}
+        sx={{ mb: 3 }}
       />
 
       {/* Search Field */}

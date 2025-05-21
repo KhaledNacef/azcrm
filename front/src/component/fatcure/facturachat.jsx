@@ -89,7 +89,7 @@ const Boncommande = () => {
           }}
         />
 
-          <Button variant="contained" color="primary"  sx={{ mb: 3 }} onClick={handleOpen}>
+          <Button variant="contained" color="primary"  sx={{ m: 2 }} onClick={handleOpen}>
         Créer un Bon De Livraison
       </Button>
 
@@ -100,7 +100,7 @@ const Boncommande = () => {
         fullWidth
         value={searchQuery}
         onChange={(e) => setSearchQuery(e.target.value)}
-        sx={{ m: 2 }}
+        sx={{ mb: 3 }}
       />
 
       {/* Button to open the modal for creating a new delivery note */}
