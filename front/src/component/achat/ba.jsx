@@ -17,7 +17,8 @@ import {
   CircularProgress,
   Snackbar,
   Alert,
-  Modal
+  Modal,
+  Chip
 } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
@@ -29,6 +30,7 @@ const BonAchatPage = () => {
   // States
   const [deliveryNotes, setDeliveryNotes] = useState([]);
     const [open, setOpen] = useState(false);
+    const [todayInvoicesCount, setTodayInvoicesCount] = useState(0);
   
   const [searchQuery, setSearchQuery] = useState('');
   const [loading, setLoading] = useState(true);
@@ -46,6 +48,8 @@ const BonAchatPage = () => {
       setLoading(true);
       const response = await axios.get('https://api.azcrm.deviceshopleader.com/api/v1/bonachat/stock/getall');
       setDeliveryNotes(response.data);
+     countTodayInvoices(response.data);
+
     } catch (error) {
       console.error('Error fetching delivery notes:', error);
       setSnackbar({
@@ -120,11 +124,35 @@ const BonAchatPage = () => {
     fetchDeliveryNotes();
   }, []);
 
+
+  const countTodayInvoices = (notes) => {
+    const today = new Date();
+    const todayString = today.toISOString().split('T')[0]; // Get YYYY-MM-DD format
+    
+    const count = notes.filter(note => {
+      const noteDate = new Date(note.createdAt).toISOString().split('T')[0];
+      return noteDate === todayString;
+    }).length;
+    
+    setTodayInvoicesCount(count);
+  };
+ 
+
+
+
   return (
     <Box sx={{ p: 3 }}>
-      <Typography variant="h4" mb={3}>
-      Facture
-      </Typography>
+       <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 3 }}>
+                   <Typography variant="h4">
+                     Factures Achat
+                   </Typography>
+                   <Chip 
+                     label={`${todayInvoicesCount} factures Achat aujourd'hui`}
+                     color="primary"
+                     variant="outlined"
+                     sx={{ fontSize: '1rem', padding: '8px 16px' }}
+                   />
+                 </Box>
 <Button variant="contained" color="primary" onClick={handleOpen} sx={{ mb: 2, mr: 2 }}>
         Créer un Bon D'ACHAT
       </Button>

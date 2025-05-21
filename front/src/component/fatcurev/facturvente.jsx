@@ -10,6 +10,7 @@ import {
   Typography,
   Modal,
   TextField,
+  Chip
 } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import Createbv from './createbv.jsx';
@@ -20,6 +21,7 @@ const Boncommandev = () => {
   const [deliveryNotes, setDeliveryNotes] = useState([]); // State for storing delivery notes
   const [open, setOpen] = useState(false); // Modal state
   const [searchQuery, setSearchQuery] = useState(''); // Search query state
+  const [todayInvoicesCount, setTodayInvoicesCount] = useState(0);
 
   // Function to fetch delivery notes
   const fetchDeliveryNotes = async () => {
@@ -27,7 +29,8 @@ const Boncommandev = () => {
       const response = await axios.get('https://api.azcrm.deviceshopleader.com/api/v1/bonlivraison/facturev/get');
       console.log('API Response:', response.data); // ✅ Debugging log
       setDeliveryNotes(response.data); // ✅ Ensure it's always an array
-      
+      countTodayInvoices(response.data);
+
     } catch (error) {
       console.error('Error fetching delivery notes:', error);
     }
@@ -47,7 +50,17 @@ const Boncommandev = () => {
     handleClose();
     fetchDeliveryNotes(); // ✅ Refresh table after adding
   };
-
+  const countTodayInvoices = (notes) => {
+    const today = new Date();
+    const todayString = today.toISOString().split('T')[0]; // Get YYYY-MM-DD format
+    
+    const count = notes.filter(note => {
+      const noteDate = new Date(note.createdAt).toISOString().split('T')[0];
+      return noteDate === todayString;
+    }).length;
+    
+    setTodayInvoicesCount(count);
+  };
  
   const formatDate = (dateString) => {
     const date = new Date(dateString);
@@ -70,12 +83,26 @@ const Boncommandev = () => {
 
   return (
     <Box sx={{ p: 3 }}>
-      <Typography variant="h4" mb={3}>
-        Bon De Livraison Vente
-      </Typography>
+      <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 3 }}>
+        <Typography variant="h4">
+          Bon De Livraison Vente
+        </Typography>
+        <Chip 
+          label={`${todayInvoicesCount} Bon De Livraison Vente aujourd'hui`}
+          color="primary"
+          variant="outlined"
+          sx={{ fontSize: '1rem', padding: '8px 16px' }}
+        />
+      </Box>
 
       {/* Search bar */}
-      <TextField
+     
+
+      {/* Button to create a new delivery note */}
+      <Button variant="contained" color="primary" onClick={handleOpen}>
+        Créer un Bon De Livraison
+      </Button>
+       <TextField
         label="Rechercher par Code"
         variant="outlined"
         fullWidth
@@ -83,11 +110,6 @@ const Boncommandev = () => {
         onChange={(e) => setSearchQuery(e.target.value)}
         sx={{ mb: 3 }}
       />
-
-      {/* Button to create a new delivery note */}
-      <Button variant="contained" color="primary" onClick={handleOpen}>
-        Créer un Bon De Livraison
-      </Button>
 
       {/* Delivery Notes Table */}
       <Table sx={{ mt: 3 }}>

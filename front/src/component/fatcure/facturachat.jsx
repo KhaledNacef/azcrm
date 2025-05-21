@@ -10,6 +10,7 @@ import {
   Typography,
   Modal,
   TextField,
+  Chip
 } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import CreatebcModala from './createa.jsx'; // Ensure correct file name
@@ -23,6 +24,7 @@ const Boncommande = () => {
 
   // State for search query
   const [searchQuery, setSearchQuery] = useState('');
+  const [todayInvoicesCount, setTodayInvoicesCount] = useState(0);
 
   // Modal state
   const [open, setOpen] = useState(false);
@@ -39,7 +41,9 @@ const Boncommande = () => {
   const fetchDeliveryNotes = async () => {
     try {
       const response = await axios.get('https://api.azcrm.deviceshopleader.com/api/v1/boncommandall/factures/get'); // Adjust URL as needed
-      setDeliveryNotes(response.data); // Assuming API returns an array of delivery notes
+      setDeliveryNotes(response.data); 
+      countTodayInvoices(response.data);
+
     } catch (error) {
       console.error('Error fetching delivery notes:', error);
     }
@@ -54,11 +58,33 @@ const Boncommande = () => {
     fetchDeliveryNotes();
   }, []);
 
+
+ const countTodayInvoices = (notes) => {
+    const today = new Date();
+    const todayString = today.toISOString().split('T')[0]; // Get YYYY-MM-DD format
+    
+    const count = notes.filter(note => {
+      const noteDate = new Date(note.createdAt).toISOString().split('T')[0];
+      return noteDate === todayString;
+    }).length;
+    
+    setTodayInvoicesCount(count);
+  };
+ 
+
   return (
     <Box sx={{ p: 3 }}>
-      <Typography variant="h4" mb={3}>
-      Bon De Livraison
-      </Typography>
+         <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 3 }}>
+                    <Typography variant="h4">
+                      Bon De Livraison Achat
+                    </Typography>
+                    <Chip 
+                      label={`${todayInvoicesCount} Bon De Livraison Achat aujourd'hui`}
+                      color="primary"
+                      variant="outlined"
+                      sx={{ fontSize: '1rem', padding: '8px 16px' }}
+                    />
+                  </Box>
 
       {/* Search Field */}
       <TextField

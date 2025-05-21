@@ -9,7 +9,8 @@ import {
   TableRow,
   Typography,
   TextField,
-  Modal
+  Modal,
+  Chip
 } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
@@ -17,15 +18,16 @@ import CreateDeliveryNoteModal from './cratebl.jsx';
 
 const BonsortiePage = () => {
   const navigate = useNavigate();
-    const [open, setOpen] = useState(false);
-  
+  const [open, setOpen] = useState(false);
   const [deliveryNotes, setDeliveryNotes] = useState([]);
   const [searchQuery, setSearchQuery] = useState('');
+  const [todayInvoicesCount, setTodayInvoicesCount] = useState(0);
 
   const fetchDeliveryNotes = async () => {
     try {
       const response = await axios.get('https://api.azcrm.deviceshopleader.com/api/v1/bs/bs/get');
       setDeliveryNotes(response.data);
+      countTodayInvoices(response.data);
     } catch (error) {
       console.error('Error fetching delivery notes:', error);
     }
@@ -36,7 +38,21 @@ const BonsortiePage = () => {
   }, []);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
-  // Format date to dd/mm/yyyy
+
+  const countTodayInvoices = (notes) => {
+    const today = new Date();
+    const todayString = today.toISOString().split('T')[0]; // Get YYYY-MM-DD format
+    
+    const count = notes.filter(note => {
+      const noteDate = new Date(note.createdAt).toISOString().split('T')[0];
+      return noteDate === todayString;
+    }).length;
+    
+    setTodayInvoicesCount(count);
+  };
+ 
+
+
   const formatDate = (dateString) => {
     const date = new Date(dateString);
     const day = String(date.getDate()).padStart(2, '0');
@@ -65,9 +81,18 @@ const BonsortiePage = () => {
   
   return (
     <Box sx={{ p: 3 }}>
-      <Typography variant="h4" mb={3}>
-        Facture
-      </Typography>
+       <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 3 }}>
+              <Typography variant="h4">
+                Factures Vente
+              </Typography>
+              <Chip 
+                label={`${todayInvoicesCount} factures Vente aujourd'hui`}
+                color="primary"
+                variant="outlined"
+                sx={{ fontSize: '1rem', padding: '8px 16px' }}
+              />
+            </Box>
+      
 <Button variant="contained" color="primary" onClick={handleOpen} sx={{ mb: 2, mr: 2 }}>
         Créer un Facture Vente
       </Button>
