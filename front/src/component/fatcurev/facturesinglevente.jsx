@@ -204,12 +204,11 @@ const totalHT = deliveryNote.reduce((acc, prod) => {
   };
 
   const isArabic = printLanguage === 'ar';
-  const formattedDate = new Date(datee).toLocaleDateString('fr-FR', {
-    day: '2-digit',
-    month: '2-digit',
-    year: 'numeric',
-  });
-
+ const formatCode = (id, dateString) => {
+    const date = new Date(dateString);
+    const year = date.getFullYear();
+    return `${id}/${year}`; // Only ID and year
+  };
 
 
   const handlePrint = async () => {
@@ -506,7 +505,7 @@ const totalHT = deliveryNote.reduce((acc, prod) => {
        </Box>
 
         <Typography variant="h5" mb={3} textAlign="center">
-        {translations[printLanguage].deliveryNote}- {id}/{formattedDate}
+        {translations[printLanguage].deliveryNote}- {formatCode(id,datee)}
         </Typography>
 
 <Table sx={{
