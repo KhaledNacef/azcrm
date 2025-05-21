@@ -95,7 +95,7 @@ const BonsortiePage = () => {
     }}
   />
       
-<Button variant="contained" color="primary" onClick={handleOpen} sx={{ mb: 2, mr: 2 }}>
+<Button variant="contained" color="primary" onClick={handleOpen} sx={{ m: 2 }}>
         Créer un Facture Vente
       </Button>
       <TextField

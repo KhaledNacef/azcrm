@@ -165,7 +165,7 @@ const BonAchatPage = () => {
         fullWidth
         value={searchQuery}
         onChange={(e) => setSearchQuery(e.target.value)}
-        sx={{ mb: 3 }}
+        sx={{ m: 2 }}
       />
 
       {/* Search Field */}

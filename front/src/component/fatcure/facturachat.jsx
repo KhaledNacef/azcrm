@@ -100,7 +100,7 @@ const Boncommande = () => {
         fullWidth
         value={searchQuery}
         onChange={(e) => setSearchQuery(e.target.value)}
-        sx={{ mb: 3 }}
+        sx={{ m: 2 }}
       />
 
       {/* Button to open the modal for creating a new delivery note */}
