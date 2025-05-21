@@ -45,12 +45,17 @@ const BonsortiePage = () => {
     return `${day}/${month}/${year}`;
   };
 
-  // Filter notes by checking if searchQuery matches id or id/date format
+  const formatCode = (id, dateString) => {
+    const date = new Date(dateString);
+    const year = date.getFullYear();
+    return `${id}/${year}`; // Only ID and year
+  };
+
   const filteredNotes = deliveryNotes.filter((note) => {
-    const formattedDate = formatDate(note.createdAt);
-    const idDateCombo = `${note.id}/${formattedDate}`;
-    return idDateCombo.toLowerCase().includes(searchQuery.toLowerCase());
+    const formattedCode = formatCode(note.id, note.createdAt);
+    return formattedCode.toLowerCase().includes(searchQuery.toLowerCase());
   });
+
   const addDeliveryNote = () => {
     handleClose();
     fetchDeliveryNotes(); // ✅ Refresh table after adding
@@ -89,7 +94,7 @@ const BonsortiePage = () => {
           {filteredNotes.length > 0 ? (
             filteredNotes.map((note) => (
               <TableRow key={note.id}>
-                <TableCell>{note.id}/{formatDate(note.createdAt)}</TableCell>
+                <TableCell>{formatCode(note.id, note.createdAt)}</TableCell>
                 <TableCell>{note.clientName || 'N/A'}</TableCell>
                 <TableCell>{note.timbre}</TableCell>
                 <TableCell>{formatDate(note.createdAt)}</TableCell>

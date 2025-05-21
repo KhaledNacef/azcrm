@@ -88,8 +88,7 @@ async function createBs(req, res) {
       
     });
     const createdAt = new Date(Bss.createdAt);
-    const formattedCodeClient = `${Bss.id}/${String(createdAt.getDate()).padStart(2, '0')}/${String(createdAt.getMonth() + 1).padStart(2, '0')}/${createdAt.getFullYear()}`;
-    // Step 2: Handle the products
+const formattedCodeClient = `${Bss.id}/${createdAt.getFullYear()}`;    // Step 2: Handle the products
     const stockPromises = products.map(async (product) => {
       const { prixU_HT, quantite, designation, Unite,rem,tva,sellprice,buyprice } = product;
 

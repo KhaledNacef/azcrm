@@ -48,6 +48,7 @@ const Boncommandev = () => {
     fetchDeliveryNotes(); // ✅ Refresh table after adding
   };
 
+ 
   const formatDate = (dateString) => {
     const date = new Date(dateString);
     const day = String(date.getDate()).padStart(2, '0');
@@ -56,13 +57,16 @@ const Boncommandev = () => {
     return `${day}/${month}/${year}`;
   };
 
-  // Filter notes by checking if searchQuery matches id or id/date format
-  const filteredNotes = deliveryNotes.filter((note) => {
-    const formattedDate = formatDate(note.createdAt);
-    const idDateCombo = `${note.id}/${formattedDate}`;
-    return idDateCombo.toLowerCase().includes(searchQuery.toLowerCase());
-  });
+  const formatCode = (id, dateString) => {
+    const date = new Date(dateString);
+    const year = date.getFullYear();
+    return `${id}/${year}`; // Only ID and year
+  };
 
+  const filteredNotes = deliveryNotes.filter((note) => {
+    const formattedCode = formatCode(note.id, note.createdAt);
+    return formattedCode.toLowerCase().includes(searchQuery.toLowerCase());
+  });
 
   return (
     <Box sx={{ p: 3 }}>
@@ -100,7 +104,7 @@ const Boncommandev = () => {
           {filteredNotes.length > 0 ? (
             filteredNotes.map((note) => (
               <TableRow key={note.code}>
-                <TableCell>{note.id}/{formatDate(note.createdAt)}</TableCell>
+                <TableCell>{formatCode(note.id, note.createdAt)}</TableCell>
                 <TableCell>{note.clientName || 'N/A'}</TableCell>
                 <TableCell>{note.timbre}</TableCell>                
                 <TableCell>{formatDate(note.createdAt)}</TableCell>
