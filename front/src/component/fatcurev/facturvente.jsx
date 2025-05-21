@@ -15,20 +15,28 @@ import {
 import { useNavigate } from 'react-router-dom';
 import Createbv from './createbv.jsx';
 import axios from 'axios';
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
+
+
 
 const Boncommandev = () => {
   const navigate = useNavigate();
-  const [deliveryNotes, setDeliveryNotes] = useState([]); // State for storing delivery notes
-  const [open, setOpen] = useState(false); // Modal state
-  const [searchQuery, setSearchQuery] = useState(''); // Search query state
+ const [deliveryNotes, setDeliveryNotes] = useState([]);
+  const [open, setOpen] = useState(false);
   const [todayInvoicesCount, setTodayInvoicesCount] = useState(0);
-
+  const [filteredNotes, setFilteredNotes] = useState([]);
+  const [searchQuery, setSearchQuery] = useState('');
+const [startDate, setStartDate] = useState(null);
+  const [endDate, setEndDate] = useState(null);
   // Function to fetch delivery notes
   const fetchDeliveryNotes = async () => {
     try {
       const response = await axios.get('https://api.azcrm.deviceshopleader.com/api/v1/bonlivraison/facturev/get');
       console.log('API Response:', response.data); // ✅ Debugging log
       setDeliveryNotes(response.data); // ✅ Ensure it's always an array
+      setFilteredNotes(response.data);
       countTodayInvoices(response.data);
 
     } catch (error) {
@@ -41,7 +49,23 @@ const Boncommandev = () => {
     fetchDeliveryNotes();
   }, []); // ✅ Runs only once
 
-  // Modal handlers
+  const handleStartDateChange = (date) => {
+    setStartDate(date);
+    applyFilters(searchQuery, date, endDate);
+  };
+
+  const handleEndDateChange = (date) => {
+    setEndDate(date);
+    applyFilters(searchQuery, startDate, date);
+  };
+
+  const resetDateFilters = () => {
+    setStartDate(null);
+    setEndDate(null);
+    applyFilters(searchQuery, null, null);
+  };
+
+
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
@@ -76,10 +100,49 @@ const Boncommandev = () => {
     return `${id}/${year}`; // Only ID and year
   };
 
-  const filteredNotes = deliveryNotes.filter((note) => {
-    const formattedCode = formatCode(note.id, note.createdAt);
-    return formattedCode.toLowerCase().includes(searchQuery.toLowerCase());
-  });
+  const applyFilters = (search = searchQuery, start = startDate, end = endDate) => {
+    let filtered = [...deliveryNotes];
+
+    // Apply search filter
+   if (search) {
+      filtered = filtered.filter(note => {
+        const formattedCode = formatCode(note.id, note.createdAt);
+        return (
+          formattedCode.toLowerCase().includes(search.toLowerCase()) ||
+          (note.clientName && note.clientName.toLowerCase().includes(search.toLowerCase()))
+        );
+      });
+    }
+    // Apply date filters
+    if (start || end) {
+      filtered = filtered.filter(note => {
+        if (!note.createdAt) return false;
+        
+        const noteDate = new Date(note.createdAt);
+        const startDateObj = start ? new Date(start) : null;
+        const endDateObj = end ? new Date(end) : null;
+
+        if (startDateObj) startDateObj.setHours(0, 0, 0, 0);
+        if (endDateObj) endDateObj.setHours(23, 59, 59, 999);
+
+        const afterStart = !startDateObj || noteDate >= startDateObj;
+        const beforeEnd = !endDateObj || noteDate <= endDateObj;
+
+        return afterStart && beforeEnd;
+      });
+    }
+
+    setFilteredNotes(filtered);
+  };
+
+  // Handle search query change
+  const handleSearchChange = (e) => {
+    const query = e.target.value;
+    setSearchQuery(query);
+    applyFilters(query, startDate, endDate);
+  };
+
+ 
   return (
     <Box sx={{ p: 3 }}>
           <Typography variant="h4" gutterBottom> {/* gutterBottom adds spacing below */}
@@ -103,14 +166,38 @@ const Boncommandev = () => {
         Créer un Bon De Livraison
       </Button>
 
-       <TextField
-        label="Rechercher par Code"
-        variant="outlined"
-        fullWidth
-        value={searchQuery}
-        onChange={(e) => setSearchQuery(e.target.value)}
-        sx={{ mb: 3 }}
-      />
+        <LocalizationProvider dateAdapter={AdapterDateFns}>
+               <Box sx={{ display: 'flex', gap: 2, mb: 3 }}>
+                 <DatePicker
+                   label="Date de début"
+                   value={startDate}
+                   onChange={handleStartDateChange}
+                   format="dd/MM/yyyy"
+                   renderInput={(params) => <TextField {...params} />}
+                 />
+                 <DatePicker
+                   label="Date de fin"
+                   value={endDate}
+                   onChange={handleEndDateChange}
+                   format="dd/MM/yyyy"
+                   renderInput={(params) => <TextField {...params} />}
+                 />
+                 {(startDate || endDate) && (
+                   <Button onClick={resetDateFilters} variant="outlined" sx={{ ml: 2 }}>
+                     Réinitialiser
+                   </Button>
+                 )}
+               </Box>
+             </LocalizationProvider>
+       
+             <TextField
+               label="Rechercher par Code ou Client"
+               variant="outlined"
+               fullWidth
+               value={searchQuery}
+               onChange={handleSearchChange}
+               sx={{ mb: 3 }}
+             />
 
       {/* Delivery Notes Table */}
       <Table sx={{ mt: 3 }}>
