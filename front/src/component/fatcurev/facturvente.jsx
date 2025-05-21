@@ -205,7 +205,7 @@ const [startDate, setStartDate] = useState(null);
      <TableContainer 
              component={Paper}
              sx={{
-               maxHeight: '700px', // Set your desired max height
+               maxHeight: '850px', // Set your desired max height
                overflow: 'auto'
              }}
            >
