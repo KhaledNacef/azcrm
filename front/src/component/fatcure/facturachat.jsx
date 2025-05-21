@@ -30,7 +30,8 @@ const Boncommande = () => {
     const [todayInvoicesCount, setTodayInvoicesCount] = useState(0);
     const [filteredNotes, setFilteredNotes] = useState([]);
     const [searchQuery, setSearchQuery] = useState('');
-
+  const [startDate, setStartDate] = useState(null);
+  const [endDate, setEndDate] = useState(null);
   // Modal state
 
   const handleOpen = () => setOpen(true);
