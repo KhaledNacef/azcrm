@@ -181,31 +181,31 @@ const totalHT = deliveryNote.reduce((acc, prod) => {
 const formatAmountInWords = (amount, language, currency = 'TND') => {
   // Format the number with 3 decimal places
   const formattedAmount = amount.toFixed(3);
+  const [wholePart, decimalPart] = formattedAmount.split('.');
   
-  // Convert to words based on language
-  let amountInWords = n2words(formattedAmount, { 
+  // Convert whole and decimal parts to words
+  const wholeWords = n2words(wholePart, { 
+    lang: language === 'ar' ? 'ar' : language 
+  });
+  const decimalWords = n2words(decimalPart, {
     lang: language === 'ar' ? 'ar' : language 
   });
 
   // Language-specific formatting
+  let amountInWords;
   if (language === 'fr') {
-    // French: replace "virgule" with "et"
-    amountInWords = amountInWords.replace('virgule', 'et');
+    // French: "dinar" before virgule, "millimes" after
+    amountInWords = `${wholeWords} dinar et ${decimalWords} millimes`;
   } else if (language === 'ar') {
-    // Arabic: ensure "و" is used for decimals
-    amountInWords = amountInWords.replace(/،/g, ' و');
+    // Arabic: "دينار" before فاصلة, "مليم" after
+    amountInWords = `${wholeWords} دينار و ${decimalWords} مليم`;
+  } else {
+    // English/default: "dinar" before point, "millimes" after
+    amountInWords = `${wholeWords} dinar and ${decimalWords} millimes`;
   }
 
-  // Add currency
-  const currencies = {
-    fr: `${amountInWords} dinars`, 
-    ar: `${amountInWords} دينارا`,
-    en: `${amountInWords} dinars`
-  };
-
-  return currencies[language] || `${amountInWords} ${currency}`;
+  return amountInWords;
 };
-
 
   
   const handleOpen = () => setOpen(true);
