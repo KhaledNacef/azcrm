@@ -119,8 +119,8 @@ const formattedCodeClient = `${Bss.id}/${createdAt.getFullYear()}`;    // Step 2
       });
       // Handle StockP (general stock)
       const stockP = await StockP.findOne({
-        where: { designation },
-        transaction
+        where: { designation }
+        
       });
 
       
@@ -130,16 +130,15 @@ const formattedCodeClient = `${Bss.id}/${createdAt.getFullYear()}`;    // Step 2
         if (newQuantity <= 0) {
           // Remove the StockP entry if quantity is zero or negative
           await StockP.destroy({
-            where: { designation },
-            transaction
+            where: { designation }
+            
           });
         } else {
           // Update the StockP entry
           await stockP.update(
             {
               quantite: newQuantity
-            },
-            { transaction }
+            }
           );
         }
       } else {
