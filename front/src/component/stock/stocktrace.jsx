@@ -70,7 +70,7 @@ const [startDate, setStartDate] = useState(null);
       filtered = filtered.filter(
         (product) =>
           product.designation.toLowerCase().includes(searchQuery) ||
-          product.codesuplier.toString().includes(searchQuery)
+          product.codeClient.toString().includes(searchQuery)
       );
     }
   
