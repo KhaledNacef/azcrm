@@ -251,19 +251,20 @@ const [startDate, setStartDate] = useState(null);
 
       {/* Modal for creating a delivery note */}
       <Modal open={open} onClose={handleClose}>
-        <Box
-          sx={{
-            position: 'absolute',
-            top: '50%',
-            left: '50%',
-            transform: 'translate(-50%, -50%)',
-            bgcolor: 'background.paper',
-            boxShadow: 24,
-            p: 4,
-            borderRadius: 2,
-            width: 500,
-          }}
-        >
+           <Box
+           sx={{
+             position: 'absolute',
+             top: '50%',
+             left: '50%',
+             transform: 'translate(-50%, -50%)',
+             bgcolor: 'background.paper',
+             boxShadow: 24,
+             p: 4,
+             borderRadius: 2,
+             width: 800, // increased width
+             maxWidth: '95vw', // optional for responsive design
+           }}
+         >
           <Createbv onAddDeliveryNote={addDeliveryNote} />
         </Box>
       </Modal>

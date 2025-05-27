@@ -252,7 +252,7 @@ const CreateDeliveryNoteModal = ({ onAddDeliveryNote, codey }) => {
   )}
   ListboxProps={{
     style: {
-      maxHeight: "200px",
+      maxHeight: "300px",
     },
   }}
 />

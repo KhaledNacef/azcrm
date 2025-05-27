@@ -239,7 +239,7 @@ const Createbv = ({ onAddDeliveryNote }) => {
   )}
   ListboxProps={{
     style: {
-      maxHeight: "200px",
+      maxHeight: "300px",
     },
   }}
 />

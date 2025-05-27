@@ -248,7 +248,7 @@ const BonsortiePage = () => {
    </TableContainer>
       
       <Modal open={open} onClose={handleClose}>
-        <Box
+          <Box
           sx={{
             position: 'absolute',
             top: '50%',
@@ -258,7 +258,8 @@ const BonsortiePage = () => {
             boxShadow: 24,
             p: 4,
             borderRadius: 2,
-            width: 500,
+            width: 800, // increased width
+            maxWidth: '95vw', // optional for responsive design
           }}
         >
           <CreateDeliveryNoteModal onAddDeliveryNote={addDeliveryNote}  />
