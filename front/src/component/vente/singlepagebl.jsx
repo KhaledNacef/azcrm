@@ -669,6 +669,10 @@ const formatAmountInWords = (amount, language, currency = 'TND') => {
 
   </Typography>
 </Box>
+   <Box sx={{ mt: 5, textAlign: 'center' }}>
+                    {displayDate()}
+        
+        </Box>
         <Box sx={{ 
           display: 'flex', 
           justifyContent: 'space-between', 

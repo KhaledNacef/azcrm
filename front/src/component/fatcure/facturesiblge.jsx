@@ -530,6 +530,10 @@ const formatAmountInWords = (amount, language, currency = 'TND') => {
                         {formatAmountInWords(totalNetTTC,language)}
                 </Typography>
         </Box>
+         <Box sx={{ mt: 5, textAlign: 'center' }}>
+                    {displayDate()}
+        
+        </Box>
            <Box sx={{ display: 'flex', justifyContent: 'space-between', mt: 4 }}>
                   <Box sx={{ textAlign: 'center' }}>
                     <Typography variant="body2">{translations[language].signatureFournisseur}</Typography>
@@ -538,7 +542,6 @@ const formatAmountInWords = (amount, language, currency = 'TND') => {
                     <Typography variant="body2">{translations[language].signatureSociete}</Typography>
                   </Box>
                 </Box>
-                {displayDate()}
 
       </div>
 

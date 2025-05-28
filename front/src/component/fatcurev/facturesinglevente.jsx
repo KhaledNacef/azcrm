@@ -398,6 +398,14 @@ const formatAmountInWords = (amount, language, currency = 'TND') => {
     }
   };
   
+  function displayDate() {
+    const today = new Date();
+    const day = String(today.getDate()).padStart(2, '0');
+    const month = String(today.getMonth() + 1).padStart(2, '0');
+    const year = today.getFullYear();
+    return `${day}/${month}/${year}`;
+  }
+
   const hasTVA = deliveryNote.some((prod) => prod.tva && prod.tva > 0);
   const hasRemise = deliveryNote.some((prod) => prod.rem && prod.rem > 0);
   return (
@@ -673,6 +681,10 @@ const formatAmountInWords = (amount, language, currency = 'TND') => {
 
                       </Typography>
                     </Box>
+                       <Box sx={{ mt: 5, textAlign: 'center' }}>
+                                        {displayDate()}
+                            
+                            </Box>
 
         <Box sx={{ 
           display: 'flex', 
