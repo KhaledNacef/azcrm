@@ -564,7 +564,7 @@ const formatAmountInWords = (amount, language, currency = 'TND') => {
         <Box sx={{ mt: 5, textAlign: 'center' }}>
   <Typography variant="body2" sx={{ fontStyle: 'italic' }}>
     {formatAmountInWords(totalNetTTC,language)}
-            {displayDate()}
+           
 
   </Typography>
 </Box>
