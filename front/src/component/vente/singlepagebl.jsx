@@ -535,7 +535,7 @@ const formatAmountInWords = (amount, language, currency = 'TND') => {
         </Box>
 
         <Typography variant="h5" mb={3} textAlign="center">
-        {translations[printLanguage].deliveryNote} - {formatCode(id,datee)}
+        {translations[printLanguage].deliveryNote} - {formatCode(8,datee)}
         </Typography>
 
   <Table sx={{
