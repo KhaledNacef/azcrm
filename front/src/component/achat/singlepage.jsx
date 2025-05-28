@@ -425,7 +425,10 @@ const formatAmountInWords = (amount, language, currency = 'TND') => {
 </Box>
 
 </Box>
+<Box sx={{ mt: 5, textAlign: 'center' }}>
+            {displayDate()}
 
+</Box>
         <Typography variant="h5" mb={3} textAlign="center">
           {translations[language].bonDeAchat} - {num}
         </Typography>
@@ -565,12 +568,7 @@ const formatAmountInWords = (amount, language, currency = 'TND') => {
 
   </Typography>
 </Box>
- <Box sx={{ mt: 5, textAlign: 'center' }}>
-  <Typography variant="body2" >
-            {displayDate()}
-
-  </Typography>
-</Box>
+ 
         <Box sx={{ display: 'flex', justifyContent: 'space-between', mt: 4 }}>
           <Box sx={{ textAlign: 'center' }}>
             <Typography variant="body2">{translations[language].signatureFournisseur}</Typography>

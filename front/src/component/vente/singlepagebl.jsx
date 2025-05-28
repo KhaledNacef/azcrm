@@ -529,7 +529,10 @@ const formatAmountInWords = (amount, language, currency = 'TND') => {
     </Typography>
   </Box>
 </Box>
-
+       <Box sx={{ mt: 5, textAlign: 'center' }}>
+                    {displayDate()}
+        
+        </Box>
 
         <Typography variant="h5" mb={3} textAlign="center">
         {translations[printLanguage].deliveryNote} - {formatCode(id,datee)}
@@ -669,10 +672,7 @@ const formatAmountInWords = (amount, language, currency = 'TND') => {
 
   </Typography>
 </Box>
-   <Box sx={{ mt: 5, textAlign: 'center' }}>
-                    {displayDate()}
-        
-        </Box>
+  
         <Box sx={{ 
           display: 'flex', 
           justifyContent: 'space-between', 
