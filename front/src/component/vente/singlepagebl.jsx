@@ -530,7 +530,7 @@ const formatAmountInWords = (amount, language, currency = 'TND') => {
   </Box>
 </Box>
        <Box sx={{ mt: 5, textAlign: 'center' }}>
-                    {displayDate()}
+                    {datee}
         
         </Box>
 
