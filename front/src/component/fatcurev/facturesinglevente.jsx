@@ -110,7 +110,7 @@ const translations = {
 };
 
 const Bvsinlge = () => {
-  const { code, clientId, codey, devise,id,datee,timbre } = useParams();
+  const { code, clientId, codey, devise,num,datee,timbre } = useParams();
   const printRef = useRef();
   const navigate = useNavigate();
   const [printLanguage, setPrintLanguage] = useState('fr');
@@ -543,7 +543,7 @@ const formatAmountInWords = (amount, language, currency = 'TND') => {
 
 
         <Typography variant="h5" mb={3} textAlign="center">
-        {translations[printLanguage].deliveryNote}- {formatCode(id,datee)}
+        {translations[printLanguage].deliveryNote}- {formatCode(num,datee)}
         </Typography>
 
 <Table sx={{

@@ -218,7 +218,7 @@ const BonsortiePage = () => {
           {filteredNotes.length > 0 ? (
             filteredNotes.map((note) => (
               <TableRow key={note.id}>
-                <TableCell>{formatCode(note.id, note.createdAt)}</TableCell>
+                <TableCell>{formatCode(note.num, note.createdAt)}</TableCell>
                 <TableCell>{note.clientName || 'N/A'}</TableCell>
                 <TableCell>{note.timbre ? 'Oui' : 'Non'}</TableCell>
                 <TableCell>{formatDate(note.createdAt)}</TableCell>
@@ -227,7 +227,7 @@ const BonsortiePage = () => {
                     variant="outlined"
                     onClick={() =>
                       navigate(
-                        `/bon-livraison/${note.code}/${note.clientId}/${note.codey}/${note.devise}/${note.id}/${note.createdAt}/${note.timbre}`
+                        `/bon-livraison/${note.code}/${note.clientId}/${note.codey}/${note.devise}/${note.num}/${note.createdAt}/${note.timbre}`
                       )
                     }
                   >

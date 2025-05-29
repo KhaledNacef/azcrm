@@ -77,8 +77,12 @@ async function createBs(req, res) {
   try {
     const {code,clientId, products,clientName,codey,devise,timbre} = req.body;
 
+const count = await Bs.count();
+const nextId = count + 1;
+
     // Step 1: Create the Bs (Bon de Sortie)
     const Bss = await Bs.create({
+      num:nextId,
       timbre:timbre,
       clientId: clientId,
       code:code,

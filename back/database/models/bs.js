@@ -7,6 +7,11 @@ const Bs = {
     autoIncrement: true,
     primaryKey: true,
   },
+   num: {
+    type: DataTypes.INTEGER,
+          allowNull: false,
+
+  },
      timbre: {
       type: DataTypes.BOOLEAN,
       allowNull: false,

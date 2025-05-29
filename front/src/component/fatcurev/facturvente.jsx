@@ -223,14 +223,14 @@ const [startDate, setStartDate] = useState(null);
           {filteredNotes.length > 0 ? (
             filteredNotes.map((note) => (
               <TableRow key={note.code}>
-                <TableCell>{formatCode(note.id, note.createdAt)}</TableCell>
+                <TableCell>{formatCode(note.num, note.createdAt)}</TableCell>
                 <TableCell>{note.clientName || 'N/A'}</TableCell>
                 <TableCell>{note.timbre ? 'Oui' : 'Non'}</TableCell>                
                 <TableCell>{formatDate(note.createdAt)}</TableCell>
                 <TableCell>
                   <Button
                     variant="outlined"
-                    onClick={() => navigate(`/bon-commandefacturee/${note.code}/${note.clientId}/${note.codey}/${note.devise}/${note.id}/${note.createdAt}/${note.timbre}`)}
+                    onClick={() => navigate(`/bon-commandefacturee/${note.code}/${note.clientId}/${note.codey}/${note.devise}/${note.num}/${note.createdAt}/${note.timbre}`)}
                   >
                     Voir
                   </Button>
