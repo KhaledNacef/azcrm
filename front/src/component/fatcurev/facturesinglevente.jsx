@@ -400,7 +400,7 @@ const formatAmountInWords = (amount, language, currency = 'TND') => {
   };
   
   function displayDate() {
-    const today = new Date();
+    const today = new Date(datee);
     const day = String(today.getDate()).padStart(2, '0');
     const month = String(today.getMonth() + 1).padStart(2, '0');
     const year = today.getFullYear();
@@ -538,7 +538,7 @@ const formatAmountInWords = (amount, language, currency = 'TND') => {
          </Box>
        </Box>
         <Box sx={{ mt: 5, textAlign: 'center' }}>
-                                        {datee}
+                                        {displayDate()}
                             
                             </Box>
 
