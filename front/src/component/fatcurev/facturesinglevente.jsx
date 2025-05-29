@@ -229,6 +229,7 @@ const formatAmountInWords = (amount, language, currency = 'TND') => {
   };
 
   const isArabic = printLanguage === 'ar';
+  
  const formatCode = (id, dateString) => {
     const date = new Date(dateString);
     const year = date.getFullYear();

@@ -9,7 +9,7 @@ const Bs = {
   },
    num: {
     type: DataTypes.INTEGER,
-          allowNull: false,
+    allowNull: false,
 
   },
      timbre: {
