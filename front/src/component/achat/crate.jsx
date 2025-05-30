@@ -111,6 +111,13 @@ const CreateDeliveryNoteModala = ({ onAddDeliveryNote, codey }) => {
     }
   };
 
+
+const handleDeleteProduct = (indexToDelete) => {
+  const updatedProducts = products.filter((_, index) => index !== indexToDelete);
+  setProducts(updatedProducts);
+};
+
+
   return (
     <Box>
       <Typography variant="h6" mb={2}>Créer un Facture</Typography>
@@ -164,6 +171,7 @@ const CreateDeliveryNoteModala = ({ onAddDeliveryNote, codey }) => {
                <TableCell>Unité</TableCell>
                <TableCell>Prix U (TND)</TableCell>
                <TableCell>Quantité</TableCell>
+                  <TableCell>Action</TableCell>
              </TableRow>
            </TableHead>
            <TableBody>
@@ -173,6 +181,15 @@ const CreateDeliveryNoteModala = ({ onAddDeliveryNote, codey }) => {
                  <TableCell>{prod.Unite}</TableCell>
                  <TableCell>{prod.prixU_HT}</TableCell>
                  <TableCell>{prod.quantite}</TableCell>
+                  <TableCell>
+        <Button
+          variant="outlined"
+          color="error"
+          onClick={() => handleDeleteProduct(index)}
+        >
+          Supprimer
+        </Button>
+      </TableCell>
                </TableRow>
              ))}
            </TableBody>

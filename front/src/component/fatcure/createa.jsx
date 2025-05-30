@@ -141,6 +141,12 @@ const CreatebcModala = ({ onAddDeliveryNote }) => {
     }
   };
 
+
+  const handleDeleteProduct = (indexToDelete) => {
+  const updatedProducts = products.filter((_, index) => index !== indexToDelete);
+  setProducts(updatedProducts);
+};
+
   return (
     <Box>
       <Typography variant="h6" mb={2}>Créer un Bon De Livraison</Typography>
@@ -246,6 +252,8 @@ const CreatebcModala = ({ onAddDeliveryNote }) => {
                <TableCell>Unité</TableCell>
                <TableCell>Prix U (TND)</TableCell>
                <TableCell>Quantité</TableCell>
+              <TableCell>Action</TableCell>
+               
              </TableRow>
            </TableHead>
            <TableBody>
@@ -255,6 +263,15 @@ const CreatebcModala = ({ onAddDeliveryNote }) => {
                  <TableCell>{prod.Unite}</TableCell>
                  <TableCell>{prod.prixU_HT}</TableCell>
                  <TableCell>{prod.quantite}</TableCell>
+                            <TableCell>
+                         <Button
+                           variant="outlined"
+                           color="error"
+                           onClick={() => handleDeleteProduct(index)}
+                         >
+                           Supprimer
+                         </Button>
+                       </TableCell>
                </TableRow>
              ))}
            </TableBody>

@@ -208,6 +208,13 @@ const CreateDeliveryNoteModal = ({ onAddDeliveryNote, codey }) => {
   const handleCloseSnackbar = () => {
     setSnackbarOpen(false);
   };
+  
+
+
+  const handleDeleteProduct = (indexToDelete) => {
+  const updatedProducts = products.filter((_, index) => index !== indexToDelete);
+  setProducts(updatedProducts);
+};
 
   return (
     <Box>
@@ -338,7 +345,7 @@ const CreateDeliveryNoteModal = ({ onAddDeliveryNote, codey }) => {
                 <TableCell>Quantité</TableCell>
                 <TableCell>Rem</TableCell>
                 <TableCell>TVA</TableCell>
-
+                <TableCell>Action</TableCell>
 
               </TableRow>
             </TableHead>
@@ -351,7 +358,15 @@ const CreateDeliveryNoteModal = ({ onAddDeliveryNote, codey }) => {
                   <TableCell>{prod.quantite}</TableCell>
                   <TableCell>{prod.rem}</TableCell>
                   <TableCell>{prod.tva}</TableCell>
-
+                  <TableCell>
+                       <Button
+                          variant="outlined"
+                          color="error"
+                          onClick={() => handleDeleteProduct(index)}
+                        >
+                  Supprimer
+                       </Button>
+                 </TableCell>
 
                 </TableRow>
               ))}

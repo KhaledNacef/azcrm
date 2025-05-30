@@ -190,6 +190,10 @@ const Createbv = ({ onAddDeliveryNote }) => {
       console.error('Error creating delivery note:', error);
     }
   };
+const handleDeleteProduct = (indexToDelete) => {
+  const updatedProducts = products.filter((_, index) => index !== indexToDelete);
+  setProducts(updatedProducts);
+};
 
   return (
     <Box>
@@ -328,6 +332,8 @@ const Createbv = ({ onAddDeliveryNote }) => {
                 <TableCell>Price ({selectedCurrency})</TableCell>
                 <TableCell>Quantity</TableCell>
                 <TableCell>tva</TableCell>
+            <TableCell>Action</TableCell>
+                
 
               </TableRow>
             </TableHead>
@@ -339,6 +345,15 @@ const Createbv = ({ onAddDeliveryNote }) => {
                   <TableCell>{product.prixU_HT}</TableCell>
                   <TableCell>{product.quantite}</TableCell>
                   <TableCell>{product.tva}</TableCell>
+                            <TableCell>
+                          <Button
+                            variant="outlined"
+                            color="error"
+                            onClick={() => handleDeleteProduct(index)}
+                          >
+                            Supprimer
+                          </Button>
+                        </TableCell>
 
                 </TableRow>
               ))}
