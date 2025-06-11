@@ -32,7 +32,7 @@ const BonsortiePage = () => {
   const [filteredNotes, setFilteredNotes] = useState([]);
   const [startDate, setStartDate] = useState(null);
   const [endDate, setEndDate] = useState(null);
-const[bslocation,setBslocation]=('');
+const[bslocation,setBslocation] =useState('');
 
  const handleChange = async (event) => {
     const selectedLocation = event.target.value;

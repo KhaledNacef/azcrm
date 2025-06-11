@@ -33,7 +33,7 @@ const Boncommandev = () => {
   const [searchQuery, setSearchQuery] = useState('');
 const [startDate, setStartDate] = useState(null);
   const [endDate, setEndDate] = useState(null);
-  const[bslocation,setBslocation]=('');
+  const[bslocation,setBslocation]=useState('');
   // Function to fetch delivery notes
  const handleChange = async (event) => {
     const selectedLocation = event.target.value;
