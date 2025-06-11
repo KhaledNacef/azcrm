@@ -287,7 +287,7 @@ const [startDate, setStartDate] = useState(null);
           <TableCell>{product.designation}</TableCell>
           <TableCell>{product.Unite}</TableCell>
           <TableCell>{product.quantite}</TableCell>
-          <TableCell>{unitPrice.toFixed(3)} TND</TableCell>
+          <TableCell>{unitPrice.toFixed(3)} </TableCell>
           <TableCell>{(sellPrice|| 0).toFixed(3)} </TableCell>
           <TableCell>{totalprixvente.toFixed(3)} </TableCell>
           <TableCell>{gainPerUnit.toFixed(3)} </TableCell> 

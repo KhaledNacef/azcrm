@@ -183,7 +183,7 @@ const [startDate, setStartDate] = useState(null);
             <PaidIcon />
           </Avatar>
         </Box>
-        <Typography variant="h5">{totalTTC.toFixed(3)} TND</Typography>
+        <Typography variant="h5">{totalTTC.toFixed(3)} </Typography>
       </CardContent>
     </Card>
   </Grid>
@@ -198,7 +198,7 @@ const [startDate, setStartDate] = useState(null);
             <MonetizationOnIcon />
           </Avatar>
         </Box>
-        <Typography variant="h5">{totalSellPrice.toFixed(3)} TND</Typography>
+        <Typography variant="h5">{totalSellPrice.toFixed(3)} </Typography>
       </CardContent>
     </Card>
   </Grid>
@@ -213,7 +213,7 @@ const [startDate, setStartDate] = useState(null);
             <TrendingUpIcon />
           </Avatar>
         </Box>
-        <Typography variant="h5">{totalProfit.toFixed(3)} TND</Typography>
+        <Typography variant="h5">{totalProfit.toFixed(3)} </Typography>
       </CardContent>
     </Card>
   </Grid>

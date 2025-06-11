@@ -159,7 +159,7 @@ const StockHPage = () => {
                     const netTTC = netHT + (netHT * product.tva) / 100;
                     return acc + netTTC;
                   }, 0)
-                  .toFixed(3)}
+                  .toFixed(3)} TND
               </Typography>
             </CardContent>
           </Card>
