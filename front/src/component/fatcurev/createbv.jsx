@@ -35,6 +35,7 @@ const Createbv = ({ onAddDeliveryNote }) => {
   const [rem, setRem] = useState(0);
   const [tvaa, setTvaa] = useState(0);
   const [timbre, setTimbre] = useState(false);
+  const [location,setLocation]=useState('');
 
   const API_BASE_URL = 'https://api.azcrm.deviceshopleader.com/api/v1';
   const EXCHANGE_RATE_API_URL = 'https://api.exchangerate-api.com/v4/latest/TND';
@@ -176,7 +177,8 @@ const Createbv = ({ onAddDeliveryNote }) => {
         clientName: clients.find((cl) => cl.id === client)?.fullname || "",
         codey,
         devise: selectedCurrency,
-        timbre:timbre
+        timbre:timbre,
+      location:location
       });
 
       setSnackbarMessage('Delivery note created successfully');
@@ -206,7 +208,14 @@ const handleDeleteProduct = (indexToDelete) => {
         margin="normal"
         disabled
       />
-      
+      <TextField
+              label="Localisation"
+              type="text"
+              value={location}
+              onChange={(e) => setLocation(e.target.value)}
+              fullWidth
+              margin="normal"
+            />
       <TextField
         select
         label="Select Client"

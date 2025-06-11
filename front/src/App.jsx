@@ -22,7 +22,7 @@ import Login from './component/loginandRegistration/login.jsx';
 import Registration from './component/loginandRegistration/registration.jsx';
 import StockHPage from './component/stock/stockHistory.jsx';
 import StockTPage from './component/stock/stocktrace.jsx';
-
+import StockTPageEtranger from './component/stock/stocktraceetranger.jsx'
 // Protect Route Component
 const RequireAuth = () => {
   const isAuthenticated = localStorage.getItem('token'); 
@@ -59,6 +59,7 @@ const App = () => {
       <Route path="gestion/:codey" element={<CompareProducts />} />
       <Route path="gestionv/:codey" element={<CompareProductsv />} />
       <Route path="/stock/mouvement" element={<StockTPage />} />
+       <Route path="/stocketranger/mouvement" element={<StockTPageEtranger />} />
       <Route path="/stock/achat-history" element={<StockHPage />} />
 
     </Route>

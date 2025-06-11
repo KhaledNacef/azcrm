@@ -20,6 +20,7 @@ import CreateDeliveryNoteModal from './cratebl.jsx';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
+import { FormControl, InputLabel, Select, MenuItem } from '@mui/material';
 
 
 const BonsortiePage = () => {
@@ -31,21 +32,40 @@ const BonsortiePage = () => {
   const [filteredNotes, setFilteredNotes] = useState([]);
   const [startDate, setStartDate] = useState(null);
   const [endDate, setEndDate] = useState(null);
+const[bslocation,setBslocation]=('');
 
+ const handleChange = async (event) => {
+    const selectedLocation = event.target.value;
+    setBslocation(selectedLocation);
 
-  const fetchDeliveryNotes = async () => {
+    if (selectedLocation === 'local') {
+      await fetchLocalNotes();
+    } else if (selectedLocation === 'etranger') {
+      await fetchForeignNotes();
+    }
+  };
+
+  const fetchLocalNotes = async () => {
     try {
       const response = await axios.get('https://api.azcrm.deviceshopleader.com/api/v1/bs/bs/get');
       setDeliveryNotes(response.data);
       setFilteredNotes(response.data);
       countTodayInvoices(response.data);
     } catch (error) {
-      console.error('Error fetching delivery notes:', error);
+      console.error('Error fetching local delivery notes:', error);
     }
   };
 
-
-
+  const fetchForeignNotes = async () => {
+    try {
+      const response = await axios.get('https://api.azcrm.deviceshopleader.com/api/v1/bs/bsE/get');
+      setDeliveryNotes(response.data);
+      setFilteredNotes(response.data);
+      countTodayInvoices(response.data);
+    } catch (error) {
+      console.error('Error fetching foreign delivery notes:', error);
+    }
+  };
 
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
@@ -163,6 +183,19 @@ const BonsortiePage = () => {
 <Button variant="contained" color="primary" onClick={handleOpen} sx={{ m: 2 }}>
         Créer un Facture Vente
       </Button>
+       <FormControl fullWidth>
+      <InputLabel id="location-label">Localisation</InputLabel>
+      <Select
+        labelId="location-label"
+        id="location-select"
+        value={bslocation}
+        label="Localisation"
+        onChange={handleChange}
+      >
+        <MenuItem value="local">Local</MenuItem>
+        <MenuItem value="etranger">Étranger</MenuItem>
+      </Select>
+    </FormControl>
      
         <LocalizationProvider dateAdapter={AdapterDateFns}>
                     <Box sx={{ display: 'flex', gap: 2, mb: 3 }}>

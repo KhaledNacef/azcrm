@@ -8,7 +8,7 @@ const FactureVP=db.models.facturevp
 
 async function createbv(req, res) {
   try {
-    const {code, clientId, products,clientName,codey,devise,timbre } = req.body;
+    const {code, clientId, products,clientName,codey,devise,timbre,location } = req.body;
 
 const count = await Bs.count();
 const nextId = count + 1;
@@ -21,7 +21,9 @@ const nextId = count + 1;
       code:code,
       clientName:clientName,
       codey:codey,
-      devise:devise
+      devise:devise,
+      location:location
+
     
     });
 
@@ -65,13 +67,20 @@ const nextId = count + 1;
 // Get all FactureV entries
 const getAllFactureV = async (req, res) => {
   try {
-    const factures = await FactureV.findAll();
+    const factures = await FactureV.findAll({ where: { location:'local'  } });
     res.status(200).json(factures);
   } catch (error) {
     res.status(500).json({ error: 'Error fetching FactureV entries' });
   }
 };
-
+const getAllFactureVe = async (req, res) => {
+  try {
+    const factures = await FactureV.findAll({ where: { location:'etranger' } });
+    res.status(200).json(factures);
+  } catch (error) {
+    res.status(500).json({ error: 'Error fetching FactureV entries' });
+  }
+};
 // Get FactureV by code
 const getFactureVByCode = async (req, res) => {
   const { code } = req.params;
@@ -144,5 +153,6 @@ module.exports = {
   getFactureVByCode,
   updateFactureVById,
   deleteFactureVById,
-  getFactureVBycodey
+  getFactureVBycodey,
+  getAllFactureVe
 };

@@ -102,7 +102,16 @@ const SidebarMenu = () => {
               to="/stock/mouvement"
               sx={getSubItemStyles(isActive('/stock/mouvement'))}
             >
-              <ListItemText inset primary="Mouvement de Produit" />
+              <ListItemText inset primary="Mouvement de Produit Local" />
+            </ListItem>
+             <ListItem
+              button
+              component={Link}
+              to="/stocketranger/mouvement"
+              sx={getSubItemStyles(isActive('/stocketranger/mouvement'))}
+            >
+              <ListItemText inset primary="Produits exportés" />
+              
             </ListItem>
             <ListItem
               button
@@ -110,8 +119,10 @@ const SidebarMenu = () => {
               to="/stock/achat-history"
               sx={getSubItemStyles(isActive('/stock/achat-history'))}
             >
-              <ListItemText inset primary="Produit Achat History" />
+              <ListItemText inset primary="Historique d’achat de produits" />
+              
             </ListItem>
+             
           </List>
         </Collapse>
 

@@ -3,6 +3,7 @@ const Bs =db.models.bs
 const Vente=db.models.vente
 const StockP=db.models.stockP
 const StockT=db.models.stockT
+const StockTE=db.models.stockTE
 
 async function getAllStockT(req, res) {
   try {
@@ -18,7 +19,19 @@ async function getAllStockT(req, res) {
   }
 }
 
+async function getAllStockTE(req, res) {
+  try {
+    // Fetch all delivery notes with their associated stock entries
+    const ST = await StockTE.findAll();
 
+    return res.status(200).json(ST);
+  } catch (error) {
+    console.error('Error fetching delivery notes:', error);
+    return res.status(500).json({
+      error: 'Failed to fetch delivery notess',
+    });
+  }
+}
 
 const getAllStockItemsByBs = async (req, res) => {
   try {
@@ -61,7 +74,24 @@ const getAllStockItemsByBscodey = async (req, res) => {
 async function getAllBss(req, res) {
   try {
     // Fetch all delivery notes with their associated stock entries
-    const Bss = await Bs.findAll();
+    const Bss = await Bs.findAll({
+      where: { location:'local' },
+    });
+
+    return res.status(200).json(Bss);
+  } catch (error) {
+    console.error('Error fetching delivery notes:', error);
+    return res.status(500).json({
+      error: 'Failed to fetch delivery notess',
+    });
+  }
+}
+async function getAllBssE(req, res) {
+  try {
+    // Fetch all delivery notes with their associated stock entries
+    const Bss = await Bs.findAll({
+      where: { location:'etranger' },
+    });
 
     return res.status(200).json(Bss);
   } catch (error) {
@@ -72,10 +102,9 @@ async function getAllBss(req, res) {
   }
 }
 
-
 async function createBs(req, res) {
   try {
-    const {code,clientId, products,clientName,codey,devise,timbre} = req.body;
+    const {code,clientId, products,clientName,codey,devise,timbre,location} = req.body;
 
 const count = await Bs.count();
 const nextId = count + 1;
@@ -89,6 +118,7 @@ const nextId = count + 1;
       clientName:clientName,
       codey:codey,
       devise:devise,
+      location:location
       
     });
     const createdAt = new Date(Bss.createdAt);
@@ -109,7 +139,8 @@ const formattedCodeClient = `${Bss.id}/${createdAt.getFullYear()}`;    // Step 2
         tva:tva
       });
 
-      await StockT.create({
+     if (location==='local'){
+       await StockT.create({
         prixU_HT: buyprice,
         quantite: quantite,
         designation: designation,
@@ -121,6 +152,22 @@ const formattedCodeClient = `${Bss.id}/${createdAt.getFullYear()}`;    // Step 2
         devise:devise
 
       });
+
+     }else{
+         await StockTE.create({
+        prixU_HT: buyprice,
+        quantite: quantite,
+        designation: designation,
+        Unite: Unite,
+        rem:rem,
+        tva:tva,
+        sellprice:sellprice,
+        codeClient:formattedCodeClient,
+        devise:devise
+
+      });
+
+     };
       // Handle StockP (general stock)
       const stockP = await StockP.findOne({
         where: { designation }
@@ -203,5 +250,5 @@ async function deleteBs(req, res) {
 
 module.exports = {
   createBs,
-  deleteBs,getAllBss,getAllStockItemsByBs,getAllStockItemsByBscodey,getAllStockT
+  deleteBs,getAllBss,getAllStockItemsByBs,getAllStockItemsByBscodey,getAllStockT,getAllStockTE,getAllBssE
 };

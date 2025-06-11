@@ -109,7 +109,8 @@ const StockHPage = () => {
   return (
     <Box sx={{ p: 3 }}>
       <Typography variant="h4" gutterBottom>
-        Tous Les Produits
+        Historique d’achat de produits
+
       </Typography>
 
       <LocalizationProvider dateAdapter={AdapterDateFns}>

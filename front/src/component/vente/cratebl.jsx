@@ -17,6 +17,7 @@ import {
 import Autocomplete from "@mui/material/Autocomplete";
 
 const CreateDeliveryNoteModal = ({ onAddDeliveryNote, codey }) => {
+  
   const [client, setClient] = useState("");
   const [code, setCode] = useState("");
   const [products, setProducts] = useState([]);
@@ -35,7 +36,7 @@ const CreateDeliveryNoteModal = ({ onAddDeliveryNote, codey }) => {
   const [tvaa, setTvaa] = useState(0);
   const [timbre, setTimbre] = useState(false);
   const [bprice, setBprice] = useState("");
-
+  const [location,setLocation]=useState('');
   const API_BASE_URL = "https://api.azcrm.deviceshopleader.com/api/v1";
   const CURRENCY_API_URL = "https://v6.exchangerate-api.com/v6/9179a4fac368332ee3e66b7b/latest/TND";
 
@@ -110,7 +111,7 @@ const CreateDeliveryNoteModal = ({ onAddDeliveryNote, codey }) => {
     }
   };
 
-  const handleAddProduct = async () => {
+ const handleAddProduct = async () => {
     if (!newProduct) return;
   
     if (parseFloat(quantite, 10) > newProduct.quantite) {
@@ -118,7 +119,7 @@ const CreateDeliveryNoteModal = ({ onAddDeliveryNote, codey }) => {
       setSnackbarSeverity('error');
       setSnackbarOpen(true);
       return;
-    }
+    } 
   
     const finalPrice = parseFloat(price);
     if (isNaN(finalPrice)) {
@@ -188,7 +189,8 @@ const CreateDeliveryNoteModal = ({ onAddDeliveryNote, codey }) => {
       clientName: clients.find((cl) => cl.id === client)?.fullname || "",
       codey: codey || 11,
       devise: selectedCurrency,
-      timbre:timbre
+      timbre:timbre,
+      location:location
     };
 
     try {
@@ -221,7 +223,14 @@ const CreateDeliveryNoteModal = ({ onAddDeliveryNote, codey }) => {
       <Typography variant="h6" mb={2}>
         Créer Facture
       </Typography>
-
+      <TextField
+        label="Localisation"
+        type="text"
+        value={location}
+        onChange={(e) => setLocation(e.target.value)}
+        fullWidth
+        margin="normal"
+      />
       <TextField
         label="Client"
         value={client}

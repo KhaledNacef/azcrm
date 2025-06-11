@@ -25,7 +25,10 @@ import ReceiptIcon from '@mui/icons-material/Receipt';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
-const StockTPage = () => {
+
+
+
+const StockTPageEtranger = () => {
   const [products, setProducts] = useState([]);
   const [filteredProducts, setFilteredProducts] = useState([]);
   const [searchQuery, setSearchQuery] = useState('');
@@ -37,8 +40,8 @@ const [startDate, setStartDate] = useState(null);
   useEffect(() => {
     const fetchStockAndRates = async () => {
       try {
-        const [stockResponse, rateResponse] = await Promise.all([
-          axios.get('https://api.azcrm.deviceshopleader.com/api/v1/bs/bs/getST')
+        const [stockResponse] = await Promise.all([
+          axios.get('https://api.azcrm.deviceshopleader.com/api/v1/bs/bs/getSTE')
         ]);
         setProducts(stockResponse.data);
         setFilteredProducts(stockResponse.data);
@@ -97,7 +100,7 @@ const [startDate, setStartDate] = useState(null);
     setSnackbarOpen(false);
   };
 
-  
+
 
   const totalTTC = filteredProducts.reduce((acc, product) => {
     const totalacaht=product.prixU_HT*product.quantite
@@ -141,7 +144,8 @@ const [startDate, setStartDate] = useState(null);
   return (
     <Box sx={{ p: 3 }}>
       <Typography variant="h4" gutterBottom>
-        Tous Les Produits
+        Produits exportés
+
       </Typography>
 
   <LocalizationProvider dateAdapter={AdapterDateFns}>
@@ -260,7 +264,9 @@ const [startDate, setStartDate] = useState(null);
               <TableCell sx={{ position: 'sticky', top: 0, bgcolor: 'background.paper', zIndex: 1 }}><strong>Total Prix De Vente (TTC)</strong></TableCell>
               <TableCell sx={{ position: 'sticky', top: 0, bgcolor: 'background.paper', zIndex: 1 }}><strong>Gain Unitaire</strong></TableCell> 
               <TableCell sx={{ position: 'sticky', top: 0, bgcolor: 'background.paper', zIndex: 1 }}><strong>Gain Total</strong></TableCell> 
+            <TableCell sx={{ position: 'sticky', top: 0, bgcolor: 'background.paper', zIndex: 1 }}><strong>Devise</strong></TableCell>
               <TableCell sx={{ position: 'sticky', top: 0, bgcolor: 'background.paper', zIndex: 1 }}><strong>Date</strong></TableCell>
+
               
           </TableRow>
           </TableHead>
@@ -287,11 +293,12 @@ const [startDate, setStartDate] = useState(null);
           <TableCell>{product.designation}</TableCell>
           <TableCell>{product.Unite}</TableCell>
           <TableCell>{product.quantite}</TableCell>
-          <TableCell>{unitPrice.toFixed(3)} TND</TableCell>
+          <TableCell>{unitPrice.toFixed(3)} </TableCell>
           <TableCell>{(sellPrice|| 0).toFixed(3)} </TableCell>
           <TableCell>{totalprixvente.toFixed(3)} </TableCell>
           <TableCell>{gainPerUnit.toFixed(3)} </TableCell> 
           <TableCell>{totalGain.toFixed(3)} </TableCell> 
+        <TableCell>{product.devise} </TableCell> 
           <TableCell>{createdAtDate}</TableCell>
         </TableRow>
       );
@@ -327,4 +334,4 @@ const [startDate, setStartDate] = useState(null);
   );
 };
 
-export default StockTPage;
+export default StockTPageEtranger;

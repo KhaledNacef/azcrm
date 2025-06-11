@@ -5,6 +5,7 @@ const factureVController = require('../controler/factureVente');
 
 // Route to fetch all FactureV entries
 router.get('/facturev/get', factureVController.getAllFactureV);
+router.get('/facturevE/get', factureVController.getAllFactureVe);
 
 // Route to fetch FactureV by code
 router.get('/facturev/:code', factureVController.getFactureVByCode);
