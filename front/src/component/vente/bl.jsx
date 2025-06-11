@@ -34,38 +34,41 @@ const BonsortiePage = () => {
   const [endDate, setEndDate] = useState(null);
 const[bslocation,setBslocation] =useState('');
 
- const handleChange = async (event) => {
-    const selectedLocation = event.target.value;
-    setBslocation(selectedLocation);
 
-    if (selectedLocation === 'local') {
-      await fetchLocalNotes();
-    } else if (selectedLocation === 'etranger') {
-      await fetchForeignNotes();
-    }
-  };
+const handleChange = async (event) => {
+  const selectedLocation = event.target.value;
+  setBslocation(selectedLocation);
 
-  const fetchLocalNotes = async () => {
-    try {
-      const response = await axios.get('https://api.azcrm.deviceshopleader.com/api/v1/bs/bs/get');
-      setDeliveryNotes(response.data);
-      setFilteredNotes(response.data);
-      countTodayInvoices(response.data);
-    } catch (error) {
-      console.error('Error fetching local delivery notes:', error);
-    }
-  };
+  if (selectedLocation === 'local') {
+    await fetchLocalNotes();
+  } else if (selectedLocation === 'etranger') {
+    await fetchForeignNotes();
+  }
+};
+ const fetchLocalNotes = async () => {
+  try {
+    const response = await axios.get('https://api.azcrm.deviceshopleader.com/api/v1/bs/bs/get');
+    setDeliveryNotes(response.data);
+    setFilteredNotes(response.data); // optional: will be overridden
+    countTodayInvoices(response.data);
+    applyFilters(searchQuery, startDate, endDate, response.data); // 👈 pass data here
+  } catch (error) {
+    console.error('Error fetching local delivery notes:', error);
+  }
+};
 
-  const fetchForeignNotes = async () => {
-    try {
-      const response = await axios.get('https://api.azcrm.deviceshopleader.com/api/v1/bs/bsE/get');
-      setDeliveryNotes(response.data);
-      setFilteredNotes(response.data);
-      countTodayInvoices(response.data);
-    } catch (error) {
-      console.error('Error fetching foreign delivery notes:', error);
-    }
-  };
+const fetchForeignNotes = async () => {
+  try {
+    const response = await axios.get('https://api.azcrm.deviceshopleader.com/api/v1/bs/bsE/get');
+    setDeliveryNotes(response.data);
+    setFilteredNotes(response.data); // optional
+    countTodayInvoices(response.data);
+    applyFilters(searchQuery, startDate, endDate, response.data); // 👈 pass data here
+  } catch (error) {
+    console.error('Error fetching foreign delivery notes:', error);
+  }
+};
+
 
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
@@ -112,40 +115,40 @@ const[bslocation,setBslocation] =useState('');
     return `${id}/${year}`; // Only ID and year
   };
 
-  const applyFilters = (search = searchQuery, start = startDate, end = endDate) => {
-    let filtered = [...deliveryNotes];
+const applyFilters = (search = searchQuery, start = startDate, end = endDate, data = deliveryNotes) => {
+  let filtered = [...data]; // ← use passed notes
 
-    // Apply search filter
-   if (search) {
-      filtered = filtered.filter(note => {
-        const formattedCode = formatCode(note.id, note.createdAt);
-        return (
-          formattedCode.toLowerCase().includes(search.toLowerCase()) ||
-          (note.clientName && note.clientName.toLowerCase().includes(search.toLowerCase()))
-        );
-      });
-    }
-    // Apply date filters
-    if (start || end) {
-      filtered = filtered.filter(note => {
-        if (!note.createdAt) return false;
-        
-        const noteDate = new Date(note.createdAt);
-        const startDateObj = start ? new Date(start) : null;
-        const endDateObj = end ? new Date(end) : null;
+  if (search) {
+    filtered = filtered.filter(note => {
+      const formattedCode = formatCode(note.id, note.createdAt);
+      return (
+        formattedCode.toLowerCase().includes(search.toLowerCase()) ||
+        (note.clientName && note.clientName.toLowerCase().includes(search.toLowerCase()))
+      );
+    });
+  }
 
-        if (startDateObj) startDateObj.setHours(0, 0, 0, 0);
-        if (endDateObj) endDateObj.setHours(23, 59, 59, 999);
+  if (start || end) {
+    filtered = filtered.filter(note => {
+      if (!note.createdAt) return false;
 
-        const afterStart = !startDateObj || noteDate >= startDateObj;
-        const beforeEnd = !endDateObj || noteDate <= endDateObj;
+      const noteDate = new Date(note.createdAt);
+      const startDateObj = start ? new Date(start) : null;
+      const endDateObj = end ? new Date(end) : null;
 
-        return afterStart && beforeEnd;
-      });
-    }
+      if (startDateObj) startDateObj.setHours(0, 0, 0, 0);
+      if (endDateObj) endDateObj.setHours(23, 59, 59, 999);
 
-    setFilteredNotes(filtered);
-  };
+      const afterStart = !startDateObj || noteDate >= startDateObj;
+      const beforeEnd = !endDateObj || noteDate <= endDateObj;
+
+      return afterStart && beforeEnd;
+    });
+  }
+
+  setFilteredNotes(filtered);
+};
+
 
   // Handle search query change
   const handleSearchChange = (e) => {
