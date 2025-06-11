@@ -155,15 +155,7 @@ const[bslocation,setBslocation]=('');
   };
 
 
-  const addDeliveryNote = () => {
-    handleClose();
-    fetchDeliveryNotes(); // ✅ Refresh table after adding
-  };
 
-  useEffect(() => {
-    fetchDeliveryNotes();
-  }, []);
-  
   return (
     <Box sx={{ p: 3 }}>
        <Typography variant="h4" gutterBottom> {/* gutterBottom adds spacing below */}

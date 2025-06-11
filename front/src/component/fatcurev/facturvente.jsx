@@ -91,7 +91,6 @@ const [startDate, setStartDate] = useState(null);
   // Function to refresh data after adding a note
   const addDeliveryNote = () => {
     handleClose();
-    fetchDeliveryNotes(); // ✅ Refresh table after adding
   };
   const countTodayInvoices = (notes) => {
     const today = new Date();
