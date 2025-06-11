@@ -155,7 +155,12 @@ const[bslocation,setBslocation]=('');
   };
 
 
+  const addDeliveryNote = () => {
+    handleClose();
+  };
 
+ 
+  
   return (
     <Box sx={{ p: 3 }}>
        <Typography variant="h4" gutterBottom> {/* gutterBottom adds spacing below */}
