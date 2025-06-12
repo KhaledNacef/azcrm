@@ -84,7 +84,6 @@ const handleChange = async (event) => {
     try {
       const response = await axios.get('https://api.azcrm.deviceshopleader.com/api/v1/bonachat/stock/getallL');
       setDeliveryNotes(response.data);
-      setFilteredNotes(response.data); // optional: will be overridden
       countTodayInvoices(response.data);
       applyFilters(searchQuery, startDate, endDate, response.data); // 👈 pass data here
     } catch (error) {
@@ -96,7 +95,6 @@ const handleChange = async (event) => {
     try {
       const response = await axios.get('https://api.azcrm.deviceshopleader.com/api/v1/bonachat/stock/getallE');
       setDeliveryNotes(response.data);
-      setFilteredNotes(response.data); // optional
       countTodayInvoices(response.data);
       applyFilters(searchQuery, startDate, endDate, response.data); // 👈 pass data here
     } catch (error) {

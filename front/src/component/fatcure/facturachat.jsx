@@ -35,7 +35,7 @@ const Boncommande = () => {
     const [searchQuery, setSearchQuery] = useState('');
   const [startDate, setStartDate] = useState(null);
   const [endDate, setEndDate] = useState(null);
-  // Modal state
+const[bslocation,setBslocation] =useState('');
 
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
@@ -60,7 +60,6 @@ const Boncommande = () => {
       try {
         const response = await axios.get('https://api.azcrm.deviceshopleader.com/api/v1/boncommandall/factures/get');
         setDeliveryNotes(response.data);
-        setFilteredNotes(response.data); // optional: will be overridden
         countTodayInvoices(response.data);
         applyFilters(searchQuery, startDate, endDate, response.data); // 👈 pass data here
       } catch (error) {
@@ -72,7 +71,6 @@ const Boncommande = () => {
       try {
         const response = await axios.get('https://api.azcrm.deviceshopleader.com/api/v1/boncommandall/factures/getE');
         setDeliveryNotes(response.data);
-        setFilteredNotes(response.data); // optional
         countTodayInvoices(response.data);
         applyFilters(searchQuery, startDate, endDate, response.data); // 👈 pass data here
       } catch (error) {

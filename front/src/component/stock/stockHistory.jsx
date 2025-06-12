@@ -51,7 +51,6 @@ const StockHPage = () => {
     try {
       const response = await axios.get('https://api.azcrm.deviceshopleader.com/api/v1/bonachat/stock/getallSHL');
       setProducts(response.data);
-      setFilteredNotes(response.data); // optional: will be overridden
       countTodayInvoices(response.data);
       applyFilters(searchQuery, startDate, endDate, response.data); // 👈 pass data here
     } catch (error) {
@@ -63,7 +62,6 @@ const StockHPage = () => {
     try {
       const response = await axios.get('https://api.azcrm.deviceshopleader.com/api/v1/bonachat/stock/getallSHE');
       setProducts(response.data);
-      setFilteredNotes(response.data); // optional
       countTodayInvoices(response.data);
       applyFilters(searchQuery, startDate, endDate, response.data); // 👈 pass data here
     } catch (error) {
