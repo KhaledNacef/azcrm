@@ -7,13 +7,20 @@ const  FactureAP  = db.models.factureap // Adjust the path as per your project s
 // Fetch all FactureA entries
 const getAllFactureA = async (req, res) => {
   try {
-    const factures = await FactureA.findAll();
+    const factures = await FactureA.findAll({ where: { location:'local'  } });
     res.status(200).json(factures);
   } catch (error) {
     res.status(500).json({ error: 'Error fetching factures' });
   }
 };
-
+const getAllFactureAE = async (req, res) => {
+  try {
+    const factures = await FactureA.findAll({ where: { location:'etranger' } });
+    res.status(200).json(factures);
+  } catch (error) {
+    res.status(500).json({ error: 'Error fetching factures' });
+  }
+};
 // Fetch FactureA by code
 const getFactureAByCode = async (req, res) => {
   const { code } = req.params;
@@ -32,7 +39,7 @@ const getFactureAByCode = async (req, res) => {
 // Add a new FactureA
 async function addFactureA(req, res) {
   try {
-    const { code,num,spulierId,timbre, products,spulierName,codey} = req.body;
+    const { code,num,spulierId,timbre, products,spulierName,codey,location} = req.body;
 
     // Step 1: Create the DeliveryNote (Bon d'achat)
     const deliveryNote = await FactureA.create({
@@ -41,7 +48,8 @@ async function addFactureA(req, res) {
       timbre:timbre,
       code:code,
       spulierName:spulierName,
-      codey:codey
+      codey:codey,
+      location:location
     });
 
     // Step 2: Handle stock and stockP for each product
@@ -100,5 +108,5 @@ module.exports = {
   getAllFactureA,
   getFactureAByCode,
   addFactureA,
-  deleteFactureA,
+  deleteFactureA,getAllFactureAE
 };

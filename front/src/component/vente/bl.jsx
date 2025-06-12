@@ -198,7 +198,7 @@ const applyFilters = (search = searchQuery, start = startDate, end = endDate, da
     </FormControl>
      
         <LocalizationProvider dateAdapter={AdapterDateFns}>
-                    <Box sx={{ display: 'flex', gap: 2, mb: 3 }}>
+                    <Box sx={{ display: 'flex', gap: 2, mb: 3,mt:3 }}>
                       <DatePicker
                         label="Date de début"
                         value={startDate}

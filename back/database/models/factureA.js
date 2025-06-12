@@ -31,6 +31,10 @@ const FactureA =  {
     codey: {
       type: DataTypes.STRING,
       allowNull: true,
+    },
+    location: {
+      type: DataTypes.STRING,
+      allowNull: false,
     }
    
 };

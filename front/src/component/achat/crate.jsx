@@ -15,6 +15,7 @@ import {
   Alert,
 } from "@mui/material";
 import Autocomplete from "@mui/material/Autocomplete";
+import { FormControl, InputLabel, MenuItem, Select } from '@mui/material';
 
 const CreateDeliveryNoteModala = ({ onAddDeliveryNote, codey }) => {
   const [supplier, setSupplier] = useState(0);
@@ -31,6 +32,7 @@ const CreateDeliveryNoteModala = ({ onAddDeliveryNote, codey }) => {
   const [snackbar, setSnackbar] = useState({ open: false, message: "", severity: "info" });
   const [rem, setRem] = useState(0);
   const [num, setNum] = useState("");
+  const [location,setLocation]=useState('');
 
   const API_BASE_URL = "https://api.azcrm.deviceshopleader.com/api/v1";
 
@@ -100,6 +102,8 @@ const CreateDeliveryNoteModala = ({ onAddDeliveryNote, codey }) => {
       products,
       spulierName: suppliern,
       codey:codey || 10,
+      location:location
+
     };
 
     try {
@@ -122,6 +126,19 @@ const handleDeleteProduct = (indexToDelete) => {
     <Box>
       <Typography variant="h6" mb={2}>Créer un Facture</Typography>
       <TextField label="Numéro de bon d'achat" type="text" value={num} onChange={(e) => setNum(e.target.value || 0)} fullWidth margin="normal" />
+
+        <FormControl fullWidth margin="normal" sx={{mb:3 }}> 
+        <InputLabel id="location-label">Localisation</InputLabel>
+        <Select
+          labelId="location-label"
+          value={location}
+          label="Localisation"
+          onChange={(e) => setLocation(e.target.value)}
+        >
+          <MenuItem value="local">Local</MenuItem>
+          <MenuItem value="etranger">Etranger</MenuItem>
+        </Select>
+      </FormControl>
 
       <TextField label="Fournisseur" value={supplier} onChange={handleSupplierChange} select fullWidth margin="normal">
         {suppliers.map((sup) => (<MenuItem key={sup.id} value={sup.id}>{sup.fullname}</MenuItem>))}

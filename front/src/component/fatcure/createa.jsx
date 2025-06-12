@@ -29,6 +29,7 @@ const CreatebcModala = ({ onAddDeliveryNote }) => {
   const [prixU_HT, setPrixU_HT] = useState(0);
   const [rem, setRem] = useState(0);
   const [num, setNum] = useState("");
+  const [location,setLocation]=useState('');
 
   const [quantite, setQuantite] = useState(1);
   const [availableProducts, setAvailableProducts] = useState([]);
@@ -122,7 +123,9 @@ const CreatebcModala = ({ onAddDeliveryNote }) => {
       timbre,
       products,
       spulierName:suppliern,
-      codey:codey
+      codey:codey,
+      location:location
+
     };
 
     try {
@@ -154,7 +157,18 @@ const CreatebcModala = ({ onAddDeliveryNote }) => {
      <TextField label="Numéro de bon d'achat"  type="text" value={num} onChange={(e) => setNum(e.target.value || 0)} fullWidth margin="normal" />
       
 
-      {/* Supplier selection */}
+        <FormControl fullWidth margin="normal" sx={{mb:3 }}> 
+        <InputLabel id="location-label">Localisation</InputLabel>
+        <Select
+          labelId="location-label"
+          value={location}
+          label="Localisation"
+          onChange={(e) => setLocation(e.target.value)}
+        >
+          <MenuItem value="local">Local</MenuItem>
+          <MenuItem value="etranger">Etranger</MenuItem>
+        </Select>
+      </FormControl>
       <TextField
         label="Fournisseur"
         value={supplier}

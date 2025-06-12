@@ -15,6 +15,7 @@ import {
   Alert,
 } from "@mui/material";
 import Autocomplete from "@mui/material/Autocomplete";
+import { FormControl, InputLabel, MenuItem, Select } from '@mui/material';
 
 const CreateDeliveryNoteModal = ({ onAddDeliveryNote, codey }) => {
   
@@ -223,14 +224,18 @@ const CreateDeliveryNoteModal = ({ onAddDeliveryNote, codey }) => {
       <Typography variant="h6" mb={2}>
         Créer Facture
       </Typography>
-      <TextField
-        label="Localisation"
-        type="text"
-        value={location}
-        onChange={(e) => setLocation(e.target.value)}
-        fullWidth
-        margin="normal"
-      />
+     <FormControl fullWidth margin="normal" sx={{mb:3 }}> 
+  <InputLabel id="location-label">Localisation</InputLabel>
+  <Select
+    labelId="location-label"
+    value={location}
+    label="Localisation"
+    onChange={(e) => setLocation(e.target.value)}
+  >
+    <MenuItem value="local">Local</MenuItem>
+    <MenuItem value="etranger">Etranger</MenuItem>
+  </Select>
+</FormControl>
       <TextField
         label="Client"
         value={client}

@@ -92,9 +92,39 @@ async function getAllDeliveryNotes(req, res) {
 
 }
 
+async function getAllDeliveryNotesL(req, res) {
+  try {
+    // Fetch all delivery notes with their associated stock entries
+    const deliveryNotes = await DeliveryNote.findAll({
+      where: { location:'local' }
+    });
 
+    return res.status(200).json(deliveryNotes);
+  } catch (error) {
+    console.error('Error fetching delivery notes:', error);
+    return res.status(500).json({
+      error: 'Failed to fetch delivery notes',
+    });
+  }
 
+}
 
+async function getAllDeliveryNotesE(req, res) {
+  try {
+    // Fetch all delivery notes with their associated stock entries
+    const deliveryNotes = await DeliveryNote.findAll({
+      where: { location:'etranger' }
+    });
+
+    return res.status(200).json(deliveryNotes);
+  } catch (error) {
+    console.error('Error fetching delivery notes:', error);
+    return res.status(500).json({
+      error: 'Failed to fetch delivery notes',
+    });
+  }
+
+}
 
 
 // Controller to create a DeliveryNote
@@ -110,6 +140,7 @@ async function createDeliveryNote(req, res) {
       code: code,
       spulierName: spulierName,
       codey: codey,
+      location:location
     });
 
     // Process each product
@@ -249,6 +280,6 @@ async function deleteDeliveryNote(req, res) {
 }
 
 module.exports = {
-  createDeliveryNote,
+  createDeliveryNote,getAllDeliveryNotesE,getAllDeliveryNotesL,
   deleteDeliveryNote,getAllDeliveryNotes,getAllStockItemsByDeliveryNote,getAllStockItemsByDeliveryNotey,getAllStockhistoryE,getAllStockhistoryL
 };

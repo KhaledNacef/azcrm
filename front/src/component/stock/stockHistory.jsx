@@ -34,7 +34,7 @@ const StockHPage = () => {
   const [snackbarSeverity, setSnackbarSeverity] = useState('success');
   const [startDate, setStartDate] = useState(null);
   const [endDate, setEndDate] = useState(null);
-const[bslocation,setBslocation] =useState('');
+  const[bslocation,setBslocation] =useState('');
 
   
   const handleChange = async (event) => {
@@ -149,7 +149,7 @@ const[bslocation,setBslocation] =useState('');
           </FormControl>
 
       <LocalizationProvider dateAdapter={AdapterDateFns}>
-        <Box sx={{ display: 'flex', gap: 2, mb: 3 }}>
+        <Box sx={{ display: 'flex', gap: 2, mb: 3,mt:3 }}>
         <DatePicker
   label="Start Date"
   value={startDate}

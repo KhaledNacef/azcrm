@@ -20,6 +20,7 @@ import axios from 'axios';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
+import { FormControl, InputLabel, Select, MenuItem } from '@mui/material';
 
 
 
@@ -41,21 +42,43 @@ const Boncommande = () => {
 
   const addDeliveryNote = () => {
     handleClose();
-    fetchDeliveryNotes();
+    
   };
 
-  // Fetch delivery notes from the backend
-  const fetchDeliveryNotes = async () => {
-    try {
-      const response = await axios.get('https://api.azcrm.deviceshopleader.com/api/v1/boncommandall/factures/get'); // Adjust URL as needed
-      setDeliveryNotes(response.data); 
-      setFilteredNotes(response.data);
-      countTodayInvoices(response.data);
-
-    } catch (error) {
-      console.error('Error fetching delivery notes:', error);
-    }
-  };
+  
+  const handleChange = async (event) => {
+      const selectedLocation = event.target.value;
+      setBslocation(selectedLocation);
+    
+      if (selectedLocation === 'local') {
+        await fetchLocalNotes();
+      } else if (selectedLocation === 'etranger') {
+        await fetchForeignNotes();
+      }
+    };
+     const fetchLocalNotes = async () => {
+      try {
+        const response = await axios.get('https://api.azcrm.deviceshopleader.com/api/v1/boncommandall/factures/get');
+        setDeliveryNotes(response.data);
+        setFilteredNotes(response.data); // optional: will be overridden
+        countTodayInvoices(response.data);
+        applyFilters(searchQuery, startDate, endDate, response.data); // 👈 pass data here
+      } catch (error) {
+        console.error('Error fetching local delivery notes:', error);
+      }
+    };
+    
+    const fetchForeignNotes = async () => {
+      try {
+        const response = await axios.get('https://api.azcrm.deviceshopleader.com/api/v1/boncommandall/factures/getE');
+        setDeliveryNotes(response.data);
+        setFilteredNotes(response.data); // optional
+        countTodayInvoices(response.data);
+        applyFilters(searchQuery, startDate, endDate, response.data); // 👈 pass data here
+      } catch (error) {
+        console.error('Error fetching foreign delivery notes:', error);
+      }
+    };
 
    const handleStartDateChange = (date) => {
     setStartDate(date);
@@ -74,8 +97,8 @@ const Boncommande = () => {
   };
 
   // Apply all filters
-  const applyFilters = (search = searchQuery, start = startDate, end = endDate) => {
-    let filtered = [...deliveryNotes];
+  const applyFilters = (search = searchQuery, start = startDate, end = endDate, data = deliveryNotes) => {
+    let filtered = [...data];
 
     // Apply search filter
     if (search) {
@@ -114,9 +137,7 @@ const Boncommande = () => {
     applyFilters(query, startDate, endDate);
   };
 
-  useEffect(() => {
-    fetchDeliveryNotes();
-  }, []);
+  
 
 
  const countTodayInvoices = (notes) => {
@@ -138,6 +159,7 @@ const Boncommande = () => {
              <Typography variant="h4" gutterBottom> {/* gutterBottom adds spacing below */}
           Bon De Livraison Achat
         </Typography>
+
         <Chip 
           label={`${todayInvoicesCount} Bon De Livraison Achat aujourd'hui`}
           color="primary"
@@ -152,6 +174,20 @@ const Boncommande = () => {
           <Button variant="contained" color="primary"  sx={{ m: 2 }} onClick={handleOpen}>
         Créer un Bon De Livraison
       </Button>
+
+       <FormControl fullWidth>
+                        <InputLabel id="location-label">Localisation</InputLabel>
+                        <Select
+                          labelId="location-label"
+                          id="location-select"
+                          value={bslocation}
+                          label="Localisation"
+                          onChange={handleChange}
+                        >
+                          <MenuItem value="local">Local</MenuItem>
+                          <MenuItem value="etranger">Étranger</MenuItem>
+                        </Select>
+                      </FormControl>
 
         <LocalizationProvider dateAdapter={AdapterDateFns}>
               <Box sx={{ display: 'flex', gap: 2, mb: 3 }}>

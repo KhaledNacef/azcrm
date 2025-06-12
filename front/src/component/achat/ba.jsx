@@ -28,11 +28,12 @@ import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import CreateDeliveryNoteModala from './crate.jsx';
+import { FormControl, InputLabel, Select, MenuItem } from '@mui/material';
 
 const BonAchatPage = () => {
   const navigate = useNavigate();
 
-  // States
+const[bslocation,setBslocation] =useState('');
   const [deliveryNotes, setDeliveryNotes] = useState([]);
   const [open, setOpen] = useState(false);
   const [todayInvoicesCount, setTodayInvoicesCount] = useState(0);
@@ -69,6 +70,41 @@ const BonAchatPage = () => {
     }
   };
 
+const handleChange = async (event) => {
+    const selectedLocation = event.target.value;
+    setBslocation(selectedLocation);
+  
+    if (selectedLocation === 'local') {
+      await fetchLocalNotes();
+    } else if (selectedLocation === 'etranger') {
+      await fetchForeignNotes();
+    }
+  };
+   const fetchLocalNotes = async () => {
+    try {
+      const response = await axios.get('https://api.azcrm.deviceshopleader.com/api/v1/bonachat/stock/getallL');
+      setDeliveryNotes(response.data);
+      setFilteredNotes(response.data); // optional: will be overridden
+      countTodayInvoices(response.data);
+      applyFilters(searchQuery, startDate, endDate, response.data); // 👈 pass data here
+    } catch (error) {
+      console.error('Error fetching local delivery notes:', error);
+    }
+  };
+  
+  const fetchForeignNotes = async () => {
+    try {
+      const response = await axios.get('https://api.azcrm.deviceshopleader.com/api/v1/bonachat/stock/getallE');
+      setDeliveryNotes(response.data);
+      setFilteredNotes(response.data); // optional
+      countTodayInvoices(response.data);
+      applyFilters(searchQuery, startDate, endDate, response.data); // 👈 pass data here
+    } catch (error) {
+      console.error('Error fetching foreign delivery notes:', error);
+    }
+  };
+
+
   // Handle date changes
   const handleStartDateChange = (date) => {
     setStartDate(date);
@@ -87,8 +123,8 @@ const BonAchatPage = () => {
   };
 
   // Apply all filters
-  const applyFilters = (search = searchQuery, start = startDate, end = endDate) => {
-    let filtered = [...deliveryNotes];
+  const applyFilters = (search = searchQuery, start = startDate, end = endDate, data = deliveryNotes) => {
+    let filtered = [...data];
 
     // Apply search filter
     if (search) {
@@ -204,6 +240,7 @@ const BonAchatPage = () => {
       <Typography variant="h4" gutterBottom>
         Factures Achat
       </Typography>
+
       <Chip 
         label={`${todayInvoicesCount} Factures Achat aujourd'hui`}
         color="primary"
@@ -217,10 +254,23 @@ const BonAchatPage = () => {
       <Button variant="contained" color="primary" onClick={handleOpen} sx={{ m: 2 }}>
         Créer un Bon D'ACHAT
       </Button>
+      <FormControl fullWidth>
+                  <InputLabel id="location-label">Localisation</InputLabel>
+                  <Select
+                    labelId="location-label"
+                    id="location-select"
+                    value={bslocation}
+                    label="Localisation"
+                    onChange={handleChange}
+                  >
+                    <MenuItem value="local">Local</MenuItem>
+                    <MenuItem value="etranger">Étranger</MenuItem>
+                  </Select>
+                </FormControl>
 
       {/* Date Filters */}
       <LocalizationProvider dateAdapter={AdapterDateFns}>
-        <Box sx={{ display: 'flex', gap: 2, mb: 3 }}>
+        <Box sx={{ display: 'flex', gap: 2, mb: 3,mt:3 }}>
           <DatePicker
             label="Date de début"
             value={startDate}

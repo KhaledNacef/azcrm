@@ -208,14 +208,18 @@ const handleDeleteProduct = (indexToDelete) => {
         margin="normal"
         disabled
       />
-      <TextField
-              label="Localisation"
-              type="text"
-              value={location}
-              onChange={(e) => setLocation(e.target.value)}
-              fullWidth
-              margin="normal"
-            />
+        <FormControl fullWidth margin="normal" sx={{mb:3 }}> 
+        <InputLabel id="location-label">Localisation</InputLabel>
+        <Select
+          labelId="location-label"
+          value={location}
+          label="Localisation"
+          onChange={(e) => setLocation(e.target.value)}
+        >
+          <MenuItem value="local">Local</MenuItem>
+          <MenuItem value="etranger">Etranger</MenuItem>
+        </Select>
+      </FormControl>
       <TextField
         select
         label="Select Client"
