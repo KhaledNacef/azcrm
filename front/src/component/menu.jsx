@@ -110,7 +110,7 @@ const SidebarMenu = () => {
               to="/stocketranger/mouvement"
               sx={getSubItemStyles(isActive('/stocketranger/mouvement'))}
             >
-              <ListItemText inset primary="Mouvement de Produit Produits exportés" />
+              <ListItemText inset primary="Produits destinés à l'exportation" />
               
             </ListItem>
             <ListItem
