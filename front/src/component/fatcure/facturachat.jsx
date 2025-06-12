@@ -173,7 +173,7 @@ const[bslocation,setBslocation] =useState('');
         Créer un Bon De Livraison
       </Button>
 
-       <FormControl fullWidth>
+       <FormControl fullWidth sx={{  mb: 3}}>
                         <InputLabel id="location-label">Localisation</InputLabel>
                         <Select
                           labelId="location-label"

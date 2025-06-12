@@ -51,7 +51,6 @@ const StockHPage = () => {
     try {
       const response = await axios.get('https://api.azcrm.deviceshopleader.com/api/v1/bonachat/stock/getallSHL');
       setProducts(response.data);
-      countTodayInvoices(response.data);
       applyFilters(searchQuery, startDate, endDate, response.data); // 👈 pass data here
     } catch (error) {
       console.error('Error fetching local delivery notes:', error);
@@ -62,7 +61,6 @@ const StockHPage = () => {
     try {
       const response = await axios.get('https://api.azcrm.deviceshopleader.com/api/v1/bonachat/stock/getallSHE');
       setProducts(response.data);
-      countTodayInvoices(response.data);
       applyFilters(searchQuery, startDate, endDate, response.data); // 👈 pass data here
     } catch (error) {
       console.error('Error fetching foreign delivery notes:', error);
