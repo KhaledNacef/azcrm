@@ -7,13 +7,13 @@ const StockH=db.models.stockH
 
 
 
-const getAllStockhistory = async (req, res) => {
+const getAllStockhistoryL = async (req, res) => {
   try {
 
-
-
     // Fetch all Stock items where BaId matches the DeliveryNote's id
-    const stocks = await StockH.findAll();
+    const stocks = await StockH.findAll({
+      where: { location:'local' }
+    });
 
     res.status(200).json(stocks);
   } catch (error) {
@@ -21,7 +21,22 @@ const getAllStockhistory = async (req, res) => {
     res.status(500).json({ error: 'Failed to fetch stock items' });
   }
 };
+const getAllStockhistoryE = async (req, res) => {
+  try {
 
+
+
+    // Fetch all Stock items where BaId matches the DeliveryNote's id
+    const stocks = await StockH.findAll({
+      where: { location:'etranger' }
+    });
+
+    res.status(200).json(stocks);
+  } catch (error) {
+    console.error('Error fetching stock items by delivery note code:', error);
+    res.status(500).json({ error: 'Failed to fetch stock items' });
+  }
+};
 
 
 const getAllStockItemsByDeliveryNote = async (req, res) => {
@@ -95,7 +110,6 @@ async function createDeliveryNote(req, res) {
       code: code,
       spulierName: spulierName,
       codey: codey,
-      location:location
     });
 
     // Process each product
@@ -124,7 +138,8 @@ async function createDeliveryNote(req, res) {
         designation: designation,
         Unite: Unite,
         rem: rem,
-        codesuplier:num
+        codesuplier:num,
+        location:location
       });
 
       // Handle StockP
@@ -235,5 +250,5 @@ async function deleteDeliveryNote(req, res) {
 
 module.exports = {
   createDeliveryNote,
-  deleteDeliveryNote,getAllDeliveryNotes,getAllStockItemsByDeliveryNote,getAllStockItemsByDeliveryNotey,getAllStockhistory
+  deleteDeliveryNote,getAllDeliveryNotes,getAllStockItemsByDeliveryNote,getAllStockItemsByDeliveryNotey,getAllStockhistoryE,getAllStockhistoryL
 };

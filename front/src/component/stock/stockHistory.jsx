@@ -23,6 +23,7 @@ import axios from 'axios';
 import PaidIcon from '@mui/icons-material/Paid';
 import Grid from '@mui/material/Grid2';
 import ReceiptIcon from '@mui/icons-material/Receipt';
+import { FormControl, InputLabel, Select, MenuItem } from '@mui/material';
 
 const StockHPage = () => {
   const [products, setProducts] = useState([]);
@@ -33,22 +34,42 @@ const StockHPage = () => {
   const [snackbarSeverity, setSnackbarSeverity] = useState('success');
   const [startDate, setStartDate] = useState(null);
   const [endDate, setEndDate] = useState(null);
+const[bslocation,setBslocation] =useState('');
 
-  useEffect(() => {
-    const fetchStock = async () => {
-      try {
-        const response = await axios.get('https://api.azcrm.deviceshopleader.com/api/v1/bonachat/stock/getallSH');
-        setProducts(response.data);
-        setFilteredProducts(response.data);
-      } catch (error) {
-        console.error("Erreur lors de la récupération des produits :", error);
-        showSnackbar('Error fetching products.', 'error');
-      }
-    };
-
-    fetchStock();
-  }, []);
-
+  
+  const handleChange = async (event) => {
+    const selectedLocation = event.target.value;
+    setBslocation(selectedLocation);
+  
+    if (selectedLocation === 'local') {
+      await fetchLocalNotes();
+    } else if (selectedLocation === 'etranger') {
+      await fetchForeignNotes();
+    }
+  };
+   const fetchLocalNotes = async () => {
+    try {
+      const response = await axios.get('https://api.azcrm.deviceshopleader.com/api/v1/bonachat/stock/getallSHL');
+      setProducts(response.data);
+      setFilteredNotes(response.data); // optional: will be overridden
+      countTodayInvoices(response.data);
+      applyFilters(searchQuery, startDate, endDate, response.data); // 👈 pass data here
+    } catch (error) {
+      console.error('Error fetching local delivery notes:', error);
+    }
+  };
+  
+  const fetchForeignNotes = async () => {
+    try {
+      const response = await axios.get('https://api.azcrm.deviceshopleader.com/api/v1/bonachat/stock/getallSHE');
+      setProducts(response.data);
+      setFilteredNotes(response.data); // optional
+      countTodayInvoices(response.data);
+      applyFilters(searchQuery, startDate, endDate, response.data); // 👈 pass data here
+    } catch (error) {
+      console.error('Error fetching foreign delivery notes:', error);
+    }
+  };
   useEffect(() => {
     applyFilters();
   }, [searchQuery, startDate, endDate, products]);
@@ -112,6 +133,20 @@ const StockHPage = () => {
         Historique d’achat de produits
 
       </Typography>
+
+        <FormControl fullWidth>
+            <InputLabel id="location-label">Localisation</InputLabel>
+            <Select
+              labelId="location-label"
+              id="location-select"
+              value={bslocation}
+              label="Localisation"
+              onChange={handleChange}
+            >
+              <MenuItem value="local">Local</MenuItem>
+              <MenuItem value="etranger">Étranger</MenuItem>
+            </Select>
+          </FormControl>
 
       <LocalizationProvider dateAdapter={AdapterDateFns}>
         <Box sx={{ display: 'flex', gap: 2, mb: 3 }}>
