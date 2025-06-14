@@ -23,7 +23,7 @@ const Createrecettes = ({ onAddDeliveryNote, codey }) => {
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState("");
   const [snackbarSeverity, setSnackbarSeverity] = useState("success");
-  const [selectedCurrency, setSelectedCurrency] = useState("TND");
+  const [availableProducts, setAvailableProducts] = useState([]);
 
   const [rem, setRem] = useState(0);
 
@@ -33,7 +33,7 @@ const Createrecettes = ({ onAddDeliveryNote, codey }) => {
 
     const fetchData = async () => {
       try {
-        const [productRes, ] = await Promise.all([
+        const [productRes ] = await Promise.all([
           axios.get(`${API_BASE_URL}/fiches/getallf`),
         
         ]);
@@ -129,7 +129,7 @@ const Createrecettes = ({ onAddDeliveryNote, codey }) => {
      
 
       <Autocomplete
-  value={newProduct}
+  value={availableProducts}
   onChange={(event, newValue) => {
     setNewProduct(newValue);
   }}

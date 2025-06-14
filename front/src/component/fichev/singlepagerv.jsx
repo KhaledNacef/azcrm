@@ -51,14 +51,19 @@ const FicheTechniquev = () => {
           <TableRow>
             <TableCell>Ingredient</TableCell>
             <TableCell>Cout (TND)</TableCell>
+              <TableCell>profit (TND)</TableCell>
+
           </TableRow>
         </TableHead>
         <TableBody>
            {fiche.recieps.map((reciep, index) => (
                      <TableRow key={index}>
                        <TableCell>{reciep.name}</TableCell>
-                       <TableCell>{reciep.sellingPrice.toFixed(2)}</TableCell>
                        <TableCell>{reciep.totalcost.toFixed(2)}</TableCell>
+                       <TableCell>{reciep.sellingPrice.toFixed(2)}</TableCell>
+                       <TableCell>{reciep.profit.toFixed(2)}</TableCell>
+
+                       
                      </TableRow>
                    ))}
         </TableBody>
