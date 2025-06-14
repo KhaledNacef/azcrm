@@ -57,12 +57,18 @@ const FicheTechnique = () => {
         </TableHead>
         <TableBody>
         
-          {fiche.ingredients.map((ingredient, index) => (
-                      <TableRow key={index}>
-                        <TableCell>{ingredient.name}</TableCell>
-                        <TableCell>{ingredient.cost}</TableCell>
-                      </TableRow>
-                    ))}
+        {Array.isArray(fiche.ingredients) ? (
+  fiche.ingredients.map((ingredient, index) => (
+    <TableRow key={index}>
+      <TableCell>{ingredient.name}</TableCell>
+      <TableCell>{ingredient.cost}</TableCell>
+    </TableRow>
+  ))
+) : (
+  <TableRow>
+    <TableCell colSpan={2}>No ingredients found</TableCell>
+  </TableRow>
+)}
         </TableBody>
       </Table>
     </Box>
