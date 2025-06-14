@@ -14,7 +14,6 @@ import {
   Alert,
   Paper,
   TableContainer,
-  CircularProgress
 } from '@mui/material';
 
 const FicheTechniqueForm = () => {
@@ -25,7 +24,6 @@ const FicheTechniqueForm = () => {
   const [ingredientCost, setIngredientCost] = useState('');
   const [totalCost, setTotalCost] = useState(0);
   const [profit, setProfit] = useState(0);
-  const [loading, setLoading] = useState(false);
   const [snackbar, setSnackbar] = useState({
     open: false,
     message: '',
@@ -77,11 +75,11 @@ const FicheTechniqueForm = () => {
     try {
       setLoading(true);
       const response = await axios.post(`${API_URL}/createf`, {
-        name,
+        name:name,
         sellingPrice: parseFloat(sellingPrice),
-        ingredients,
+        ingredients:ingredients,
         totalcost: totalCost,
-        profit
+        profit:profit
       });
 
       showSnackbar('Fiche technique created successfully!', 'success');
@@ -221,14 +219,12 @@ const FicheTechniqueForm = () => {
               variant="contained"
               color="primary"
               onClick={handleSubmit}
-              disabled={loading}
             >
                Create Fiche
             </Button>
             <Button
               variant="outlined"
               onClick={resetForm}
-              disabled={loading}
             >
               Reset
             </Button>
