@@ -50,6 +50,8 @@ useEffect(() => {
       setLoading(true);
       const response = await axios.get('https://api.azcrm.deviceshopleader.com/api/v1/fiches/getallf');
       setFiche(response.data);
+      setFilteredNotes(response.data);
+
     } catch (error) {
       console.error('Error fetching delivery notes:', error);
       setSnackbar({
@@ -61,7 +63,7 @@ useEffect(() => {
       setLoading(false);
     }
   };
-  
+
   fetchfiche();
   }, []);
 
@@ -130,7 +132,6 @@ useEffect(() => {
 
   const addDeliveryNote = () => {
     handleClose();
-    fetchfiche();
   };
 
   const handleOpen = () => setOpen(true);
