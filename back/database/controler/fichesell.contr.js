@@ -12,19 +12,13 @@ exports.createRecipem = async (req, res) => {
     }
 
     // Calculate totals by summing all recipes' values
-    const { totalTTC, totalcost } = recipes.reduce(
-      (totals, recipe) => ({
-        totalTTC: totals.totalTTC + (recipe.totalTTC || 0),
-        totalcost: totals.totalcost + (recipe.totalcosts || 0),
-      }),
-      { totalTTC: 0, totalcost: 0 }
-    );
+  
 
     // Create the Recipem entry
     const recipem = await Recipem.create({
       recipes, // Store the full array of recipes
-      totalcosts:totalcost, // Sum of all recipe.totalcost
-      totalprofit: totalTTC, // Calculated profit (TTC - cost)
+      totalcosts:recipes.totalcosts, // Sum of all recipe.totalcost
+      totalprofit:recipes.totalTTC, // Calculated profit (TTC - cost)
     });
 
     // Return the created record

@@ -13,11 +13,11 @@ const RecipeM = {
   },
   totalcosts: {
     type: DataTypes.FLOAT,
-    allowNull: false
+    allowNull: true
   },
   totalprofit: {
     type: DataTypes.FLOAT,
-    allowNull: false
+    allowNull: true
   }
 };
 
