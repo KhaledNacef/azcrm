@@ -19,7 +19,6 @@ const StockH=require('./models/stockhistorique.js')
 const StockT=require('./models/stocktrace.js')
 const StockTE=require('./models/stocktraceetranger.js')
 const Recipe=require('./models/fichetechnique.js')
-const RecipeV=require('./models/fichesell.js')
 const RecipeM=require('./models/monthlyreportreciep.js')
 
 
@@ -50,7 +49,6 @@ const stockH=db.define('stockH',StockH)
 const stockT=db.define('stockT',StockT)
 const stockTE=db.define('stockTE',StockTE)
 const recipe = db.define('recipe', Recipe); // Define Recipe model
-const recipev = db.define('recipev', RecipeV); // Define Recipe model
 const recipem = db.define('recipem', RecipeM); // Define Recipe model
 
 
