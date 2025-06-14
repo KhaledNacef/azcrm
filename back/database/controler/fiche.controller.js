@@ -4,49 +4,28 @@ const Recipe = db.recipe;
 
 exports.createRecipe = async (req, res) => {
   try {
-    const { name, sellingPrice, ingredients } = req.body;
+   const { name, sellingPrice, ingredients } = req.body;
 
-    // Basic validation matching model requirements
-    if (!name || typeof name !== 'string') {
-      return res.status(400).json({ error: 'Valid name (string) is required' });
-    }
+if (!name || !sellingPrice || !Array.isArray(ingredients)) {
+  return res.status(400).json({ error: 'Missing or invalid required fields' });
+}
 
-    if (typeof sellingPrice !== 'number' || isNaN(sellingPrice)) {
-      return res.status(400).json({ error: 'Valid sellingPrice (number) is required' });
-    }
+const totalcost = ingredients.reduce((sum, ing) => sum + (ing.cost || 0), 0);
+const profit = sellingPrice - totalcost;
 
-    if (!Array.isArray(ingredients)) {
-      return res.status(400).json({ error: 'Ingredients must be an array' });
-    }
-
-    // Process ingredients according to model
-    const processedIngredients = ingredients.map(ing => ({
-      name: String(ing.name || ''),
-      cost: parseFloat(ing.cost) || 0
-    }));
-
-    // Calculate derived fields
-    const totalcost = processedIngredients.reduce((sum, ing) => sum + ing.cost, 0);
-    const profit = sellingPrice - totalcost;
-
-    // Create with model structure
-    const recipe = await Recipe.create({
-      name,
-      sellingPrice,
-      ingredients: processedIngredients,
-      totalcost,
-      profit
-    });
+const recipe = await Recipe.create({
+  name:name,
+  sellingPrice:sellingPrice,
+  ingredients:ingredients,
+  totalcost:totalcost,
+  profit:profit
+});
 
     res.status(201).json(recipe);
 
   } catch (error) {
-    console.error('Database error:', error);
-    res.status(400).json({ 
-      error: error.name === 'SequelizeValidationError'
-        ? error.errors.map(e => e.message).join(', ')
-        : 'Invalid data format'
-    });
+    console.error('Error creating recipe:', error);
+    res.status(400).json({ error: 'Invalid data' });
   }
 };
 
