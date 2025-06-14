@@ -14,11 +14,11 @@ const totalcost = ingredients.reduce((sum, ing) => sum + (ing.cost || 0), 0);
 const profit = sellingPrice - totalcost;
 
 const recipe = await Recipe.create({
-  name,
-  sellingPrice,
-  ingredients,
-  totalcost,
-  profit
+  name:name,
+  sellingPrice:sellingPrice,
+  ingredients:ingredients,
+  totalcost:totalcost,
+  profit:profit
 });
 
     res.status(201).json(recipe);

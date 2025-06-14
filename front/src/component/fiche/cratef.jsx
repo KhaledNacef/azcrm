@@ -18,10 +18,10 @@ import {
 
 const FicheTechniqueForm = () => {
   const [name, setName] = useState('');
-  const [sellingPrice, setSellingPrice] = useState('');
+  const [sellingPrice, setSellingPrice] = useState(0);
   const [ingredients, setIngredients] = useState([]);
   const [ingredientName, setIngredientName] = useState('');
-  const [ingredientCost, setIngredientCost] = useState('');
+  const [ingredientCost, setIngredientCost] = useState(0);
 
   const [snackbar, setSnackbar] = useState({
     open: false,
