@@ -66,9 +66,9 @@ const App = () => {
        <Route path="/stocketranger/mouvement" element={<StockTPageEtranger />} />
       <Route path="/stock/achat-history" element={<StockHPage />} />
       <Route path="/fiches" element={<Fiche />} />
-      <Route path="/fiche" element={<FicheTechnique />} />
+      <Route path="/fiche/:id" element={<FicheTechnique />} />
       <Route path="/fichesv" element={<Fichev />} />
-      <Route path="/fichev" element={<FicheTechniquev />} />
+      <Route path="/fichev/:id" element={<FicheTechniquev />} />
 
     </Route>
   </Route>
