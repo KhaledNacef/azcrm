@@ -32,13 +32,13 @@ exports.createRecipe = async (req, res) => {
 
   } catch (error) {
     console.error('Error:', error);
-    res.status(400).json({ 
-      error: error.name === 'SequelizeUniqueConstraintError' 
-        ? 'Recipe name already exists' 
-        : 'Invalid data'
-    });
+    res.status(400).json( 
+      
+        'Invalid data'
+    );
   }
 };
+
 exports.getAllRecipes = async (req, res) => {
   try {
     const recipes = await Recipe.findAll();

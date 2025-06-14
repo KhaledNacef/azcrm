@@ -31,7 +31,6 @@ const FicheTechniqueForm = () => {
     message: '',
     severity: 'success'
   });
-  const [fiches, setFiches] = useState([]);
   const [selectedFiche, setSelectedFiche] = useState(null);
 
   const API_URL = 'https://api.azcrm.deviceshopleader.com/api/v1/fiches';
@@ -95,14 +94,7 @@ const FicheTechniqueForm = () => {
     }
   };
 
-  const loadFiche = (fiche) => {
-    setName(fiche.name);
-    setSellingPrice(fiche.sellingPrice);
-    setIngredients(fiche.ingredients);
-    setTotalCost(fiche.totalcost);
-    setProfit(fiche.profit);
-    setSelectedFiche(fiche.id);
-  };
+ 
 
   const resetForm = () => {
     setName('');
@@ -231,7 +223,7 @@ const FicheTechniqueForm = () => {
               onClick={handleSubmit}
               disabled={loading}
             >
-              {selectedFiche ? 'Update' : 'Create'} Fiche
+               Create Fiche
             </Button>
             <Button
               variant="outlined"
