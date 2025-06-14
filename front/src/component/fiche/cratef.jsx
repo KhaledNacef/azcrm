@@ -189,15 +189,7 @@ const FicheTechniqueForm = () => {
             </TableContainer>
           )}
 
-          <Box sx={{ mt: 3 }}>
-            <Typography variant="body1">
-              <strong>Total Cost:</strong> {totalCost.toFixed(2)} TND
-            </Typography>
-            <Typography variant="body1">
-              <strong>Profit:</strong> {profit.toFixed(2)} TND
-            </Typography>
-          </Box>
-
+         
           <Box sx={{ mt: 3, display: 'flex', gap: 2 }}>
             <Button
               variant="contained"
