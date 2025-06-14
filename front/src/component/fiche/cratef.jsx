@@ -73,7 +73,6 @@ const FicheTechniqueForm = () => {
     }
 
     try {
-      setLoading(true);
       const response = await axios.post(`${API_URL}/createf`, {
         name:name,
         sellingPrice: parseFloat(sellingPrice),
@@ -88,7 +87,7 @@ const FicheTechniqueForm = () => {
       const message = error.response?.data?.error || 'Failed to create fiche technique';
       showSnackbar(message, 'error');
     } finally {
-      setLoading(false);
+      ;
     }
   };
 
