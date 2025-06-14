@@ -4,36 +4,57 @@ const Recipem = db.models.recipem
 
 exports.createRecipem = async (req, res) => {
   try {
-    const { recipes } = req.body; // Expecting array of recipes
+    const { recipes } = req.body;
 
-    // Basic validation
-    if (!recipes || !Array.isArray(recipes)) {
+    // Validate input
+    if (!Array.isArray(recipes)) {
       return res.status(400).json({ error: 'Recipes must be provided as an array' });
     }
 
-    // Calculate totals by summing all recipes' values
-  
-
-    // Create the Recipem entry
-    const recipem = await Recipem.create({
-      recipes, // Store the full array of recipes
-      totalcosts:recipes.totalcosts, // Sum of all recipe.totalcost
-      totalprofit:recipes.totalTTC, // Calculated profit (TTC - cost)
+    // Validate each recipe structure
+    const validatedRecipes = recipes.map(recipe => {
+      if (!recipe || 
+          typeof recipe.name !== 'string' ||
+          typeof recipe.sellingPrice !== 'number' ||
+          typeof recipe.quantite !== 'number' ||
+          typeof recipe.totalcost !== 'number' ||
+          typeof recipe.profit !== 'number' ||
+          typeof recipe.totalTTC !== 'number' ||
+          typeof recipe.totalcosts !== 'number') {
+        throw new Error('Invalid recipe format');
+      }
+      return recipe;
     });
 
-    // Return the created record
+    // Calculate totals
+    const totalcosts = validatedRecipes.reduce((sum, recipe) => sum + recipe.totalcosts, 0);
+    const totalTTC = validatedRecipes.reduce((sum, recipe) => sum + recipe.totalTTC, 0);
+
+    // Create the collection
+    const recipem = await Recipem.create({
+      recipes: validatedRecipes,
+      totalcosts,
+      totalprofit:totalTTC
+    });
+
     res.status(201).json(recipem);
 
   } catch (error) {
     console.error('Error creating Recipem:', error);
-    res.status(400).json({
-      error: error.name === 'SequelizeUniqueConstraintError'
-        ? 'This collection already exists'
-        : 'Failed to create recipe collection'
+    
+    let errorMessage = 'Failed to create recipe collection';
+    if (error.message === 'Invalid recipe format') {
+      errorMessage = 'Each recipe must contain: name, sellingPrice, quantite, totalcost, profit, totalTTC, totalcosts';
+    } else if (error.name === 'SequelizeUniqueConstraintError') {
+      errorMessage = 'This collection already exists';
+    }
+
+    res.status(400).json({ 
+      error: errorMessage,
+      details: error.message
     });
   }
 };
-
 exports.getAllRecipesM = async (req, res) => {
   try {
     const recipes = await Recipem.findAll();
