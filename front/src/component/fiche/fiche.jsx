@@ -43,7 +43,9 @@ const Fiche = () => {
   const [endDate, setEndDate] = useState(null);
 
   // Fetch delivery notes
-  const fetchfiche = async () => {
+
+useEffect(() => {
+      const fetchfiche = async () => {
     try {
       setLoading(true);
       const response = await axios.get('https://api.azcrm.deviceshopleader.com/api/v1/fiches/getallf');
@@ -59,6 +61,8 @@ const Fiche = () => {
       setLoading(false);
     }
   };
+  fetchfiche()
+  }, []);
 
 
   // Handle date changes
@@ -134,10 +138,7 @@ const Fiche = () => {
   // Confirmation dialog handlers
 
 
-  useEffect(() => {
-    fetchfiche();
-  }, []);
-
+  
   return (
     <Box sx={{ p: 3 }}>
       <Typography variant="h4" gutterBottom>
@@ -216,6 +217,7 @@ const Fiche = () => {
           {!loading && filteredNotes.length > 0 ? (
             filteredNotes.map((note) => (
               <TableRow key={note.id}>
+               <TableCell>{note.id}</TableCell>
                 <TableCell>{note.name}</TableCell>
                 <TableCell>{note.totalcost }</TableCell>
                 <TableCell>{note.sellingPrice }</TableCell>
