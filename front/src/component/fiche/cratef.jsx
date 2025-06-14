@@ -57,30 +57,58 @@ const FicheTechniqueForm = () => {
     setIngredients(updatedIngredients);
   };
 
-  const handleSubmit = async () => {
+const handleSubmit = async () => {
+  // Validate against model requirements
+  if (!name || typeof name !== 'string') {
+    showSnackbar('Valid recipe name is required', 'error');
+    return;
+  }
 
-    if (!name || !sellingPrice || ingredients.length === 0) {
-      showSnackbar('Please fill all required fields', 'warning');
-      return;
-    }
-    const payload={
-    name:name,
-    sellingPrice:parseFloat(sellingPrice),
-    ingredients:ingredients
-};
-    try {
-      const response = await axios.post(`${API_URL}/createf`, payload );
+  if (isNaN(sellingPrice)) {
+    showSnackbar('Valid selling price is required', 'error');
+    return;
+  }
 
-      showSnackbar('Fiche technique created successfully!', 'success');
-      resetForm();
-    } catch (error) {
-      const message = error.response?.data?.error || 'Failed to create fiche technique';
-      showSnackbar(message, 'error');
-    } finally {
-      ;
-    }
+  // Prepare ingredients according to model
+  const validIngredients = ingredients
+    .filter(ing => ing.name) // Must have name
+    .map(ing => ({
+      name: String(ing.name),
+      cost: parseFloat(ing.cost) || 0 // Default to 0 if invalid
+    }));
+
+  if (validIngredients.length === 0) {
+    showSnackbar('At least one valid ingredient is required', 'error');
+    return;
+  }
+
+  // Prepare payload matching model structure
+  const payload = {
+    name: name,
+    sellingPrice: parseFloat(sellingPrice),
+    ingredients: validIngredients
   };
 
+  try {
+    const response = await axios.post(`${API_URL}/createf`, payload, {
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    });
+
+    if (response.status === 201) {
+      showSnackbar('Recipe created successfully!', 'success');
+      resetForm();
+    }
+  } catch (error) {
+    const errorData = error.response?.data;
+    const errorMessage = errorData?.error || 
+                        (typeof errorData === 'string' ? errorData : 'Failed to create recipe');
+    
+    showSnackbar(errorMessage, 'error');
+    console.error('API Error:', error.response?.data || error.message);
+  }
+};
  
 
   const resetForm = () => {
