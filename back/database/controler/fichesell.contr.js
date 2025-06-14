@@ -15,12 +15,12 @@ exports.createRecipem = async (req, res) => {
  
     // Calculate totals
     const totalcosts = recipes.reduce((sum, recipe) => sum + recipe.totalcosts, 0);
-    const totalTTC = recipes.reduce((sum, recipe) => sum + recipe.totalTTC, 0);
+    const totalTTC = recipes.reduce((sum, recipe) => sum + recipe.totalTCT, 0);
 
     // Create the collection
     const recipem = await Recipem.create({
       recipes: recipes,
-      totalcosts,
+      totalcosts:totalcosts,
       totalprofit:totalTTC
     });
 

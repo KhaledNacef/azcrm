@@ -57,7 +57,7 @@ const Createrecettes = () => {
       quantite: Number(quantite) || 1,
       totalcost: newProduct.totalcost,
       profit: newProduct.profit,
-      totalTTC: newProduct.profit * (Number(quantite) || 1),
+      totalTCT: newProduct.profit * (Number(quantite) || 1),
       totalcosts: newProduct.totalcost * (Number(quantite) || 1),
     };
 
