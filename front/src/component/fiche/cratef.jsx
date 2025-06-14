@@ -69,7 +69,7 @@ const FicheTechniqueForm = () => {
     ingredients:ingredients
 };
     try {
-      const response = await axios.post(`${API_URL}/createf`,{ payload });
+      const response = await axios.post(`${API_URL}/createf`, payload );
 
       showSnackbar('Fiche technique created successfully!', 'success');
       resetForm();
