@@ -58,18 +58,18 @@ const FicheTechniqueForm = () => {
   };
 
   const handleSubmit = async () => {
-    const payload={
-    name:name,
-    sellingPrice:sellingPrice,
-    ingredients:ingredients
-};
+
     if (!name || !sellingPrice || ingredients.length === 0) {
       showSnackbar('Please fill all required fields', 'warning');
       return;
     }
-
+    const payload={
+    name:name,
+    sellingPrice:parseFloat(sellingPrice),
+    ingredients:ingredients
+};
     try {
-      const response = await axios.post(`${API_URL}/createf`,payload);
+      const response = await axios.post(`${API_URL}/createf`,{ payload });
 
       showSnackbar('Fiche technique created successfully!', 'success');
       resetForm();
@@ -87,7 +87,6 @@ const FicheTechniqueForm = () => {
     setName('');
     setSellingPrice('');
     setIngredients([]);
-    setSelectedFiche(null);
   };
 
   const showSnackbar = (message, severity) => {

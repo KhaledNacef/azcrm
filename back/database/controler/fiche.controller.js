@@ -4,22 +4,22 @@ const Recipe = db.recipe;
 
 exports.createRecipe = async (req, res) => {
   try {
-    const { payload } = req.body;
+   const { name, sellingPrice, ingredients } = req.body;
 
-    if (!payload.name || !payload.sellingPrice || !payload.ingredients || !Array.isArray(payload.ingredients)) {
-      return res.status(400).json({ error: 'Missing or invalid required fields' });
-    }
+if (!name || !sellingPrice || !Array.isArray(ingredients)) {
+  return res.status(400).json({ error: 'Missing or invalid required fields' });
+}
 
-    const totalcost = payload.ingredients.reduce((sum, ing) => sum + (ing.cost || 0), 0);
-    const profit = payload.sellingPrice - totalcost;
+const totalcost = ingredients.reduce((sum, ing) => sum + (ing.cost || 0), 0);
+const profit = sellingPrice - totalcost;
 
-    const recipe = await Recipe.create({
-      name:payload.name,
-      sellingPrice:payload.sellingPrice,
-      ingredients:payload.ingredients,
-      totalcost,
-      profit
-    });
+const recipe = await Recipe.create({
+  name,
+  sellingPrice,
+  ingredients,
+  totalcost,
+  profit
+});
 
     res.status(201).json(recipe);
 
