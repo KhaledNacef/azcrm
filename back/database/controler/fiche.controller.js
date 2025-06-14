@@ -1,4 +1,4 @@
-const db = require('../database/index');
+const db = require('../index');
 const Recipe = db.recipe;
 
 exports.createRecipe = async (req, res) => {

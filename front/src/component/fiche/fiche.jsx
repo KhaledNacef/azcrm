@@ -9,18 +9,14 @@ import {
   TableRow,
   Typography,
   TextField,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogContentText,
-  DialogTitle,
+
   CircularProgress,
   Snackbar,
   Alert,
   Modal,
   TableContainer, 
   Paper,
-  Chip
+  
 } from '@mui/material';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
@@ -136,10 +132,6 @@ const Fiche = () => {
   const handleClose = () => setOpen(false);
 
   // Confirmation dialog handlers
-  const handleOpenDialog = (note) => {
-    setSelectedNote(note);
-    setOpenDialog(true);
-  };
 
 
   useEffect(() => {

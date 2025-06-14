@@ -1,5 +1,5 @@
-const db = require('../database/index');
-const Recipem=db.models.recipem
+const db = require('../index');
+const Recipem = db.recipem
 
 
 exports.createRecipem = async (req, res) => {
