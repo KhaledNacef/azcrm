@@ -74,17 +74,9 @@ const Createrecettes = () => {
 
     try {
       // Prepare payload exactly as required
-      const payload = products.map(product => ({
-        name: product.name,
-        sellingPrice: product.sellingPrice,
-        quantite: product.quantite,
-        totalcost: product.totalcost,
-        profit: product.profit,
-        totalTTC: product.totalTTC,
-        totalcosts: product.totalcosts
-      }));
+ 
 
-      console.log("Sending payload:", payload); // For debugging
+      console.log("Sending payload:", products); // For debugging
 
       const response = await axios.post(`${API_BASE_URL}/recette/mc`, payload, {
         headers: {
