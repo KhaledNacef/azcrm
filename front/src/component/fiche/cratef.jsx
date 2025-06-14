@@ -1,0 +1,308 @@
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
+import {
+  Box,
+  Button,
+  TextField,
+  Typography,
+  Table,
+  TableBody,
+  TableCell,
+  TableRow,
+  TableHead,
+  Snackbar,
+  Alert,
+  Paper,
+  TableContainer,
+  CircularProgress
+} from '@mui/material';
+
+const FicheTechniqueForm = () => {
+  const [name, setName] = useState('');
+  const [sellingPrice, setSellingPrice] = useState('');
+  const [ingredients, setIngredients] = useState([]);
+  const [ingredientName, setIngredientName] = useState('');
+  const [ingredientCost, setIngredientCost] = useState('');
+  const [totalCost, setTotalCost] = useState(0);
+  const [profit, setProfit] = useState(0);
+  const [loading, setLoading] = useState(false);
+  const [snackbar, setSnackbar] = useState({
+    open: false,
+    message: '',
+    severity: 'success'
+  });
+  const [fiches, setFiches] = useState([]);
+  const [selectedFiche, setSelectedFiche] = useState(null);
+
+  const API_URL = 'https://api.azcrm.deviceshopleader.com/api/v1/fiches';
+
+  // Fetch all fiches on component mount
+ 
+
+  const calculateTotals = () => {
+    const cost = ingredients.reduce((sum, ing) => sum + ing.cost , 0);
+    setTotalCost(cost);
+    setProfit(sellingPrice ? (parseFloat(sellingPrice) - cost) : 0);
+  };
+
+  const addIngredient = () => {
+    if (!ingredientName || !ingredientCost) {
+      showSnackbar('Please enter ingredient name and cost', 'warning');
+      return;
+    }
+
+    const newIngredient = {
+      name: ingredientName,
+      cost: parseFloat(ingredientCost),
+    };
+
+    setIngredients([...ingredients, newIngredient]);
+    setIngredientName('');
+    setIngredientCost('');
+    calculateTotals();
+  };
+
+  const removeIngredient = (index) => {
+    const updatedIngredients = [...ingredients];
+    updatedIngredients.splice(index, 1);
+    setIngredients(updatedIngredients);
+    calculateTotals();
+  };
+
+  const handleSubmit = async () => {
+    if (!name || !sellingPrice || ingredients.length === 0) {
+      showSnackbar('Please fill all required fields', 'warning');
+      return;
+    }
+
+    try {
+      setLoading(true);
+      const response = await axios.post(`${API_URL}/createf`, {
+        name,
+        sellingPrice: parseFloat(sellingPrice),
+        ingredients,
+        totalcost: totalCost,
+        profit
+      });
+
+      showSnackbar('Fiche technique created successfully!', 'success');
+      resetForm();
+    } catch (error) {
+      const message = error.response?.data?.error || 'Failed to create fiche technique';
+      showSnackbar(message, 'error');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const loadFiche = (fiche) => {
+    setName(fiche.name);
+    setSellingPrice(fiche.sellingPrice);
+    setIngredients(fiche.ingredients);
+    setTotalCost(fiche.totalcost);
+    setProfit(fiche.profit);
+    setSelectedFiche(fiche.id);
+  };
+
+  const resetForm = () => {
+    setName('');
+    setSellingPrice('');
+    setIngredients([]);
+    setTotalCost(0);
+    setProfit(0);
+    setSelectedFiche(null);
+  };
+
+  const showSnackbar = (message, severity) => {
+    setSnackbar({ open: true, message, severity });
+  };
+
+  const handleCloseSnackbar = () => {
+    setSnackbar({ ...snackbar, open: false });
+  };
+
+  return (
+    <Box sx={{ p: 3 }}>
+      <Typography variant="h4" gutterBottom>
+        Fiche Technique Management
+      </Typography>
+
+      <Box sx={{ display: 'flex', gap: 3 }}>
+        {/* Fiche Creation Form */}
+        <Box sx={{ flex: 1 }}>
+          <Typography variant="h6" gutterBottom>
+            Create New Fiche
+          </Typography>
+
+          <TextField
+            label="Fiche Name"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            fullWidth
+            margin="normal"
+            required
+          />
+
+          <TextField
+            label="Selling Price (TND)"
+            type="number"
+            value={sellingPrice}
+            onChange={(e) => {
+              setSellingPrice(e.target.value);
+              calculateTotals();
+            }}
+            fullWidth
+            margin="normal"
+            required
+          />
+
+          <Typography variant="subtitle1" mt={2}>
+            Ingredients
+          </Typography>
+
+          <Box sx={{ display: 'flex', gap: 2, mt: 1 }}>
+            <TextField
+              label="Ingredient Name"
+              value={ingredientName}
+              onChange={(e) => setIngredientName(e.target.value)}
+              fullWidth
+            />
+            <TextField
+              label="Cost (TND)"
+              type="number"
+              value={ingredientCost}
+              onChange={(e) => setIngredientCost(e.target.value)}
+              fullWidth
+            />
+         
+            <Button variant="contained" onClick={addIngredient}>
+              Add
+            </Button>
+          </Box>
+
+          {ingredients.length > 0 && (
+            <TableContainer component={Paper} sx={{ mt: 2, maxHeight: 300, overflow: 'auto' }}>
+              <Table size="small">
+                <TableHead>
+                  <TableRow>
+                    <TableCell>Ingredient</TableCell>
+                    <TableCell>Cost (TND)</TableCell>
+                    <TableCell>Quantity</TableCell>
+                    <TableCell>Total</TableCell>
+                    <TableCell>Action</TableCell>
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {ingredients.map((ing, index) => (
+                    <TableRow key={index}>
+                      <TableCell>{ing.name}</TableCell>
+                      <TableCell>{ing.cost.toFixed(2)}</TableCell>
+                      <TableCell>{ing.quantity}</TableCell>
+                      <TableCell>{(ing.cost * ing.quantity).toFixed(2)}</TableCell>
+                      <TableCell>
+                        <Button
+                          size="small"
+                          color="error"
+                          onClick={() => removeIngredient(index)}
+                        >
+                          Remove
+                        </Button>
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </TableContainer>
+          )}
+
+          <Box sx={{ mt: 3 }}>
+            <Typography variant="body1">
+              <strong>Total Cost:</strong> {totalCost.toFixed(2)} TND
+            </Typography>
+            <Typography variant="body1">
+              <strong>Profit:</strong> {profit.toFixed(2)} TND
+            </Typography>
+          </Box>
+
+          <Box sx={{ mt: 3, display: 'flex', gap: 2 }}>
+            <Button
+              variant="contained"
+              color="primary"
+              onClick={handleSubmit}
+              disabled={loading}
+            >
+              {selectedFiche ? 'Update' : 'Create'} Fiche
+            </Button>
+            <Button
+              variant="outlined"
+              onClick={resetForm}
+              disabled={loading}
+            >
+              Reset
+            </Button>
+          </Box>
+        </Box>
+
+        {/* Existing Fiches List */}
+        <Box sx={{ flex: 1 }}>
+          <Typography variant="h6" gutterBottom>
+            Existing Fiches
+          </Typography>
+
+          {loading ? (
+            <CircularProgress />
+          ) : (
+            <TableContainer component={Paper} sx={{ maxHeight: 500, overflow: 'auto' }}>
+              <Table size="small">
+                <TableHead>
+                  <TableRow>
+                    <TableCell>Name</TableCell>
+                    <TableCell>Price</TableCell>
+                    <TableCell>Cost</TableCell>
+                    <TableCell>Profit</TableCell>
+                    <TableCell>Action</TableCell>
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {fiches.map((fiche) => (
+                    <TableRow key={fiche.id}>
+                      <TableCell>{fiche.name}</TableCell>
+                      <TableCell>{fiche.sellingPrice.toFixed(2)}</TableCell>
+                      <TableCell>{fiche.totalcost.toFixed(2)}</TableCell>
+                      <TableCell>{fiche.profit.toFixed(2)}</TableCell>
+                      <TableCell>
+                        <Button
+                          size="small"
+                          onClick={() => loadFiche(fiche)}
+                        >
+                          Load
+                        </Button>
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </TableContainer>
+          )}
+        </Box>
+      </Box>
+
+      <Snackbar
+        open={snackbar.open}
+        autoHideDuration={6000}
+        onClose={handleCloseSnackbar}
+        anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
+      >
+        <Alert
+          onClose={handleCloseSnackbar}
+          severity={snackbar.severity}
+          sx={{ width: '100%' }}
+        >
+          {snackbar.message}
+        </Alert>
+      </Snackbar>
+    </Box>
+  );
+};
+
+export default FicheTechniqueForm;

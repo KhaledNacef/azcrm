@@ -125,6 +125,30 @@ const SidebarMenu = () => {
              
           </List>
         </Collapse>
+         {/* Stock Submenus */}
+        <Collapse in={openStockSubmenu} timeout="auto" unmountOnExit>
+          <List component="div" disablePadding>
+            <ListItem
+              button
+              component={Link}
+              to="/fiches"
+              sx={getSubItemStyles(isActive('/fiches'))}
+            >
+              <ListItemText inset primary="Fcihe techinque" />
+            </ListItem>
+             <ListItem
+              button
+              component={Link}
+              to="/fichesv"
+              sx={getSubItemStyles(isActive('/fichesv'))}
+            >
+              <ListItemText inset primary="Recette " />
+              
+            </ListItem>
+           
+             
+          </List>
+        </Collapse>
 
         {/* Other Menu Items */}
         {[
@@ -135,6 +159,7 @@ const SidebarMenu = () => {
           { label: 'Bon de Livraison Vente', path: '/bon-commandefacture', icon: <LocalShippingIcon /> },
           { label: 'Facture Vente', path: '/bon-livraison', icon: <ExitToAppIcon /> },
           { label: 'Retenue', path: '/RET1', icon: <AttachMoneyIcon /> },
+
         ].map((item) => (
           <ListItem
             key={item.label}

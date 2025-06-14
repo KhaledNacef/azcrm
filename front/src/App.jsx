@@ -23,6 +23,10 @@ import Registration from './component/loginandRegistration/registration.jsx';
 import StockHPage from './component/stock/stockHistory.jsx';
 import StockTPage from './component/stock/stocktrace.jsx';
 import StockTPageEtranger from './component/stock/stocktraceetranger.jsx'
+import Fiche from './component/fiche/fiche.jsx';
+import FicheTechnique from './component/fiche/singlepagef.jsx';
+import Fichev from './component/fichev/recet.jsx';
+import FicheTechniquev from './component/fichev/singlepagerv.jsx';
 // Protect Route Component
 const RequireAuth = () => {
   const isAuthenticated = localStorage.getItem('token'); 
@@ -61,6 +65,10 @@ const App = () => {
       <Route path="/stock/mouvement" element={<StockTPage />} />
        <Route path="/stocketranger/mouvement" element={<StockTPageEtranger />} />
       <Route path="/stock/achat-history" element={<StockHPage />} />
+      <Route path="/fiches" element={<Fiche />} />
+      <Route path="/fiche" element={<FicheTechnique />} />
+      <Route path="/fichesv" element={<Fichev />} />
+      <Route path="/fichev" element={<FicheTechniquev />} />
 
     </Route>
   </Route>

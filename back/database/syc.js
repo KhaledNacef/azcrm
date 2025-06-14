@@ -13,6 +13,9 @@ const Reteune =db.models.reteune
 const StockH=db.models.stockH
 const StockT=db.models.stockT
 const StockTE=db.models.stockTE
+const Recipe=db.models.Recipe
+const Recipev=db.models.RecipeV
+const Recipem=db.models.RecipeM
 
 async function syncDatabase() {
   try {

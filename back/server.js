@@ -82,6 +82,8 @@ app.use('/api/v1/boncommandallproducts', factureachatproduct);
 app.use('/api/v1/bonlivraisonproducts', factureventeproduct);
 app.use('/api/v1/reteune', reteune);
 app.use('/api/v1/luser', user);
+app.use('/api/v1/fiches', require('./database/router/ficherouter'));
+app.use('/api/v1/recette', require('./database/router/fichsell'));
 
 // ========================
 // ⚠️ Error Handling
