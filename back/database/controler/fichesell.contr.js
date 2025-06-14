@@ -4,41 +4,49 @@ const Recipem = db.models.recipem
 
 exports.createRecipem = async (req, res) => {
   try {
-    const { recipes } = req.body;
+    // Accept either direct array or { recipes } format
+    const recipes = Array.isArray(req.body) ? req.body : req.body.recipes;
 
-    // Validate input
     if (!Array.isArray(recipes)) {
-      return res.status(400).json({ error: 'Recipes must be provided as an array' });
+      return res.status(400).json({ 
+        error: 'Payload must be an array of recipes or { recipes: [...] }' 
+      });
     }
 
-    // Validate each recipe structure
- 
-    // Calculate totals
-    const totalcosts = recipes.reduce((sum, recipe) => sum + recipe.totalcosts, 0);
-    const totalTTC = recipes.reduce((sum, recipe) => sum + recipe.totalTCT, 0);
+    // Validate each recipe
+    const validatedRecipes = recipes.map(recipe => {
+      if (!recipe || typeof recipe !== 'object') {
+        throw new Error('Each recipe must be an object');
+      }
+      
+      return {
+        name: String(recipe.name || ''),
+        sellingPrice: parseFloat(recipe.sellingPrice) || 0,
+        quantite: parseInt(recipe.quantite) || 1,
+        totalcost: parseFloat(recipe.totalcost) || 0,
+        profit: parseFloat(recipe.profit) || 0,
+        totalTTC: parseFloat(recipe.totalTTC || recipe.totalTCT || 0), // Handle both spellings
+        totalcosts: parseFloat(recipe.totalcosts) || 0
+      };
+    });
 
-    // Create the collection
+    // Calculate totals
+    const totalcosts = validatedRecipes.reduce((sum, r) => sum + r.totalcosts, 0);
+    const totalTTC = validatedRecipes.reduce((sum, r) => sum + r.totalTTC, 0);
+
     const recipem = await Recipem.create({
-      recipes: recipes,
-      totalcosts:totalcosts,
+      recipes: validatedRecipes,
+      totalcosts,
       totalprofit:totalTTC
     });
 
     res.status(201).json(recipem);
 
   } catch (error) {
-    console.error('Error creating Recipem:', error);
-    
-    let errorMessage = 'Failed to create recipe collection';
-    if (error.message === 'Invalid recipe format') {
-      errorMessage = 'Each recipe must contain: name, sellingPrice, quantite, totalcost, profit, totalTTC, totalcosts';
-    } else if (error.name === 'SequelizeUniqueConstraintError') {
-      errorMessage = 'This collection already exists';
-    }
-
+    console.error('Error:', error);
     res.status(400).json({ 
-      error: errorMessage,
-      details: error.message
+      error: error.message || 'Invalid data format',
+      details: error.stack // For debugging
     });
   }
 };

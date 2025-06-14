@@ -66,36 +66,50 @@ const Createrecettes = () => {
     setQuantite(1);
   };
 
-  const handleSubmit = async () => {
-    if (products.length === 0) {
-      showSnackbar("Please add at least one product", "error");
-      return;
+ const handleSubmit = async () => {
+  if (products.length === 0) {
+    showSnackbar('Please add at least one product', 'error');
+    return;
+  }
+
+  try {
+    // Format payload to match backend expectations
+    const payload = products.map(p => ({
+      name: p.name,
+      sellingPrice: p.sellingPrice,
+      quantite: p.quantite,
+      totalcost: p.totalcost,
+      profit: p.profit,
+      totalTTC: p.totalTCT || p.totalTTC, // Handle both spellings
+      totalcosts: p.totalcosts
+    }));
+
+    console.log('Submitting:', payload); // Debug log
+
+    // Send as direct array
+    const response = await axios.post(`${API_BASE_URL}/recette/mc`, payload, {
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      transformRequest: [data => JSON.stringify(data)],
+    });
+
+    if (response.status === 201) {
+      showSnackbar('Recipe collection created!', 'success');
+      setProducts([]);
     }
-
-    try {
-      // Prepare payload exactly as required
- 
-
-      console.log("Sending payload:", products); // For debugging
-
-      const response = await axios.post(`${API_BASE_URL}/recette/mc`, products, {
-        headers: {
-          'Content-Type': 'application/json'
-        }
-      });
-
-      if (response.status === 201) {
-        showSnackbar("Recipe created successfully!", "success");
-        setProducts([]);
-      }
-    } catch (error) {
-      console.error("Error creating recipe:", error);
-      const errorMsg = error.response?.data?.error || 
-                      error.response?.data?.message || 
-                      "Failed to create recipe";
-      showSnackbar(errorMsg, "error");
+  } catch (error) {
+    console.error('API Error:', error);
+    
+    let errorMsg = 'Failed to create recipe';
+    if (error.response) {
+      errorMsg = error.response.data?.error || 
+                JSON.stringify(error.response.data);
     }
-  };
+    
+    showSnackbar(errorMsg, 'error');
+  }
+};
 
   const handleDeleteProduct = (index) => {
     const updatedProducts = [...products];
