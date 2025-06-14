@@ -149,16 +149,7 @@ const Fichev = () => {
        Recette
       </Typography>
 
-      <Chip 
-        label={`${todayInvoicesCount} Factures Achat aujourd'hui`}
-        color="primary"
-        variant="outlined"
-        sx={{ 
-          fontSize: '1rem', 
-          padding: '8px 16px',
-          m: 2,
-        }}
-      />
+    
       <Button variant="contained" color="primary" onClick={handleOpen} sx={{ m: 2 }}>
         Créer une Recette
       </Button>
