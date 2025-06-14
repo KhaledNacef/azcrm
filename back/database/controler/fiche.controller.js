@@ -15,7 +15,7 @@ const profit = sellingPrice - totalcost;
 
 const recipe = await Recipe.create({
   name:name,
-  sellingPrice:parseFloat(sellingPrice),
+  sellingPrice:sellingPrice,
   ingredients:ingredients,
   totalcost:parseFloat(totalcost),
   profit:parseFloat(profit)
