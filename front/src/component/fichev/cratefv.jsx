@@ -74,20 +74,11 @@ const Createrecettes = () => {
 
   try {
     // Format payload to match backend expectations
-    const payload = products.map(p => ({
-      name: p.name,
-      sellingPrice: p.sellingPrice,
-      quantite: p.quantite,
-      totalcost: p.totalcost,
-      profit: p.profit,
-      totalTTC: p.totalTCT || p.totalTTC, // Handle both spellings
-      totalcosts: p.totalcosts
-    }));
-
+    
     console.log('Submitting:', payload); // Debug log
 
     // Send as direct array
-    const response = await axios.post(`${API_BASE_URL}/recette/mc`, payload, {
+    const response = await axios.post(`${API_BASE_URL}/recette/mc`, products, {
       headers: {
         'Content-Type': 'application/json'
       },

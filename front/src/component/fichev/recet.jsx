@@ -52,6 +52,7 @@ const Fichev = () => {
       setLoading(true);
       const response = await axios.get('https://api.azcrm.deviceshopleader.com/api/v1/recette/m');
       setFiche(response.data);
+      setFilteredNotes(response.data)
     } catch (error) {
       console.error('Error fetching delivery notes:', error);
       setSnackbar({
@@ -207,10 +208,10 @@ const Fichev = () => {
              <Table stickyHeader>
         <TableHead>
           <TableRow>
-            <TableCell sx={{ position: 'sticky', top: 0, bgcolor: 'background.paper', zIndex: 1 }}>Code</TableCell>
             <TableCell sx={{ position: 'sticky', top: 0, bgcolor: 'background.paper', zIndex: 1 }}>Id</TableCell>
             <TableCell sx={{ position: 'sticky', top: 0, bgcolor: 'background.paper', zIndex: 1 }}>total cout</TableCell>
-                        <TableCell sx={{ position: 'sticky', top: 0, bgcolor: 'background.paper', zIndex: 1 }}>total profit</TableCell>
+             <TableCell sx={{ position: 'sticky', top: 0, bgcolor: 'background.paper', zIndex: 1 }}>total profit</TableCell>
+             <TableCell sx={{ position: 'sticky', top: 0, bgcolor: 'background.paper', zIndex: 1 }}>date</TableCell>
 
             <TableCell sx={{ position: 'sticky', top: 0, bgcolor: 'background.paper', zIndex: 1 }}>Actions</TableCell>
           </TableRow>
