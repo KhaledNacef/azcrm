@@ -1,5 +1,5 @@
 const db = require('../index');
-const Recipe = db.recipe;
+const Recipe = db.models.recipe;
 
 
 exports.createRecipe = async (req, res) => {
@@ -15,10 +15,10 @@ const profit = sellingPrice - totalcost;
 
 const recipe = await Recipe.create({
   name:name,
-  sellingPrice:sellingPrice,
+  sellingPrice:parseFloat(sellingPrice),
   ingredients:ingredients,
-  totalcost:totalcost,
-  profit:profit
+  totalcost:parseFloat(totalcost),
+  profit:parseFloat(profit)
 });
 
     res.status(201).json(recipe);

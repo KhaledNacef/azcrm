@@ -47,7 +47,7 @@ const FicheTechniqueForm = () => {
 
     setIngredients([...ingredients, newIngredient]);
     setIngredientName('');
-    setIngredientCost('');
+    setIngredientCost(0);
     
   };
 
