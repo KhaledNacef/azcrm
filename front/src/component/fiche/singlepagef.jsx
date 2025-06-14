@@ -35,13 +35,13 @@ const FicheTechnique = () => {
       
   <Box sx={{ display: 'flex', gap: 3, mb: 4 }}>
         <Typography variant="h6">
-           Cost: {fiche.totalcost.toFixed(2)} TND
+           Cost: {fiche.totalcost} TND
         </Typography>
         <Typography variant="h6">
-           Profit: {fiche.profit.toFixed(2)} TND
+           Profit: {fiche.profit} TND
         </Typography>
           <Typography variant="h6">
-           prix de vente: {fiche.sellingPrice.toFixed(2)} TND
+           prix de vente: {fiche.sellingPrice} TND
         </Typography>
       </Box>
       <Typography variant="h5" gutterBottom>
@@ -60,7 +60,7 @@ const FicheTechnique = () => {
           {fiche.ingredients.map((ingredient, index) => (
                       <TableRow key={index}>
                         <TableCell>{ingredient.name}</TableCell>
-                        <TableCell>{ingredient.cost.toFixed(2)}</TableCell>
+                        <TableCell>{ingredient.cost}</TableCell>
                       </TableRow>
                     ))}
         </TableBody>
