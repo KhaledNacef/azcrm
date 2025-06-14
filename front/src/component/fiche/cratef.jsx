@@ -22,8 +22,7 @@ const FicheTechniqueForm = () => {
   const [ingredients, setIngredients] = useState([]);
   const [ingredientName, setIngredientName] = useState('');
   const [ingredientCost, setIngredientCost] = useState('');
-  const [totalCost, setTotalCost] = useState(0);
-  const [profit, setProfit] = useState(0);
+
   const [snackbar, setSnackbar] = useState({
     open: false,
     message: '',
@@ -35,12 +34,6 @@ const FicheTechniqueForm = () => {
 
   // Fetch all fiches on component mount
  
-
-  const calculateTotals = () => {
-    const cost = ingredients.reduce((sum, ing) => sum + ing.cost , 0);
-    setTotalCost(cost);
-    setProfit(sellingPrice ? (parseFloat(sellingPrice) - cost) : 0);
-  };
 
   const addIngredient = () => {
     if (!ingredientName || !ingredientCost) {
@@ -56,14 +49,13 @@ const FicheTechniqueForm = () => {
     setIngredients([...ingredients, newIngredient]);
     setIngredientName('');
     setIngredientCost('');
-    calculateTotals();
+    
   };
 
   const removeIngredient = (index) => {
     const updatedIngredients = [...ingredients];
     updatedIngredients.splice(index, 1);
     setIngredients(updatedIngredients);
-    calculateTotals();
   };
 
   const handleSubmit = async () => {
@@ -77,8 +69,7 @@ const FicheTechniqueForm = () => {
         name:name,
         sellingPrice: parseFloat(sellingPrice),
         ingredients:ingredients,
-        totalcost: totalCost,
-        profit:profit
+        
       });
 
       showSnackbar('Fiche technique created successfully!', 'success');
@@ -97,8 +88,6 @@ const FicheTechniqueForm = () => {
     setName('');
     setSellingPrice('');
     setIngredients([]);
-    setTotalCost(0);
-    setProfit(0);
     setSelectedFiche(null);
   };
 
@@ -138,7 +127,6 @@ const FicheTechniqueForm = () => {
             value={sellingPrice}
             onChange={(e) => {
               setSellingPrice(e.target.value);
-              calculateTotals();
             }}
             fullWidth
             margin="normal"
@@ -176,7 +164,6 @@ const FicheTechniqueForm = () => {
                   <TableRow>
                     <TableCell>Ingredient</TableCell>
                     <TableCell>Cost (TND)</TableCell>
-                    <TableCell>Quantity</TableCell>
                     <TableCell>Total</TableCell>
                     <TableCell>Action</TableCell>
                   </TableRow>
@@ -186,8 +173,6 @@ const FicheTechniqueForm = () => {
                     <TableRow key={index}>
                       <TableCell>{ing.name}</TableCell>
                       <TableCell>{ing.cost.toFixed(2)}</TableCell>
-                      <TableCell>{ing.quantity}</TableCell>
-                      <TableCell>{(ing.cost * ing.quantity).toFixed(2)}</TableCell>
                       <TableCell>
                         <Button
                           size="small"
