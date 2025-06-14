@@ -22,6 +22,7 @@ const FicheTechniqueForm = () => {
   const [ingredients, setIngredients] = useState([]);
   const [ingredientName, setIngredientName] = useState('');
   const [ingredientCost, setIngredientCost] = useState('');
+  const [payload, setPayload] = useState({});
 
   const [snackbar, setSnackbar] = useState({
     open: false,
@@ -62,14 +63,13 @@ const FicheTechniqueForm = () => {
       showSnackbar('Please fill all required fields', 'warning');
       return;
     }
-
+setPayload({
+    name:name,
+    sellingPrice:sellingPrice,
+    ingredients:ingredients
+})
     try {
-      const response = await axios.post(`${API_URL}/createf`, {
-        name:name,
-        sellingPrice: parseFloat(sellingPrice),
-        ingredients:ingredients,
-        
-      });
+      const response = await axios.post(`${API_URL}/createf`,payload);
 
       showSnackbar('Fiche technique created successfully!', 'success');
       resetForm();
