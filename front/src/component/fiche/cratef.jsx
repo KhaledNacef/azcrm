@@ -28,7 +28,6 @@ const FicheTechniqueForm = () => {
     message: '',
     severity: 'success'
   });
-  const [selectedFiche, setSelectedFiche] = useState(null);
 
   const API_URL = 'https://api.azcrm.deviceshopleader.com/api/v1/fiches';
 
@@ -164,7 +163,6 @@ const FicheTechniqueForm = () => {
                   <TableRow>
                     <TableCell>Ingredient</TableCell>
                     <TableCell>Cost (TND)</TableCell>
-                    <TableCell>Total</TableCell>
                     <TableCell>Action</TableCell>
                   </TableRow>
                 </TableHead>

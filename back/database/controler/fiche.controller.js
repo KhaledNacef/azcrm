@@ -1,24 +1,18 @@
 const db = require('../index');
 const Recipe = db.recipe;
 
+
 exports.createRecipe = async (req, res) => {
   try {
     const { name, sellingPrice, ingredients } = req.body;
 
-    // Basic validation
-    if (!name || !sellingPrice || !ingredients) {
-      return res.status(400).json({ error: 'Missing required fields' });
+    if (!name || !sellingPrice || !ingredients || !Array.isArray(ingredients)) {
+      return res.status(400).json({ error: 'Missing or invalid required fields' });
     }
 
-    if (!Array.isArray(ingredients)) {
-      return res.status(400).json({ error: 'Ingredients must be an array' });
-    }
-
-    // Calculate total cost
     const totalcost = ingredients.reduce((sum, ing) => sum + (ing.cost || 0), 0);
     const profit = sellingPrice - totalcost;
 
-    // Create recipe
     const recipe = await Recipe.create({
       name,
       sellingPrice,
@@ -27,15 +21,11 @@ exports.createRecipe = async (req, res) => {
       profit
     });
 
-    // Return simple response
     res.status(201).json(recipe);
 
   } catch (error) {
-    console.error('Error:', error);
-    res.status(400).json( 
-      
-        'Invalid data'
-    );
+    console.error('Error creating recipe:', error);
+    res.status(400).json({ error: 'Invalid data' });
   }
 };
 
