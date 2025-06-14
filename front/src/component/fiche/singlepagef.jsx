@@ -78,9 +78,9 @@ const FicheTechnique = () => {
       </Typography>
       
       <Box sx={{ display: 'flex', gap: 3, mb: 4 }}>
-        <Typography variant="h6">Cost: {fiche.totalcost?.toFixed(2) || '0.00'} TND</Typography>
-        <Typography variant="h6">Profit: {fiche.profit?.toFixed(2) || '0.00'} TND</Typography>
-        <Typography variant="h6">Selling Price: {fiche.sellingPrice?.toFixed(2) || '0.00'} TND</Typography>
+        <Typography variant="h6">Cout: {fiche.totalcost?.toFixed(2) || '0.00'} TND</Typography>
+        <Typography variant="h6">Benifice: {fiche.profit?.toFixed(2) || '0.00'} TND</Typography>
+        <Typography variant="h6">Prix d=De Vente: {fiche.sellingPrice?.toFixed(2) || '0.00'} TND</Typography>
       </Box>
       
       <Typography variant="h5" gutterBottom>
@@ -91,7 +91,7 @@ const FicheTechnique = () => {
         <TableHead>
           <TableRow>
             <TableCell>Ingredient</TableCell>
-            <TableCell>Cost (TND)</TableCell>
+            <TableCell>Cout (TND)</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
