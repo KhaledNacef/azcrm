@@ -244,47 +244,7 @@ const FicheTechniqueForm = () => {
         </Box>
 
         {/* Existing Fiches List */}
-        <Box sx={{ flex: 1 }}>
-          <Typography variant="h6" gutterBottom>
-            Existing Fiches
-          </Typography>
-
-          {loading ? (
-            <CircularProgress />
-          ) : (
-            <TableContainer component={Paper} sx={{ maxHeight: 500, overflow: 'auto' }}>
-              <Table size="small">
-                <TableHead>
-                  <TableRow>
-                    <TableCell>Name</TableCell>
-                    <TableCell>Price</TableCell>
-                    <TableCell>Cost</TableCell>
-                    <TableCell>Profit</TableCell>
-                    <TableCell>Action</TableCell>
-                  </TableRow>
-                </TableHead>
-                <TableBody>
-                  {fiches.map((fiche) => (
-                    <TableRow key={fiche.id}>
-                      <TableCell>{fiche.name}</TableCell>
-                      <TableCell>{fiche.sellingPrice.toFixed(2)}</TableCell>
-                      <TableCell>{fiche.totalcost.toFixed(2)}</TableCell>
-                      <TableCell>{fiche.profit.toFixed(2)}</TableCell>
-                      <TableCell>
-                        <Button
-                          size="small"
-                          onClick={() => loadFiche(fiche)}
-                        >
-                          Load
-                        </Button>
-                      </TableCell>
-                    </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
-            </TableContainer>
-          )}
-        </Box>
+      
       </Box>
 
       <Snackbar
