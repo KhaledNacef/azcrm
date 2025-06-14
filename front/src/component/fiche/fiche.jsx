@@ -61,7 +61,8 @@ useEffect(() => {
       setLoading(false);
     }
   };
-  fetchfiche()
+  
+  fetchfiche();
   }, []);
 
 
