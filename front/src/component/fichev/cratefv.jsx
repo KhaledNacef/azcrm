@@ -78,7 +78,7 @@ const Createrecettes = () => {
 
       console.log("Sending payload:", products); // For debugging
 
-      const response = await axios.post(`${API_BASE_URL}/recette/mc`, payload, {
+      const response = await axios.post(`${API_BASE_URL}/recette/mc`, products, {
         headers: {
           'Content-Type': 'application/json'
         }
