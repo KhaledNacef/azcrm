@@ -12,27 +12,14 @@ exports.createRecipem = async (req, res) => {
     }
 
     // Validate each recipe structure
-    const validatedRecipes = recipes.map(recipe => {
-      if (!recipe || 
-          typeof recipe.name !== 'string' ||
-          typeof recipe.sellingPrice !== 'number' ||
-          typeof recipe.quantite !== 'number' ||
-          typeof recipe.totalcost !== 'number' ||
-          typeof recipe.profit !== 'number' ||
-          typeof recipe.totalTTC !== 'number' ||
-          typeof recipe.totalcosts !== 'number') {
-        throw new Error('Invalid recipe format');
-      }
-      return recipe;
-    });
-
+ 
     // Calculate totals
-    const totalcosts = validatedRecipes.reduce((sum, recipe) => sum + recipe.totalcosts, 0);
-    const totalTTC = validatedRecipes.reduce((sum, recipe) => sum + recipe.totalTTC, 0);
+    const totalcosts = recipes.reduce((sum, recipe) => sum + recipe.totalcosts, 0);
+    const totalTTC = recipes.reduce((sum, recipe) => sum + recipe.totalTTC, 0);
 
     // Create the collection
     const recipem = await Recipem.create({
-      recipes: validatedRecipes,
+      recipes: recipes,
       totalcosts,
       totalprofit:totalTTC
     });
