@@ -1,0 +1,17 @@
+const express = require('express');
+const router = express.Router();
+const chargeCafeController = require('../controler/chargecontroler'); // Adjust path as needed
+
+// Create a new ChargeCafe
+router.post('/chargecreate', chargeCafeController.createReteune);
+
+// Get all ChargeCafes
+router.get('/chargeget', chargeCafeController.getAllReteunes);
+
+// Get a single ChargeCafe by ID
+router.get('/chargegetid/:id', chargeCafeController.getReteuneById);
+
+// Delete a ChargeCafe
+router.delete('/chargedel/:id', chargeCafeController.deleteReteune);
+
+module.exports = router;

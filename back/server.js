@@ -68,7 +68,7 @@ const factureventeproduct = require('./database/router/facturevpr');
 const reteune = require('./database/router/reteuner');
 const stock = require('./database/router/stockR');
 const user=require('./database/router/user')
-
+const chargeCafe=require('./database/router/chargecaferouter')
 
 app.use('/api/v1/suplier', suplierRoutes);
 app.use('/api/v1/clients', clientRoutes);
@@ -84,6 +84,7 @@ app.use('/api/v1/reteune', reteune);
 app.use('/api/v1/luser', user);
 app.use('/api/v1/fiches', require('./database/router/ficherouter'));
 app.use('/api/v1/recette', require('./database/router/fichsell'));
+app.use('/api/v1/chargerest', chargeCafe);
 
 // ========================
 // ⚠️ Error Handling

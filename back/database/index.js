@@ -20,7 +20,7 @@ const StockT=require('./models/stocktrace.js')
 const StockTE=require('./models/stocktraceetranger.js')
 const Recipe=require('./models/fichetechnique.js')
 const RecipeM=require('./models/monthlyreportreciep.js')
-
+const Charge=require('./models/chargeCafe.js')
 
 
 const db = new Sequelize({
@@ -50,6 +50,7 @@ const stockT=db.define('stockT',StockT)
 const stockTE=db.define('stockTE',StockTE)
 const recipe = db.define('recipe', Recipe); // Define Recipe model
 const recipem = db.define('recipem', RecipeM); // Define Recipe model
+const chargecafe = db.define('chargecafe', Charge); // Define Recipe model
 
 
 

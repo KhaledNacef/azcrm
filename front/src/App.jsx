@@ -27,6 +27,8 @@ import Fiche from './component/fiche/fiche.jsx';
 import FicheTechnique from './component/fiche/singlepagef.jsx';
 import Fichev from './component/fichev/recet.jsx';
 import FicheTechniquev from './component/fichev/singlepagerv.jsx';
+import ChargeCafePage from './component/restaurantmanagment/charge.jsx';
+import ChargeSummaryPage from './component/restaurantmanagment/singlecharge.jsx';
 // Protect Route Component
 const RequireAuth = () => {
   const isAuthenticated = localStorage.getItem('token'); 
@@ -69,6 +71,8 @@ const App = () => {
       <Route path="/fiche/:id" element={<FicheTechnique />} />
       <Route path="/fichesv" element={<Fichev />} />
       <Route path="/fichev/:id" element={<FicheTechniquev />} />
+      <Route path="/charge" element={<ChargeCafePage />} />
+      <Route path="/charges/:id" element={<ChargeSummaryPage />} />
 
     </Route>
   </Route>
