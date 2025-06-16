@@ -163,14 +163,9 @@ const ChargeCafePage = () => {
         />
 
         <Box sx={{ mt: 2 }}>
-          {editChargeId ? (
-            <>
-              <Button variant="contained" color="primary" onClick={handleUpdateCharge} sx={{ mr: 2 }}>Update</Button>
-              <Button variant="outlined" onClick={resetForm}>Cancel</Button>
-            </>
-          ) : (
+          
             <Button variant="contained" color="primary" onClick={handleCreateCharge}>Add Charge</Button>
-          )}
+        
         </Box>
       </Box>
 
