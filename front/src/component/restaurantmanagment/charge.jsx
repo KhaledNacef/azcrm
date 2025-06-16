@@ -134,7 +134,7 @@ const ChargeCafePage = () => {
             </Paper>
 
       <Box component={Paper} sx={{ p: 3, mb: 3 }}>
-        <Typography variant="h6">{editChargeId ? 'Edit Charge' : 'Add New Charge'}</Typography>
+        <Typography variant="h6"> Ajouter Nouvelle Charge</Typography>
         <FormGroup row>
           {Object.keys(formData).filter(key => key !== 'totalcharge').map((key) => (
             <Box key={key} sx={{ m: 1 }}>
