@@ -80,7 +80,7 @@ const FicheTechniquev = () => {
         Détails des Recettes
       </Typography>
       
-      {fiche.recettes?.length > 0 ? (  // Note: Utilisez le bon nom de propriété (recettes/recipes)
+      {fiche.recieps?.length > 0 ? (  // Note: Utilisez le bon nom de propriété (recettes/recipes)
         <Table>
           <TableHead>
             <TableRow>
