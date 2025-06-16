@@ -8,7 +8,7 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 
 const ChargeCafePage = () => {
-      const navigate = useNavigate();
+  const navigate = useNavigate();
     
   const [charges, setCharges] = useState([]);
   const [filteredCharges, setFilteredCharges] = useState([]);
@@ -188,7 +188,7 @@ const ChargeCafePage = () => {
                 <TableCell>{charge.totalcharge}</TableCell>
                 <TableCell>{new Date(charge.createdAt).toLocaleString()}</TableCell>
                 <TableCell>
-                 <Button variant="outlined" color="error" onClick={() =>  navigate(`/charges/${charge.id}`)}>Voir</Button>
+                 <Button variant="outlined"  onClick={() => navigate(`/charges/${charge.id}`)}>Voir</Button>
                   <Button variant="outlined" color="error" onClick={() => confirmDeleteCharge(charge)}>Delete</Button>
                 </TableCell>
               </TableRow>
