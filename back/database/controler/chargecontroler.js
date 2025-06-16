@@ -1,5 +1,5 @@
 const db = require('../index'); 
-const ChargeCafe=db.models.chargeCafe
+const ChargeCafe=db.models.chargecafe
 
 // Create new reteune
 exports.createReteune = async (req, res) => {
