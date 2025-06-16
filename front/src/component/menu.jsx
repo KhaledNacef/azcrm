@@ -155,6 +155,14 @@ const SidebarMenu = () => {
             >
               <ListItemText inset primary="Recettes" />
             </ListItem>
+             <ListItem
+              button
+              component={Link}
+              to="/charge"
+              sx={getSubItemStyles(isActive('/charge'))}
+            >
+              <ListItemText inset primary="Charge" />
+            </ListItem>
           </List>
         </Collapse>
 
