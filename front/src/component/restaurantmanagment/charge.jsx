@@ -17,8 +17,8 @@ const ChargeCafePage = () => {
   const [isDataUpdated, setIsDataUpdated] = useState(false);
 
   const [formData, setFormData] = useState({
-    mantant_location: '', cnss: '', impots: '', salaire_total: '', electricity: '',
-    water: '', beinsport: '', wifi: '', faris_divers: '', totalcharge: ''
+    mantant_location: 0, cnss: 0, impots: 0, salaire_total: 0, electricity: 0,
+    water: 0, beinsport: 0, wifi: 0, faris_divers: 0, totalcharge: 0
   });
 
   const [selectedFields, setSelectedFields] = useState({
@@ -112,8 +112,8 @@ const ChargeCafePage = () => {
 
   const resetForm = () => {
     setFormData({
-      mantant_location: '', cnss: '', impots: '', salaire_total: '', electricity: '',
-      water: '', beinsport: '', wifi: '', faris_divers: '', totalcharge: ''
+      mantant_location: 0, cnss: 0, impots: 0, salaire_total: 0, electricity: 0,
+      water: 0, beinsport: 0, wifi: 0, faris_divers: 0, totalcharge: 0
     });
   };
 
