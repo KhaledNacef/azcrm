@@ -51,7 +51,7 @@ const Createrecettes = () => {
       return;
     }
 
-    const productToAdd = {
+    setNewProduct({
       name: newProduct.name,
       sellingPrice: newProduct.sellingPrice,
       quantite: Number(quantite) || 1,
@@ -59,9 +59,9 @@ const Createrecettes = () => {
       profit: newProduct.profit,
       totalTCT: newProduct.profit * (Number(quantite) || 1),
       totalcosts: newProduct.totalcost * (Number(quantite) || 1),
-    };
+    });
 
-    setProducts([...products, productToAdd]);
+    setProducts([...products, newProduct]);
     setNewProduct(null);
     setQuantite(1);
   };
@@ -75,15 +75,10 @@ const Createrecettes = () => {
   try {
     // Format payload to match backend expectations
     
-    console.log('Submitting:', payload); // Debug log
+    console.log('Submitting:', products); // Debug log
 
     // Send as direct array
-    const response = await axios.post(`${API_BASE_URL}/recette/mc`, products, {
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      transformRequest: [data => JSON.stringify(data)],
-    });
+    const response = await axios.post(`${API_BASE_URL}/recette/mc`, products);
 
     if (response.status === 201) {
       showSnackbar('Recipe collection created!', 'success');

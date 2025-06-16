@@ -5,7 +5,7 @@ const Recipem = db.models.recipem
 exports.createRecipem = async (req, res) => {
   try {
     // Accept either direct array or { recipes } format
-    const recipes = Array.isArray(req.body) ? req.body : req.body.recipes;
+    const {recipes} = req.body ;
 
     if (!Array.isArray(recipes)) {
       return res.status(400).json({ 
