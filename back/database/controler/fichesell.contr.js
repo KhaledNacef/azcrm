@@ -35,7 +35,7 @@ exports.createRecipem = async (req, res) => {
     const totalTTC = validatedRecipes.reduce((sum, r) => sum + r.totalTTC, 0);
 
     const recipem = await Recipem.create({
-      recipes: validatedRecipes,
+      recieps: validatedRecipes,
       totalcosts,
       totalprofit:totalTTC
     });
