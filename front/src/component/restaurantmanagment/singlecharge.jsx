@@ -17,7 +17,7 @@ import {
 } from '@mui/material';
 
 const ChargeSummaryPage = () => {
-  const [charges, setCharges] = useState([]);
+  const [charges, setCharges] = useState({});
   const [loading, setLoading] = useState(true);
   const { id } = useParams();
 
