@@ -51,17 +51,18 @@ const Createrecettes = () => {
       return;
     }
 
-    setNewProduct({
-      name: newProduct.name,
-      sellingPrice: newProduct.sellingPrice,
-      quantite: Number(quantite) || 1,
-      totalcost: newProduct.totalcost,
-      profit: newProduct.profit,
-      totalTCT: newProduct.profit * (Number(quantite) || 1),
-      totalcosts: newProduct.totalcost * (Number(quantite) || 1),
-    });
+      const productToAdd = {
+    name: newProduct.name,
+    sellingPrice: newProduct.sellingPrice,
+    quantite: Number(quantite) || 1,
+    totalcost: newProduct.totalcost,
+    profit: newProduct.profit,
+    totalTCT: newProduct.profit * (Number(quantite) || 1),
+    totalcosts: newProduct.totalcost * (Number(quantite) || 1),
+  };
 
-    setProducts([...products, newProduct]);
+
+    setProducts([...products, productToAdd]);
     setNewProduct(null);
     setQuantite(1);
   };
@@ -74,11 +75,21 @@ const Createrecettes = () => {
 
   try {
     // Format payload to match backend expectations
-    
+      const payload = {
+      recipes: products.map(p => ({
+        name: p.name,
+        sellingPrice: p.sellingPrice,
+        quantite: p.quantite,
+        totalcost: p.totalcost,
+        profit: p.profit,
+        totalTTC: p.totalTCT || p.totalTTC, // Handle both spellings
+        totalcosts: p.totalcosts
+      }))
+    };
     console.log('Submitting:', products); // Debug log
 
     // Send as direct array
-    const response = await axios.post(`${API_BASE_URL}/recette/mc`, products);
+    const response = await axios.post(`${API_BASE_URL}/recette/mc`, payload);
 
     if (response.status === 201) {
       showSnackbar('Recipe collection created!', 'success');
