@@ -188,7 +188,7 @@ const ChargeCafePage = () => {
                 <TableCell>{charge.totalcharge}</TableCell>
                 <TableCell>{new Date(charge.createdAt).toLocaleString()}</TableCell>
                 <TableCell>
-                 <Button variant="outlined"  onClick={() => navigate(`/charges/${charge.id}`)}>Voir</Button>
+                 <Button variant="outlined" onClick={() => navigate(`/charges/${charge.id}`)}>Voir</Button>
                   <Button variant="outlined" color="error" onClick={() => confirmDeleteCharge(charge)}>Delete</Button>
                 </TableCell>
               </TableRow>
