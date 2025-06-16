@@ -26,7 +26,6 @@ const ChargeCafePage = () => {
     water: true, beinsport: true, wifi: true, faris_divers: true
   });
 
-  const [edis, setEdis] = useState(null);
   const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
   const [chargeToDelete, setChargeToDelete] = useState(null);
   const [snackbarOpen, setSnackbarOpen] = useState(false);
@@ -91,22 +90,8 @@ const ChargeCafePage = () => {
     }
   };
 
-  const handleEditCharge = (charge) => {
-    setEditChargeId(charge.id);
-    setFormData({ ...charge });
-  };
 
-  const handleUpdateCharge = async () => {
-    try {
-      await axios.put(`${API_BASE_URL}/chargerest/updateReteune/${editChargeId}`, formData);
-      setIsDataUpdated(!isDataUpdated);
-      resetForm();
-      showSnackbar('Charge updated successfully!', 'success');
-    } catch {
-      showSnackbar('Error updating charge', 'error');
-    }
-  };
-
+ 
   const confirmDeleteCharge = (charge) => {
     setChargeToDelete(charge);
     setOpenDeleteDialog(true);
@@ -130,7 +115,6 @@ const ChargeCafePage = () => {
       mantant_location: '', cnss: '', impots: '', salaire_total: '', electricity: '',
       water: '', beinsport: '', wifi: '', faris_divers: '', totalcharge: ''
     });
-    setEditChargeId(null);
   };
 
   const showSnackbar = (msg, severity) => {
