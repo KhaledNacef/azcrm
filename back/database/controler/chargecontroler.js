@@ -16,7 +16,7 @@ exports.createReteune = async (req, res) => {
 exports.getAllReteunes = async (req, res) => {
   try {
     const chargeCafe = await ChargeCafe.findAll();
-    res.status(200).json(reteunes);
+    res.status(200).json(chargeCafe);
   } catch (error) {
     console.error('Error fetching ChargeCafe:', error);
     res.status(500).json({ message: 'Erreur serveur' });
