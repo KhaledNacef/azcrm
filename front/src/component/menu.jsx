@@ -19,6 +19,7 @@ import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import ReceiptIcon from '@mui/icons-material/Receipt';
 import LocalShippingIcon from '@mui/icons-material/LocalShipping';
 import AttachMoneyIcon from '@mui/icons-material/AttachMoney';
+import RestaurantIcon from '@mui/icons-material/Restaurant';
 import ExpandLess from '@mui/icons-material/ExpandLess';
 import ExpandMore from '@mui/icons-material/ExpandMore';
 
@@ -36,6 +37,7 @@ const SidebarMenu = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const [openStockSubmenu, setOpenStockSubmenu] = useState(false);
+  const [openRestaurantSubmenu, setOpenRestaurantSubmenu] = useState(false);
 
   const handleLogout = () => {
     localStorage.removeItem('token');
@@ -104,14 +106,13 @@ const SidebarMenu = () => {
             >
               <ListItemText inset primary="Mouvement de Produit Local" />
             </ListItem>
-             <ListItem
+            <ListItem
               button
               component={Link}
               to="/stocketranger/mouvement"
               sx={getSubItemStyles(isActive('/stocketranger/mouvement'))}
             >
               <ListItemText inset primary="Produits destinés à l'exportation" />
-              
             </ListItem>
             <ListItem
               button
@@ -119,14 +120,24 @@ const SidebarMenu = () => {
               to="/stock/achat-history"
               sx={getSubItemStyles(isActive('/stock/achat-history'))}
             >
-              <ListItemText inset primary="Historique d’achat de produits" />
-              
+              <ListItemText inset primary="Historique d'achat de produits" />
             </ListItem>
-             
           </List>
         </Collapse>
-         {/* Stock Submenus */}
-        <Collapse in={openStockSubmenu} timeout="auto" unmountOnExit>
+
+        {/* Restaurant Management Parent */}
+        <ListItem
+          button
+          onClick={() => setOpenRestaurantSubmenu(!openRestaurantSubmenu)}
+          sx={getItemStyles(openRestaurantSubmenu)}
+        >
+          <ListItemIcon><RestaurantIcon /></ListItemIcon>
+          <ListItemText primary="Restaurant Management" />
+          {openRestaurantSubmenu ? <ExpandLess /> : <ExpandMore />}
+        </ListItem>
+
+        {/* Restaurant Submenus */}
+        <Collapse in={openRestaurantSubmenu} timeout="auto" unmountOnExit>
           <List component="div" disablePadding>
             <ListItem
               button
@@ -134,19 +145,16 @@ const SidebarMenu = () => {
               to="/fiches"
               sx={getSubItemStyles(isActive('/fiches'))}
             >
-              <ListItemText inset primary="Fcihe techinque" />
+              <ListItemText inset primary="Fiche Technique" />
             </ListItem>
-             <ListItem
+            <ListItem
               button
               component={Link}
-              to="/fichesv"
-              sx={getSubItemStyles(isActive('/fichesv'))}
+              to="/recettes"
+              sx={getSubItemStyles(isActive('/recettes'))}
             >
-              <ListItemText inset primary="Recette " />
-              
+              <ListItemText inset primary="Recettes" />
             </ListItem>
-           
-             
           </List>
         </Collapse>
 
@@ -159,7 +167,6 @@ const SidebarMenu = () => {
           { label: 'Bon de Livraison Vente', path: '/bon-commandefacture', icon: <LocalShippingIcon /> },
           { label: 'Facture Vente', path: '/bon-livraison', icon: <ExitToAppIcon /> },
           { label: 'Retenue', path: '/RET1', icon: <AttachMoneyIcon /> },
-
         ].map((item) => (
           <ListItem
             key={item.label}
