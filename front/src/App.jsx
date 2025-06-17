@@ -64,15 +64,15 @@ const App = () => {
       <Route path="bon-commandea/:code/:supplierId/:codey/:timbre/:num" element={<BCsingleACHAT />} />
       <Route path="gestion/:codey" element={<CompareProducts />} />
       <Route path="gestionv/:codey" element={<CompareProductsv />} />
-      <Route path="/stock/mouvement" element={<StockTPage />} />
-      <Route path="/stocketranger/mouvement" element={<StockTPageEtranger />} />
-      <Route path="/stock/achat-history" element={<StockHPage />} />
-      <Route path="/fiches" element={<Fiche />} />
-      <Route path="/fiche/:id" element={<FicheTechnique />} />
-      <Route path="/fichesv" element={<Fichev />} />
-      <Route path="/fichev/:id" element={<FicheTechniquev />} />
-      <Route path="/chargecafe" element={<ChargeCafePage />} />
-      <Route path="/charges/:id" element={<ChargeSummaryPage />} />
+      <Route path="stock/mouvement" element={<StockTPage />} />
+      <Route path="stocketranger/mouvement" element={<StockTPageEtranger />} />
+      <Route path="stock/achat-history" element={<StockHPage />} />
+      <Route path="fiches" element={<Fiche />} />
+      <Route path="fiche/:id" element={<FicheTechnique />} />
+      <Route path="fichesv" element={<Fichev />} />
+      <Route path="fichev/:id" element={<FicheTechniquev />} />
+      <Route path="chargecafe" element={<ChargeCafePage />} />
+      <Route path="charges/:id" element={<ChargeSummaryPage />} />
 
     </Route>
   </Route>
