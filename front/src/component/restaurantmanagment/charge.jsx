@@ -1,75 +1,54 @@
+// ChargeCafePage.js
 import React, { useState, useEffect } from 'react';
 import {
-  Box, TextField, Table, TableBody, TableCell, TableContainer, 
-  TableHead, TableRow, Paper, Typography, Button, Snackbar, 
-  Alert, Dialog, DialogTitle, DialogContent, DialogActions
+  Box,
+  TextField,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Paper,
+  Typography,
+  Button,
+  Snackbar,
+  Alert
 } from '@mui/material';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import CreateChargeModal from './create.jsx';
 
 const ChargeCafePage = () => {
   const navigate = useNavigate();
   const [charges, setCharges] = useState([]);
   const [filteredCharges, setFilteredCharges] = useState([]);
   const [searchQuery, setSearchQuery] = useState('');
-  const API_BASE_URL = 'https://api.azcrm.deviceshopleader.com/api/v1';
-  const [isDataUpdated, setIsDataUpdated] = useState(false);
-
-  const [formData, setFormData] = useState({
-    mantant_location: 0, 
-    cnss: 0, 
-    impots: 0, 
-    salaire_total: 0, 
-    electricity: 0,
-    water: 0, 
-    beinsport: 0, 
-    wifi: 0, 
-    faris_divers: 0, 
-    totalcharge: 0
-  });
-
-  // Dialog states
-  const [openCreateDialog, setOpenCreateDialog] = useState(false);
-  const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
-  const [chargeToDelete, setChargeToDelete] = useState(null);
-  
-  // Notification states
-  const [snackbarOpen, setSnackbarOpen] = useState(false);
-  const [snackbarMessage, setSnackbarMessage] = useState('');
-  const [snackbarSeverity, setSnackbarSeverity] = useState('success');
-  
   const [total, setTotal] = useState(0);
+  const [openCreateModal, setOpenCreateModal] = useState(false);
+  const [snackbar, setSnackbar] = useState({
+    open: false,
+    message: '',
+    severity: 'success'
+  });
+  const API_BASE_URL = 'https://api.azcrm.deviceshopleader.com/api/v1';
+
+  const fetchCharges = async () => {
+    try {
+      const response = await axios.get(`${API_BASE_URL}/chargerest/chargeget`);
+      setCharges(response.data);
+      setFilteredCharges(response.data);
+      const totalSum = response.data.reduce((acc, charge) => 
+        acc + (parseFloat(charge.totalcharge) || 0), 0);
+      setTotal(totalSum);
+    } catch (error) {
+      showSnackbar('Error fetching charges', 'error');
+    }
+  };
 
   useEffect(() => {
-    const fetchCharges = async () => {
-      try {
-        const response = await axios.get(`${API_BASE_URL}/chargerest/chargeget`);
-        setCharges(response.data);
-        setFilteredCharges(response.data);
-        const totalSum = response.data.reduce((acc, charge) => 
-          acc + (parseFloat(charge.totalcharge) || 0), 0);
-        setTotal(totalSum);
-      } catch (error) {
-        showSnackbar('Error fetching charges', 'error');
-      }
-    };
     fetchCharges();
-  }, [isDataUpdated]);
-
-  useEffect(() => {
-    // Auto-calculate total whenever form data changes
-    const calculatedTotal = Object.keys(formData).reduce((acc, key) => {
-      if (key !== 'totalcharge') {
-        acc += parseFloat(formData[key]) || 0;
-      }
-      return acc;
-    }, 0);
-    
-    setFormData(prev => ({ 
-      ...prev, 
-      totalcharge: calculatedTotal.toFixed(2) 
-    }));
-  }, [formData]);
+  }, []);
 
   const handleSearch = (e) => {
     const query = e.target.value.toLowerCase();
@@ -82,20 +61,10 @@ const ChargeCafePage = () => {
     setFilteredCharges(filtered);
   };
 
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setFormData(prev => ({ 
-      ...prev, 
-      [name]: value 
-    }));
-  };
-
-  const handleCreateCharge = async () => {
+  const handleCreateCharge = async (formData) => {
     try {
       await axios.post(`${API_BASE_URL}/chargerest/chargecreate`, formData);
-      setIsDataUpdated(prev => !prev);
-      resetForm();
-      setOpenCreateDialog(false);
+      fetchCharges();
       showSnackbar('Charge created successfully!', 'success');
     } catch (error) {
       console.error('Error creating charge:', error);
@@ -103,57 +72,23 @@ const ChargeCafePage = () => {
     }
   };
 
-  const confirmDeleteCharge = (charge) => {
-    setChargeToDelete(charge);
-    setOpenDeleteDialog(true);
-  };
-
-  const handleDeleteCharge = async () => {
+  const handleDeleteCharge = async (id) => {
     try {
-      await axios.delete(`${API_BASE_URL}/chargerest/chargedel/${chargeToDelete.id}`);
-      setIsDataUpdated(prev => !prev);
+      await axios.delete(`${API_BASE_URL}/chargerest/chargedel/${id}`);
+      fetchCharges();
       showSnackbar('Charge deleted successfully!', 'success');
     } catch (error) {
       console.error('Error deleting charge:', error);
       showSnackbar('Error deleting charge', 'error');
-    } finally {
-      setOpenDeleteDialog(false);
-      setChargeToDelete(null);
     }
   };
 
-  const resetForm = () => {
-    setFormData({
-      mantant_location: 0, 
-      cnss: 0, 
-      impots: 0, 
-      salaire_total: 0, 
-      electricity: 0,
-      water: 0, 
-      beinsport: 0, 
-      wifi: 0, 
-      faris_divers: 0, 
-      totalcharge: 0
-    });
+  const showSnackbar = (message, severity) => {
+    setSnackbar({ open: true, message, severity });
   };
 
-  const showSnackbar = (msg, severity) => {
-    setSnackbarMessage(msg);
-    setSnackbarSeverity(severity);
-    setSnackbarOpen(true);
-  };
-
-  const handleViewCharge = (id) => {
-    navigate(`/charges/${id}`);
-  };
-
-  const handleOpenCreateDialog = () => {
-    setOpenCreateDialog(true);
-  };
-
-  const handleCloseCreateDialog = () => {
-    setOpenCreateDialog(false);
-    resetForm();
+  const handleCloseSnackbar = () => {
+    setSnackbar({ ...snackbar, open: false });
   };
 
   return (
@@ -167,71 +102,22 @@ const ChargeCafePage = () => {
         </Typography>
       </Paper>
 
-      <Box sx={{ mb: 3 }}>
+      <Box sx={{ mb: 3, display: 'flex', justifyContent: 'space-between' }}>
         <Button 
           variant="contained" 
           color="primary" 
-          onClick={handleOpenCreateDialog}
+          onClick={() => setOpenCreateModal(true)}
         >
           Add New Charge
         </Button>
+        
+        <TextField 
+          label="Search Charges" 
+          value={searchQuery} 
+          onChange={handleSearch} 
+          sx={{ width: 300 }}
+        />
       </Box>
-
-      {/* Create Charge Dialog */}
-      <Dialog 
-        open={openCreateDialog} 
-        onClose={handleCloseCreateDialog} 
-        maxWidth="md" 
-        fullWidth
-        disableEnforceFocus // Fix for navigation issue
-      >
-        <DialogTitle>Add New Charge</DialogTitle>
-        <DialogContent>
-          <Box sx={{ 
-            display: 'grid', 
-            gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))',
-            gap: 2,
-            mb: 2,
-            mt: 2
-          }}>
-            {Object.keys(formData)
-              .filter(key => key !== 'totalcharge')
-              .map((key) => (
-                <TextField
-                  key={key}
-                  label={key.replace('_', ' ')}
-                  name={key}
-                  value={formData[key]}
-                  onChange={handleInputChange}
-                  type="number"
-                  variant="outlined"
-                  fullWidth
-                />
-            ))}
-          </Box>
-
-          <TextField
-            label="Total Charge"
-            name="totalcharge"
-            value={formData.totalcharge}
-            InputProps={{ readOnly: true }}
-            fullWidth
-            sx={{ mb: 2 }}
-          />
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleCloseCreateDialog}>Cancel</Button>
-          <Button onClick={handleCreateCharge} color="primary">Save</Button>
-        </DialogActions>
-      </Dialog>
-
-      <TextField 
-        label="Search Charges" 
-        fullWidth 
-        value={searchQuery} 
-        onChange={handleSearch} 
-        sx={{ mb: 3 }} 
-      />
 
       <TableContainer component={Paper}>
         <Table>
@@ -254,7 +140,7 @@ const ChargeCafePage = () => {
                 <TableCell>
                   <Button 
                     variant="outlined" 
-                    onClick={() => handleViewCharge(charge.id)}
+                    onClick={() => navigate(`/charges/${charge.id}`)}
                     sx={{ mr: 1 }}
                   >
                     View
@@ -262,7 +148,7 @@ const ChargeCafePage = () => {
                   <Button 
                     variant="outlined" 
                     color="error" 
-                    onClick={() => confirmDeleteCharge(charge)}
+                    onClick={() => handleDeleteCharge(charge.id)}
                   >
                     Delete
                   </Button>
@@ -273,35 +159,20 @@ const ChargeCafePage = () => {
         </Table>
       </TableContainer>
 
-      {/* Delete Confirmation Dialog */}
-      <Dialog 
-        open={openDeleteDialog} 
-        onClose={() => setOpenDeleteDialog(false)}
-        disableEnforceFocus // Fix for navigation issue
-      >
-        <DialogTitle>Confirm Delete</DialogTitle>
-        <DialogContent>
-          Are you sure you want to delete this charge?
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={() => setOpenDeleteDialog(false)}>Cancel</Button>
-          <Button onClick={handleDeleteCharge} color="error">Delete</Button>
-        </DialogActions>
-      </Dialog>
+      <CreateChargeModal 
+        open={openCreateModal}
+        onClose={() => setOpenCreateModal(false)}
+        onCreateCharge={handleCreateCharge}
+      />
 
-      {/* Notification Snackbar */}
-      <Snackbar 
-        open={snackbarOpen} 
-        autoHideDuration={6000} 
-        onClose={() => setSnackbarOpen(false)}
+      <Snackbar
+        open={snackbar.open}
+        autoHideDuration={6000}
+        onClose={handleCloseSnackbar}
         anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
       >
-        <Alert 
-          onClose={() => setSnackbarOpen(false)} 
-          severity={snackbarSeverity}
-          sx={{ width: '100%' }}
-        >
-          {snackbarMessage}
+        <Alert onClose={handleCloseSnackbar} severity={snackbar.severity}>
+          {snackbar.message}
         </Alert>
       </Snackbar>
     </Box>
