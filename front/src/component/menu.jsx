@@ -46,7 +46,7 @@ const SidebarMenu = () => {
  const handleViewCharge = (path) => {
     navigate(path);
   };
-  const isActive = (path) => location.pathname === path;
+  const isActive = (path) => useNavigate(path);
 
   return (
     <Box sx={{ width: 270, height: '100vh', bgcolor: '#242c44', boxShadow: 3, display: 'flex', flexDirection: 'column' }}>
@@ -161,7 +161,7 @@ const SidebarMenu = () => {
               button
               component={Link}
               to="/chargecafe"
-              sx={getSubItemStyles(handleViewCharge('/chargecafe'))}
+              sx={getSubItemStyles(isActive('/chargecafe'))}
             >
               <ListItemText inset primary="Charge" />
             </ListItem>
