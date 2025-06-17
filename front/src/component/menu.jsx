@@ -43,7 +43,9 @@ const SidebarMenu = () => {
     localStorage.removeItem('token');
     navigate('/login');
   };
-
+ const handleViewCharge = (path) => {
+    navigate(path);
+  };
   const isActive = (path) => location.pathname === path;
 
   return (
@@ -159,7 +161,7 @@ const SidebarMenu = () => {
               button
               component={Link}
               to="/chargecafe"
-              sx={getSubItemStyles(isActive('/chargecafe'))}
+              sx={getSubItemStyles(handleViewCharge('/chargecafe'))}
             >
               <ListItemText inset primary="Charge" />
             </ListItem>
