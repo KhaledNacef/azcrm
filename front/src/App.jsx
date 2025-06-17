@@ -71,7 +71,7 @@ const App = () => {
       <Route path="/fiche/:id" element={<FicheTechnique />} />
       <Route path="/fichesv" element={<Fichev />} />
       <Route path="/fichev/:id" element={<FicheTechniquev />} />
-      <Route path="/charge" element={<ChargeCafePage />} />
+      <Route path="/chargecafe" element={<ChargeCafePage />} />
       <Route path="/charges/:id" element={<ChargeSummaryPage />} />
 
     </Route>

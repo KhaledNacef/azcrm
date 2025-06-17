@@ -158,8 +158,8 @@ const SidebarMenu = () => {
              <ListItem
               button
               component={Link}
-              to="/charge"
-              sx={getSubItemStyles(isActive('/charge'))}
+              to="/chargecafe"
+              sx={getSubItemStyles(isActive('/chargecafe'))}
             >
               <ListItemText inset primary="Charge" />
             </ListItem>

@@ -123,6 +123,14 @@ const ChargeCafePage = () => {
     setSnackbarOpen(true);
   };
 
+  const handleViewCharge = (id) => {
+  try {
+    navigate(`/charges/${id}`);
+  } catch (error) {
+    console.error('Navigation error:', error);
+  }
+};
+
   return (
     <Box sx={{ p: 3 }}>
       <Typography variant="h4" gutterBottom>Charge Café Management</Typography>
@@ -188,8 +196,8 @@ const ChargeCafePage = () => {
                 <TableCell>{charge.totalcharge}</TableCell>
                 <TableCell>{new Date(charge.createdAt).toLocaleString()}</TableCell>
                 <TableCell>
-                 <Button variant="outlined" onClick={() => navigate(`/charges/${charge.id}`)}>Voir</Button>
-                  <Button variant="outlined" color="error" onClick={() => confirmDeleteCharge(charge)}>Delete</Button>
+                 <Button variant="outlined" onClick={() => handleViewCharge(charge.id)}>Voir</Button>
+                <Button variant="outlined" color="error" onClick={() => confirmDeleteCharge(charge)}>Delete</Button>
                 </TableCell>
               </TableRow>
             ))}
