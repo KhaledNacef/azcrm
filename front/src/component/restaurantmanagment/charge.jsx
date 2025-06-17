@@ -178,7 +178,13 @@ const ChargeCafePage = () => {
       </Box>
 
       {/* Create Charge Dialog */}
-      <Dialog open={openCreateDialog} onClose={handleCloseCreateDialog} maxWidth="md" fullWidth>
+      <Dialog 
+        open={openCreateDialog} 
+        onClose={handleCloseCreateDialog} 
+        maxWidth="md" 
+        fullWidth
+        disableEnforceFocus // Fix for navigation issue
+      >
         <DialogTitle>Add New Charge</DialogTitle>
         <DialogContent>
           <Box sx={{ 
@@ -268,7 +274,11 @@ const ChargeCafePage = () => {
       </TableContainer>
 
       {/* Delete Confirmation Dialog */}
-      <Dialog open={openDeleteDialog} onClose={() => setOpenDeleteDialog(false)}>
+      <Dialog 
+        open={openDeleteDialog} 
+        onClose={() => setOpenDeleteDialog(false)}
+        disableEnforceFocus // Fix for navigation issue
+      >
         <DialogTitle>Confirm Delete</DialogTitle>
         <DialogContent>
           Are you sure you want to delete this charge?
