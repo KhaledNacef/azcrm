@@ -28,11 +28,16 @@ const ChargeCafePage = () => {
     totalcharge: 0
   });
 
+  // Dialog states
+  const [openCreateDialog, setOpenCreateDialog] = useState(false);
   const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
   const [chargeToDelete, setChargeToDelete] = useState(null);
+  
+  // Notification states
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState('');
   const [snackbarSeverity, setSnackbarSeverity] = useState('success');
+  
   const [total, setTotal] = useState(0);
 
   useEffect(() => {
@@ -42,7 +47,7 @@ const ChargeCafePage = () => {
         setCharges(response.data);
         setFilteredCharges(response.data);
         const totalSum = response.data.reduce((acc, charge) => 
-          acc + (parseFloat(charge.totalcharge) || 0, 0));
+          acc + (parseFloat(charge.totalcharge) || 0), 0);
         setTotal(totalSum);
       } catch (error) {
         showSnackbar('Error fetching charges', 'error');
@@ -88,8 +93,9 @@ const ChargeCafePage = () => {
   const handleCreateCharge = async () => {
     try {
       await axios.post(`${API_BASE_URL}/chargerest/chargecreate`, formData);
-      setIsDataUpdated(!isDataUpdated);
+      setIsDataUpdated(prev => !prev);
       resetForm();
+      setOpenCreateDialog(false);
       showSnackbar('Charge created successfully!', 'success');
     } catch (error) {
       console.error('Error creating charge:', error);
@@ -105,7 +111,7 @@ const ChargeCafePage = () => {
   const handleDeleteCharge = async () => {
     try {
       await axios.delete(`${API_BASE_URL}/chargerest/chargedel/${chargeToDelete.id}`);
-      setIsDataUpdated(!isDataUpdated);
+      setIsDataUpdated(prev => !prev);
       showSnackbar('Charge deleted successfully!', 'success');
     } catch (error) {
       console.error('Error deleting charge:', error);
@@ -141,6 +147,15 @@ const ChargeCafePage = () => {
     navigate(`/charges/${id}`);
   };
 
+  const handleOpenCreateDialog = () => {
+    setOpenCreateDialog(true);
+  };
+
+  const handleCloseCreateDialog = () => {
+    setOpenCreateDialog(false);
+    resetForm();
+  };
+
   return (
     <Box sx={{ p: 3 }}>
       <Typography variant="h4" gutterBottom>Charge Café Management</Typography>
@@ -152,49 +167,57 @@ const ChargeCafePage = () => {
         </Typography>
       </Paper>
 
-      <Box component={Paper} sx={{ p: 3, mb: 3 }}>
-        <Typography variant="h6" gutterBottom>Ajouter Nouvelle Charge</Typography>
-        
-        <Box sx={{ 
-          display: 'grid', 
-          gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))',
-          gap: 2,
-          mb: 2
-        }}>
-          {Object.keys(formData)
-            .filter(key => key !== 'totalcharge')
-            .map((key) => (
-              <TextField
-                key={key}
-                label={key.replace('_', ' ')}
-                name={key}
-                value={formData[key]}
-                onChange={handleInputChange}
-                type="number"
-                variant="outlined"
-                fullWidth
-              />
-          ))}
-        </Box>
-
-        <TextField
-          label="Total Charge"
-          name="totalcharge"
-          value={formData.totalcharge}
-          InputProps={{ readOnly: true }}
-          fullWidth
-          sx={{ mb: 2 }}
-        />
-
+      <Box sx={{ mb: 3 }}>
         <Button 
           variant="contained" 
           color="primary" 
-          onClick={handleCreateCharge}
-          fullWidth
+          onClick={handleOpenCreateDialog}
         >
-          Add Charge
+          Add New Charge
         </Button>
       </Box>
+
+      {/* Create Charge Dialog */}
+      <Dialog open={openCreateDialog} onClose={handleCloseCreateDialog} maxWidth="md" fullWidth>
+        <DialogTitle>Add New Charge</DialogTitle>
+        <DialogContent>
+          <Box sx={{ 
+            display: 'grid', 
+            gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))',
+            gap: 2,
+            mb: 2,
+            mt: 2
+          }}>
+            {Object.keys(formData)
+              .filter(key => key !== 'totalcharge')
+              .map((key) => (
+                <TextField
+                  key={key}
+                  label={key.replace('_', ' ')}
+                  name={key}
+                  value={formData[key]}
+                  onChange={handleInputChange}
+                  type="number"
+                  variant="outlined"
+                  fullWidth
+                />
+            ))}
+          </Box>
+
+          <TextField
+            label="Total Charge"
+            name="totalcharge"
+            value={formData.totalcharge}
+            InputProps={{ readOnly: true }}
+            fullWidth
+            sx={{ mb: 2 }}
+          />
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleCloseCreateDialog}>Cancel</Button>
+          <Button onClick={handleCreateCharge} color="primary">Save</Button>
+        </DialogActions>
+      </Dialog>
 
       <TextField 
         label="Search Charges" 
@@ -244,6 +267,7 @@ const ChargeCafePage = () => {
         </Table>
       </TableContainer>
 
+      {/* Delete Confirmation Dialog */}
       <Dialog open={openDeleteDialog} onClose={() => setOpenDeleteDialog(false)}>
         <DialogTitle>Confirm Delete</DialogTitle>
         <DialogContent>
@@ -255,6 +279,7 @@ const ChargeCafePage = () => {
         </DialogActions>
       </Dialog>
 
+      {/* Notification Snackbar */}
       <Snackbar 
         open={snackbarOpen} 
         autoHideDuration={6000} 
