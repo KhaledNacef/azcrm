@@ -13,7 +13,9 @@ import {
   Typography,
   Button,
   Snackbar,
-  Alert
+  Alert,
+  Modal,
+
 } from '@mui/material';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
@@ -165,12 +167,24 @@ const ChargeCafePage = () => {
         </Table>
       </TableContainer>
 
-      <CreateChargeModal 
-        open={openCreateModal}
-        onClose={() => setOpenCreateModal(false)}
-        onCreateCharge={handleCreateCharge}
-      />
-
+       <Modal open={open} onClose={handleClose}>
+       <Box
+    sx={{
+      position: 'absolute',
+      top: '50%',
+      left: '50%',
+      transform: 'translate(-50%, -50%)',
+      bgcolor: 'background.paper',
+      boxShadow: 24,
+      p: 4,
+      borderRadius: 2,
+      width: 900, // increased width
+      maxWidth: '95vw', // optional for responsive design
+    }}
+  >
+          <CreateChargeModal onCreateCharge={handleCreateCharge} onClose={setOpenCreateModal(false)} open={openCreateModal} />
+        </Box>
+      </Modal>
       <Snackbar
         open={snackbar.open}
         autoHideDuration={6000}
