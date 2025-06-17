@@ -95,12 +95,12 @@ const ChargeCafePage = () => {
     <Box sx={{ p: 3 }}>
       <Typography variant="h4" gutterBottom>Charge Café Management</Typography>
       
-      <Paper sx={{ mb: 3, p: 2 }}>
+      <Box sx={{ mb: 3, p: 2 }}>
         <Typography variant="h6" gutterBottom>Total des Charges</Typography>
         <Typography variant="h5" color="primary">
           {parseFloat(total).toFixed(2)} TND
         </Typography>
-      </Paper>
+      </Box>
 
       <Box sx={{ mb: 3, display: 'flex', justifyContent: 'space-between' }}>
         <Button 
@@ -119,14 +119,20 @@ const ChargeCafePage = () => {
         />
       </Box>
 
-      <TableContainer component={Paper}>
-        <Table>
+       <TableContainer 
+                   component={Paper}
+                   sx={{
+                     maxHeight: '850px', // Set your desired max height
+                     overflow: 'auto'
+                   }}
+                 >
+        <Table stickyHeader>
           <TableHead>
             <TableRow>
-              <TableCell>ID</TableCell>
-              <TableCell>Total Charge</TableCell>
-              <TableCell>Date</TableCell>
-              <TableCell>Actions</TableCell>
+              <TableCell sx={{ position: 'sticky', top: 0, bgcolor: 'background.paper', zIndex: 1 }}>ID</TableCell>
+              <TableCell sx={{ position: 'sticky', top: 0, bgcolor: 'background.paper', zIndex: 1 }}>Total Charge</TableCell>
+              <TableCell sx={{ position: 'sticky', top: 0, bgcolor: 'background.paper', zIndex: 1 }}>Date</TableCell>
+              <TableCell sx={{ position: 'sticky', top: 0, bgcolor: 'background.paper', zIndex: 1 }}>Actions</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>

@@ -155,7 +155,14 @@ const SidebarMenu = () => {
             >
               <ListItemText inset primary="Recettes" />
             </ListItem>
-             
+              <ListItem
+              button
+              component={Link}
+              to="/chargecafe"
+              sx={getSubItemStyles(isActive('/chargecafe'))}
+            >
+              <ListItemText inset primary="Charge" />
+            </ListItem>
           </List>
         </Collapse>
 
@@ -168,7 +175,6 @@ const SidebarMenu = () => {
           { label: 'Bon de Livraison Vente', path: '/bon-commandefacture', icon: <LocalShippingIcon /> },
           { label: 'Facture Vente', path: '/bon-livraison', icon: <ExitToAppIcon /> },
           { label: 'Retenue', path: '/RET1', icon: <AttachMoneyIcon /> },
-          { label: 'Charge', path: '/chargecafe', icon: <AttachMoneyIcon /> },
         ].map((item) => (
           <ListItem
             key={item.label}

@@ -2,7 +2,7 @@ const db = require('../index');
 const ChargeCafe=db.models.chargecafe
 
 // Create new reteune
-exports.createReteune = async (req, res) => {
+exports.createchargecafe = async (req, res) => {
   try {
     const chargeCafe = await ChargeCafe.create(req.body);
     res.status(201).json(chargeCafe);
@@ -13,7 +13,7 @@ exports.createReteune = async (req, res) => {
 };
 
 // Get all reteunes
-exports.getAllReteunes = async (req, res) => {
+exports.getAllchargecafe = async (req, res) => {
   try {
     const chargeCafe = await ChargeCafe.findAll();
     res.status(200).json(chargeCafe);
@@ -24,7 +24,7 @@ exports.getAllReteunes = async (req, res) => {
 };
 
 // Get one reteune by ID
-exports.getReteuneById = async (req, res) => {
+exports.getchargecafeById = async (req, res) => {
   try {
     const id = req.params.id;
     const chargeCafe = await ChargeCafe.findByPk(id);
@@ -39,7 +39,7 @@ exports.getReteuneById = async (req, res) => {
 };
 
 // Delete reteune
-exports.deleteReteune = async (req, res) => {
+exports.deletechargecafe = async (req, res) => {
   try {
     const id = req.params.id;
     const deleted = await ChargeCafe.destroy({ where: { id } });
