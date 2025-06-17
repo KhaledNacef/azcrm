@@ -43,10 +43,8 @@ const SidebarMenu = () => {
     localStorage.removeItem('token');
     navigate('/login');
   };
- const handleViewCharge = (path) => {
-    navigate(path);
-  };
-  const isActive = (path) => useNavigate(path);
+
+  const isActive = (path) => location.pathname === path;
 
   return (
     <Box sx={{ width: 270, height: '100vh', bgcolor: '#242c44', boxShadow: 3, display: 'flex', flexDirection: 'column' }}>
